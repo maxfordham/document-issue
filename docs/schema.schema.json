@@ -1,0 +1,226 @@
+{
+    "title": "DocumentHeader",
+    "description": "metadata to be accompanied by every formal document issue.\n\n__Aspiration__: not all data fields are required for every document type,\nbut no document will require additional data fields.\n\n__Note__: The parameter names are stored in the background as \"snake_case\"\nbut are output as \"sentence case\" (all lower case). This is configurable and simple to change.",
+    "type": "object",
+    "properties": {
+        "project_name": {
+            "title": "Project Name",
+            "default": "In House App Testing",
+            "type": "string"
+        },
+        "project_number": {
+            "title": "Project Number",
+            "default": "J5001",
+            "type": "string"
+        },
+        "fpth_job_data_ini": {
+            "title": "Fpth Job Data Ini",
+            "default": "",
+            "type": "string"
+        },
+        "roles": {
+            "title": "Roles",
+            "description": "defines who is fulfilling various roles on the project.currently the there is no validation on the \"allowed roles\", but in the future this should probably link up with the work Dan, Andy and Dean having been doing  on roles and responsibilities. It is suggested that the __Project Leader__ (or senior partner...)role should be required on every project, and that only 1no Project Leader can exist on a project at a given time. Any document can then inherit this Project Leader field.[TODO: fix the required roles for a project / integrate with WebApp]{custom-style=\"mf_green\"}",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Role"
+            }
+        },
+        "document_name": {
+            "title": "Document Name",
+            "default": "06667-MXF-XX-XX-SH-M-20003",
+            "type": "string"
+        },
+        "document_description": {
+            "title": "Document Description",
+            "default": "Document Description",
+            "type": "string"
+        },
+        "classification": {
+            "title": "Classification",
+            "description": "classification as per Uniclass2015",
+            "default": "Ac_05",
+            "type": "string"
+        },
+        "name_nomenclature": {
+            "title": "Name Nomenclature",
+            "default": "project code-originator-volume-level-type-role-number",
+            "type": "string"
+        },
+        "size": {
+            "title": "Size",
+            "description": "paper size of the document",
+            "default": "A4",
+            "type": "string"
+        },
+        "scale": {
+            "title": "Scale",
+            "description": "if drawing, give scale, else \"not to scale\" (NTS)",
+            "default": "NTS",
+            "type": "string"
+        },
+        "doc_source": {
+            "title": "Doc Source",
+            "description": "software used to author the document",
+            "default": "WD",
+            "type": "string"
+        },
+        "date_string_format": {
+            "title": "Date String Format",
+            "default": "%d %^b %y",
+            "type": "string"
+        },
+        "description_in_filename": {
+            "title": "Description In Filename",
+            "default": false,
+            "type": "boolean"
+        },
+        "include_author_and_checked_by": {
+            "title": "Include Author And Checked By",
+            "default": false,
+            "type": "boolean"
+        },
+        "issue_history": {
+            "title": "Issue History",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Issue"
+            }
+        },
+        "notes": {
+            "title": "Notes",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "originator": {
+            "title": "Originator",
+            "description": "the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
+            "default": "Max Fordham LLP",
+            "const": "Max Fordham LLP",
+            "type": "string"
+        },
+        "format_configuration": {
+            "title": "Format Configuration",
+            "default": {
+                "date_string_format": "%d %^b %y",
+                "description_in_filename": false,
+                "include_author_and_checked_by": false
+            },
+            "allOf": [
+                {
+                    "$ref": "#/definitions/FormatConfiguration"
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "Role": {
+            "title": "Role",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Name",
+                    "description": "initial of the person fulfilling the Role",
+                    "default": "JG",
+                    "type": "string"
+                },
+                "role": {
+                    "title": "Role",
+                    "default": "Project Engineer",
+                    "type": "string"
+                }
+            }
+        },
+        "IssueFormatEnum": {
+            "title": "IssueFormatEnum",
+            "description": "An enumeration.",
+            "enum": [
+                "cde",
+                "ea",
+                "el",
+                "p",
+                "r"
+            ],
+            "type": "string"
+        },
+        "Issue": {
+            "title": "Issue",
+            "description": "required information fields that define the metadata of a document issue",
+            "type": "object",
+            "properties": {
+                "revision": {
+                    "title": "Revision",
+                    "default": "P01",
+                    "type": "string"
+                },
+                "date": {
+                    "title": "Date",
+                    "default": "2020-01-02",
+                    "type": "string",
+                    "format": "date"
+                },
+                "status_code": {
+                    "title": "Status Code",
+                    "default": "S2",
+                    "type": "string"
+                },
+                "status_description": {
+                    "title": "Status Description",
+                    "description": "this is a BIM field that matches directly with status_code. TODO: add validation",
+                    "default": "Suitable for information",
+                    "type": "string"
+                },
+                "author": {
+                    "title": "Author",
+                    "description": "\nthe person who authored the work. \nthis is an optional field as for many info types listing a single author is not appropriate. \n_could change the type to be either a single author or a list of authors..._\nthis field has been explicitly requested by Canary Wharf.",
+                    "default": "EG",
+                    "type": "string"
+                },
+                "checked_by": {
+                    "title": "Checked By",
+                    "description": "\nthe person who checked the work. \nthis is an optional field as for many info types listing a single checked_by is not appropriate. \n_could change the type to be either a single author or a list of authors..._\nthis field has been explicitly requested by Canary Wharf.\nit is most appropriate for drawings - less so for Spec. ",
+                    "default": "CK",
+                    "type": "string"
+                },
+                "issue_format": {
+                    "description": "in what form was the issue delivered",
+                    "default": "cde",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/IssueFormatEnum"
+                        }
+                    ]
+                },
+                "issue_notes": {
+                    "title": "Issue Notes",
+                    "description": "free field where the Engineer can briefly summarise changes since previous issue",
+                    "default": "",
+                    "type": "string"
+                }
+            }
+        },
+        "FormatConfiguration": {
+            "title": "FormatConfiguration",
+            "type": "object",
+            "properties": {
+                "date_string_format": {
+                    "title": "Date String Format",
+                    "default": "%d %^b %y",
+                    "type": "string"
+                },
+                "description_in_filename": {
+                    "title": "Description In Filename",
+                    "default": false,
+                    "type": "boolean"
+                },
+                "include_author_and_checked_by": {
+                    "title": "Include Author And Checked By",
+                    "default": false,
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
