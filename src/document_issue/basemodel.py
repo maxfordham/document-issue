@@ -29,7 +29,7 @@ class BaseModel(BaseModel):
     def file_mdschema(
         self, path: pathlib.Path, **json_kwargs
     ):  # TODO: check this. not sure its working
-        path_mdschema = path.with_suffix(".schema.md")
+        path_mdschema = path.with_suffix(".md")
         path_schema = self.file_schema(path, **json_kwargs)
         subprocess.run(["jsonschema2md", str(path_schema), str(path_mdschema)])
 

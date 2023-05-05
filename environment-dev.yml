@@ -20,6 +20,10 @@ dependencies:
   - pytest
   - jupyterbook # docs
   - autodoc-pydantic # docs
+  - erdantic # docs
+  - sphinxcontrib-mermaid # docs
+  - sphinx-autoapi # docs
   - pip
   - pip:
       - jsonschema2md
+      - sphinx-github-changelog

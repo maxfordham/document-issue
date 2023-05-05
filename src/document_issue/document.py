@@ -161,7 +161,7 @@ class DocumentHeaderBase(Document):
     __Aspiration__: not all data fields are required for every document type,
     but no document will require additional data fields.
 
-    __Note__: The parameter names are stored in the background as "camelCase"
+    __Note__: The parameter names are stored in the background as "snake_case"
     but are output as "sentence case" (all lower case). This is configurable and simple to change.
     """
 
@@ -179,7 +179,7 @@ class DocumentHeaderBase(Document):
         return [str(n) for n in v]
 
 
-class DocumentHeader(DocumentHeaderBase):
+class DocumentHeader(DocumentHeaderBase): # TODO: rename DocumentIssue
     @property
     def filename(self):
         if self.format_configuration.description_in_filename:
