@@ -1,0 +1,25 @@
+name: document-issue-dev
+# channels priority
+# see https://bioconda.github.io/
+# conda-forge has highest prioriy
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.8
+  - numpy
+  - pandas
+  - dataclasses
+  - pandoc
+  - pydantic
+  - tabulate
+  - toml
+  - Jinja2
+  - click
+  - stringcase
+  - pytest
+  - jupyterbook # docs
+  - autodoc-pydantic # docs
+  - pip
+  - pip:
+      - jsonschema2md
