@@ -18,6 +18,7 @@ dependencies:
   - click
   - stringcase
   - pytest
+  - black
   - jupyterbook # docs
   - autodoc-pydantic # docs
   - erdantic # docs
@@ -27,3 +28,4 @@ dependencies:
   - pip:
       - jsonschema2md
       - sphinx-github-changelog
+      - nb-black
