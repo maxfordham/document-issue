@@ -19,16 +19,9 @@ from pprint import pprint
 import stringcase
 from enum import Enum
 
-# from ipyword.constants import FPTH_DISCLAIMER_SPACER
-FPTH_DISCLAIMER_SPACER = (
-    "/mnt/c/engDev/git_mf/ipyword/ipyword/images/disclaimer_spacer.png"
-)
-PATH_DISCLAIMER_SPACER = pathlib.Path(FPTH_DISCLAIMER_SPACER)
 
 from document_issue.project import Project
-from document_issue.utils import read_json
 from document_issue.constants import (
-    PATH_DISCLAIMER,
     DIR_TEMPLATES,
     NAME_MD_HEADER_TEMPLATE,
     PATH_REFERENCE_DOCX,
@@ -38,18 +31,19 @@ from document_issue.constants import (
 
 from document_issue.basemodel import BaseModel, Field, validator
 
+
 # TODO:
 class FormatConfiguration(BaseModel):
     date_string_format: str = (
         "%d %^b %y"  # https://www.programiz.com/python-programming/datetime/strptime
     )
     description_in_filename: bool = False
-    include_author_and_checked_by: bool = False  # TODO: implement
+    include_author_and_checked_by: bool = False
 
 
 class Document(Project):
     document_name: str = "06667-MXF-XX-XX-SH-M-20003"
-    document_description: str = "Document Description"  # e.g. Light Fitting Schedule
+    document_description: str = "Document Description"
     classification: str = Field(
         "Ac_05", description="classification as per Uniclass2015"
     )
@@ -59,10 +53,6 @@ class Document(Project):
         "NTS", description='if drawing, give scale, else "not to scale" (NTS)'
     )
     doc_source: str = Field("WD", description="software used to author the document")
-    date_string_format: str = "%d %^b %y"
-    # ^ https://www.programiz.com/python-programming/datetime/strptime
-    description_in_filename: bool = False
-    include_author_and_checked_by: bool = False  # TODO: implement
 
     @validator("name_nomenclature")
     def validate_name_nomenclature(cls, v, values):
@@ -88,9 +78,6 @@ def pydantic_dataclass_to_file(data: Type[dataclass], fpth="pydantic_dataclass.j
     f.write(json.dumps(data, indent=4, default=pydantic_encoder))
     f.close()
     return fpth
-
-
-
 
 
 @dataclass
@@ -179,7 +166,7 @@ class DocumentHeaderBase(Document):
         return [str(n) for n in v]
 
 
-class DocumentHeader(DocumentHeaderBase): # TODO: rename DocumentIssue
+class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
     @property
     def filename(self):
         if self.format_configuration.description_in_filename:
@@ -302,10 +289,9 @@ class MarkdownHeader:
     def _disclaimer(self):
         if not self.path_disclaimer_spacer.is_file():
             self.dir_disclaimer_spacer.mkdir(exist_ok=True)
-            shutil.copyfile(
-                PATH_DISCLAIMER_SPACER,
-                (self.dir_disclaimer_spacer / PATH_DISCLAIMER_SPACER.name),
-            )
+            from document_issue.utils import make_disclaimer_spacer
+
+            make_disclaimer_spacer(self.dir_disclaimer_spacer)
         template = self.env.get_template(NAME_MD_DISCLAIMER_TEMPLATE)
         return template.render(fdirRelImg=self.path_rel_img)
 
@@ -408,4 +394,3 @@ class MarkdownHeader:
             li_current_issue_header_table=self.md_current_issue_header_table,
             md_page_two=self.md_page_two,
         )
-
