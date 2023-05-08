@@ -13,7 +13,6 @@ but are output as "sentence case" (all lower case). This is configurable and sim
 
 - **`project_name`** *(string)*: Default: `In House App Testing`.
 - **`project_number`** *(string)*: Default: `J5001`.
-- **`fpth_job_data_ini`** *(string)*: Default: ``.
 - **`roles`** *(array)*: defines who is fulfilling various roles on the project.currently the there is no validation on the "allowed roles", but in the future this should probably link up with the work Dan, Andy and Dean having been doing  on roles and responsibilities. It is suggested that the __Project Leader__ (or senior partner...)role should be required on every project, and that only 1no Project Leader can exist on a project at a given time. Any document can then inherit this Project Leader field.[TODO: fix the required roles for a project / integrate with WebApp]{custom-style="mf_green"}.
   - **Items**: Refer to *#/definitions/Role*.
 - **`document_name`** *(string)*: Default: `06667-MXF-XX-XX-SH-M-20003`.
@@ -23,9 +22,6 @@ but are output as "sentence case" (all lower case). This is configurable and sim
 - **`size`** *(string)*: paper size of the document. Default: `A4`.
 - **`scale`** *(string)*: if drawing, give scale, else "not to scale" (NTS). Default: `NTS`.
 - **`doc_source`** *(string)*: software used to author the document. Default: `WD`.
-- **`date_string_format`** *(string)*: Default: `%d %^b %y`.
-- **`description_in_filename`** *(boolean)*: Default: `False`.
-- **`include_author_and_checked_by`** *(boolean)*: Default: `False`.
 - **`issue_history`** *(array)*
   - **Items**: Refer to *#/definitions/Issue*.
 - **`notes`** *(array)*

@@ -1,6 +1,14 @@
 # Current Templates
 
-## drawings
+```{figure} images/doc-issue-summary.png
+---
+name: doc-issue-summary
+---
+a summary of what document issue information is being shown on which
+information type
+```
+
+## Drawings
 
 ![drawings](images/drawings.png)
 
@@ -9,7 +17,7 @@
 - no issue history (this is in issue sheet)
 - includes Uniclass classification field
 
-## spec
+## Specifications
 
 ![ ](images/spec.png)
 
@@ -19,14 +27,14 @@
 - doesn't include Uniclass classification field
 - status not shown in Issue History
 
-## reports
+## Reports
 
 ![ ](images/reports.png)
 
 - no structured filename information
 - doesn't include Uniclass classification field
 
-## schedule
+## Schedules
 
 ![ ](images/schedule.png)
 
@@ -34,20 +42,20 @@
 - includes "_engineer_" and "_project leader_" for every issue
 - doesn't include Uniclass classification field
 
-## issue sheet
+## Issue Sheets
 
 ![ ](images/issuesheet.png)
 
 - no authoring information
 - doesn't include Uniclass classification field
 
-## What are we being asked for on Projects?
+## Notes from J6865
 
 example: __6865 WOOD WHARF PHASE 3 J1-J3__ (but probably the same for all Canary Wharf Projects)
 
 Canary Wharf QA process required: ___Authored By___ and ___Checked By___ fields
 
-Discussion from Pete B (Project Engineer)
+Discussion from Pete B (Project Engineer for Project)
 
 > We have used the engineer and project leader fields elsewhere to cover author and checked_by. However the distinction may get lost in 
 > translation. Plus our more obstinate clients are asking for author and checked_by unique not only to the current document (1) but also for the
@@ -62,5 +70,3 @@ Discussion from Pete B (Project Engineer)
 > (2) We have had QA rejections unfortunately from clients wanting to see the initials appear in the revision history. I don't see why they need > this since the information about authoring and checking is out of date and we don't retain other out of date information in the document (it
 > would become contradictory, nonsensical and unreadable). However it has been habit for a long time and other consultants readily do it.  In
 > isolation it seems such a small request that I'm not prepared to waste time arguing against it. Unless perhaps at the draft BEP stage if we spot > it. I'm sure others will feel the same.
-
-\newpage

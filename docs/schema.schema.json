@@ -13,11 +13,6 @@
             "default": "J5001",
             "type": "string"
         },
-        "fpth_job_data_ini": {
-            "title": "Fpth Job Data Ini",
-            "default": "",
-            "type": "string"
-        },
         "roles": {
             "title": "Roles",
             "description": "defines who is fulfilling various roles on the project.currently the there is no validation on the \"allowed roles\", but in the future this should probably link up with the work Dan, Andy and Dean having been doing  on roles and responsibilities. It is suggested that the __Project Leader__ (or senior partner...)role should be required on every project, and that only 1no Project Leader can exist on a project at a given time. Any document can then inherit this Project Leader field.[TODO: fix the required roles for a project / integrate with WebApp]{custom-style=\"mf_green\"}",
@@ -64,21 +59,6 @@
             "description": "software used to author the document",
             "default": "WD",
             "type": "string"
-        },
-        "date_string_format": {
-            "title": "Date String Format",
-            "default": "%d %^b %y",
-            "type": "string"
-        },
-        "description_in_filename": {
-            "title": "Description In Filename",
-            "default": false,
-            "type": "boolean"
-        },
-        "include_author_and_checked_by": {
-            "title": "Include Author And Checked By",
-            "default": false,
-            "type": "boolean"
         },
         "issue_history": {
             "title": "Issue History",
