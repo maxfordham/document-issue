@@ -28,6 +28,7 @@ dependencies = [
     "pandas",
     "tabulate",
     "pandoc",
+    "pandoc-docx-pagebreak",
 ]
 dynamic = ["version"]
 
