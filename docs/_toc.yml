@@ -3,7 +3,9 @@
 
 format: jb-book
 root: scope
+title: document-issue
 chapters:
+- file: erd
 - file: schema
 - file: current-templates
 - file: releases
