@@ -31,3 +31,4 @@ dependencies:
       - jsonschema2md
       - sphinx-github-changelog
       - nb-black
+      - git+ssh://git@github.com/maxfordham/ipyautoui.git@0.5.3
