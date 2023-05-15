@@ -176,11 +176,9 @@ class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
 
     @property
     def df_issue_history(self):
-        di = [i.dict() for i in self.issue_history]
+        li = [i.dict() for i in self.issue_history]
         df = (
-            pd.DataFrame.from_dict(di)
-            .sort_values("date", ascending=False)
-            .reset_index(drop=True)
+            pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
         )
         df["date"] = pd.to_datetime(df.date).dt.strftime(
             self.format_configuration.date_string_format
@@ -189,11 +187,11 @@ class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
 
     @property
     def df_roles(self):
-        return pd.DataFrame.from_dict([i.dict() for i in self.roles]).set_index("name")
+        return pd.DataFrame([i.dict() for i in self.roles]).set_index("name")
 
     @property
     def df_current_issue(self):
-        return pd.DataFrame.from_dict([self.current_issue.dict()])
+        return pd.DataFrame([self.current_issue.dict()])
 
     @property
     def df_notes(self):
@@ -239,7 +237,7 @@ class MarkdownHeader:
     def __init__(
         self,
         dh: DocumentHeader,
-        fpth_md_header: pathlib.Path = pathlib.Path("."),
+        fpth_md_header: Optional[pathlib.Path] = None,
         path_rel_img: pathlib.Path = PATH_REL_IMG,
         tomd=False,
         todocx=False,
@@ -268,9 +266,11 @@ class MarkdownHeader:
         self.path_rel_img = path_rel_img
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
+        if fpth_md_header is None:
+            fpth_md_header = pathlib.Path(self.dh.filename + "-header.md")
         self.fpth_md_header = fpth_md_header
-        self.path_md_header = fpth_md_header.parent
-        self.dir_disclaimer_spacer = (self.path_md_header / self.path_rel_img).resolve()
+        self.dir_md_header = fpth_md_header.parent
+        self.dir_disclaimer_spacer = (self.dir_md_header / self.path_rel_img).resolve()
         self.path_disclaimer_spacer = (
             self.dir_disclaimer_spacer / "disclaimer_spacer.png"
         )

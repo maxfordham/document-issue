@@ -2,7 +2,6 @@
 define base characteristics of a Project
 """
 from document_issue.constants import FNM_EXAMPLE_JOB
-from typing import Optional
 from document_issue.basemodel import BaseModel, Field
 
 
@@ -28,7 +27,7 @@ on a project at a given time. Any document can then inherit this Project Leader 
 class Project(BaseModel):
     project_name: str = "In House App Testing"
     project_number: str = FNM_EXAMPLE_JOB
-    roles: Optional[list[Role]] = Field(
+    roles: list[Role] = Field(
         default_factory=lambda: [Role()], description=description_roles
     )
 
