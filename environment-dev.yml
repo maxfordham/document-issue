@@ -19,6 +19,8 @@ dependencies:
   - stringcase
   - pytest
   - black
+  - jupytext # authoring docs
+  - jupyterlab # authoring docs
   - jupyterbook # docs
   - autodoc-pydantic # docs
   - erdantic # docs

@@ -51,3 +51,9 @@ CONF.write_text("\n".join(_conf))
 
 subprocess.call("sphinx-build . _build/html -b html", shell=True, env=env)
 # ^ call sphinx build with required environ vars
+
+import shutil
+
+src = "06667-MXF-XX-XX-SH-M-20003-header.pdf"
+dst = "_build/html/06667-MXF-XX-XX-SH-M-20003-header.pdf"
+shutil.copyfile(src, dst)
