@@ -2,7 +2,6 @@
 """
 object model for defining the fields required for a structured document (TODO: add iso reference here)
 """
-import shutil
 import pathlib
 import pandas as pd  # TODO: remove pandas ?
 import datetime
@@ -28,7 +27,7 @@ from document_issue.constants import (
     PATH_REL_IMG,
     NAME_MD_DISCLAIMER_TEMPLATE,
 )
-
+from document_issue.enums import scales, paper_sizes, DocSource
 from document_issue.basemodel import BaseModel, Field, validator
 
 
@@ -41,18 +40,45 @@ class FormatConfiguration(BaseModel):
     include_author_and_checked_by: bool = False
 
 
+description_document_name = """document code. Should be the filename when uploaded
+to a CDE. Structured to be machine-readable.""".replace(
+    "\n", ""
+)
+description_name_nomenclature = """denotes what each section of of the document code means
+when split on '-' character.
+""".replace(
+    "\n", ""
+)
+
+
 class Document(Project):
-    document_name: str = "06667-MXF-XX-XX-SH-M-20003"
-    document_description: str = "Document Description"
+    document_name: str = Field(  # TODO: rename document_name -> document_code
+        "06667-MXF-XX-XX-SH-M-20003", description=description_document_name
+    )
+    document_description: str = Field(
+        "Document Description", description="human readable description of the document"
+    )
     classification: str = Field(
-        "Ac_05", description="classification as per Uniclass2015"
+        "Ac_05",
+        description="classification as per Uniclass2015",  # TODO: make this a list...
     )
-    name_nomenclature: str = "project code-originator-volume-level-type-role-number"
-    size: str = Field("A4", description="paper size of the document")
+    name_nomenclature: str = Field(
+        "project-originator-volume-level-type-role-number",
+        description=description_name_nomenclature,
+    )
+    size: str = Field(
+        "A4", description="paper size of the document", examples=paper_sizes
+    )
     scale: str = Field(
-        "NTS", description='if drawing, give scale, else "not to scale" (NTS)'
+        "NTS",
+        description='if drawing, give scale, else "not to scale" (NTS)',
+        examples=scales,
     )
-    doc_source: str = Field("WD", description="software used to author the document")
+    doc_source: str = Field(
+        "WD",
+        description="software used to author the document",
+        examples=DocSource._member_names_,
+    )
 
     @validator("name_nomenclature")
     def validate_name_nomenclature(cls, v, values):
@@ -80,18 +106,19 @@ def pydantic_dataclass_to_file(data: Type[dataclass], fpth="pydantic_dataclass.j
     return fpth
 
 
-@dataclass
-class IssueFormatCodes:
+class IssueFormatCodes(Enum):
     """maps IssueFormat codes to string description"""
 
-    cde: str = "Uploaded to the project common data environment"
-    ea: str = "Sent as Email attachment"
-    el: str = "Sent as Email with a link to file download"
-    p: str = "paper - full size"
-    r: str = "paper - reduced size"
+    cde = "Uploaded to the project common data environment"
+    ea = "Sent as Email attachment"
+    el = "Sent as Email with a link to file download"
+    p = "paper - full size"
+    r = "paper - reduced size"
 
 
 class IssueFormatEnum(str, Enum):
+    """in what form was the issue delivered"""
+
     cde = "cde"
     ea = "ea"
     el = "el"
@@ -100,36 +127,42 @@ class IssueFormatEnum(str, Enum):
 
 
 description_author = """
-the person who authored the work. 
-this is an optional field as for many info types listing a single author is not appropriate. 
-_could change the type to be either a single author or a list of authors..._
-this field has been explicitly requested by Canary Wharf."""
+the person who authored the work.""".replace(
+    "\n", ""
+)
 description_checked_by = """
 the person who checked the work. 
-this is an optional field as for many info types listing a single checked_by is not appropriate. 
-_could change the type to be either a single author or a list of authors..._
-this field has been explicitly requested by Canary Wharf.
-it is most appropriate for drawings - less so for Spec. """
+""".replace(
+    "\n", ""
+)
+
+COL_WIDTH = 100
 
 
 class Issue(BaseModel):
     """required information fields that define the metadata of a document issue"""
 
-    revision: str = "P01"
-    date: datetime.date = datetime.date(2020, 1, 2)
-    status_code: str = "S2"
+    revision: str = Field("P01", column_width=COL_WIDTH)
+    date: datetime.date = Field(datetime.date(2020, 1, 2), column_width=COL_WIDTH)
+    status_code: str = Field("S2", column_width=COL_WIDTH)
     status_description: str = Field(
         "Suitable for information",
-        description="this is a BIM field that matches directly with status_code. TODO: add validation",
+        description="this is a BIM field that matches directly with status_code.",
+        column_width=150,
     )
-    author: Optional[str] = Field("EG", description=description_author)
-    checked_by: Optional[str] = Field("CK", description=description_checked_by)
+    author: Optional[str] = Field(
+        "EG", description=description_author, column_width=COL_WIDTH
+    )
+    checked_by: Optional[str] = Field(
+        "CK", description=description_checked_by, column_width=COL_WIDTH
+    )
     issue_format: IssueFormatEnum = Field(
-        "cde", description="in what form was the issue delivered"
+        "cde", title="Issue Format", column_width=COL_WIDTH
     )
     issue_notes: str = Field(
         "",
         description="free field where the Engineer can briefly summarise changes since previous issue",
+        column_width=300,
     )
 
     @validator("date", pre=True)
@@ -152,8 +185,12 @@ class DocumentHeaderBase(Document):
     but are output as "sentence case" (all lower case). This is configurable and simple to change.
     """
 
-    issue_history: List[Issue] = Field(default_factory=lambda: [Issue()])
-    notes: List[str] = Field(default_factory=lambda: ["add notes here"])
+    issue_history: List[Issue] = Field(
+        [Issue()],
+        format="dataframe",
+        layout={"height": "200px"},
+    )
+    notes: List[str] = Field(["add notes here"])
     originator: str = Field(
         "Max Fordham LLP",
         const=True,
