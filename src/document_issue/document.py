@@ -312,8 +312,10 @@ class MarkdownIssue:
         if fpth_md_docissue is None:
             fpth_md_docissue = pathlib.Path(self.dh.filename + "-header.md")
         self.fpth_md_docissue = fpth_md_docissue
-        self.dir_md_header = fpth_md_docissue.parent
-        self.dir_disclaimer_spacer = (self.dir_md_header / self.path_rel_img).resolve()
+        self.dir_md_docissue = fpth_md_docissue.parent
+        self.dir_disclaimer_spacer = (
+            self.dir_md_docissue / self.path_rel_img
+        ).resolve()
         self.path_disclaimer_spacer = (
             self.dir_disclaimer_spacer / "disclaimer_spacer.png"
         )
