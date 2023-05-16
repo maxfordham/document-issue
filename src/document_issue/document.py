@@ -22,7 +22,7 @@ from enum import Enum
 from document_issue.project import Project
 from document_issue.constants import (
     DIR_TEMPLATES,
-    NAME_MD_HEADER_TEMPLATE,
+    NAME_MD_DOCISSUE_TEMPLATE,
     PATH_REFERENCE_DOCX,
     PATH_REL_IMG,
     NAME_MD_DISCLAIMER_TEMPLATE,
@@ -426,7 +426,7 @@ class MarkdownIssue:
 
     @property
     def md_header(self):
-        template = self.env.get_template(NAME_MD_HEADER_TEMPLATE)
+        template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
             project_name=self.dh.project_name,
             document_description=self.dh.document_description,
