@@ -343,7 +343,7 @@ class MarkdownIssue:
     def _tomd(self):
         if self.fpth_md_docissue is not None:
             f = open(self.fpth_md_docissue, "w")
-            f.write(self.md_header)
+            f.write(self.md_docissue)
             f.close()
         else:
             raise ValueError("fpth_md_docissue not given")
@@ -351,7 +351,7 @@ class MarkdownIssue:
     def _todocx(self):
         fpth_md = self.fpth_md_docissue
         fpth_docx = str(pathlib.Path(fpth_md).with_suffix(".docx"))
-        self.fpth_docx_header = fpth_docx
+        self.fpth_docx_docissue = fpth_docx
         if self.fpth_refdocx.is_file():
             fpth_refdocx = self.fpth_refdocx
             cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --reference-doc={fpth_refdocx} --columns=6"
@@ -427,7 +427,7 @@ class MarkdownIssue:
         return tabulate(df_page2, showindex=False, tablefmt="grid")
 
     @property
-    def md_header(self):
+    def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
             project_name=self.dh.project_name,
