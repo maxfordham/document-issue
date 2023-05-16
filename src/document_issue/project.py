@@ -25,7 +25,7 @@ class Project(BaseModel):
         "In House App Testing", description="should be the same as the WebApp"
     )
     project_number: str = Field(
-        FNM_EXAMPLE_JOB, description="MXF unique number prefixed by J"
+        FNM_EXAMPLE_JOB, description="unique number project code"
     )
     roles: list[Role] = Field(
         [Role()],
