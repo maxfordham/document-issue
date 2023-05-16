@@ -1,21 +1,33 @@
 {
     "title": "DocumentHeader",
-    "description": "metadata to be accompanied by every formal document issue.\n\n__Aspiration__: not all data fields are required for every document type,\nbut no document will require additional data fields.\n\n__Note__: The parameter names are stored in the background as \"snake_case\"\nbut are output as \"sentence case\" (all lower case). This is configurable and simple to change.",
+    "description": "metadata to be accompanied by every formal document issue.\n\nNot all data fields are required for every document type,\nbut no document will require additional data fields.",
     "type": "object",
     "properties": {
         "project_name": {
             "title": "Project Name",
+            "description": "should be the same as the WebApp",
             "default": "In House App Testing",
             "type": "string"
         },
         "project_number": {
             "title": "Project Number",
+            "description": "unique number project code",
             "default": "J5001",
             "type": "string"
         },
         "roles": {
             "title": "Roles",
-            "description": "defines who is fulfilling various roles on the project.currently the there is no validation on the \"allowed roles\", but in the future this should probably link up with the work Dan, Andy and Dean having been doing  on roles and responsibilities. It is suggested that the __Project Leader__ (or senior partner...)role should be required on every project, and that only 1no Project Leader can exist on a project at a given time. Any document can then inherit this Project Leader field.[TODO: fix the required roles for a project / integrate with WebApp]{custom-style=\"mf_green\"}",
+            "description": "defines who is fulfilling various roles and responsibilitieson the project. Some of these roles are required from a QA and quality assurance perspective.",
+            "default": [
+                {
+                    "name": "JG",
+                    "role": "Project Engineer"
+                }
+            ],
+            "format": "dataframe",
+            "layout": {
+                "height": "200px"
+            },
             "type": "array",
             "items": {
                 "$ref": "#/definitions/Role"
@@ -23,11 +35,13 @@
         },
         "document_name": {
             "title": "Document Name",
+            "description": "document code. Should be the filename when uploadedto a CDE. Structured to be machine-readable.",
             "default": "06667-MXF-XX-XX-SH-M-20003",
             "type": "string"
         },
         "document_description": {
             "title": "Document Description",
+            "description": "human readable description of the document",
             "default": "Document Description",
             "type": "string"
         },
@@ -39,29 +53,85 @@
         },
         "name_nomenclature": {
             "title": "Name Nomenclature",
-            "default": "project code-originator-volume-level-type-role-number",
+            "description": "denotes what each section of of the document code meanswhen split on '-' character.",
+            "default": "project-originator-volume-level-type-role-number",
             "type": "string"
         },
         "size": {
             "title": "Size",
             "description": "paper size of the document",
             "default": "A4",
+            "examples": [
+                "n/a",
+                "A4",
+                "A3",
+                "A2",
+                "A1",
+                "A0"
+            ],
             "type": "string"
         },
         "scale": {
             "title": "Scale",
             "description": "if drawing, give scale, else \"not to scale\" (NTS)",
             "default": "NTS",
+            "examples": [
+                "nts",
+                "1:1",
+                "1:2",
+                "1:5",
+                "1:10",
+                "1:20",
+                "1:25",
+                "1:50",
+                "1:100",
+                "1:200",
+                "1:250",
+                "1:500",
+                "1:1000",
+                "1:1250"
+            ],
             "type": "string"
         },
         "doc_source": {
             "title": "Doc Source",
             "description": "software used to author the document",
             "default": "WD",
+            "examples": [
+                "A",
+                "R18",
+                "R19",
+                "R20",
+                "R21",
+                "R22",
+                "R23",
+                "PDF",
+                "PSD",
+                "PNG",
+                "WD",
+                "EXL",
+                "AM"
+            ],
             "type": "string"
         },
         "issue_history": {
             "title": "Issue History",
+            "default": [
+                {
+                    "revision": "P01",
+                    "date": "2020-01-02",
+                    "status_code": "S2",
+                    "status_description": "Suitable for information",
+                    "author": "EG",
+                    "checked_by": "CK",
+                    "issue_format": "cde",
+                    "issue_notes": ""
+                }
+            ],
+            "format": "dataframe",
+            "layout": {
+                "height": "200px"
+            },
             "type": "array",
             "items": {
                 "$ref": "#/definitions/Issue"
@@ -69,6 +139,9 @@
         },
         "notes": {
             "title": "Notes",
+            "default": [
+                "add notes here"
+            ],
             "type": "array",
             "items": {
                 "type": "string"
@@ -85,7 +158,6 @@
             "title": "Format Configuration",
             "default": {
                 "date_string_format": "%d %^b %y",
-                "description_in_filename": false,
                 "include_author_and_checked_by": false
             },
             "allOf": [
@@ -109,13 +181,44 @@
                 "role": {
                     "title": "Role",
                     "default": "Project Engineer",
+                    "column_width": 300,
+                    "examples": [
+                        "",
+                        "Director in Charge",
+                        "Client Relationship Management (CRM) Lead",
+                        "Management Lead",
+                        "Commercial Lead",
+                        "Design Strategy Lead",
+                        "Health and Safety Lead",
+                        "Project Coordinator",
+                        "Project Administrator",
+                        "Strategy Reviewer",
+                        "Technical Reviewer",
+                        "Project Engineer",
+                        "Lead Electrical Engineer",
+                        "Lead Mechanical Engineer",
+                        "Systems Engineer",
+                        "Site Engineer",
+                        "BIM Strategy Advisor",
+                        "Digital Design Engineer",
+                        "Responsible Building Performance Modeller",
+                        "Building Performance Modeller",
+                        "Lead Sustainability Consultant",
+                        "Sustainability Consultant",
+                        "Lead Acoustician",
+                        "Specialist Building Physics Engineer",
+                        "Specialist Lighting Designer",
+                        "Passivhaus Principal",
+                        "Passivhaus Project Designer",
+                        "Passivhaus Designer"
+                    ],
                     "type": "string"
                 }
             }
         },
         "IssueFormatEnum": {
             "title": "IssueFormatEnum",
-            "description": "An enumeration.",
+            "description": "in what form was the issue delivered",
             "enum": [
                 "cde",
                 "ea",
@@ -133,40 +236,47 @@
                 "revision": {
                     "title": "Revision",
                     "default": "P01",
+                    "column_width": 100,
                     "type": "string"
                 },
                 "date": {
                     "title": "Date",
                     "default": "2020-01-02",
+                    "column_width": 100,
                     "type": "string",
                     "format": "date"
                 },
                 "status_code": {
                     "title": "Status Code",
                     "default": "S2",
+                    "column_width": 100,
                     "type": "string"
                 },
                 "status_description": {
                     "title": "Status Description",
-                    "description": "this is a BIM field that matches directly with status_code. TODO: add validation",
+                    "description": "this is a BIM field that matches directly with status_code.",
                     "default": "Suitable for information",
+                    "column_width": 150,
                     "type": "string"
                 },
                 "author": {
                     "title": "Author",
-                    "description": "\nthe person who authored the work. \nthis is an optional field as for many info types listing a single author is not appropriate. \n_could change the type to be either a single author or a list of authors..._\nthis field has been explicitly requested by Canary Wharf.",
+                    "description": "the person who authored the work.",
                     "default": "EG",
+                    "column_width": 100,
                     "type": "string"
                 },
                 "checked_by": {
                     "title": "Checked By",
-                    "description": "\nthe person who checked the work. \nthis is an optional field as for many info types listing a single checked_by is not appropriate. \n_could change the type to be either a single author or a list of authors..._\nthis field has been explicitly requested by Canary Wharf.\nit is most appropriate for drawings - less so for Spec. ",
+                    "description": "the person who checked the work. ",
                     "default": "CK",
+                    "column_width": 100,
                     "type": "string"
                 },
                 "issue_format": {
-                    "description": "in what form was the issue delivered",
+                    "title": "Issue Format",
                     "default": "cde",
+                    "column_width": 100,
                     "allOf": [
                         {
                             "$ref": "#/definitions/IssueFormatEnum"
@@ -177,26 +287,25 @@
                     "title": "Issue Notes",
                     "description": "free field where the Engineer can briefly summarise changes since previous issue",
                     "default": "",
+                    "column_width": 300,
                     "type": "string"
                 }
             }
         },
         "FormatConfiguration": {
             "title": "FormatConfiguration",
+            "description": "configuration options that determine how the output is displayed",
             "type": "object",
             "properties": {
                 "date_string_format": {
                     "title": "Date String Format",
+                    "description": "date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime",
                     "default": "%d %^b %y",
                     "type": "string"
                 },
-                "description_in_filename": {
-                    "title": "Description In Filename",
-                    "default": false,
-                    "type": "boolean"
-                },
                 "include_author_and_checked_by": {
                     "title": "Include Author And Checked By",
+                    "description": "Include the initials of the author and checker in the client facing output. Often avoided but some clients (e.g. Canary Wharf) require it.",
                     "default": false,
                     "type": "boolean"
                 }

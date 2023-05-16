@@ -33,7 +33,6 @@ path_schema.write_text("\n".join(_schema))
 env = os.environ.copy()
 env["SPHINX_GITHUB_CHANGELOG_TOKEN"] = GITHUB_TOKEN
 # ^ add SPHINX_GITHUB_CHANGELOG_TOKEN to environ
-print(GITHUB_TOKEN)
 
 subprocess.call("jupyter-book config sphinx .", shell=True)
 # ^ create `conf.py` file
