@@ -310,7 +310,7 @@ class MarkdownIssue:
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
         if fpth_md_docissue is None:
-            fpth_md_docissue = pathlib.Path(self.dh.filename + "-header.md")
+            fpth_md_docissue = pathlib.Path(self.dh.filename + ".docissue.md")
         self.fpth_md_docissue = fpth_md_docissue
         self.dir_md_docissue = fpth_md_docissue.parent
         self.dir_disclaimer_spacer = (
