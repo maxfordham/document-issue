@@ -77,3 +77,13 @@ mh = MarkdownHeader(dh, tomd=True, todocx=True) #
 from ipyautoui.autodisplay_renderers import preview_pdf
 preview_pdf("06667-MXF-XX-XX-SH-M-20003-header.pdf")
 ```
+
+### User Interface
+
+
+```{figure} images/ui.png
+---
+name: user interface
+---
+demonstrates how the document issue information is defined in the app
+```

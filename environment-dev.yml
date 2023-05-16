@@ -19,9 +19,10 @@ dependencies:
   - stringcase
   - pytest
   - black
+  - nb_black
   - jupytext # authoring docs
   - jupyterlab # authoring docs
-  - jupyterbook # docs
+  - jupyter-book # docs
   - autodoc-pydantic # docs
   - erdantic # docs
   - sphinxcontrib-mermaid # docs
@@ -30,5 +31,4 @@ dependencies:
   - pip:
       - jsonschema2md
       - sphinx-github-changelog
-      - nb-black
       - git+ssh://git@github.com/maxfordham/ipyautoui.git@0.5.3

@@ -33,11 +33,20 @@ from document_issue.basemodel import BaseModel, Field, validator
 
 # TODO:
 class FormatConfiguration(BaseModel):
-    date_string_format: str = (
-        "%d %^b %y"  # https://www.programiz.com/python-programming/datetime/strptime
+    """configuration options that determine how the output is displayed"""
+
+    date_string_format: str = Field(
+        "%d %^b %y",
+        description="date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime",
     )
-    description_in_filename: bool = False
-    include_author_and_checked_by: bool = False
+    # description_in_filename: bool = False
+    include_author_and_checked_by: bool = Field(
+        False,
+        description=(
+            "Include the initials of the author and checker in the client facing output."
+            " Often avoided but some clients (e.g. Canary Wharf) require it."
+        ),
+    )
 
 
 description_document_name = """document code. Should be the filename when uploaded
@@ -178,11 +187,8 @@ class Issue(BaseModel):
 class DocumentHeaderBase(Document):
     """metadata to be accompanied by every formal document issue.
 
-    __Aspiration__: not all data fields are required for every document type,
+    Not all data fields are required for every document type,
     but no document will require additional data fields.
-
-    __Note__: The parameter names are stored in the background as "snake_case"
-    but are output as "sentence case" (all lower case). This is configurable and simple to change.
     """
 
     issue_history: List[Issue] = Field(
