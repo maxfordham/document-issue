@@ -280,7 +280,7 @@ class MarkdownIssue:
     def __init__(
         self,
         dh: DocumentIssue,
-        fpth_md_header: Optional[pathlib.Path] = None,
+        fpth_md_docissue: Optional[pathlib.Path] = None,
         path_rel_img: pathlib.Path = PATH_REL_IMG,
         tomd=False,
         todocx=False,
@@ -309,10 +309,10 @@ class MarkdownIssue:
         self.path_rel_img = path_rel_img
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
-        if fpth_md_header is None:
-            fpth_md_header = pathlib.Path(self.dh.filename + "-header.md")
-        self.fpth_md_header = fpth_md_header
-        self.dir_md_header = fpth_md_header.parent
+        if fpth_md_docissue is None:
+            fpth_md_docissue = pathlib.Path(self.dh.filename + "-header.md")
+        self.fpth_md_docissue = fpth_md_docissue
+        self.dir_md_header = fpth_md_docissue.parent
         self.dir_disclaimer_spacer = (self.dir_md_header / self.path_rel_img).resolve()
         self.path_disclaimer_spacer = (
             self.dir_disclaimer_spacer / "disclaimer_spacer.png"
@@ -339,15 +339,15 @@ class MarkdownIssue:
         return template.render(fdirRelImg=self.path_rel_img)
 
     def _tomd(self):
-        if self.fpth_md_header is not None:
-            f = open(self.fpth_md_header, "w")
+        if self.fpth_md_docissue is not None:
+            f = open(self.fpth_md_docissue, "w")
             f.write(self.md_header)
             f.close()
         else:
-            raise ValueError("fpth_md_header not given")
+            raise ValueError("fpth_md_docissue not given")
 
     def _todocx(self):
-        fpth_md = self.fpth_md_header
+        fpth_md = self.fpth_md_docissue
         fpth_docx = str(pathlib.Path(fpth_md).with_suffix(".docx"))
         self.fpth_docx_header = fpth_docx
         if self.fpth_refdocx.is_file():
