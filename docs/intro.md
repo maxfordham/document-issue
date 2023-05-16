@@ -24,7 +24,7 @@ Max Fordham branded A4 report format document.
 :tags: [remove-cell]
 
 # from IPython.display import IFrame
-# mh = MarkdownHeader(dh, tomd=True, todocx=True) # 
+# mh = MarkdownIssue(dh, tomd=True, todocx=True) # 
 ```
 
 ```{code-cell} ipython3

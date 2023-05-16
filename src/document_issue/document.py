@@ -22,7 +22,7 @@ from enum import Enum
 from document_issue.project import Project
 from document_issue.constants import (
     DIR_TEMPLATES,
-    NAME_MD_HEADER_TEMPLATE,
+    NAME_MD_DOCISSUE_TEMPLATE,
     PATH_REFERENCE_DOCX,
     PATH_REL_IMG,
     NAME_MD_DISCLAIMER_TEMPLATE,
@@ -184,7 +184,7 @@ class Issue(BaseModel):
         return v  # TODO: i think this validation step can probs be removed if the code runs differently...
 
 
-class DocumentHeaderBase(Document):
+class DocumentIssueBase(Document):
     """metadata to be accompanied by every formal document issue.
 
     Not all data fields are required for every document type,
@@ -209,7 +209,7 @@ class DocumentHeaderBase(Document):
         return [str(n) for n in v]
 
 
-class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
+class DocumentIssue(DocumentIssueBase):  # TODO: rename DocumentIssue
     @property
     def filename(self):
         if self.format_configuration.description_in_filename:
@@ -274,13 +274,13 @@ class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
         return self.current_issue.revision
 
 
-class MarkdownHeader:
-    """create structured markdown header from DocumentHeader object"""
+class MarkdownIssue:
+    """create structured markdown header from DocumentIssue object"""
 
     def __init__(
         self,
-        dh: DocumentHeader,
-        fpth_md_header: Optional[pathlib.Path] = None,
+        dh: DocumentIssue,
+        fpth_md_docissue: Optional[pathlib.Path] = None,
         path_rel_img: pathlib.Path = PATH_REL_IMG,
         tomd=False,
         todocx=False,
@@ -309,11 +309,13 @@ class MarkdownHeader:
         self.path_rel_img = path_rel_img
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
-        if fpth_md_header is None:
-            fpth_md_header = pathlib.Path(self.dh.filename + "-header.md")
-        self.fpth_md_header = fpth_md_header
-        self.dir_md_header = fpth_md_header.parent
-        self.dir_disclaimer_spacer = (self.dir_md_header / self.path_rel_img).resolve()
+        if fpth_md_docissue is None:
+            fpth_md_docissue = pathlib.Path(self.dh.filename + ".docissue.md")
+        self.fpth_md_docissue = fpth_md_docissue
+        self.dir_md_docissue = fpth_md_docissue.parent
+        self.dir_disclaimer_spacer = (
+            self.dir_md_docissue / self.path_rel_img
+        ).resolve()
         self.path_disclaimer_spacer = (
             self.dir_disclaimer_spacer / "disclaimer_spacer.png"
         )
@@ -339,17 +341,17 @@ class MarkdownHeader:
         return template.render(fdirRelImg=self.path_rel_img)
 
     def _tomd(self):
-        if self.fpth_md_header is not None:
-            f = open(self.fpth_md_header, "w")
-            f.write(self.md_header)
+        if self.fpth_md_docissue is not None:
+            f = open(self.fpth_md_docissue, "w")
+            f.write(self.md_docissue)
             f.close()
         else:
-            raise ValueError("fpth_md_header not given")
+            raise ValueError("fpth_md_docissue not given")
 
     def _todocx(self):
-        fpth_md = self.fpth_md_header
+        fpth_md = self.fpth_md_docissue
         fpth_docx = str(pathlib.Path(fpth_md).with_suffix(".docx"))
-        self.fpth_docx_header = fpth_docx
+        self.fpth_docx_docissue = fpth_docx
         if self.fpth_refdocx.is_file():
             fpth_refdocx = self.fpth_refdocx
             cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --reference-doc={fpth_refdocx} --columns=6"
@@ -425,8 +427,8 @@ class MarkdownHeader:
         return tabulate(df_page2, showindex=False, tablefmt="grid")
 
     @property
-    def md_header(self):
-        template = self.env.get_template(NAME_MD_HEADER_TEMPLATE)
+    def md_docissue(self):
+        template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
             project_name=self.dh.project_name,
             document_description=self.dh.document_description,

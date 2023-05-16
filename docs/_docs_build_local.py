@@ -12,7 +12,7 @@ import sys
 
 sys.path.append(str(pathlib.Path(__file__).parents[1] / "src"))
 
-from document_issue.document import DocumentHeader
+from document_issue.document import DocumentIssue
 
 fdir = pathlib.Path(__file__).parents[1].resolve()
 GITHUB_TOKEN = (fdir / "TOKENS" / "GITHUB_TOKEN").read_text()
@@ -23,7 +23,7 @@ script_erd = fdir / "_create_erd.py"
 subprocess.call(f"python {str(script_erd)}", shell=True)
 # ^ create ERD diagram
 
-dh = DocumentHeader()
+dh = DocumentIssue()
 path_schema = pathlib.Path("schema.md")
 dh.file_mdschema(path_schema)
 _schema = path_schema.read_text().split("\n")
