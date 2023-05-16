@@ -274,7 +274,7 @@ class DocumentIssue(DocumentIssueBase):  # TODO: rename DocumentIssue
         return self.current_issue.revision
 
 
-class MarkdownHeader:
+class MarkdownIssue:
     """create structured markdown header from DocumentIssue object"""
 
     def __init__(

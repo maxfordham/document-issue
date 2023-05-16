@@ -5,7 +5,7 @@ import sys
 import pathlib
 fdir = (pathlib.Path(".").resolve().parent / "src")
 sys.path.append(str(fdir))
-from document_issue.document import DocumentIssue, MarkdownHeader
+from document_issue.document import DocumentIssue, MarkdownIssue
 from document_issue.utils import preview_dict_as_yaml
 dh = DocumentIssue()
 preview_dict_as_yaml(dh.dict())
