@@ -184,7 +184,7 @@ class Issue(BaseModel):
         return v  # TODO: i think this validation step can probs be removed if the code runs differently...
 
 
-class DocumentHeaderBase(Document):
+class DocumentIssueBase(Document):
     """metadata to be accompanied by every formal document issue.
 
     Not all data fields are required for every document type,
@@ -209,7 +209,7 @@ class DocumentHeaderBase(Document):
         return [str(n) for n in v]
 
 
-class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
+class DocumentIssue(DocumentIssueBase):  # TODO: rename DocumentIssue
     @property
     def filename(self):
         if self.format_configuration.description_in_filename:
@@ -275,11 +275,11 @@ class DocumentHeader(DocumentHeaderBase):  # TODO: rename DocumentIssue
 
 
 class MarkdownHeader:
-    """create structured markdown header from DocumentHeader object"""
+    """create structured markdown header from DocumentIssue object"""
 
     def __init__(
         self,
-        dh: DocumentHeader,
+        dh: DocumentIssue,
         fpth_md_header: Optional[pathlib.Path] = None,
         path_rel_img: pathlib.Path = PATH_REL_IMG,
         tomd=False,

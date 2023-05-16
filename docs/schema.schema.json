@@ -1,5 +1,5 @@
 {
-    "title": "DocumentHeader",
+    "title": "DocumentIssue",
     "description": "metadata to be accompanied by every formal document issue.\n\nNot all data fields are required for every document type,\nbut no document will require additional data fields.",
     "type": "object",
     "properties": {

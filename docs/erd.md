@@ -1,9 +1,9 @@
 # Entity Relationship Diagram
 
-```{figure} images/erd-DocumentHeader.png
+```{figure} images/erd-DocumentIssue.png
 ---
-name: DocumentHeader entity relationship diagram (erd)
+name: DocumentIssue entity relationship diagram (erd)
 ---
-a diagram indicating the relational model for the DocumentHeader data stored
+a diagram indicating the relational model for the DocumentIssue data stored
 with every issued document.
 ```
