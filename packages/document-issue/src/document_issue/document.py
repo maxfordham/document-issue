@@ -17,7 +17,7 @@ from tabulate import tabulate
 from pprint import pprint
 import stringcase
 from enum import Enum
-
+from document_issue.enums import IssueFormatEnum, IssueStatusEnum
 
 from document_issue.project import Project
 from document_issue.constants import (
@@ -29,6 +29,7 @@ from document_issue.constants import (
 )
 from document_issue.enums import scales, paper_sizes, DocSource
 from document_issue.basemodel import BaseModel, Field, validator
+from document_issue.constants import COL_WIDTH
 
 
 # TODO:
@@ -70,7 +71,7 @@ class Document(Project):
     classification: str = Field(
         "Ac_05",
         description="classification as per Uniclass2015",  # TODO: make this a list...
-    )
+    )  # TODO: remove. out of scope
     name_nomenclature: str = Field(
         "project-originator-volume-level-type-role-number",
         description=description_name_nomenclature,
@@ -115,26 +116,6 @@ def pydantic_dataclass_to_file(data: Type[dataclass], fpth="pydantic_dataclass.j
     return fpth
 
 
-class IssueFormatCodes(Enum):
-    """maps IssueFormat codes to string description"""
-
-    cde = "Uploaded to the project common data environment"
-    ea = "Sent as Email attachment"
-    el = "Sent as Email with a link to file download"
-    p = "paper - full size"
-    r = "paper - reduced size"
-
-
-class IssueFormatEnum(str, Enum):
-    """in what form was the issue delivered"""
-
-    cde = "cde"
-    ea = "ea"
-    el = "el"
-    p = "p"
-    r = "r"
-
-
 description_author = """
 the person who authored the work.""".replace(
     "\n", ""
@@ -144,8 +125,6 @@ the person who checked the work.
 """.replace(
     "\n", ""
 )
-
-COL_WIDTH = 100
 
 
 class Issue(BaseModel):

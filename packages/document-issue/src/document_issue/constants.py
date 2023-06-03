@@ -1,5 +1,6 @@
 import pathlib
 
+COL_WIDTH = 100
 
 # dev
 DIR_TESTS = pathlib.Path(__file__).parent

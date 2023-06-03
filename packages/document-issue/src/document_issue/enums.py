@@ -72,3 +72,23 @@ class DocSource(Enum):
     WD = "Word"
     EXL = "Excel"
     AM = "Ametch"
+
+
+class IssueFormatCodes(Enum):
+    """maps IssueFormat codes to string description"""
+
+    cde = "Uploaded to the project common data environment"
+    ea = "Sent as Email attachment"
+    el = "Sent as Email with a link to file download"
+    p = "paper - full size"
+    r = "paper - reduced size"
+
+
+class IssueFormatEnum(str, Enum):
+    """in what form was the issue delivered"""
+
+    cde = "cde"
+    ea = "ea"
+    el = "el"
+    p = "p"
+    r = "r"

@@ -8,9 +8,9 @@ from document_issue.enums import roles
 
 class Role(BaseModel):
     name: str = Field("JG", description="initial of the person fulfilling the Role")
-    role: str = Field("Project Engineer", column_width=300, examples=roles)
-
-    # TODO: add validator to only allow defined roles...
+    role: str = Field(
+        "Project Engineer", column_width=300, examples=roles
+    )  # TODO options enum for dynamic dropdown
 
 
 description_roles = """defines who is fulfilling various roles and responsibilities
