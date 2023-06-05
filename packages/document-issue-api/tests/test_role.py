@@ -4,8 +4,8 @@ from document_issue.role import Role
 import pytest
 
 
-def post_role():
-    role = Role(role_name="test_role", role_description="test_description")
+def post_role(role_name="test_role"):
+    role = Role(role_name=role_name, role_description="test_description")
     _ = jsonable_encoder(role)
     return client.post("/role/", json=_)
 
