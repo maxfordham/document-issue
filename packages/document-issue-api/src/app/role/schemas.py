@@ -6,7 +6,7 @@ p = str(
 )
 sys.path.append(p)
 
-from document_issue.project import Role  # , Document, Project, Role
+from document_issue.role import Role  # , Document, Project, Role
 
 
 class RolePost(Role):
