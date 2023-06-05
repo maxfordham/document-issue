@@ -6,6 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import pathlib
 from app.models import Base
+from contextlib import contextmanager
+import pytest
 
 FPTH_API_TEST_ENV = pathlib.Path(__file__).parent.parent / "api-test.env"
 ENV = ApiEnv(_env_file=FPTH_API_TEST_ENV, _env_file_encoding="utf-8")
@@ -43,3 +45,18 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
+
+
+# ---- utils ----
+
+
+@contextmanager
+def _clear_data():
+    clean_session()
+    yield
+
+
+@pytest.fixture(scope="function")
+def clear_data_func():
+    with _clear_data() as result:
+        yield result
