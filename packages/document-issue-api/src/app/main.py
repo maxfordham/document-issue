@@ -9,6 +9,7 @@ import app.issue.main as issue_main
 import app.role.main as role_main
 import app.project.main as project_main
 import app.project_role.main as project_role_main
+import app.document.main as document_main
 
 logger = logging.getLogger(__name__)
 
@@ -33,3 +34,4 @@ app.include_router(issue_main.router)
 app.include_router(role_main.router)
 app.include_router(project_main.router)
 app.include_router(project_role_main.router)
+app.include_router(document_main.router)
