@@ -19,3 +19,34 @@ class TestProjectRole:
         response = post_project_role()
         assert response.status_code == 200
         assert response.json()["project"]["project_name"] == "test_project"
+
+    def test_get_project_role(self):
+        response = post_project_role()
+        assert response.status_code == 200
+        assert response.json()["project"]["project_name"] == "test_project"
+
+        # response = client.get("/project_role/1/1/")
+        # assert response.status_code == 200
+        # assert response.json()["project"]["project_name"] == "test_project"
+
+        post_role(role_name="test_role2")
+        client.post("/project_role/1/1/")
+        response = client.post("/project_role/1/2/")
+        response = client.get("/project_roles/1/")
+        assert response.status_code == 200
+        assert response.json()["roles"][0]["role_name"] == "test_role"
+        assert response.json()["roles"][1]["role_name"] == "test_role2"
+
+    def test_delete_project_role(self):
+        # response =
+        # assert response.status_code == 200
+        # assert response.json()["project"]["project_name"] == "test_project"
+        post_project_role()
+
+        response = client.delete("/project_role/1/1/")
+        assert response.status_code == 200
+        assert response.json()["project"]["project_name"] == "test_project"
+
+        response = client.get("/project_roles/1/")
+        assert response.status_code == 200
+        assert response.json()["roles"] == []
