@@ -76,6 +76,7 @@ class Project(Base):
     project_name = Column(String)  #  remove / get from webapp
 
     project_role = relationship("ProjectRole", back_populates="project")
+    document = relationship("Document", back_populates="project")
     UniqueConstraint(project_number)
 
 
@@ -124,8 +125,17 @@ class Document(Base):
     __tablename__ = "document"
 
     id = Column(Integer, primary_key=True, index=True)
+    name_nomenclature = Column(String)
     document_code = Column(Integer)
     document_description = Column(String)
+    document_source = Column(String)
+    paper_size = Column(String)
+    scale = Column(String)
+    notes = Column(JSON)
+    originator = Column(String)
+    date_string_format = Column(String)
+    output_author = Column(Boolean)
+    output_checked_by = Column(Boolean)
 
     # role = relationship(
     #     "DocumentRole",
@@ -139,7 +149,8 @@ class Document(Base):
     # )
 
     project_id = Column(Integer, ForeignKey("project.id"))
-    UniqueConstraint(document_code)
+    project = relationship("Project", back_populates="document")
+    UniqueConstraint(project_id, document_code)  # i.e. unique within project
 
 
 # ------------------

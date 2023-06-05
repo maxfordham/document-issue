@@ -14,7 +14,7 @@ from tabulate import tabulate
 from pprint import pprint
 import stringcase
 from enum import Enum
-from document_issue.enums import IssueFormatEnum, IssueStatusEnum
+from document_issue.enums import IssueFormatEnum  # , IssueStatusEnum
 
 from document_issue.project import Project
 from document_issue.constants import (
@@ -67,13 +67,19 @@ class DocumentBase(BaseModel):
         "project-originator-volume-level-type-role-number",
         description=description_name_nomenclature,
     )
-    document_name: str = Field(  # TODO: rename document_name -> document_code
+    document_code: str = Field(  # TODO: rename document_name -> document_code
         "06667-MXF-XX-XX-SH-M-20003", description=description_document_name
     )
     document_description: str = Field(
         "Document Description", description="human readable description of the document"
     )
-    size: str = Field(
+    document_source: str = Field(
+        "WD",
+        description="software used to author the document",
+        examples=DocSource._member_names_,
+    )
+    # document_filetype: str = Field() # include this?
+    paper_size: str = Field(
         "A4", description="paper size of the document", examples=paper_sizes
     )
     scale: str = Field(
@@ -81,11 +87,7 @@ class DocumentBase(BaseModel):
         description='if drawing, give scale, else "not to scale" (NTS)',
         examples=scales,
     )
-    doc_source: str = Field(
-        "WD",
-        description="software used to author the document",
-        examples=DocSource._member_names_,
-    )
+
     notes: List[str] = Field(["add notes here"])
     originator: str = Field(
         "Max Fordham LLP",
