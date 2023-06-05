@@ -34,3 +34,11 @@ class ProjectRoleGet(ProjectRole):  # ProjectRole
 
     class Config:
         orm_mode = True
+
+
+class ProjectRolesGet(BaseModel):
+    project: ProjectBase
+    roles: ty.List[Role] = Field()
+
+    class Config:
+        orm_mode = True

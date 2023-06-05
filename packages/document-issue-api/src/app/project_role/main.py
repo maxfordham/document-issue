@@ -28,3 +28,40 @@ def post_project_role(project_id: int, role_id: int, db: Session = Depends(get_d
         raise HTTPException(
             status_code=404, detail=f"Failed to add ProjectRole.\n{err}"
         )
+
+
+@router.delete(
+    "/project_role/{project_id}/{role_id}",
+    response_model=schemas.ProjectRoleGet,
+    tags=["ProjectRole"],
+    summary="Delete ProjectRole.",
+)
+def delete_project_role(project_id: int, role_id: int, db: Session = Depends(get_db)):
+    try:
+        db_ = crud.delete_project_role(db=db, project_id=project_id, role_id=role_id)
+        db.commit()
+        return db_
+    except Exception as err:
+        db.rollback()
+        logger.exception(err)
+        raise HTTPException(
+            status_code=404, detail=f"Failed to delete ProjectRole.\n{err}"
+        )
+
+
+@router.get(
+    "/project_roles/{project_id}/",
+    response_model=schemas.ProjectRolesGet,
+    tags=["ProjectRole"],
+    summary="Get ProjectRoles.",
+)
+def get_project_roles(project_id: int, db: Session = Depends(get_db)):
+    try:
+        db_ = crud.get_project_roles(db=db, project_id=project_id)
+        return db_
+    except Exception as err:
+        db.rollback()
+        logger.exception(err)
+        raise HTTPException(
+            status_code=404, detail=f"Failed to get ProjectRoles.\n{err}"
+        )
