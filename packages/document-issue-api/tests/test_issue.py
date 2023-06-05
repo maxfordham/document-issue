@@ -1,6 +1,6 @@
 from setup_test_client import client, clean_session, get_db_path
 from fastapi.encoders import jsonable_encoder
-from document_issue.document import Issue
+from document_issue.issue import Issue
 
 
 def post_issue(issue: Issue):
