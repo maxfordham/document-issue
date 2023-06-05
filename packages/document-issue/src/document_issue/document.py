@@ -17,7 +17,7 @@ from tabulate import tabulate
 from pprint import pprint
 import stringcase
 from enum import Enum
-from document_issue.enums import IssueFormatEnum, IssueStatusEnum
+from document_issue.enums import IssueFormatEnum  # , IssueStatusEnum
 
 from document_issue.project import Project
 from document_issue.constants import (
@@ -180,7 +180,7 @@ class DocumentIssueBase(Document):
         "Max Fordham LLP",
         const=True,
         description="the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
-    )
+    )  # TODO: remove. should be picked up in classification data.
     format_configuration: FormatConfiguration = FormatConfiguration()
 
     @validator("notes", pre=True, always=True)

@@ -15,6 +15,7 @@ PATH_REL_IMG = pathlib.Path("images")
 
 FNM_JOB_DATA_INI = "Jobdata.ini"
 FNM_EXAMPLE_JOB = "J5001"
+DEFAULT_PROJECT_NUMBER = 3870
 
 # documentinfo ------------------------------
 #  update this with WebApp data
