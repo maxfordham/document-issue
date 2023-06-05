@@ -6,10 +6,11 @@ p = str(
 )
 sys.path.append(p)
 
-from document_issue.document import Issue  # , Document, Project, Role
+from document_issue.issue import Issue  # , Document, Project, Role
 
 
 class IssueBasePost(Issue):
     """Issue post schema."""
 
-    pass
+    class Config:
+        orm_mode = True
