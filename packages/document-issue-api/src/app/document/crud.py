@@ -55,3 +55,29 @@ def get_documents(
     """
 
     return db.query(models.Document).offset(skip).limit(limit).all()
+
+
+def patch_document(
+    db: Session, document_id: int, document: schemas.DocumentBase
+) -> models.Document:
+    """Patch a document.
+
+    Args:
+        db (Session): The session linking to the database
+        document_id (int): The document id
+        document (schemas.DocumentBase): The document to patch
+
+    Returns:
+        models.Document: The patched document
+    """
+
+    db_document = (
+        db.query(models.Document).filter(models.Document.id == document_id).first()
+    )
+    update_data = document.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_document, key, value)
+    db.add(db_document)
+    db.commit()
+    db.refresh(db_document)
+    return db_document

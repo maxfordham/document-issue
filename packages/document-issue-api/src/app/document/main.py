@@ -56,3 +56,22 @@ def get_documents(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
     except Exception as err:
         logger.exception(err)
         raise HTTPException(status_code=404, detail=f"Failed to get Documents.\n{err}")
+
+
+@router.patch(
+    "/document/{document_id}",
+    response_model=schemas.DocumentBaseGet,
+    tags=["Document"],
+    summary="Patch Document.",
+)
+def patch_document(
+    document_id: int, document: schemas.DocumentBasePatch, db: Session = Depends(get_db)
+):
+    try:
+        db_ = crud.patch_document(db=db, document_id=document_id, document=document)
+        db.commit()
+        return db_
+    except Exception as err:
+        db.rollback()
+        logger.exception(err)
+        raise HTTPException(status_code=404, detail=f"Failed to patch Document.\n{err}")

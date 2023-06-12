@@ -36,3 +36,12 @@ class TestDocument:
         response = client.get("/documents/")
         assert response.status_code == 200
         assert response.json()[0]["document_code"] == "06667-MXF-XX-XX-SH-M-20003"
+
+    def test_patch_document(self):
+        post_project()
+        document = DocumentBasePost(project_id=1)
+        doc = post_document(document).json()
+        doc["document_code"] = "06667-MXF-XX-XX-SH-M-20004"
+        response = client.patch("/document/1/", json=doc)
+        assert response.status_code == 200
+        assert response.json()["document_code"] == "06667-MXF-XX-XX-SH-M-20004"

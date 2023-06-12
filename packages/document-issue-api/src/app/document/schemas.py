@@ -21,6 +21,12 @@ class DocumentBasePost(DocumentBase):
         orm_mode = True
 
 
+class DocumentBasePatch(DocumentBase):
+    """Issue post schema."""
+
+    pass
+
+
 class DocumentBaseGet(DocumentBasePost):
     """Issue get schema."""
 
