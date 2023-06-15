@@ -212,10 +212,7 @@ class DocumentIssueBase(Document):
 class DocumentIssue(DocumentIssueBase):  # TODO: rename DocumentIssue
     @property
     def filename(self):
-        if self.format_configuration.description_in_filename:
-            return self.document_name + "-" + self.document_description.replace(" ", "")
-        else:
-            return self.document_name
+        return self.document_name
 
     @property
     def df_issue_history(self):
