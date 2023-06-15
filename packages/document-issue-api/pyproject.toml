@@ -1,2 +1,30 @@
-[tool.pytest.ini_options]
-pythonpath = [".", "src", "tests", "../document-issue/src"]
+[project]
+name = "document-issue"
+description = ""
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["aec"]
+authors = [{ name = "J Gunstone", email = "j.gunstone@maxfordham.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+license = "MIT"
+dependencies = [
+    "pydantic",
+    "Jinja2",
+    "stringcase",
+    "PyYAML",
+    "Pillow",
+    "pandas",
+    "tabulate",
+    "pandoc",
+    "pandoc-docx-pagebreak",
+]
