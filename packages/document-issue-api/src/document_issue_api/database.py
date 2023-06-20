@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, inspect
 from sqlalchemy.ext.declarative import as_declarative, declarative_base
 from sqlalchemy.orm import sessionmaker, configure_mappers
 import logging
-from app.env import ApiEnv
+from document_issue_api.env import ApiEnv
 
 logger = logging.getLogger(__name__)
 

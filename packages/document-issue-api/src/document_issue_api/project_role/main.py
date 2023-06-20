@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import logging
-import app.project_role.schemas as schemas
-import app.project_role.crud as crud
+import document_issue_api.project_role.schemas as schemas
+import document_issue_api.project_role.crud as crud
 import typing as ty
 
-from app.database import get_db  # TODO: remove this dependency / make configurable
+from document_issue_api.database import get_db  # TODO: remove this dependency / make configurable
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

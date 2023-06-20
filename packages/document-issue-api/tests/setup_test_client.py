@@ -1,18 +1,18 @@
 from fastapi.testclient import TestClient
-from app.main import app
-from app.database import get_db
-from app.env import ApiEnv
+from document_issue_api.main import app
+from document_issue_api.database import get_db
+from document_issue_api.env import ApiEnv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import pathlib
-from app.models import Base
+from document_issue_api.models import Base
 from contextlib import contextmanager
 import pytest
 
 FPTH_API_TEST_ENV = pathlib.Path(__file__).parent.parent / "api-test.env"
 ENV = ApiEnv(_env_file=FPTH_API_TEST_ENV, _env_file_encoding="utf-8")
 
-# --------------- equivalent to: app./database.py ---------------------
+# --------------- equivalent to: document_issue_api./database.py ---------------------
 
 engine = create_engine(
     ENV.DOCUMENTISSUE_DATABASE_URL, connect_args={"check_same_thread": False}

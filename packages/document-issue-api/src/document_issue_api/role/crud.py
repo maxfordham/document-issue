@@ -1,7 +1,7 @@
 import logging
 from sqlalchemy.orm import Session
-import app.role.schemas as schemas
-import app.models as models
+import document_issue_api.role.schemas as schemas
+import document_issue_api.models as models
 import typing as ty
 from fastapi.encoders import jsonable_encoder
 

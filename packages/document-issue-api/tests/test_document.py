@@ -4,7 +4,7 @@ import pytest
 from document_issue.document_new import DocumentBase
 from test_project import post_project
 
-from app.document.schemas import DocumentBasePost
+from document_issue_api.document.schemas import DocumentBasePost
 
 
 def post_document(document: DocumentBasePost):
