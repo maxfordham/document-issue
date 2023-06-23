@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
@@ -38,10 +38,7 @@ Issues = "https://github.com/unknown/document-issue/issues"
 Source = "https://github.com/unknown/document-issue"
 
 [tool.hatch.version]
-source = "vcs"
-
-[tool.hatch.build.hooks.vcs]
-version-file = "_version.py"
+path = "src/document_issue/__about__.py"
 
 [tool.hatch.envs.default]
 dependencies = ["pytest", "pytest-cov"]
@@ -61,6 +58,5 @@ omit = ["src/document_issue/__about__.py"]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.pytest.ini_options]
-pythonpath = "src"
-testpaths = ["tests"]
-
+addopts = ["--import-mode=importlib"]
+pythonpath = "tests"

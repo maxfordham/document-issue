@@ -28,8 +28,7 @@ Specialist Lighting Designer
 Passivhaus Principal
 Passivhaus Project Designer
 Passivhaus Designer
-"""
-roles = roles.splitlines()
+""".splitlines()
 
 paper_sizes = [
     "n/a",  # Not a drawing, 3D model for example

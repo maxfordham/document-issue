@@ -28,7 +28,7 @@ class ProjectBase(BaseModel):
 
 class Project(ProjectBase):
     roles: list[Role] = Field(
-        ...,
+        [],
         description=description_roles,
         format="dataframe",
         layout={"height": "200px"},

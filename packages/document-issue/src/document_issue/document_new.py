@@ -41,12 +41,18 @@ class FormatConfiguration(BaseModel):
         "%d %^b %y",
         description="date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime",
     )
-    # description_in_filename: bool = False
-    include_author_and_checked_by: bool = Field(
+    output_author: bool = Field(
         False,
         description=(
-            "Include the initials of the author and checker in the client facing output."
-            " Often avoided but some clients (e.g. Canary Wharf) require it."
+            "Include the initials of the author in the client facing output."
+            " Often avoided but some clients require it."
+        ),
+    )
+    output_checked_by: bool = Field(
+        False,
+        description=(
+            "Include the initials of the checker in the client facing output."
+            " Often avoided but some clients require it."
         ),
     )
 
@@ -94,24 +100,6 @@ class DocumentBase(BaseModel):
         const=True,
         description="the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
     )  # TODO: remove. should be picked up in classification data.
-    date_string_format: str = Field(
-        "%d %^b %y",
-        description="date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime",
-    )
-    output_author: bool = Field(
-        False,
-        description=(
-            "Include the initials of the author in the client facing output."
-            " Often avoided but some clients require it."
-        ),
-    )
-    output_checked_by: bool = Field(
-        False,
-        description=(
-            "Include the initials of the checker in the client facing output."
-            " Often avoided but some clients require it."
-        ),
-    )
 
     @validator("name_nomenclature")
     def validate_name_nomenclature(cls, v, values):
@@ -135,6 +123,8 @@ class Document(DocumentBase):
     project: Project = Field(..., description="the project this document belongs to")
     classification: Classification = Field(None)
     issue_history: ty.List[Issue] = Field(
+        [],
+        description="list of issues",
         format="dataframe",
         layout={"height": "200px"},
     )

@@ -7,8 +7,10 @@
 
 **Table of Contents**
 
-- [Installation](#installation)
-- [License](#license)
+- [document-issue-api](#document-issue-api)
+  - [Installation](#installation)
+  - [Development Install](#development-install)
+  - [License](#license)
 
 ## Installation
 
@@ -18,11 +20,24 @@ pip install document-issue-api
 
 ## Development Install
 
+├── packages
+│   ├── document-issue
+│   │   ├── pyproject.toml
+│   │   ├── tests
+│   │   ├── src
+│   │   ├── ...
+│   ├── document-issue-api
+│   │   ├── pyproject.toml
+│   │   ├── tests
+│   │   ├── src
+│   │   ├── ...
+
 ```console
-mamba create -n document-issue-api-dev python pip
+mamba create -n document-issue-api-dev python pip pytest black jupyterlab
 # create a new dev env
 
 pip install -e .
+pip install -e ../aecschedule
 ```
 
 ## License
