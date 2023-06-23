@@ -57,7 +57,7 @@ class FormatConfiguration(BaseModel):
     )
 
 
-description_document_name = """document code. Should be the filename when uploaded
+description_document_code = """document code. Should be the filename when uploaded
 to a CDE. Structured to be machine-readable.""".replace(
     "\n", ""
 )
@@ -68,13 +68,13 @@ when split on '-' character.
 )
 
 
-class DocumentBase(BaseModel):
+class DocumentBase(FormatConfiguration):
     name_nomenclature: str = Field(
         "project-originator-volume-level-type-role-number",
         description=description_name_nomenclature,
     )
-    document_code: str = Field(  # TODO: rename document_name -> document_code
-        "06667-MXF-XX-XX-SH-M-20003", description=description_document_name
+    document_code: str = Field(
+        "06667-MXF-XX-XX-SH-M-20003", description=description_document_code
     )
     document_description: str = Field(
         "Document Description", description="human readable description of the document"
@@ -104,14 +104,14 @@ class DocumentBase(BaseModel):
     @validator("name_nomenclature")
     def validate_name_nomenclature(cls, v, values):
         """fix the author to always be Max Fordham LLP"""
-        li_name = v.split("-")  # values['document_name'].split('-')
+        li_name = v.split("-")  # values['document_code'].split('-')
         li_nomenclature = v.split("-")
         len_name = len(li_name)
         len_nomenclature = len(li_nomenclature)
         if len_name != len_nomenclature:
             raise ValueError(
                 f"""
-            number of sections in document_name == {len_name}
+            number of sections in document_code == {len_name}
             number of sections in name_nomenclature == {len_nomenclature}
             they must match!"""
             )

@@ -27,25 +27,18 @@ class MarkdownIssue:
         fpth_refdocx=PATH_REFERENCE_DOCX,
     ):
         self.dh = dh
-        # TODO: make sure this works
-        if self.dh.format_configuration.include_author_and_checked_by:
-            issue_history_cols = [
-                "date",
-                "revision",
-                "status_code",
-                "status_description",
-                "issue_notes",
-                "author",
-                "checked_by",
-            ]
-        else:
-            issue_history_cols = [
-                "date",
-                "revision",
-                "status_code",
-                "status_description",
-                "issue_notes",
-            ]
+        issue_history_cols = [
+            "date",
+            "revision",
+            "status_code",
+            "status_description",
+            "issue_notes",
+        ]
+        if self.dh.output_author:
+            issue_history_cols += ["author"]
+        if self.dh.output_checked_by:
+            issue_history_cols += ["checked_by"]
+
         self.path_rel_img = path_rel_img
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
@@ -169,12 +162,12 @@ class MarkdownIssue:
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
-            project_name=self.dh.project_name,
+            project_name=self.dh.project.project_name,
             document_description=self.dh.document_description,
             current_status_description=self.dh.current_status_description,
             author=self.dh.originator,
             current_issue_long_date=self.dh.current_issue_long_date,
-            document_name=self.dh.document_name,
+            document_code=self.dh.document_code,
             li_current_issue_header_table=self.md_current_issue_header_table,
             md_page_two=self.md_page_two,
         )
