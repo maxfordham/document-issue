@@ -1,7 +1,6 @@
 from enum import Enum
 
-roles = """
-Director in Charge
+roles = """Director in Charge
 Client Relationship Management (CRM) Lead
 Management Lead
 Commercial Lead
@@ -30,7 +29,12 @@ Passivhaus Project Designer
 Passivhaus Designer
 """.splitlines()
 
-paper_sizes = [
+RoleEnum = Enum(
+    "RoleEnum",
+    roles,
+)
+
+PaperSizeEnum = [
     "n/a",  # Not a drawing, 3D model for example
     "A4",  # Sketched only, not normally used for drawings
     "A3",  # Sketch drawings, small schematics, details
@@ -39,7 +43,7 @@ paper_sizes = [
     "A0",  # Layouts, common to use at 1:50 scale to avoid an excessive number of drawing tiles
 ]
 
-scales = [
+ScalesEnum = [
     "nts",
     "1:1",
     "1:2",
@@ -73,7 +77,7 @@ class DocSource(Enum):
     AM = "Ametch"
 
 
-class IssueFormatCodes(Enum):
+class IssueFormatEnum(Enum):
     """maps IssueFormat codes to string description"""
 
     cde = "Uploaded to the project common data environment"
@@ -83,11 +87,11 @@ class IssueFormatCodes(Enum):
     r = "paper - reduced size"
 
 
-class IssueFormatEnum(str, Enum):
-    """in what form was the issue delivered"""
+# class IssueFormatEnum(str, Enum):
+#     """in what form was the issue delivered"""
 
-    cde = "cde"
-    ea = "ea"
-    el = "el"
-    p = "p"
-    r = "r"
+#     cde = "cde"
+#     ea = "ea"
+#     el = "el"
+#     p = "p"
+#     r = "r"

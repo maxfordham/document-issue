@@ -34,7 +34,7 @@ class Issue(BaseModel):
         "CK", description=description_checked_by, column_width=COL_WIDTH
     )
     issue_format: IssueFormatEnum = Field(
-        "cde", title="Issue Format", column_width=COL_WIDTH
+        IssueFormatEnum.cde, title="Issue Format", column_width=COL_WIDTH
     )
     issue_notes: str = Field(
         "",

@@ -24,7 +24,7 @@ from document_issue.constants import (
     PATH_REL_IMG,
     NAME_MD_DISCLAIMER_TEMPLATE,
 )
-from document_issue.enums import scales, paper_sizes, DocSource
+from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
 from document_issue.basemodel import BaseModel, Field, validator
 from document_issue.constants import COL_WIDTH
 from document_issue.issue import Issue
@@ -86,12 +86,12 @@ class DocumentBase(FormatConfiguration):
     )
     # document_filetype: str = Field() # include this?
     paper_size: str = Field(
-        "A4", description="paper size of the document", examples=paper_sizes
+        "A4", description="paper size of the document", examples=PaperSizeEnum
     )
     scale: str = Field(
         "NTS",
         description='if drawing, give scale, else "not to scale" (NTS)',
-        examples=scales,
+        examples=ScalesEnum,
     )
 
     notes: List[str] = Field(["add notes here"])
@@ -128,3 +128,61 @@ class Document(DocumentBase):
         format="dataframe",
         layout={"height": "200px"},
     )
+
+    @property
+    def filename(self):
+        return self.document_code
+
+    @property
+    def df_issue_history(self):
+        li = [i.dict() for i in self.issue_history]
+        df = (
+            pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
+        )
+        df["date"] = pd.to_datetime(df.date).dt.strftime(self.date_string_format)
+        return df
+
+    @property
+    def df_roles(self):
+        return pd.DataFrame([i.dict() for i in self.roles]).set_index("name")
+
+    @property
+    def df_current_issue(self):
+        return pd.DataFrame([self.current_issue.dict()])
+
+    @property
+    def df_notes(self):
+        return pd.DataFrame.from_dict(
+            {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
+        ).set_index("index")
+
+    @property
+    def current_issue(self):
+        return self.issue_history[-1]  # Issue(**self.df_issue_history.loc[0].to_dict())
+
+    @property
+    def current_issue_long_date(self):
+        return self.current_issue.date.strftime("%B %Y")
+
+    @property
+    def df_current_issue_header_table(self):
+        di = {}
+        di["status code"] = self.current_issue.status_code
+        di["revision"] = self.current_issue.revision
+        di["status description"] = self.current_issue.status_description
+        di = {
+            **di,
+            **dict(
+                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
+            ),
+        }
+        di = {k: [v] for k, v in di.items()}
+        return pd.DataFrame.from_dict(di).set_index("status code")
+
+    @property
+    def current_status_description(self):
+        return self.current_issue.status_description
+
+    @property
+    def current_revision(self):
+        return self.current_issue.revision

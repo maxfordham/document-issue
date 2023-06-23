@@ -20,7 +20,7 @@ def post_issue(db: Session, issue: schemas.IssueBasePost) -> models.Issue:
         models.Issue: The postd issue
     """
 
-    db_issue = models.Issue(**issue.dict())
+    db_issue = models.Issue(**issue.dict())  # jsonable_encoder(issue)
     db.add(db_issue)
     db.commit()
     db.refresh(db_issue)
