@@ -1,18 +1,11 @@
 import sys
 import pathlib
 
-p = str(
-    pathlib.Path(__file__).parent.parent.parent.parent.parent / "document-issue" / "src"
-)
-sys.path.append(p)
 from document_issue.role import Role
 from document_issue.project import ProjectBase
 
 from pydantic import BaseModel, Field
 import typing as ty
-
-# from
-
 
 # class ProjectRolePost(BaseModel):
 #     project_id: int = Field(description="id of the project")

@@ -1,7 +1,7 @@
 from setup_test_client import client, clean_session, get_db_path, clear_data_func
 from fastapi.encoders import jsonable_encoder
 import pytest
-from document_issue.document_new import DocumentBase
+from document_issue.document import DocumentBase
 from test_project import post_project
 
 from document_issue_api.document.schemas import DocumentBasePost

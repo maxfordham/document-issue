@@ -30,7 +30,7 @@ dependencies = [
     "Jinja2",
     "stringcase",
     "PyYAML",
-    "Pillow",
+    "pillow",
     "pandas",
     "tabulate",
     "pandoc",
