@@ -7,28 +7,17 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.8
-  - numpy
-  - pandas
-  - dataclasses
-  - pandoc
-  - pydantic
-  - tabulate
-  - toml
-  - Jinja2
-  - click
-  - stringcase
   - pytest
   - black
   - nb_black
-  - jupytext # authoring docs
-  - jupyterlab # authoring docs
-  - jupyter-book # docs
-  - autodoc-pydantic # docs
-  - erdantic # docs
-  - sphinxcontrib-mermaid # docs
-  - sphinx-autoapi # docs
+  # - jupytext # authoring docs
+  # - jupyterlab # authoring docs
+  # - jupyter-book # docs
+  # - autodoc-pydantic # docs
+  # - erdantic # docs
+  # - sphinxcontrib-mermaid # docs
+  # - sphinx-autoapi # docs
   - pip
-  - pip:
-      - jsonschema2md
-      - sphinx-github-changelog
-      - git+ssh://git@github.com/maxfordham/ipyautoui.git@0.5.3
+  # - pip:
+  #     - jsonschema2md
+      # - sphinx-github-changelog
