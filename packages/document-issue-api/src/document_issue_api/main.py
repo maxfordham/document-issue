@@ -30,8 +30,8 @@ app = FastAPI(
     #     "url": "",
     # },
 )
-document_issue_api.include_router(issue_main.router)
-document_issue_api.include_router(role_main.router)
-document_issue_api.include_router(project_main.router)
-document_issue_api.include_router(project_role_main.router)
-document_issue_api.include_router(document_main.router)
+app.include_router(issue_main.router)
+app.include_router(role_main.router)
+app.include_router(project_main.router)
+app.include_router(project_role_main.router)
+app.include_router(document_main.router)

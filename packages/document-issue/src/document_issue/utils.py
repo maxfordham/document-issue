@@ -4,7 +4,7 @@ import sys
 import json
 import re
 import yaml
-from IPython.display import Markdown
+
 
 
 def get_stem(path: pathlib.Path):
@@ -131,5 +131,6 @@ yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
 
 
 def preview_dict_as_yaml(di: dict, **kwargs):
+    from IPython.display import Markdown
     s = yaml.dump(di, indent=2, **kwargs)
     return Markdown("\n```yaml\n" + s + "\n```")
