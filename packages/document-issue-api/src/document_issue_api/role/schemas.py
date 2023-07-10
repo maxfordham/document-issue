@@ -1,11 +1,3 @@
-import sys
-import pathlib
-
-p = str(
-    pathlib.Path(__file__).parent.parent.parent.parent.parent / "document-issue" / "src"
-)
-sys.path.append(p)
-
 from document_issue.role import Role  # , Document, Project, Role
 
 
