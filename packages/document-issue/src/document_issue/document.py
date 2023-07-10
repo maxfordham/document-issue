@@ -63,16 +63,15 @@ class DocumentBase(FormatConfiguration):
         examples=DocSource._member_names_,
     )
     # document_filetype: str = Field() # include this?
-    paper_size: str = Field(
-        "A4", description="paper size of the document", examples=PaperSizeEnum
+    paper_size: ty.Union[str, PaperSizeEnum] = Field(
+        "A4", description="paper size of the document"
     )
-    scale: str = Field(
-        "NTS",
+    scale: ty.Union[str, ScalesEnum] = Field(
+        "nts",
         description='if drawing, give scale, else "not to scale" (NTS)',
-        examples=ScalesEnum,
     )
 
-    notes: List[str] = Field(["add notes here"])
+    notes: ty.List[str] = Field(["add notes here"])
     originator: str = Field(
         "Max Fordham LLP",
         const=True,
@@ -106,12 +105,17 @@ class Document(DocumentBase):
         format="dataframe",
         layout={"height": "200px"},
     )
+    # roles: ty.List[Role] #TODO add roles
+
+    @validator("issue_history")
+    def _issue_history(cls, v):
+        return sorted(v, key=lambda d: d.date)
 
     @property
     def filename(self):
         return self.document_code
 
-    @property
+    @property  # TODO deprecate. used tabulate and no pandas
     def df_issue_history(self):
         li = [i.dict() for i in self.issue_history]
         df = (

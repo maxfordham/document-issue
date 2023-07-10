@@ -34,31 +34,38 @@ RoleEnum = Enum(
     roles,
 )
 
-PaperSizeEnum = [
-    "n/a",  # Not a drawing, 3D model for example
-    "A4",  # Sketched only, not normally used for drawings
-    "A3",  # Sketch drawings, small schematics, details
-    "A2",  # Not a common paper size, avoid
-    "A1",  # Layouts, often at 1:100 scale
-    "A0",  # Layouts, common to use at 1:50 scale to avoid an excessive number of drawing tiles
-]
+PaperSizeEnum = Enum(
+    "PaperSizeEnum",
+    [
+        "n/a",  # Not a drawing, 3D model for example
+        "A5",  # probs never used...
+        "A4",  # Sketched only, not normally used for drawings
+        "A3",  # Sketch drawings, small schematics, details
+        "A2",  # Not a common paper size, avoid
+        "A1",  # Layouts, often at 1:100 scale
+        "A0",  # Layouts, common to use at 1:50 scale to avoid an excessive number of drawing tiles
+    ],
+)
 
-ScalesEnum = [
-    "nts",
-    "1:1",
-    "1:2",
-    "1:5",
-    "1:10",
-    "1:20",
-    "1:25",
-    "1:50",
-    "1:100",
-    "1:200",
-    "1:250",
-    "1:500",
-    "1:1000",
-    "1:1250",
-]
+ScalesEnum = Enum(
+    "ScalesEnum",
+    [
+        "nts",
+        "1:1",
+        "1:2",
+        "1:5",
+        "1:10",
+        "1:20",
+        "1:25",
+        "1:50",
+        "1:100",
+        "1:200",
+        "1:250",
+        "1:500",
+        "1:1000",
+        "1:1250",
+    ],
+)
 
 
 class DocSource(Enum):
