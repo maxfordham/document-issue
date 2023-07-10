@@ -3,7 +3,6 @@ define base characteristics of a Project
 """
 from document_issue.constants import DEFAULT_PROJECT_NUMBER
 from document_issue.basemodel import BaseModel, Field
-from document_issue.enums import RoleEnum
 from document_issue.role import Role
 
 
