@@ -5,7 +5,11 @@
 		},
 		{
 			"path": "../packages/document-issue-api"
+		},
+		{
+			"path": "../packages/document-issue-io"
 		}
+
 	],
     "settings": {
         "[python]": {
