@@ -17,19 +17,6 @@ FNM_JOB_DATA_INI = "Jobdata.ini"
 FNM_EXAMPLE_JOB = "J5001"
 DEFAULT_PROJECT_NUMBER = 3870
 
-# documentinfo ------------------------------
-#  update this with WebApp data
-ROLES = (
-    "Design Lead",
-    "Project Engineer",
-    "Engineer",
-    "Project Coordinator",
-    "Project Administrator",
-    "Building Performance Modeller",
-    "Passivhaus Engineer",
-    "Sustainability Consultant",
-)
-
 
 if __name__ == "__main__":
     if __debug__:

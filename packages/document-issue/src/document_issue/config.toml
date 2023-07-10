@@ -1,9 +1,0 @@
-[paths]
-#  job data is stored in a structured file server
-#  depending how it is accessed, it lives in one of the locations below
-jobsdrive_linux = "/home/jovyan/jobs" # from server
-jobsdrive_linux_relpth = "jobs"
-jobsdrive_windows = "\\\\maxfordham.com\\Jobs" # from users machine
-jobsdrive_windows_dfsnmspace = "J:\\"
-userdrive_windows = "C:\\"
-userdrive_linux = "/mnt/c/"
