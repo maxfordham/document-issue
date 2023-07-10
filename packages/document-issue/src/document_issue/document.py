@@ -1,32 +1,10 @@
 import typing as ty
-import pathlib
 import pandas as pd  # TODO: remove pandas ?
-import datetime
-import json
-import subprocess
-import stringcase
-from jinja2 import Environment, FileSystemLoader
-from typing import List, Type, Optional
-from pydantic.json import pydantic_encoder
-from pydantic.dataclasses import dataclass
 from pydantic import BaseModel, Field, validator
-from tabulate import tabulate
-from pprint import pprint
-import stringcase
-from enum import Enum
-from document_issue.enums import IssueFormatEnum  # , IssueStatusEnum
 
 from document_issue.project import Project
-from document_issue.constants import (
-    DIR_TEMPLATES,
-    NAME_MD_DOCISSUE_TEMPLATE,
-    PATH_REFERENCE_DOCX,
-    PATH_REL_IMG,
-    NAME_MD_DISCLAIMER_TEMPLATE,
-)
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
 from document_issue.basemodel import BaseModel, Field, validator
-from document_issue.constants import COL_WIDTH
 from document_issue.issue import Issue
 
 
