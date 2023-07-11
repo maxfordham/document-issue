@@ -8,6 +8,10 @@ class PersonPost(Person):
         orm_mode = True
 
 
+class PersonPatch(PersonPost):
+    pass
+
+
 class PersonGet(PersonPost):
     """Role get schema."""
 
