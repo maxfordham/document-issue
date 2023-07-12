@@ -1,12 +1,11 @@
-from pydantic import BaseModel, Field
+from pydantic import Field
+from document_issue.basemodel import BaseModel
 
 
 # table
 class Person(BaseModel):
-    initials: str = Field("JG", description="initial of the person fulfilling the Role")
-    full_name: str = Field(
-        "JG", description="initial of the person fulfilling the Role"
-    )
+    initials: str = Field(description="initial of the person fulfilling the Role")
+    full_name: str = Field(description="initial of the person fulfilling the Role")
 
 
 # ----------------------------------------------------
@@ -16,6 +15,3 @@ class Person(BaseModel):
 # class PersonRole(BaseModel):
 #     person: Person
 #     role: Role
-#
-#     class Config:
-#         orm_mode = True

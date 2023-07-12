@@ -34,6 +34,8 @@ class Person(Base):
     full_name = Column(String)
 
     # project_person = relationship("ProjectRole", back_populates="people")
+
+    project_role = relationship("ProjectRole", back_populates="person")
     UniqueConstraint(initials)
 
 
@@ -46,9 +48,7 @@ class Role(Base):
     id = Column(Integer, primary_key=True, index=True)
     role_name = Column(String)
     role_description = Column(String)
-    is_archived = Column(
-        Boolean, default=False
-    )  # use if a role is no longer required but already in use historically.
+    is_archived = Column(Boolean, default=False)  # use if a role is no longer required but already in use historically.
 
     project_role = relationship("ProjectRole", back_populates="role")
     UniqueConstraint(role_name)
@@ -58,9 +58,11 @@ class ProjectRole(Base):
     __tablename__ = "project_role"
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
     role_id = Column(Integer, ForeignKey("role.id"), primary_key=True)
+    person_id = Column(Integer, ForeignKey("person.id"))
 
     role = relationship("Role", back_populates="project_role")
     project = relationship("Project", back_populates="project_role")
+    person = relationship("Person", back_populates="project_role")
 
     UniqueConstraint(project_id, role_id)
 
@@ -100,8 +102,6 @@ class Issue(Base):
     project_id = Column(Integer, ForeignKey("project.id"))
     document_id = Column(Integer, ForeignKey("document.id"))
 
-    # relationship("Document", back_populates="issue")
-
 
 class DocumentRole(Base):
     __tablename__ = "document_role"
@@ -137,11 +137,15 @@ class Document(Base):
     output_author = Column(Boolean)
     output_checked_by = Column(Boolean)
 
+    # is_archived = Column(Boolean, default=False) # TODO: add for document issued but no longer required
+
     # role = relationship(
     #     "DocumentRole",
     #     back_populates="document_role",
     #     cascade="all, delete, delete-orphan",
     # )
+
+    # issue_id = Column(Integer, ForeignKey("issue.id"))
     # issue = relationship(
     #     "Issue",
     #     back_populates="document",
@@ -225,6 +229,4 @@ class ProjectDocumentCodeGenerator(Base):
     map_project = Column(JSON)
     map_originator = Column(JSON)
 
-    document_code_generator_id = Column(
-        Integer, ForeignKey("document_code_generator.id")
-    )
+    document_code_generator_id = Column(Integer, ForeignKey("document_code_generator.id"))

@@ -29,6 +29,16 @@ class TestDocument:
         assert response.status_code == 200
         assert response.json()["document_code"] == "06667-MXF-XX-XX-SH-M-20003"
 
+    def test_get_document_issue(self):
+        post_project()
+        document = DocumentBasePost(project_id=1)
+        post_document(document)
+        response = client.get("/document_issue/1/")
+        assert response.status_code == 200
+        r = response.json()
+        assert r["document_code"] == "06667-MXF-XX-XX-SH-M-20003"
+        assert r["project"]["project_number"] == 1234
+
     def test_get_documents(self):
         post_project()
         document = DocumentBasePost(project_id=1)

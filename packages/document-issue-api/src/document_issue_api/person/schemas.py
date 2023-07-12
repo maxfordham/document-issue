@@ -2,10 +2,7 @@ from document_issue.person import Person  # , Document, Project, Role
 
 
 class PersonPost(Person):
-    """Role post schema."""
-
-    class Config:
-        orm_mode = True
+    pass
 
 
 class PersonPatch(PersonPost):
@@ -13,6 +10,4 @@ class PersonPatch(PersonPost):
 
 
 class PersonGet(PersonPost):
-    """Role get schema."""
-
     id: int

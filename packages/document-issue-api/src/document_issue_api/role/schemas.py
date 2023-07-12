@@ -6,9 +6,6 @@ class RolePost(Role):
 
     is_archived: bool = False
 
-    class Config:
-        orm_mode = True
-
 
 class RoleGet(RolePost):
     """Role get schema."""

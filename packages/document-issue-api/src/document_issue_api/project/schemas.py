@@ -2,10 +2,7 @@ from document_issue.project import Project, ProjectBase
 
 
 class ProjectPost(ProjectBase):
-    """Project post schema."""
-
-    class Config:
-        orm_mode = True
+    pass
 
 
 class ProjectGet(ProjectPost):

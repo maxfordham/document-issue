@@ -5,7 +5,9 @@ import document_issue_api.project_role.schemas as schemas
 import document_issue_api.project_role.crud as crud
 import typing as ty
 
-from document_issue_api.database import get_db  # TODO: remove this dependency / make configurable
+from document_issue_api.database import (
+    get_db,
+)  # TODO: remove this dependency / make configurable
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -17,9 +19,16 @@ logger = logging.getLogger(__name__)
     tags=["ProjectRole"],
     summary="Post ProjectRole.",
 )
-def post_project_role(project_id: int, role_id: int, db: Session = Depends(get_db)):
+def post_project_role(
+    project_id: int,
+    role_id: int,
+    db: Session = Depends(get_db),
+    person_id: ty.Optional[int] = None,
+):
     try:
-        db_ = crud.post_project_role(db=db, project_id=project_id, role_id=role_id)
+        db_ = crud.post_project_role(
+            db=db, project_id=project_id, role_id=role_id, person_id=person_id
+        )
         db.commit()
         return db_
     except Exception as err:

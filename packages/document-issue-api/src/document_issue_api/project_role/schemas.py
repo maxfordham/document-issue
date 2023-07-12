@@ -1,10 +1,7 @@
-import sys
-import pathlib
-
 from document_issue.role import Role
-from document_issue.project import ProjectBase
-
-from pydantic import BaseModel, Field
+from document_issue.project import ProjectBase, PersonRole
+from document_issue.person import Person
+from document_issue.basemodel import BaseModel, Field
 import typing as ty
 
 # class ProjectRolePost(BaseModel):
@@ -12,26 +9,23 @@ import typing as ty
 #     role_id: int = Field(description="id of the role")
 
 
+class PersonGet(Person):
+    pass
+
+
 # mapping table
 class ProjectRole(BaseModel):
     project: ProjectBase
     role: Role = Field()
-
-    class Config:
-        orm_mode = True
+    person: ty.Optional[PersonGet]
 
 
 class ProjectRoleGet(ProjectRole):  # ProjectRole
     project_id: int = Field(description="id of the project")
     role_id: int = Field(description="id of the role")
-
-    class Config:
-        orm_mode = True
+    person_id: ty.Optional[int]
 
 
 class ProjectRolesGet(BaseModel):
     project: ProjectBase
-    roles: ty.List[Role] = Field()
-
-    class Config:
-        orm_mode = True
+    project_roles: ty.List[PersonRole] = Field()

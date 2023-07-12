@@ -28,6 +28,15 @@ def post_document(document: schemas.DocumentBasePost, db: Session = Depends(get_
         raise HTTPException(status_code=404, detail=f"Failed to add Document.\n{err}")
 
 
+def get_doc(document_id: int, db: Session = Depends(get_db)):
+    try:
+        db_ = crud.get_document(db=db, document_id=document_id)
+        return db_
+    except Exception as err:
+        logger.exception(err)
+        raise HTTPException(status_code=404, detail=f"Failed to get Document.\n{err}")
+
+
 @router.get(
     "/document/{document_id}",
     response_model=schemas.DocumentBaseGet,
@@ -35,12 +44,17 @@ def post_document(document: schemas.DocumentBasePost, db: Session = Depends(get_
     summary="Get Document.",
 )
 def get_document(document_id: int, db: Session = Depends(get_db)):
-    try:
-        db_ = crud.get_document(db=db, document_id=document_id)
-        return db_
-    except Exception as err:
-        logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to get Document.\n{err}")
+    return get_doc(document_id, db)
+
+
+@router.get(  # NOTE: this is a duplicate of the above. but it's a different response_model
+    "/document_issue/{document_id}",
+    response_model=schemas.DocumentIssueGet,
+    tags=["Document"],
+    summary="Get Document.",
+)
+def get_document_issue(document_id: int, db: Session = Depends(get_db)):
+    return get_doc(document_id, db)
 
 
 @router.get(
@@ -64,9 +78,7 @@ def get_documents(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
     tags=["Document"],
     summary="Patch Document.",
 )
-def patch_document(
-    document_id: int, document: schemas.DocumentBasePatch, db: Session = Depends(get_db)
-):
+def patch_document(document_id: int, document: schemas.DocumentBasePatch, db: Session = Depends(get_db)):
     try:
         db_ = crud.patch_document(db=db, document_id=document_id, document=document)
         db.commit()

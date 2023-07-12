@@ -8,7 +8,9 @@ from fastapi.encoders import jsonable_encoder
 logger = logging.getLogger(__name__)
 
 
-def post_project_role(db: Session, project_id: int, role_id: int) -> models.ProjectRole:
+def post_project_role(
+    db: Session, project_id: int, role_id: int, person_id: ty.Optional[int] = None
+) -> models.ProjectRole:
     """Create a new project role.
 
     Args:
@@ -19,17 +21,17 @@ def post_project_role(db: Session, project_id: int, role_id: int) -> models.Proj
     Returns:
         models.ProjectRole: The posted project role
     """
-
-    db_ = models.ProjectRole(project_id=project_id, role_id=role_id)
+    if person_id is not None:
+        db_ = models.ProjectRole(project_id=project_id, role_id=role_id, person_id=person_id)
+    else:
+        db_ = models.ProjectRole(project_id=project_id, role_id=role_id)
     db.add(db_)
     db.commit()
     db.refresh(db_)
     return db_
 
 
-def get_project_role(
-    db: Session, project_id: int, role_id: ty.Optional[int] = None
-) -> list[models.ProjectRole]:
+def get_project_role(db: Session, project_id: int, role_id: ty.Optional[int] = None) -> list[models.ProjectRole]:
     """Get a project role by ID.
 
     Args:
@@ -40,9 +42,7 @@ def get_project_role(
     Returns:
         models.ProjectRole: The project role
     """
-    db_ = db.query(models.ProjectRole).filter(
-        models.ProjectRole.project_id == project_id
-    )
+    db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id)
     if role_id is not None:
         db_ = db_.filter(models.ProjectRole.role_id == role_id).all()
     else:
@@ -60,19 +60,14 @@ def get_project_roles(db: Session, project_id: int) -> schemas.ProjectRolesGet:
     Returns:
         models.ProjectRole: The project role
     """
-    db_ = (
-        db.query(models.ProjectRole)
-        .filter(models.ProjectRole.project_id == project_id)
-        .all()
-    )
-    roles = [_.role for _ in db_]
+    db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id).all()
+    project_roles = [schemas.PersonRole.from_orm(_) for _ in db_]
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
-    return schemas.ProjectRolesGet(project=project, roles=roles)
+
+    return schemas.ProjectRolesGet(project=project, project_roles=project_roles)
 
 
-def delete_project_role(
-    db: Session, project_id: int, role_id: int
-) -> schemas.ProjectRoleGet:
+def delete_project_role(db: Session, project_id: int, role_id: int) -> schemas.ProjectRoleGet:
     """Delete a project role.
 
     Args:

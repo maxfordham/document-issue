@@ -5,13 +5,8 @@ import typing as ty
 
 # table
 class Role(BaseModel):
-    role_name: ty.Union[str, RoleEnum] = Field(
-        description="name of the role", examples=RoleEnum
-    )
+    role_name: ty.Union[str, RoleEnum] = Field(description="name of the role", examples=RoleEnum)
     role_description: str = Field(
         description="description of the role",
         column_width=300,
     )  # TODO options enum for dynamic dropdown
-
-    class Config:
-        orm_mode = True

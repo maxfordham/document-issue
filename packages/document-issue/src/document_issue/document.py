@@ -51,21 +51,15 @@ class DocumentBase(FormatConfiguration):
         "project-originator-volume-level-type-role-number",
         description=description_name_nomenclature,
     )
-    document_code: str = Field(
-        "06667-MXF-XX-XX-SH-M-20003", description=description_document_code
-    )
-    document_description: str = Field(
-        "Document Description", description="human readable description of the document"
-    )
+    document_code: str = Field("06667-MXF-XX-XX-SH-M-20003", description=description_document_code)
+    document_description: str = Field("Document Description", description="human readable description of the document")
     document_source: str = Field(
         "WD",
         description="software used to author the document",
         examples=DocSource._member_names_,
     )
     # document_filetype: str = Field() # include this?
-    paper_size: ty.Union[str, PaperSizeEnum] = Field(
-        "A4", description="paper size of the document"
-    )
+    paper_size: ty.Union[str, PaperSizeEnum] = Field("A4", description="paper size of the document")
     scale: ty.Union[str, ScalesEnum] = Field(
         "nts",
         description='if drawing, give scale, else "not to scale" (NTS)',
@@ -96,15 +90,19 @@ class DocumentBase(FormatConfiguration):
         return "-".join(li_nomenclature)
 
 
-class Document(DocumentBase):
+class DocumentIssue(DocumentBase):
     project: Project = Field(..., description="the project this document belongs to")
-    classification: Classification = Field(None)  # TODO: add classification
     issue_history: ty.List[Issue] = Field(
         [],
         description="list of issues",
         format="dataframe",
         layout={"height": "200px"},
     )
+
+
+class Document(DocumentIssue):
+    classification: Classification = Field(None)  # TODO: add classification
+
     # roles: ty.List[Role] #TODO add roles
 
     @validator("issue_history")
@@ -118,9 +116,7 @@ class Document(DocumentBase):
     @property  # TODO deprecate. used tabulate and no pandas
     def df_issue_history(self):
         li = [i.dict() for i in self.issue_history]
-        df = (
-            pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
-        )
+        df = pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
         df["date"] = pd.to_datetime(df.date).dt.strftime(self.date_string_format)
         return df
 
@@ -134,9 +130,9 @@ class Document(DocumentBase):
 
     @property
     def df_notes(self):
-        return pd.DataFrame.from_dict(
-            {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
-        ).set_index("index")
+        return pd.DataFrame.from_dict({"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}).set_index(
+            "index"
+        )
 
     @property
     def current_issue(self):
@@ -154,9 +150,7 @@ class Document(DocumentBase):
         di["status description"] = self.current_issue.status_description
         di = {
             **di,
-            **dict(
-                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
-            ),
+            **dict(zip(self.name_nomenclature.split("-"), self.document_code.split("-"))),
         }
         di = {k: [v] for k, v in di.items()}
         return pd.DataFrame.from_dict(di).set_index("status code")
