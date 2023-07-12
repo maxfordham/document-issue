@@ -2,10 +2,11 @@ import typing as ty
 import pandas as pd  # TODO: remove pandas ?
 from pydantic import BaseModel, Field, validator
 
-from document_issue.project import Project
+from document_issue.project import ProjectBase
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
 from document_issue.basemodel import BaseModel, Field, validator
 from document_issue.issue import Issue
+from document_issue.project_role import ProjectRoles
 
 
 class Classification(BaseModel):
@@ -91,7 +92,8 @@ class DocumentBase(FormatConfiguration):
 
 
 class DocumentIssue(DocumentBase):
-    project: Project = Field(..., description="the project this document belongs to")
+    project: ProjectBase = Field(..., description="the project this document belongs to")
+    # project_roles: ProjectRoles
     issue_history: ty.List[Issue] = Field(
         [],
         description="list of issues",

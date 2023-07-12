@@ -1,5 +1,6 @@
 from document_issue.role import Role
-from document_issue.project import ProjectBase, PersonRole
+from document_issue.project import ProjectBase
+from document_issue.project_role import PersonRole, ProjectRoles
 from document_issue.person import Person
 from document_issue.basemodel import BaseModel, Field
 import typing as ty
@@ -28,4 +29,4 @@ class ProjectRoleGet(ProjectRole):  # ProjectRole
 
 class ProjectRolesGet(BaseModel):
     project: ProjectBase
-    project_roles: ty.List[PersonRole] = Field()
+    project_roles: ProjectRoles
