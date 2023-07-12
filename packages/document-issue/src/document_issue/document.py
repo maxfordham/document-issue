@@ -96,6 +96,7 @@ class DocumentIssue(DocumentBase):
     # project_roles: ProjectRoles
     issue_history: ty.List[Issue] = Field(
         [],
+        alias="issue",
         description="list of issues",
         format="dataframe",
         layout={"height": "200px"},

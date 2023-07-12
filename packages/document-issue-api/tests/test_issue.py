@@ -2,14 +2,13 @@ from setup_test_client import client, clean_session, get_db_path
 from fastapi.encoders import jsonable_encoder
 from document_issue.issue import Issue
 
-
-def post_issue(issue: Issue):
-    _ = jsonable_encoder(issue)
-    return client.post("/issue/", json=_)
+from rest_funcs import post_issue, post_document
 
 
 class TestIssue:
     def test_post_issue(self):
-        issue = Issue()
-        response = post_issue(issue)
+        post_document()
+        response = post_issue()
+        r = response.json()
         assert response.status_code == 200
+        assert r['revision'] == 'P01'

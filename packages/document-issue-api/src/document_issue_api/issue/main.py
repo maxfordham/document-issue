@@ -12,14 +12,14 @@ logger = logging.getLogger(__name__)
 
 # ---------- /issue/ -------------------
 @router.post(
-    "/issue/",
+    "/issue/{document_id}",
     response_model=schemas.IssueBasePost,
     tags=["Issue"],
     summary="Post Issue.",
 )
-def post_issue(issue: schemas.IssueBasePost, db: Session = Depends(get_db)):
+def post_issue(issue: schemas.IssueBasePost, document_id, db: Session = Depends(get_db)):
     try:
-        db_ = crud.post_issue(db=db, issue=issue)
+        db_ = crud.post_issue(db, document_id, issue)
         db.commit()
         return db_
     except Exception as err:

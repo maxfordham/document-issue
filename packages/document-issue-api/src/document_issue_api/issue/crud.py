@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 # issue
-def post_issue(db: Session, issue: schemas.IssueBasePost) -> models.Issue:
+def post_issue(db: Session, document_id: int, issue: schemas.IssueBasePost) -> models.Issue:
     """Create a new issue.
 
     Args:
@@ -20,7 +20,7 @@ def post_issue(db: Session, issue: schemas.IssueBasePost) -> models.Issue:
         models.Issue: The postd issue
     """
 
-    db_issue = models.Issue(**issue.dict())  #
+    db_issue = models.Issue(**issue.dict() | {"document_id": int(document_id)})  #
     db.add(db_issue)
     db.commit()
     db.refresh(db_issue)

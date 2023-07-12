@@ -99,8 +99,8 @@ class Issue(Base):
     issue_format = Column(String)
     issue_notes = Column(String)
 
-    project_id = Column(Integer, ForeignKey("project.id"))
     document_id = Column(Integer, ForeignKey("document.id"))
+    document = relationship("Document", back_populates="issue")
 
 
 class DocumentRole(Base):
@@ -145,12 +145,11 @@ class Document(Base):
     #     cascade="all, delete, delete-orphan",
     # )
 
-    # issue_id = Column(Integer, ForeignKey("issue.id"))
-    # issue = relationship(
-    #     "Issue",
-    #     back_populates="document",
-    #     cascade="all, delete, delete-orphan",
-    # )
+    issue = relationship(
+        "Issue",
+        back_populates="document",
+        cascade="all, delete, delete-orphan",
+    )
 
     project_id = Column(Integer, ForeignKey("project.id"))
     project = relationship("Project", back_populates="document")
