@@ -3,11 +3,7 @@ from fastapi.encoders import jsonable_encoder
 import pytest
 from document_issue.project import ProjectBase, Project
 
-
-def post_project():
-    project = ProjectBase(project_name="test_project", project_number=1234)
-    _ = jsonable_encoder(project)
-    return client.post("/project/", json=_)
+from rest_funcs import post_project
 
 
 @pytest.mark.usefixtures("clear_data_func")

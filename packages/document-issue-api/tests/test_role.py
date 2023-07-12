@@ -3,11 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from document_issue.role import Role
 import pytest
 
-
-def post_role(role_name="test_role"):
-    role = Role(role_name=role_name, role_description="test_description")
-    _ = jsonable_encoder(role)
-    return client.post("/role/", json=_)
+from rest_funcs import post_role
 
 
 @pytest.mark.usefixtures("clear_data_func")

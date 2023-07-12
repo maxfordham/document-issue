@@ -4,12 +4,7 @@ from document_issue.person import Person
 import pytest
 
 # from polyfactory.factories import ModelFactory
-
-
-def post_person(initials="JG"):
-    person = Person(initials=initials, full_name="test_description")
-    _ = jsonable_encoder(person)
-    return client.post("/person/", json=_)
+from rest_funcs import post_person
 
 
 @pytest.mark.usefixtures("clear_data_func")
