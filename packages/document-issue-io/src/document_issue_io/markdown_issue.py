@@ -1,5 +1,6 @@
+import subprocess
 import pandas as pd  # TDOO: remove pandas ?
-import tabulate
+from tabulate import tabulate
 from document_issue.document import Document
 import typing as ty
 import pathlib
@@ -12,6 +13,7 @@ from document_issue_io.constants import (
     NAME_MD_DOCISSUE_TEMPLATE,
 )
 from document_issue_io.utils import make_disclaimer_spacer
+import stringcase
 
 
 class MarkdownIssue:
