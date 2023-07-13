@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
     "/issue/{document_id}",
     response_model=schemas.IssueBasePost,
     tags=["Issue"],
-    summary="Post Issue.",
+    summary="Post an Issue onto a Document.",
 )
 def post_issue(issue: schemas.IssueBasePost, document_id, db: Session = Depends(get_db)):
     try:

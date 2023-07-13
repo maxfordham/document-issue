@@ -1,4 +1,5 @@
-from document_issue.document import DocumentBase, DocumentIssue  # , Document, Project, Role
+from document_issue.document import DocumentBase  # , Document, Project, Role
+from document_issue.document_issue import DocumentIssue
 from document_issue.project import ProjectBase
 from document_issue.project_role import ProjectRoles
 

@@ -46,8 +46,8 @@ def get_document(document_id: int, db: Session = Depends(get_db)):
 @router.get(  # NOTE: this is a duplicate of the above. but it's a different response_model
     "/document_issue/{document_id}",
     response_model=schemas.DocumentIssueGet,
-    tags=["Document"],
-    summary="Get Document.",
+    tags=["Document Issue"],
+    summary="Get Document Issue.",
 )
 def get_document_issue(document_id: int, db: Session = Depends(get_db)):
     try:
