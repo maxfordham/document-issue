@@ -31,3 +31,4 @@ class BaseModel(BaseModel):
         alias_generator = stringcase.snakecase
         allow_population_by_field_name = True
         orm_mode = True
+        use_enum_values = True

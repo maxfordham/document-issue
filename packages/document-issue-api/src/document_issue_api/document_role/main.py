@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 @router.post(
     "/document_role/{document_id}/{role_id}",
     response_model=schemas.ProjectRoleGet,
-    tags=["ProjectRole"],
-    summary="Post ProjectRole.",
+    tags=["Document Role"],
+    summary="Post Document Role.",
 )
 def post_document_role(
     document_id: int,
@@ -31,14 +31,14 @@ def post_document_role(
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to add ProjectRole.\n{err}")
+        raise HTTPException(status_code=404, detail=f"Failed to add Document Role.\n{err}")
 
 
 @router.get(
     "/document_roles/{document_id}/",
     response_model=list[schemas.ProjectRoleGet],
-    tags=["ProjectRole"],
-    summary="Get ProjectRoles.",
+    tags=["Document Role"],
+    summary="Get Document Roles.",
 )
 def get_document_roles(document_id: int, db: Session = Depends(get_db)):
     try:
@@ -47,14 +47,14 @@ def get_document_roles(document_id: int, db: Session = Depends(get_db)):
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to get ProjectRoles.\n{err}")
+        raise HTTPException(status_code=404, detail=f"Failed to get Document Roles.\n{err}")
 
 
 @router.delete(
     "/document_role/{document_id}/{role_id}",
     response_model=schemas.ProjectRoleGet,
-    tags=["ProjectRole"],
-    summary="Delete ProjectRole.",
+    tags=["Document Role"],
+    summary="Delete Document Role.",
 )
 def delete_document_role(document_id: int, role_id: int, db: Session = Depends(get_db)):
     try:
@@ -64,4 +64,4 @@ def delete_document_role(document_id: int, role_id: int, db: Session = Depends(g
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to delete ProjectRole.\n{err}")
+        raise HTTPException(status_code=404, detail=f"Failed to delete Document Role.\n{err}")
