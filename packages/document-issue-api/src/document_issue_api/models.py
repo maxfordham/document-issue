@@ -50,6 +50,7 @@ class Role(Base):
     role_description = Column(String)
     is_archived = Column(Boolean, default=False)  # use if a role is no longer required but already in use historically.
 
+    document_role = relationship("DocumentRole", back_populates="role")
     project_role = relationship("ProjectRole", back_populates="role")
     UniqueConstraint(role_name)
 
@@ -108,13 +109,9 @@ class DocumentRole(Base):
 
     document_id = Column(Integer, ForeignKey("document.id"), primary_key=True)
     role_id = Column(Integer, ForeignKey("role.id"), primary_key=True)
-    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
 
-    # project = relationship("Project", back_populates="project_role")
-
-    # role = relationship("Role", back_populates="project_role")
-    # document_role = relationship("Document", back_populates="role")
-    # get people from project_role
+    role = relationship("Role", back_populates="document_role")
+    document = relationship("Document", back_populates="document_role")
     UniqueConstraint(document_id, role_id)
 
 
@@ -139,11 +136,7 @@ class Document(Base):
 
     # is_archived = Column(Boolean, default=False) # TODO: add for document issued but no longer required
 
-    # role = relationship(
-    #     "DocumentRole",
-    #     back_populates="document_role",
-    #     cascade="all, delete, delete-orphan",
-    # )
+    document_role = relationship("DocumentRole", back_populates="document")
 
     issue = relationship(
         "Issue",

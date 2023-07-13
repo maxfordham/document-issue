@@ -28,15 +28,6 @@ def post_document(document: schemas.DocumentBasePost, db: Session = Depends(get_
         raise HTTPException(status_code=404, detail=f"Failed to add Document.\n{err}")
 
 
-def get_doc(document_id: int, db: Session = Depends(get_db)):
-    try:
-        db_ = crud.get_document(db=db, document_id=document_id)
-        return db_
-    except Exception as err:
-        logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to get Document.\n{err}")
-
-
 @router.get(
     "/document/{document_id}",
     response_model=schemas.DocumentBaseGet,
@@ -44,7 +35,12 @@ def get_doc(document_id: int, db: Session = Depends(get_db)):
     summary="Get Document.",
 )
 def get_document(document_id: int, db: Session = Depends(get_db)):
-    return get_doc(document_id, db)
+    try:
+        db_ = crud.get_document(db=db, document_id=document_id)
+        return db_
+    except Exception as err:
+        logger.exception(err)
+        raise HTTPException(status_code=404, detail=f"Failed to get Document.\n{err}")
 
 
 @router.get(  # NOTE: this is a duplicate of the above. but it's a different response_model
@@ -54,7 +50,12 @@ def get_document(document_id: int, db: Session = Depends(get_db)):
     summary="Get Document.",
 )
 def get_document_issue(document_id: int, db: Session = Depends(get_db)):
-    return get_doc(document_id, db)
+    try:
+        d_i = crud.get_document_issue(db=db, document_id=document_id)
+        return d_i
+    except Exception as err:
+        logger.exception(err)
+        raise HTTPException(status_code=404, detail=f"Failed to get Document.\n{err}")
 
 
 @router.get(

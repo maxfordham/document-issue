@@ -41,3 +41,9 @@ def post_project_role_with_person():
     post_project()
     post_role()
     return client.post("/project_role/1/1/", params={"person_id": 1})
+
+
+def post_project_role_with_person_and_document_role():
+    assert post_project_role_with_person().status_code == 200
+    assert post_document().status_code == 200
+    return client.post("/document_role/1/1")

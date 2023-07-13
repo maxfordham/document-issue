@@ -93,7 +93,7 @@ class DocumentBase(FormatConfiguration):
 
 class DocumentIssue(DocumentBase):
     project: ProjectBase = Field(..., description="the project this document belongs to")
-    # project_roles: ProjectRoles
+    document_role: ProjectRoles
     issue_history: ty.List[Issue] = Field(
         [],
         alias="issue",

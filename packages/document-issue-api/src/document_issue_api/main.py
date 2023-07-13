@@ -9,6 +9,7 @@ import document_issue_api.issue.main as issue_main
 import document_issue_api.role.main as role_main
 import document_issue_api.project.main as project_main
 import document_issue_api.project_role.main as project_role_main
+import document_issue_api.document_role.main as document_role_main
 import document_issue_api.document.main as document_main
 import document_issue_api.person.main as person_main
 
@@ -35,5 +36,6 @@ app.include_router(issue_main.router)
 app.include_router(role_main.router)
 app.include_router(project_main.router)
 app.include_router(project_role_main.router)
+app.include_router(document_role_main.router)
 app.include_router(document_main.router)
 app.include_router(person_main.router)

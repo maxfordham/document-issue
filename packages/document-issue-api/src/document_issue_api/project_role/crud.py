@@ -47,7 +47,7 @@ def get_project_role(db: Session, project_id: int, role_id: ty.Optional[int] = N
         db_ = db_.filter(models.ProjectRole.role_id == role_id).all()
     else:
         db_ = db_.all()
-    return db_
+    return db_  # # TODO: delete - not in use
 
 
 def get_project_roles(db: Session, project_id: int) -> schemas.ProjectRolesGet:
