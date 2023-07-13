@@ -16,7 +16,8 @@ import document_issue_api.person.main as person_main
 logger = logging.getLogger(__name__)
 
 
-description = "blah blah blah"
+description = """API and database for managing document issue and revision control
+ within the AEC Industry."""
 app = FastAPI(
     # openapi_tags=tags_metadata,
     title="document-issue",
