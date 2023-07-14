@@ -11,3 +11,9 @@ class RoleGet(RolePost):
     """Role get schema."""
 
     id: int
+
+
+class RolePatch(RolePost):
+    """Role patch schema."""
+
+    pass
