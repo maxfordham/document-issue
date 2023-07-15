@@ -37,6 +37,8 @@ def post_issue(issue: schemas.IssueBasePost, document_id, db: Session = Depends(
 def get_issue(issue_id, db: Session = Depends(get_db)):
     try:
         db_ = crud.get_issue(db, issue_id)
+        if db_ is None:
+            raise HTTPException(status_code=404, detail=f"Issue {issue_id} not found.")
         return db_
     except Exception as err:
         logger.exception(err)
@@ -69,6 +71,8 @@ def patch_issue(issue_id, issue: schemas.IssueBasePatch, db: Session = Depends(g
 def delete_issue(issue_id, db: Session = Depends(get_db)):
     try:
         db_ = crud.delete_issue(db, issue_id)
+        if db_ is None:
+            raise HTTPException(status_code=404, detail=f"Issue {issue_id} not found.")
         db.commit()
         return db_
     except Exception as err:
