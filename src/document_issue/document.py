@@ -172,6 +172,7 @@ class Issue(BaseModel):
         "",
         description="free field where the Engineer can briefly summarise changes since previous issue",
         column_width=300,
+        autoui="ipyautoui.autowidgets.Textarea",
     )
 
     @validator("date", pre=True)
@@ -196,7 +197,10 @@ class DocumentIssueBase(Document):
         format="dataframe",
         layout={"height": "200px"},
     )
-    notes: List[str] = Field(["add notes here"])
+    notes: List[str] = Field(
+        ["add notes here"],
+        autoui="ipyautoui.custom.iterable.TextareaArray",
+    )
     originator: str = Field(
         "Max Fordham LLP",
         const=True,
