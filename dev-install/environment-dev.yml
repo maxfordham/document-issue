@@ -10,6 +10,7 @@ dependencies:
   - pytest
   - black
   - nb_black
+  - pytest-pretty
   # - jupytext # authoring docs
   # - jupyterlab # authoring docs
   # - jupyter-book # docs

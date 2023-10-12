@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 @router.post(
     "/document/",
-    response_model=schemas.DocumentBasePost,
+    response_model=schemas.DocumentBaseGet,
     tags=["Document"],
     summary="Post Document.",
 )
@@ -88,3 +88,20 @@ def patch_document(document_id: int, document: schemas.DocumentBasePatch, db: Se
         db.rollback()
         logger.exception(err)
         raise HTTPException(status_code=404, detail=f"Failed to patch Document.\n{err}")
+
+
+@router.delete(
+    "/document/{document_id}",
+    response_model=schemas.DocumentBaseGet,
+    tags=["Document"],
+    summary="Delete Document.",
+)
+def delete_document(document_id: int, db: Session = Depends(get_db)):
+    try:
+        db_ = crud.delete_document(db=db, document_id=document_id)
+        db.commit()
+        return db_
+    except Exception as err:
+        db.rollback()
+        logger.exception(err)
+        raise HTTPException(status_code=404, detail=f"Failed to delete Document.\n{err}")

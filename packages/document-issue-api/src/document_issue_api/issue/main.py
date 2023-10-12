@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # ---------- /issue/ -------------------
 @router.post(
     "/issue/{document_id}",
-    response_model=schemas.IssueBasePost,
+    response_model=schemas.IssueBaseGet,
     tags=["Issue"],
     summary="Post an Issue onto a Document.",
 )
