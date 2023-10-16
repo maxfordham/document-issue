@@ -15,7 +15,7 @@ from sqlalchemy import (
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import relationship, configure_mappers, validates
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base  # TODO: from sqlalchemy.orm import declarative_base
 
 
 Base = declarative_base()
@@ -78,8 +78,8 @@ class Project(Base):
     project_number = Column(Integer)
     project_name = Column(String)  #  remove / get from webapp
 
-    project_role = relationship("ProjectRole", back_populates="project")
-    document = relationship("Document", back_populates="project")
+    project_role = relationship("ProjectRole", back_populates="project", cascade="all, delete-orphan")
+    document = relationship("Document", back_populates="project", cascade="all, delete-orphan")
     UniqueConstraint(project_number)
 
 
