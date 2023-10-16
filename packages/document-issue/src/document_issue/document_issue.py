@@ -1,6 +1,6 @@
 import typing as ty
 import pandas as pd  # TODO: remove pandas ?
-from pydantic import BaseModel, Field, validator
+from pydantic import field_validator, BaseModel, Field
 
 from document_issue.project import ProjectBase
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
@@ -31,7 +31,8 @@ class DocumentIssueClassification(DocumentIssue):
 
     # roles: ty.List[Role] #TODO add roles
 
-    @validator("issue_history")
+    @field_validator("issue_history")
+    @classmethod
     def _issue_history(cls, v):
         return sorted(v, key=lambda d: d.date)
 

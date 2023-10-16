@@ -1,6 +1,7 @@
 from document_issue.role import Role
 from document_issue.person import Person
 from document_issue.basemodel import BaseModel, Field
+from pydantic import RootModel
 import typing as ty
 
 description_roles = """defines who is fulfilling various roles and responsibilities
@@ -15,8 +16,8 @@ class PersonRole(BaseModel):
     person: ty.Optional[Person]
 
 
-class ProjectRoles(BaseModel):
-    __root__: list[PersonRole] = Field(
+class ProjectRoles(RootModel):
+    root: list[PersonRole] = Field(
         [],
         description=description_roles,
         format="dataframe",

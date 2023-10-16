@@ -3,6 +3,7 @@ from document_issue.enums import IssueFormatEnum
 from document_issue.constants import COL_WIDTH
 import datetime
 import typing as ty
+from pydantic import field_validator
 
 
 description_author = """
@@ -42,7 +43,8 @@ class Issue(BaseModel):
         column_width=300,
     )
 
-    @validator("date", pre=True)
+    @field_validator("date", mode="before")
+    @classmethod
     def _date(cls, v):
         if type(v) == str:
             if "-" in v:

@@ -1,6 +1,6 @@
 import typing as ty
 # import pandas as pd  # TODO: remove pandas ?
-from pydantic import BaseModel, Field, validator
+from pydantic import field_validator, BaseModel, Field
 
 from document_issue.project import ProjectBase
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
@@ -69,8 +69,9 @@ class DocumentBase(FormatConfiguration):
         description="the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
     )  # TODO: remove. should be picked up in classification data.
 
-    @validator("name_nomenclature")
-    def validate_name_nomenclature(cls, v, values):
+    @field_validator("name_nomenclature")
+    @classmethod
+    def validate_name_nomenclature(cls, v):
         """fix the author to always be Max Fordham LLP"""
         li_name = v.split("-")  # values['document_code'].split('-')
         li_nomenclature = v.split("-")
