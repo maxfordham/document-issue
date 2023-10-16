@@ -6,10 +6,10 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python>=3.8
+  - python">=3.8,<3.12.0a0"
   - pytest
   - black
-  - nb_black
+  - tomli
   # - jupytext # authoring docs
   # - jupyterlab # authoring docs
   # - jupyter-book # docs
@@ -20,5 +20,6 @@ dependencies:
   - pip
   - pip:
       - polyfactory
+      - jupyter-black
       # - jsonschema2md
       # - sphinx-github-changelog

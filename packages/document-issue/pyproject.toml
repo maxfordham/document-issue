@@ -22,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "pydantic",
+    "pydantic<2",
     "Jinja2",
     "stringcase",
     "pandas",
