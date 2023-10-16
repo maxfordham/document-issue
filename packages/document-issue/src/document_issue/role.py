@@ -9,5 +9,5 @@ class Role(BaseModel):
     role_description: str = Field(
         "",
         description="description of the role",
-        column_width=300,
+        json_schema_extra=dict(column_width=300),
     )  # TODO options enum for dynamic dropdown

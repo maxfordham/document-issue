@@ -20,6 +20,6 @@ class ProjectRoles(RootModel):
     root: list[PersonRole] = Field(
         [],
         description=description_roles,
-        format="dataframe",
-        layout={"height": "200px"},
+        json_schema_extra=dict(format="dataframe",
+            layout={"height": "200px"}),
     )

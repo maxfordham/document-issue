@@ -23,7 +23,7 @@ def post_document_role(db: Session, role_id: int, document_id: int) -> schemas.P
     db.add(db_)
     db.commit()
     db.refresh(db_)
-    return schemas.ProjectRoleGet.from_orm(db_.role.project_role[0])
+    return schemas.ProjectRoleGet.model_validate(db_.role.project_role[0])
 
 
 def get_document_roles(db: Session, document_id: int) -> ty.List[schemas.ProjectRoleGet]:
@@ -37,7 +37,7 @@ def get_document_roles(db: Session, document_id: int) -> ty.List[schemas.Project
         models.DocumentRole: The project role
     """
     db_ = db.query(models.DocumentRole).filter(models.DocumentRole.document_id == document_id).all()
-    return [schemas.ProjectRoleGet.from_orm(_.role.project_role[0]) for _ in db_]
+    return [schemas.ProjectRoleGet.model_validate(_.role.project_role[0]) for _ in db_]
 
 
 def delete_document_role(db: Session, role_id: int, document_id: int) -> schemas.ProjectRoleGet:
@@ -58,4 +58,4 @@ def delete_document_role(db: Session, role_id: int, document_id: int) -> schemas
         .first()
     )
     db.delete(db_)
-    return schemas.ProjectRoleGet.from_orm(db_.role.project_role[0])
+    return schemas.ProjectRoleGet.model_validate(db_.role.project_role[0])

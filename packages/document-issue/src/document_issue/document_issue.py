@@ -17,8 +17,8 @@ class DocumentIssue(DocumentBase):
         [],
         alias="issue",
         description="list of issues",
-        format="dataframe",
-        layout={"height": "200px"},
+        json_schema_extra=dict(format="dataframe",
+        layout={"height": "200px"}),
     )
 
 

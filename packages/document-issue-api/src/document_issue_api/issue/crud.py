@@ -56,7 +56,7 @@ def patch_issue(db: Session, issue_id: int, issue: schemas.IssueBasePatch) -> mo
 
     db_issue = db.query(models.Issue).get(issue_id)
     issue_data = jsonable_encoder(db_issue)
-    update_data = issue.dict(exclude_unset=True)
+    update_data = issue.model_dump(exclude_unset=True)
     for field in issue_data:
         if field in update_data:
             setattr(db_issue, field, update_data[field])

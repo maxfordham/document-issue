@@ -72,7 +72,7 @@ def patch_role(db: Session, role_id: int, role: schemas.RolePatch) -> models.Rol
 
     db_ = db.query(models.Role).get(role_id)
     role_data = jsonable_encoder(db_)
-    update_data = role.dict(exclude_unset=True)
+    update_data = role.model_dump(exclude_unset=True)
     for field in role_data:
         if field in update_data:
             setattr(db_, field, update_data[field])
