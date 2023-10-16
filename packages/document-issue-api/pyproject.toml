@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+    "uvicorn",
     "fastapi",
     "pydantic<2",
     "sqlalchemy<2",
