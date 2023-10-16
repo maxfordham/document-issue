@@ -1,4 +1,5 @@
 import typing as ty
+from typing_extensions import Literal
 # import pandas as pd  # TODO: remove pandas ?
 from pydantic import field_validator, BaseModel, Field
 
@@ -63,9 +64,7 @@ class DocumentBase(FormatConfiguration):
     )
 
     notes: ty.List[str] = Field(["add notes here"])
-    originator: str = Field(
-        "Max Fordham LLP",
-        const=True,
+    originator: Literal["Max Fordham LLP"] = Field("Max Fordham LLP",
         description="the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
     )  # TODO: remove. should be picked up in classification data.
 
