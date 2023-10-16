@@ -1,4 +1,4 @@
-from setup_test_client import client, clean_session, get_db_path
+from setup_test_client import client, get_db_path
 from fastapi.encoders import jsonable_encoder
 from document_issue.issue import Issue
 from document_issue.person import Person
@@ -34,6 +34,10 @@ def post_role(role_name="test_role"):
     role = Role(role_name=role_name, role_description="test_description")
     _ = jsonable_encoder(role)
     return client.post("/role/", json=_)
+
+
+def delete_role(role_id=1):
+    return client.delete(f"/role/{role_id}")
 
 
 def post_project_role_with_person():

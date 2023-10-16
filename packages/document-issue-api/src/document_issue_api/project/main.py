@@ -38,14 +38,12 @@ def post_project(project: schemas.ProjectPost, db: Session = Depends(get_db)):
 def get_project(project_id: int, db: Session = Depends(get_db)):
     try:
         db_ = crud.get_project(db=db, project_id=project_id)
+        if db_ is None:
+            raise HTTPException(status_code=204, detail=f"Project id ={project_id} does not exist.")
+        else:
+            return db_
     except Exception as err:
         raise HTTPException(status_code=404, detail=f"Failed to get Project.\n{err}")
-    if db_ is None:
-        raise HTTPException(
-            status_code=204, detail=f"Project id ={project_id} does not exist."
-        )
-    else:
-        return db_
 
 
 @router.get(
@@ -84,9 +82,7 @@ def delete_project(project_id: int, db: Session = Depends(get_db)):
     tags=["Project"],
     summary="Patch Project.",
 )
-def patch_project(
-    project_id: int, project: schemas.ProjectPatch, db: Session = Depends(get_db)
-):
+def patch_project(project_id: int, project: schemas.ProjectPatch, db: Session = Depends(get_db)):
     try:
         db_ = crud.patch_project(db=db, project_id=project_id, project=project)
         return db_

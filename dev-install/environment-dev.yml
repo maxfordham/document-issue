@@ -10,6 +10,7 @@ dependencies:
   - pytest
   - black
   - tomli
+  - pytest-pretty
   # - jupytext # authoring docs
   # - jupyterlab # authoring docs
   # - jupyter-book # docs

@@ -83,3 +83,20 @@ def patch_document(db: Session, document_id: int, document: schemas.DocumentBase
     db.commit()
     db.refresh(db_document)
     return db_document
+
+
+def delete_document(db: Session, document_id: int) -> models.Document:
+    """Delete a document.
+
+    Args:
+        db (Session): The session linking to the database
+        document_id (int): The document id
+
+    Returns:
+        models.Document: The deleted document
+    """
+
+    db_document = db.query(models.Document).filter(models.Document.id == document_id).first()
+    db.delete(db_document)
+    db.commit()
+    return db_document

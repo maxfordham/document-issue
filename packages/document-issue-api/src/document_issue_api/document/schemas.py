@@ -19,6 +19,7 @@ class DocumentBasePatch(DocumentBase):
 class DocumentBaseGet(DocumentBasePost):
     """Issue get schema."""
 
+    id: int
     project: ProjectBase
 
 

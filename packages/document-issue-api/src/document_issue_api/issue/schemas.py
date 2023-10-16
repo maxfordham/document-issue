@@ -16,4 +16,4 @@ class IssueBasePatch(Issue):
 class IssueBaseGet(Issue):
     """Issue get schema."""
 
-    pass
+    id: int

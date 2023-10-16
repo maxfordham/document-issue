@@ -1,4 +1,4 @@
-from setup_test_client import client, clean_session, get_db_path
+from setup_test_client import client, get_db_path
 
 
 def test_app_exists():
