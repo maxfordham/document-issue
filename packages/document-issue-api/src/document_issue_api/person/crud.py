@@ -20,7 +20,7 @@ def post_person(db: Session, person: schemas.PersonPost) -> models.Role:
         models.Role: The postd role
     """
 
-    db_ = models.Person(**person.dict())
+    db_ = models.Person(**person.model_dump())
     db.add(db_)
     db.commit()
     db.refresh(db_)

@@ -19,7 +19,7 @@ def post_document(db: Session, document: schemas.DocumentBasePost) -> models.Doc
         models.Document: The posted document
     """
 
-    db_document = models.Document(**document.dict())
+    db_document = models.Document(**document.model_dump())
     db.add(db_document)
     db.commit()
     db.refresh(db_document)

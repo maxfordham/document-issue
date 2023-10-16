@@ -19,7 +19,7 @@ def post_project(db: Session, project: schemas.ProjectPost) -> models.Project:
         models.Project: The postd project
     """
 
-    db_ = models.Project(**project.dict())
+    db_ = models.Project(**project.model_dump())
     db.add(db_)
     db.commit()
     db.refresh(db_)

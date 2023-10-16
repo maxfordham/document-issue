@@ -20,7 +20,7 @@ def post_issue(db: Session, document_id: int, issue: schemas.IssueBasePost) -> m
         models.Issue: The postd issue
     """
 
-    db_issue = models.Issue(**issue.dict() | {"document_id": int(document_id)})  #
+    db_issue = models.Issue(**issue.model_dump() | {"document_id": int(document_id)})  #
     db.add(db_issue)
     db.commit()
     db.refresh(db_issue)
