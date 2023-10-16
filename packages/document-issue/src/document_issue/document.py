@@ -1,5 +1,5 @@
 import typing as ty
-import pandas as pd  # TODO: remove pandas ?
+# import pandas as pd  # TODO: remove pandas ?
 from pydantic import BaseModel, Field, validator
 
 from document_issue.project import ProjectBase
@@ -85,3 +85,7 @@ class DocumentBase(FormatConfiguration):
             )
         li_nomenclature = [s.strip() for s in li_nomenclature]
         return "-".join(li_nomenclature)
+
+
+class Document(DocumentBase):
+    pass
