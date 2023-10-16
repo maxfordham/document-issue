@@ -99,7 +99,6 @@ def patch_document(document_id: int, document: schemas.DocumentBasePatch, db: Se
 def delete_document(document_id: int, db: Session = Depends(get_db)):
     try:
         db_ = crud.delete_document(db=db, document_id=document_id)
-        db.commit()
         return db_
     except Exception as err:
         db.rollback()
