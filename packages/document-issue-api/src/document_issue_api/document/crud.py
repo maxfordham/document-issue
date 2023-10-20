@@ -19,7 +19,7 @@ def post_document(db: Session, document: schemas.DocumentBasePost) -> models.Doc
         models.Document: The posted document
     """
 
-    db_document = models.Document(**document.dict())
+    db_document = models.Document(**document.model_dump())
     db.add(db_document)
     db.commit()
     db.refresh(db_document)
@@ -42,8 +42,8 @@ def get_document(db: Session, document_id: int) -> models.Document:
 
 def get_document_issue(db: Session, document_id: int) -> schemas.DocumentIssueGet:
     db_ = get_document(db=db, document_id=document_id)
-    roles = schemas.ProjectRoles.from_orm([_.role.project_role[0] for _ in db_.document_role])
-    d_i = schemas.DocumentIssueGet.from_orm(db_)
+    roles = schemas.ProjectRoles.model_validate([_.role.project_role[0] for _ in db_.document_role])
+    d_i = schemas.DocumentIssueGet.model_validate(db_)
     d_i.document_role = roles
     return d_i
 
@@ -76,7 +76,7 @@ def patch_document(db: Session, document_id: int, document: schemas.DocumentBase
     """
 
     db_document = db.query(models.Document).filter(models.Document.id == document_id).first()
-    update_data = document.dict(exclude_unset=True)
+    update_data = document.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_document, key, value)
     db.add(db_document)

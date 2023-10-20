@@ -1,26 +1,35 @@
 import typing as ty
 import pandas as pd  # TODO: remove pandas ?
-from pydantic import BaseModel, Field, validator
+from pydantic import field_validator, BaseModel, Field
 
 from document_issue.project import ProjectBase
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
 from document_issue.basemodel import BaseModel, Field, validator
 from document_issue.issue import Issue
 from document_issue.project_role import ProjectRoles
-from document_issue.document import DocumentBase
+from document_issue.role import DocumentRole
+from document_issue.document import DocumentBase, Document
 
+# ------------------------------------------------------------------------------------------
+# NOTE: the DocumentIssue shown here is the ideal output presentation for a single document.
+#       it is not the closest representation of what is in the database. The data will need 
+#       reshaping out of the DB to create the format below.
+# ------------------------------------------------------------------------------------------
 
-class DocumentIssue(DocumentBase):
-    project: ProjectBase = Field(..., description="the project this document belongs to")
-    document_role: ProjectRoles
+class DocumentIssue(Document, ProjectBase):
+    document_role: ty.List[DocumentRole] = Field([{"role": "director", "initials": "DR"}], alias="roles", min_length=1)
     issue_history: ty.List[Issue] = Field(
         [],
         alias="issue",
         description="list of issues",
-        format="dataframe",
-        layout={"height": "200px"},
-    )
-
+        json_schema_extra=dict(format="dataframe"))
+    
+    # TODO: add this validation after ensuring that a director is shown on all existing schedules
+    # @field_validator("document_role")
+    # @classmethod
+    # def _document_role(cls, v):
+    #     assert "Director in Charge" in [_.role_name.value in _ in v]
+    #     return v
 
 class Classification(BaseModel):
     pass
@@ -31,7 +40,8 @@ class DocumentIssueClassification(DocumentIssue):
 
     # roles: ty.List[Role] #TODO add roles
 
-    @validator("issue_history")
+    @field_validator("issue_history")
+    @classmethod
     def _issue_history(cls, v):
         return sorted(v, key=lambda d: d.date)
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import ConfigDict, BaseModel, Field, validator
 import stringcase
 import pathlib
 import subprocess
@@ -26,9 +26,4 @@ class BaseModel(BaseModel):
         path_mdschema = path.with_suffix(".md")
         path_schema = self.file_schema(path, **json_kwargs)
         subprocess.run(["jsonschema2md", str(path_schema), str(path_mdschema)])
-
-    class Config:
-        alias_generator = stringcase.snakecase
-        allow_population_by_field_name = True
-        orm_mode = True
-        use_enum_values = True
+    model_config = ConfigDict(alias_generator=stringcase.snakecase, populate_by_name=True, from_attributes=True, use_enum_values=True)

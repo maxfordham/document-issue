@@ -20,7 +20,7 @@ def post_person(db: Session, person: schemas.PersonPost) -> models.Role:
         models.Role: The postd role
     """
 
-    db_ = models.Person(**person.dict())
+    db_ = models.Person(**person.model_dump())
     db.add(db_)
     db.commit()
     db.refresh(db_)
@@ -89,7 +89,7 @@ def patch_person(db: Session, person_id: int, person: schemas.PersonPatch) -> mo
 
     db_ = db.query(models.Person).filter(models.Person.id == person_id).first()
     person_data = jsonable_encoder(db_)
-    update_data = person.dict(exclude_unset=True)
+    update_data = person.model_dump(exclude_unset=True)
     for field in person_data:
         if field in update_data:
             setattr(db_, field, update_data[field])

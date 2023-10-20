@@ -19,7 +19,7 @@ def post_project(db: Session, project: schemas.ProjectPost) -> models.Project:
         models.Project: The postd project
     """
 
-    db_ = models.Project(**project.dict())
+    db_ = models.Project(**project.model_dump())
     db.add(db_)
     db.commit()
     db.refresh(db_)
@@ -90,7 +90,7 @@ def patch_project(
     """
 
     db_ = db.query(models.Project).filter(models.Project.id == project_id).first()
-    update_data = project.dict(exclude_unset=True)
+    update_data = project.model_dump(exclude_unset=True)
     for field in jsonable_encoder(db_):
         if field in update_data:
             setattr(db_, field, update_data[field])

@@ -61,7 +61,7 @@ def get_project_roles(db: Session, project_id: int) -> schemas.ProjectRolesGet:
         models.ProjectRole: The project role
     """
     db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id).all()
-    project_roles = [schemas.PersonRole.from_orm(_) for _ in db_]
+    project_roles = [schemas.PersonRole.model_validate(_) for _ in db_]
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
 
     return schemas.ProjectRolesGet(project=project, project_roles=project_roles)
@@ -84,6 +84,6 @@ def delete_project_role(db: Session, project_id: int, role_id: int) -> schemas.P
         .filter(models.ProjectRole.role_id == role_id)
         .first()
     )
-    _ = schemas.ProjectRoleGet.from_orm(db_)
+    _ = schemas.ProjectRoleGet.model_validate(db_)
     db.delete(db_)
     return _
