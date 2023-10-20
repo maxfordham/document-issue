@@ -2,10 +2,12 @@ from pydantic import Field
 from document_issue.basemodel import BaseModel
 
 
+class _Initials(BaseModel):
+    initials: str = Field(description="initial of the person fulfilling the Role", alias="name")
+
 # table
-class Person(BaseModel):
-    initials: str = Field(description="initial of the person fulfilling the Role")
-    full_name: str = Field(description="initial of the person fulfilling the Role")
+class Person(_Initials):
+    full_name: str = Field(description="full name of the person fulfilling the Role")
 
 
 # ----------------------------------------------------

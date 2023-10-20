@@ -108,7 +108,7 @@ class DocumentRole(Base):
     __tablename__ = "document_role"
 
     document_id = Column(Integer, ForeignKey("document.id"), primary_key=True)
-    role_id = Column(Integer, ForeignKey("role.id"), primary_key=True)
+    role_id = Column(Integer, ForeignKey("role.id"), primary_key=True)  # TODO: map to project role
 
     role = relationship("Role", back_populates="document_role")
     document = relationship("Document", back_populates="document_role")
@@ -126,7 +126,7 @@ class Document(Base):
     document_code = Column(Integer)
     document_description = Column(String)
     document_source = Column(String)
-    paper_size = Column(String)
+    size = Column(String)
     scale = Column(String)
     notes = Column(JSON)
     originator = Column(String)

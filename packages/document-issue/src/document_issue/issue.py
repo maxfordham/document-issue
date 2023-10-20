@@ -16,6 +16,8 @@ the person who checked the work.
     "\n", ""
 )
 
+# TODO: who issued to?
+
 
 class Issue(BaseModel):
     """required information fields that define the metadata of a document issue"""
@@ -52,3 +54,12 @@ class Issue(BaseModel):
             else:
                 v = datetime.datetime.strptime(v, "%m %b %y").date()
         return v  # TODO: i think this validation step can probs be removed if the code runs differently...
+    
+    @field_validator("issue_format", mode="before")
+    @classmethod
+    def _issue_format(cls, v):
+        if v in list(IssueFormatEnum.__members__.keys()):
+            return getattr(IssueFormatEnum, v)
+        else:
+            return v
+    
