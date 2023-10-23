@@ -44,7 +44,7 @@ are used to create the Document Number, this may follow up in the future.
 
 ## Development Install
 
-If using VSCode, we recommend using the `document-issue.code-workspace` file to open the project.
+If using VSCode, we recommend using the [`document-issue.code-workspace`](./.vscode/document-issue.code-workspace) file to open the project.
 
 To install the environment and packages for development, run the following commands:
 ```console
