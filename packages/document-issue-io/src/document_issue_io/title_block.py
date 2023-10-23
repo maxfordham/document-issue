@@ -116,8 +116,8 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
     mf_background_width, mf_background_height = image.size
     a4_image_ratio = A4[1] / mf_background_height
     canvas.saveState()
-    canvas.drawImage(FPTH_MF_BACKGROUND, x=150, y=0, width=mf_background_width*a4_image_ratio, height=A4[1])
-    canvas.drawImage(FPTH_MF_TITLE, x=540, y=400, width=0.5*mf_title_width, height=0.5*mf_title_height, mask="auto")
+    canvas.drawImage(FPTH_MF_BACKGROUND, x=170, y=0, width=mf_background_width*a4_image_ratio, height=A4[1])
+    canvas.drawImage(FPTH_MF_TITLE, x=535, y=510, width=0.35*mf_title_width, height=0.35*mf_title_height, mask="auto")
     canvas.restoreState()
 
 
