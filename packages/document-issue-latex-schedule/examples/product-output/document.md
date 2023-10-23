@@ -93,11 +93,11 @@ _[\hyperlink{toc}{TOC}]_ Fan Coil Units - Pr_70_65_03_29
 
 
 ::: {layout-ncol=3}
-![A fan coil unit](../../media/fcu.jpg){width=30mm}
+![A fan coil unit](./media/fcu.jpg){width=30mm}
 
-![Another fan coil unit](../../media/fcu-2.png){width=30mm}
+![Another fan coil unit](./media/fcu-2.png){width=30mm}
 
-![Fan coil unit again!](../../media/fcu-3.png){width=30mm}
+![Fan coil unit again!](./media/fcu-3.png){width=30mm}
 :::
 
 +------------------------------+----------------------------------------------+

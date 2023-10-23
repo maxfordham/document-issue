@@ -31,7 +31,7 @@ size: A4
 
 ## A Red Circle
 
-![Some red circle](../../media/red-dot.png){width=30mm}
+![Some red circle](./media/red-dot.png){width=30mm}
 
 Above we can see an image of a red circle.
 
@@ -40,11 +40,11 @@ Above we can see an image of a red circle.
 ## Radiators
 
 ::: {layout-ncol=3}
-![A Radiator](../../media/radiator.jpg){width=30mm}
+![A Radiator](./media/radiator.jpg){width=30mm}
 
-![Another radiator](../../media/radiator-2.jpg){width=30mm}
+![Another radiator](./media/radiator-2.jpg){width=30mm}
 
-![Look at that, another radiator!](../../media/radiator-3.jpg){width=30mm}
+![Look at that, another radiator!](./media/radiator-3.jpg){width=30mm}
 :::
 
 Above we can see many lovely looking radiators.
