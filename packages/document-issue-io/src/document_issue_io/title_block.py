@@ -135,19 +135,3 @@ def build_schedule_title_page_template_pdf(project_info: dict, fpth_output: path
         )
     elements = [TopPadder(title_block_table)]
     doc.build(elements, onFirstPage=set_background)
-
-if __name__ == "__main__":
-    project_info = {
-        "project_name": "A Max Fordham Project",
-        "job_number": "J4321",
-        "project_leader": "OH",
-        "document_name": "06667-MXF-XX-XX-SH-M-20003",
-        "document_description": "A description of the document that is important",
-        "name_nomenclature": "project-originator-volume-level-type-role-number",
-        "revision": "P01",
-        "status_code": "S2",
-        "status_description": "Suitable for information",
-        "date": "2023-10-20"
-    }
-    build_title_block_pdf(project_info=project_info, fpth_output=pathlib.Path(__file__).parent / "title-block.pdf")
-    build_schedule_title_page_template_pdf(project_info=project_info, fpth_output=pathlib.Path(__file__).parent / "schedule-title-page.pdf")
