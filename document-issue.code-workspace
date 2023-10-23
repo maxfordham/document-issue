@@ -12,6 +12,9 @@
         },
         {
             "path": "packages/document-issue-io"
+        },
+        {
+            "path": "packages/document-issue-latex-schedule"
         }
     ],
     "settings": {
