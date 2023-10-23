@@ -1,6 +1,10 @@
 {
     "folders": [
         {
+            "name": "ROOT",
+            "path": "."
+        },
+        {
             "path": "packages/document-issue"
         },
         {
@@ -8,15 +12,14 @@
         },
         {
             "path": "packages/document-issue-io"
-        },
-        {
-            "path": "dev-install"
         }
     ],
     "settings": {
         "[python]": {
             "editor.defaultFormatter": "ms-python.black-formatter"
         },
-        "python.formatting.provider": "none"
+        "files.exclude": {
+            "packages/": true,
+        }
     }
 }
