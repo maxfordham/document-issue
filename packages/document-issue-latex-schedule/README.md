@@ -1,4 +1,10 @@
-# Quarto First Steps
+# document-issue-latex-schedule
+
+**Table of Contents**
+
+- [document-issue-latex-schedule](#document-issue-latex-schedule)
+  - [Installation](#installation)
+  - [Generate PDF from MD](#generate-pdf-from-md)
 
 ## Installation
 
@@ -24,3 +30,4 @@ To generate the PDF examples from the MD files, run the following command:
 ```bash
 quarto render examples/**/document.md --to pdf
 ```
+
