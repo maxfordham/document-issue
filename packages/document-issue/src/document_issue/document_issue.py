@@ -58,7 +58,9 @@ class DocumentIssueClassification(DocumentIssue):
 
     @property
     def df_roles(self):
-        return pd.DataFrame([i.dict() for i in self.document_role]).set_index("role_name")
+        df = pd.DataFrame([i.dict() for i in self.document_role]).set_index("initials")
+        df.rename(columns={"role_name": "role"}, inplace=True)
+        return df
 
     @property
     def df_current_issue(self):
@@ -66,9 +68,12 @@ class DocumentIssueClassification(DocumentIssue):
 
     @property
     def df_notes(self):
-        return pd.DataFrame.from_dict({"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}).set_index(
+        df = pd.DataFrame.from_dict({"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}).set_index(
             "index"
         )
+        df.index.name= ""
+        df.rename(columns={"notes": ""}, inplace=True)
+        return df
 
     @property
     def current_issue(self):

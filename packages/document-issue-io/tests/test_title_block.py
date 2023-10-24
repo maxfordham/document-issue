@@ -1,9 +1,7 @@
-import pytest
-import pathlib
-
 from document_issue_io.title_block import build_title_block_pdf, build_schedule_title_page_template_pdf
 
-FDIR_TEST_OUTPUT= pathlib.Path(__file__).parent/ "testoutput"
+from tests.constants import FDIR_TEST_OUTPUT
+
 
 def test_build_title_block_pdf():
     FPTH_TITLE_BLOCK_PDF = FDIR_TEST_OUTPUT / "title-block.pdf"
