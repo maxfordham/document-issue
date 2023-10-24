@@ -53,12 +53,12 @@ class DocumentIssueClassification(DocumentIssue):
     def df_issue_history(self):
         li = [i.dict() for i in self.issue_history]
         df = pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
-        df["date"] = pd.to_datetime(df.date).dt.strftime(self.date_string_format)
+        df["date"] = pd.to_datetime(df.date).dt.strftime(self.format_configuration.date_string_format)
         return df
 
     @property
     def df_roles(self):
-        return pd.DataFrame([i.dict() for i in self.document_role]).set_index("name")
+        return pd.DataFrame([i.dict() for i in self.document_role]).set_index("role_name")
 
     @property
     def df_current_issue(self):

@@ -1,10 +1,13 @@
 import subprocess
-import pandas as pd  # TDOO: remove pandas ?
-from tabulate import tabulate
-from document_issue.document import Document
-import typing as ty
 import pathlib
+import stringcase
+import typing as ty
+import pandas as pd
+from tabulate import tabulate
 from jinja2 import Environment, FileSystemLoader
+
+from document_issue.document_issue import DocumentIssueClassification
+from document_issue_io.utils import make_disclaimer_spacer
 from document_issue_io.constants import (
     PATH_REL_IMG,
     PATH_REFERENCE_DOCX,
@@ -12,23 +15,20 @@ from document_issue_io.constants import (
     NAME_MD_DISCLAIMER_TEMPLATE,
     NAME_MD_DOCISSUE_TEMPLATE,
 )
-from document_issue_io.utils import make_disclaimer_spacer
-import stringcase
 
 
-class MarkdownIssue:
-    """create structured markdown header from Document object"""
+class MarkdownDocumentIssue:
+    """Create structured markdown header from Document object"""
 
     def __init__(
         self,
-        dh: Document,
+        document_issue: DocumentIssueClassification,
         fpth_md_docissue: ty.Optional[pathlib.Path] = None,
         path_rel_img: pathlib.Path = PATH_REL_IMG,
         tomd=False,
-        todocx=False,
-        fpth_refdocx=PATH_REFERENCE_DOCX,
+        to_pdf=False,
     ):
-        self.dh = dh
+        self.document_issue = document_issue
         issue_history_cols = [
             "date",
             "revision",
@@ -36,16 +36,16 @@ class MarkdownIssue:
             "status_description",
             "issue_notes",
         ]
-        if self.dh.output_author:
+        if self.document_issue.format_configuration.output_author:
             issue_history_cols += ["author"]
-        if self.dh.output_checked_by:
+        if self.document_issue.format_configuration.output_checked_by:
             issue_history_cols += ["checked_by"]
 
-        self.path_rel_img = path_rel_img
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
+        self.path_rel_img = path_rel_img
         if fpth_md_docissue is None:
-            fpth_md_docissue = pathlib.Path(self.dh.filename + ".docissue.md")
+            fpth_md_docissue = pathlib.Path(self.document_issue.document_code + ".docissue.md")
         self.fpth_md_docissue = fpth_md_docissue
         self.dir_md_docissue = fpth_md_docissue.parent
         self.dir_disclaimer_spacer = (
@@ -56,15 +56,14 @@ class MarkdownIssue:
         )
         self.issue_history_cols = issue_history_cols
         self.tomd = tomd
-        if todocx:
+        if to_pdf:
             self.tomd = True
-        self.todocx = todocx
-        self.fpth_refdocx = fpth_refdocx
+        self.to_pdf = to_pdf
         self.disclaimer = self._disclaimer()
         if self.tomd:
             self._tomd()
-        if self.todocx:
-            self._todocx()
+        if self.to_pdf:
+            self._to_pdf()
 
     def _disclaimer(self):
         if not self.path_disclaimer_spacer.is_file():
@@ -82,26 +81,33 @@ class MarkdownIssue:
         else:
             raise ValueError("fpth_md_docissue not given")
 
-    def _todocx(self):
-        fpth_md = self.fpth_md_docissue
-        fpth_docx = str(pathlib.Path(fpth_md).with_suffix(".docx"))
-        self.fpth_docx_docissue = fpth_docx
-        if self.fpth_refdocx.is_file():
-            fpth_refdocx = self.fpth_refdocx
-            cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --reference-doc={fpth_refdocx} --columns=6"
-        else:
-            cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --columns=6"
-        subprocess.run(cmd.split(" "))
+    def _to_pdf(self):
+        pass
+        # fpth_md = self.fpth_md_docissue
+        # fpth_docx = str(pathlib.Path(fpth_md).with_suffix(".docx"))
+        # self.fpth_docx_docissue = fpth_docx
+        # if self.fpth_refdocx.is_file():
+        #     fpth_refdocx = self.fpth_refdocx
+        #     cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --reference-doc={fpth_refdocx} --columns=6"
+        # else:
+        #     cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --columns=6"
+        # subprocess.run(cmd.split(" "))
+
+    # @property
+    # def md_datetime(self):
+    #     return self.document_issue.date.strftime(
+    #         self.document_issue.format_configuration.date_string_format
+    #     )
 
     @property
     def md_current_issue_header_table(self):
         cols = [
             f"[{l}]" + "{custom-style='mf_headertitles'}"
-            for l in list(self.dh.df_current_issue_header_table.reset_index())
+            for l in list(self.document_issue.df_current_issue_header_table.reset_index())
         ]
         vals = [
             f"__{l}__"
-            for l in list(self.dh.df_current_issue_header_table.reset_index().loc[0])
+            for l in list(self.document_issue.df_current_issue_header_table.reset_index().loc[0])
         ]
         df = pd.DataFrame.from_dict({"cols": cols, "vals": vals}).T
         md = tabulate(df, showindex=False, tablefmt="grid")
@@ -109,7 +115,7 @@ class MarkdownIssue:
 
     @property
     def md_issue_history(self):
-        df = self.dh.df_issue_history[self.issue_history_cols]
+        df = self.document_issue.df_issue_history[self.issue_history_cols]
         newcols = [
             stringcase.sentencecase(col).lower() for col in self.issue_history_cols
         ]
@@ -124,11 +130,11 @@ class MarkdownIssue:
 
     @property
     def md_roles(self):
-        return self.dh.df_roles.to_markdown()
+        return self.document_issue.df_roles.to_markdown()
 
     @property
     def md_notes(self):
-        return self.dh.df_notes.to_markdown()
+        return self.document_issue.df_notes.to_markdown()
 
     @property
     def md_doc_info(self):
@@ -164,12 +170,12 @@ class MarkdownIssue:
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
-            project_name=self.dh.project.project_name,
-            document_description=self.dh.document_description,
-            current_status_description=self.dh.current_status_description,
-            author=self.dh.originator,
-            current_issue_long_date=self.dh.current_issue_long_date,
-            document_code=self.dh.document_code,
+            project_name=self.document_issue.project_name,
+            document_description=self.document_issue.document_description,
+            current_status_description=self.document_issue.current_status_description,
+            author=self.document_issue.originator,
+            current_issue_long_date=self.document_issue.current_issue_long_date,
+            document_code=self.document_issue.document_code,
             li_current_issue_header_table=self.md_current_issue_header_table,
             md_page_two=self.md_page_two,
         )

@@ -2,8 +2,8 @@ import pathlib
 import shutil
 import pytest
 
-from document_issue.document import Document
-from document_issue_io.markdown_issue import MarkdownIssue
+from document_issue.document_issue import DocumentIssueClassification
+from document_issue_io.markdown_issue import MarkdownDocumentIssue
 from document_issue_io.constants import PATH_REFERENCE_DOCX
 
 from polyfactory.factories.pydantic_factory import ModelFactory
@@ -20,20 +20,18 @@ def refresh_dir():
     DIR_TESTDATA.mkdir(parents=True, exist_ok=True)
 
 
-class DocumentFactory(ModelFactory[Document]):
-    __model__ = Document
+class DocumentIssueFactory(ModelFactory[DocumentIssueClassification]):
+    __model__ = DocumentIssueClassification
 
 
 @pytest.mark.usefixtures("refresh_dir")
-class TestMarkdownIssue:
-    def test_create_markdown_issue(self):
-        doc = DocumentFactory.build()
-        mh = MarkdownIssue(
-            doc,
+class TestMarkdownDocumentIssue:
+    def test_create_markdown_document_issue(self):
+        document_issue = DocumentIssueFactory.build()
+        markdown_document_issue = MarkdownDocumentIssue(
+            document_issue,
             fpth_md_docissue=DIR_TESTDATA / "test_basic.dh.md",
             tomd=True,
-            todocx=True,
-            fpth_refdocx=PATH_REFERENCE_DOCX,
         )
-        assert pathlib.Path(mh.fpth_md_docissue).is_file()
-        assert pathlib.Path(mh.fpth_docx_docissue).is_file()
+        assert pathlib.Path(markdown_document_issue.fpth_md_docissue).is_file()
+        # assert pathlib.Path(markdown_document_issue.fpth_docx_docissue).is_file()

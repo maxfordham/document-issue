@@ -69,7 +69,7 @@ class DocumentBase(BaseModel):
         alias="doc_source"
     )
     # document_filetype: str = Field() # include this?
-    paper_size: ty.Union[str, PaperSizeEnum] = Field("A4", description="paper size of the document", alias="size") # TODO: rename `paper_size`
+    paper_size: ty.Union[str, PaperSizeEnum] = Field("A4", description="paper size of the document", alias="size")
     scale: ty.Union[str, ScalesEnum] = Field(
         "nts",
         description='if drawing, give scale, else "not to scale" (NTS)',
