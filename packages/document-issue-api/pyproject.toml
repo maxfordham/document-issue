@@ -25,7 +25,8 @@ classifiers = [
 dependencies = [
     "uvicorn",
     "fastapi",
-    "pydantic<2",
+    "pydantic>2",
+    "pydantic-settings",
     "sqlalchemy<2",
     "httpx",
     "Jinja2",
