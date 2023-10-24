@@ -23,7 +23,7 @@ def test_build_title_block_pdf():
     
 
 def test_build_schedule_title_page_template_pdf():
-    FPTH_SCHEDULE_TITLE_PAGE_PDF = FDIR_TEST_OUTPUT / "schedule-title-page.pdf"
+    FPTH_SCHEDULE_TITLE_PAGE_PDF = FDIR_TEST_OUTPUT / "title-page.pdf"
     FPTH_SCHEDULE_TITLE_PAGE_PDF.unlink(missing_ok=True)
     project_info = {
         "project_name": "A Max Fordham Project",
