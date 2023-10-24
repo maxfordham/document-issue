@@ -71,15 +71,17 @@
 \ThisCenterWallPaper{}{title-page.pdf}
 
 % STYLE FRONTMATTER
+\usepackage{anyfontsize}
 % Renew maketitle command
 \makeatletter
 \renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
 \vspace*{\fill} % To centre in the middle of the page
-\begin{tabular}{l} % Create table and left-align
+\begin{tabular}{>{\raggedright}p{0.65\linewidth}} % Create table: left-align and wrap text
     % Note that the $$ is used to escape the Hugo variables
     % Without them it does not work when wrapping with e.g. \textbf, etc
-    \Huge{\textbf{$${{< meta project_name >}}$$}}\\[10pt]
-    \huge{$${{< meta document_description >}}$$}\\[10pt]
+    \fontsize{30}{36}\selectfont {\bfseries {{< meta project_name >}} }\\[10pt]
+    \fontsize{20}{24}\selectfont {{< meta document_description >}}\\[10pt]
+    % NOTE: \fontsize{SIZE}{LINE SPACING}
 \end{tabular}
 \vspace*{\fill}
 \egroup
