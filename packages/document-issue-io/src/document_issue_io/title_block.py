@@ -10,6 +10,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, Image, TableStyle, SimpleDocTemplate, TopPadder
 from reportlab.pdfgen import canvas
 
+from document_issue.document_issue import DocumentIssueClassification
+
 FDIR_MEDIA = pathlib.Path(__file__).parent / "media"
 
 # Register Callibri fonts
@@ -59,23 +61,22 @@ def get_title_block_image(fpth_img: pathlib.Path) -> Image:
     image.drawWidth = 28*mm
     return image
 
-def construct_title_block_data(project_info: dict) -> list[list]:
-    """Using the project information, layout the data in preparation to be styled
+def construct_title_block_data(document_issue: DocumentIssueClassification) -> list[list]:
+    """Using the document issue, layout the data in preparation to be styled
     correctly by ReportLab."""
-    dt = datetime.strptime(project_info["date"], '%Y-%m-%d')
     FPTH_MF_CIRCLE_IMG = FDIR_MEDIA / "mf-circle.png"
     image = get_title_block_image(fpth_img=FPTH_MF_CIRCLE_IMG)
-    issue_date = dt.strftime("%d/%m/%Y")
-    document_description = "\n".join(wrap(project_info["document_description"], 45))
-    name_nomenclature = project_info["name_nomenclature"].replace("-", " - ")
-    document_name = project_info["document_name"].replace("-", " - ")
+    issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
+    document_description = "\n".join(wrap(document_issue.document_description, 45))
+    name_nomenclature = document_issue.name_nomenclature.replace("-", " - ")
+    document_code = document_issue.document_code.replace("-", " - ")
     data = [
         [image, "", "project", "", "", "", "", "document description", "", "", "", ""],
-        ["", "", project_info["project_name"], "", "", "", "", document_description, "", "", "", ""],
+        ["", "", document_issue.project_name, "", "", "", "", document_description, "", "", "", ""],
         ["", "", "job number", "project leader", "issue date", "", "", "", "", "", "", ""],
-        ["", "", project_info["job_number"], project_info["project_leader"], issue_date, "", "", "", "", "", "", ""],
+        ["", "", document_issue.project_number, document_issue.director_in_charge, issue_date, "", "", "", "", "", "", ""],
         ["", "", "status code", "revision", "status description", "", "", name_nomenclature, "", "", "", ""],
-        ["", "", project_info["status_code"], project_info["revision"], project_info["status_description"], "", "", document_name, "", "", "", ""],
+        ["", "", document_issue.current_issue.status_code, document_issue.current_issue.revision, document_issue.current_issue.status_description, "", "", document_code, "", "", "", ""],
     ]   
     return data
 
@@ -88,10 +89,10 @@ def create_title_block_table(data: list):
     return table
 
 
-def build_title_block_pdf(project_info: dict, fpth_output: pathlib.Path):
+def build_title_block_pdf(document_issue: DocumentIssueClassification, fpth_output: pathlib.Path):
     """Build a PDF with just the Max Fordham title block at the bottom of an
     A4 page."""
-    data = construct_title_block_data(project_info=project_info)
+    data = construct_title_block_data(document_issue=document_issue)
     title_block_table = create_title_block_table(data=data)
     doc = SimpleDocTemplate(
         str(fpth_output), 
@@ -121,9 +122,9 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
     canvas.restoreState()
 
 
-def build_schedule_title_page_template_pdf(project_info: dict, fpth_output: pathlib.Path):
+def build_schedule_title_page_template_pdf(document_issue: DocumentIssueClassification, fpth_output: pathlib.Path):
     """Build a PDF with a title block and the Max Fordham background."""
-    data = construct_title_block_data(project_info=project_info)
+    data = construct_title_block_data(document_issue=document_issue)
     title_block_table = create_title_block_table(data=data)
     doc = SimpleDocTemplate(
         str(fpth_output), 

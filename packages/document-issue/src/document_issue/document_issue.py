@@ -3,7 +3,7 @@ import pandas as pd  # TODO: remove pandas ?
 from pydantic import field_validator, BaseModel, Field
 
 from document_issue.project import ProjectBase
-from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
+from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource, RoleEnum
 from document_issue.basemodel import BaseModel, Field, validator
 from document_issue.issue import Issue
 from document_issue.project_role import ProjectRoles
@@ -103,3 +103,9 @@ class DocumentIssueClassification(DocumentIssue):
     @property
     def current_revision(self):
         return self.current_issue.revision
+
+    @property
+    def director_in_charge(self):
+        for role in self.document_role:
+            if role.role_name == RoleEnum.director.value:
+                return role.initials
