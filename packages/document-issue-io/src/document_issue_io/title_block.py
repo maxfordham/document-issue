@@ -89,7 +89,7 @@ def create_title_block_table(data: list):
     return table
 
 
-def build_title_block_pdf(document_issue: DocumentIssueClassification, fpth_output: pathlib.Path):
+def build_title_block_pdf(document_issue: DocumentIssueClassification, fpth_output: pathlib.Path=pathlib.Path("title-block.pdf")):
     """Build a PDF with just the Max Fordham title block at the bottom of an
     A4 page."""
     data = construct_title_block_data(document_issue=document_issue)
@@ -122,7 +122,7 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
     canvas.restoreState()
 
 
-def build_schedule_title_page_template_pdf(document_issue: DocumentIssueClassification, fpth_output: pathlib.Path):
+def build_schedule_title_page_template_pdf(document_issue: DocumentIssueClassification, fpth_output: pathlib.Path=pathlib.Path("title-page.pdf")):
     """Build a PDF with a title block and the Max Fordham background."""
     data = construct_title_block_data(document_issue=document_issue)
     title_block_table = create_title_block_table(data=data)
