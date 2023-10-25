@@ -14,7 +14,7 @@
             "path": "../packages/document-issue-io"
         },
         {
-            "path": "../packages/document-issue-latex-schedule"
+            "path": "../packages/document-issue-quarto"
         }
     ],
     "settings": {
