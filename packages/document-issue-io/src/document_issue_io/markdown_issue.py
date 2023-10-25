@@ -82,7 +82,8 @@ class MarkdownDocumentIssue:
             ])
             # NOTE: quarto render does not allow to specify a relative or absolute
             # path for "-o" parameter. Therefore, will just move post-render
-            shutil.move(self.fpth_pdf.name, self.fpth_pdf)
+            if self.fpth_pdf != self.dir_md_docissue / self.fpth_pdf.name:
+                shutil.move(self.fpth_pdf.name, self.fpth_pdf)
 
     @property
     def md_issue_history(self):

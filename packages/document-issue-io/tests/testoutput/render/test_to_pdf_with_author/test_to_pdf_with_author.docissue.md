@@ -40,16 +40,15 @@ Fordham LLP\
 
 | date      | rev   | status   | description              | issue notes           | author   |
 |:----------|:------|:---------|:-------------------------|:----------------------|:---------|
-| 13 MAY 22 | P01   | S2       | Suitable for information | This is an issue note | OH       |
+| 04 JUL 20 | P01   | S2       | Suitable for information | This is an issue note | OH       |
 
 : {tbl-colwidths="[17.5,5,7.5,25,35,10]"}
 
 ### Contributions
 
-| initials             | role                 |
-|:---------------------|:---------------------|
-| OH                   | Director in Charge   |
-| UgfSQdqQJfHDQuSTQQBf | Design Strategy Lead |
+| initials   | role               |
+|:-----------|:-------------------|
+| OH         | Director in Charge |
 
 : {tbl-colwidths="[30,70]"}
 
@@ -57,7 +56,7 @@ Fordham LLP\
 
 |    |                      |
 |---:|:---------------------|
-|  1 | gwbRrCugWMZhUFYIUafx |
+|  1 | XLRVslLBmhdwVAyiLpGY |
 
 : {tbl-colwidths="[4,96]"}
 :::
