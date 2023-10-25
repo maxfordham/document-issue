@@ -60,7 +60,7 @@
 % REF: https://stackoverflow.com/a/62283887
 \rofoot{    
     \begin{tikzpicture}
-        \node at (0,0) {\includegraphics[width=1.75cm]{../../media/mf-footer-logo.png}};
+        \node at (0,0) {\includegraphics[width=1.75cm]{ {{< meta footer-logo >}} }};
         \node at (current bounding box.center) {\thepage\ / \pageref*{LastPage}};
     \end{tikzpicture}
     }
@@ -68,7 +68,7 @@
 % TITLEPAGE
 % Set generated reportlab PDF as title page background
 \usepackage{wallpaper}
-\ThisCenterWallPaper{}{title-page.pdf}
+\ThisCenterWallPaper{}{ {{< meta title-page >}} }
 
 % STYLE FRONTMATTER
 \usepackage{anyfontsize}
