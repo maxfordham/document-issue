@@ -42,13 +42,13 @@ class MarkdownDocumentIssue:
             "status_description": "description",
             "issue_notes": "issue notes",
         }
-        self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
+        self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
         if self.document_issue.format_configuration.output_author:
             self.issue_history_cols["author"] = "author"
-            self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+            self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
             if self.document_issue.format_configuration.output_checked_by:
                 self.issue_history_cols["checked_by"] = "checked by"
-                self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
+                self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
         if self.fpth_md is None:
             self.fpth_md = pathlib.Path(self.document_issue.document_code + ".docissue.md")
         if self.fpth_pdf is None:
@@ -91,7 +91,7 @@ class MarkdownDocumentIssue:
         md_df = df.set_index(
             'date'
         ).to_markdown()
-        return md_df + "\n\n" + self.md_col_widths
+        return md_df + "\n\n" + self.md_issue_history_col_widths
 
     @property
     def md_roles(self):
