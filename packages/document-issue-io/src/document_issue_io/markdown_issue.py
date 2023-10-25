@@ -1,18 +1,22 @@
 import subprocess
 import pathlib
-import stringcase
+import shutil
 import typing as ty
 import pandas as pd
 from tabulate import tabulate
 from jinja2 import Environment, FileSystemLoader
 
 from document_issue.document_issue import DocumentIssueClassification
+from document_issue_io.title_block import build_schedule_title_page_template_pdf
 from document_issue_io.constants import (
     PATH_REL_IMG,
     DIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
+    FDIR_MEDIA
 )
+from document_issue_io.utils import change_dir, install_or_update_document_issue_quarto_extension
 
+FPTH_FOOTER_LOGO = FDIR_MEDIA / "footer-logo.png"
 
 class MarkdownDocumentIssue:
     """Create structured markdown header from Document object"""
@@ -63,16 +67,12 @@ class MarkdownDocumentIssue:
             raise ValueError("fpth_md_docissue not given")
 
     def _to_pdf(self):
-        pass
-        # fpth_md = self.fpth_md_docissue
-        # fpth_docx = str(pathlib.Path(fpth_md).with_suffix(".docx"))
-        # self.fpth_docx_docissue = fpth_docx
-        # if self.fpth_refdocx.is_file():
-        #     fpth_refdocx = self.fpth_refdocx
-        #     cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --reference-doc={fpth_refdocx} --columns=6"
-        # else:
-        #     cmd = f"pandoc {fpth_md} -s -f markdown -t docx -o {fpth_docx} --filter=pandoc-docx-pagebreakpy --columns=6"
-        # subprocess.run(cmd.split(" "))
+        self.fpth_pdf_docissue = str(pathlib.Path(self.fpth_md_docissue).with_suffix(".pdf"))
+        with change_dir(self.dir_md_docissue):
+            shutil.copy(FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name)
+            build_schedule_title_page_template_pdf(document_issue=self.document_issue)
+            install_or_update_document_issue_quarto_extension(branch="15-update-markdown_issue")
+            subprocess.run(["quarto", "render", str(self.fpth_md_docissue), "--to", "document-issue-schedule-pdf"])
 
     @property
     def md_issue_history(self):
