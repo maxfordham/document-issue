@@ -40,7 +40,7 @@ class TestMarkdownDocumentIssue:
         document_issue = create_test_document_issue()
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
-            fpth_md=FDIR_TEST_OUTPUT / "test_to_md.dh.md",
+            fpth_md=FDIR_TEST_OUTPUT / "test_to_md.docissue.md",
             to_md=True,
         )
         assert pathlib.Path(markdown_document_issue.fpth_md).is_file()
@@ -54,8 +54,8 @@ class TestMarkdownDocumentIssue:
         document_issue.format_configuration.output_checked_by = False
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
-            fpth_md=FDIR_RENDER / "test_to_pdf.dh.md",
-            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf.dh.pdf",
+            fpth_md=FDIR_RENDER / "test_to_pdf.docissue.md",
+            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf.docissue.pdf",
             to_md=True,
             to_pdf=True,
         )
@@ -71,8 +71,8 @@ class TestMarkdownDocumentIssue:
         document_issue.format_configuration.output_checked_by = False
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
-            fpth_md=FDIR_RENDER / "test_to_pdf_with_author.dh.md",
-            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf_with_author.dh.pdf",
+            fpth_md=FDIR_RENDER / "test_to_pdf_with_author.docissue.md",
+            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf_with_author.docissue.pdf",
             to_md=True,
             to_pdf=True,
         )
@@ -88,8 +88,8 @@ class TestMarkdownDocumentIssue:
         document_issue.format_configuration.output_checked_by = True
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
-            fpth_md=FDIR_RENDER / "test_to_pdf_with_author_and_checked_by.dh.md",
-            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf_with_author_and_checked_by.dh.pdf",
+            fpth_md=FDIR_RENDER / "test_to_pdf_with_author_and_checked_by.docissue.md",
+            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf_with_author_and_checked_by.docissue.pdf",
             to_md=True,
             to_pdf=True,
         )

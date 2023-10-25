@@ -38,11 +38,11 @@ Fordham LLP\
 
 ### Issue History
 
-| date      | rev   | status   | description              | issue notes           |
-|:----------|:------|:---------|:-------------------------|:----------------------|
-| 21 SEP 21 | P01   | S2       | Suitable for information | This is an issue note |
+| date      | rev   | status   | description              | issue notes           | author   | checked by   |
+|:----------|:------|:---------|:-------------------------|:----------------------|:---------|:-------------|
+| 03 OCT 23 | P01   | S2       | Suitable for information | This is an issue note | OH       | JG           |
 
-: {tbl-colwidths="[17.5,5,7.5,25,45]"}
+: {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}
 
 ### Contributions
 
@@ -56,7 +56,7 @@ Fordham LLP\
 
 |    |                      |
 |---:|:---------------------|
-|  1 | LIvrZmOhssYCXAZmoyEa |
+|  1 | pQHwjIsoYBiKpcIwJris |
 
 : {tbl-colwidths="[4,96]"}
 :::
