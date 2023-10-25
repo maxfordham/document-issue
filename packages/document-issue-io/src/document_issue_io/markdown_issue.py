@@ -1,15 +1,13 @@
+import os
 import subprocess
 import pathlib
 import shutil
 import typing as ty
-import pandas as pd
-from tabulate import tabulate
 from jinja2 import Environment, FileSystemLoader
 
 from document_issue.document_issue import DocumentIssueClassification
 from document_issue_io.title_block import build_schedule_title_page_template_pdf
 from document_issue_io.constants import (
-    PATH_REL_IMG,
     DIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
     FDIR_MEDIA
@@ -24,19 +22,19 @@ class MarkdownDocumentIssue:
     def __init__(
         self,
         document_issue: DocumentIssueClassification,
-        fpth_md_docissue: ty.Optional[pathlib.Path] = None,
-        path_rel_img: pathlib.Path = PATH_REL_IMG,
-        tomd=False,
+        fpth_md: ty.Optional[pathlib.Path] = None,
+        fpth_pdf: ty.Optional[pathlib.Path] = None,
+        to_md=True,
         to_pdf=False,
     ):
         self.document_issue = document_issue
-        self.tomd = tomd
+        self.to_md = to_md
         self.to_pdf = to_pdf
-        self.fpth_md_docissue = fpth_md_docissue
-        self.dir_md_docissue = fpth_md_docissue.parent
+        self.fpth_md = fpth_md
+        self.fpth_pdf = fpth_pdf
+        self.dir_md_docissue = fpth_md.parent
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
-        self.path_rel_img = path_rel_img
         self.issue_history_cols = {
             "date": "date",
             "revision": "rev",
@@ -47,32 +45,44 @@ class MarkdownDocumentIssue:
         self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
         if self.document_issue.format_configuration.output_author:
             self.issue_history_cols["author"] = "author"
-            self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,40,5]"}'
-        if self.document_issue.format_configuration.output_checked_by:
-            self.issue_history_cols["checked_by"] = "checked by"
-            self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,5,5]"}'
-        if fpth_md_docissue is None:
-            fpth_md_docissue = pathlib.Path(self.document_issue.document_code + ".docissue.md")
-        if self.tomd or self.to_pdf:
-            self._tomd()
+            self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+            if self.document_issue.format_configuration.output_checked_by:
+                self.issue_history_cols["checked_by"] = "checked by"
+                self.md_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
+        if self.fpth_md is None:
+            self.fpth_md = pathlib.Path(self.document_issue.document_code + ".docissue.md")
+        if self.fpth_pdf is None:
+            self.fpth_pdf = pathlib.Path(self.document_issue.document_code + ".docissue.pdf")
+        if self.to_md or self.to_pdf:
+            self._to_md()
         if self.to_pdf:
             self._to_pdf()
 
-    def _tomd(self):
-        if self.fpth_md_docissue is not None:
-            f = open(self.fpth_md_docissue, "w")
+    def _to_md(self):
+        if self.fpth_md is not None:
+            f = open(self.fpth_md, "w")
             f.write(self.md_docissue)
             f.close()
         else:
-            raise ValueError("fpth_md_docissue not given")
+            raise ValueError("fpth_md not given")
 
     def _to_pdf(self):
-        self.fpth_pdf_docissue = str(pathlib.Path(self.fpth_md_docissue).with_suffix(".pdf"))
         with change_dir(self.dir_md_docissue):
             shutil.copy(FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name)
             build_schedule_title_page_template_pdf(document_issue=self.document_issue)
             install_or_update_document_issue_quarto_extension(branch="15-update-markdown_issue")
-            subprocess.run(["quarto", "render", str(self.fpth_md_docissue), "--to", "document-issue-schedule-pdf"])
+            subprocess.run([
+                "quarto", 
+                "render", 
+                self.fpth_md.name, 
+                "--to", 
+                "document-issue-schedule-pdf",
+                "-o",
+                self.fpth_pdf.name
+            ])
+            # NOTE: quarto render does not allow to specify a relative or absolute
+            # path for "-o" parameter. Therefore, will just move post-render
+            shutil.move(self.fpth_pdf.name, self.fpth_pdf)
 
     @property
     def md_issue_history(self):

@@ -1,6 +1,8 @@
 ---
 project_name: A Max Fordham Project
-document_description: WsmgCGchYkIZTPVeXJss
+document_description: A description of a Max Fordham Project
+footer-logo: footer-logo.png
+title-page: title-page.pdf
 ---
 
 :::: {layout="[ 26.5, -2.5, 71 ]"}
@@ -36,20 +38,18 @@ Fordham LLP\
 
 ### Issue History
 
-| date      | rev                  | status               | description          | issue notes          |
-|:----------|:---------------------|:---------------------|:---------------------|:---------------------|
-| 13 SEP 20 | NecQECfftzPnOCXrQGCR | kEGjumNHyOQfLvzDoKIZ | eplfusYQwDWnSvdkAhBy | MwJExyBybMQDTELcoXVf |
+| date      | rev   | status   | description              | issue notes           | author   |
+|:----------|:------|:---------|:-------------------------|:----------------------|:---------|
+| 26 MAR 22 | P01   | S2       | Suitable for information | This is an issue note | OH       |
 
-: {tbl-colwidths="[17.5,5,7.5,25,45]"}
-
-: {tbl-colwidths="[17.5,5,7.5,25,45]"}
+: {tbl-colwidths="[17.5,5,7.5,25,35,10]"}
 
 ### Contributions
 
-| initials             | role                           |
-|:---------------------|:-------------------------------|
-| OH                   | Lead Sustainability Consultant |
-| NxZLFtfrCYTCSMYdQQzz | Director in Charge             |
+| initials             | role                          |
+|:---------------------|:------------------------------|
+| OH                   | Director in Charge            |
+| UmAeHKsNYRQmZddyrpMi | Building Performance Modeller |
 
 : {tbl-colwidths="[30,70]"}
 
@@ -57,7 +57,7 @@ Fordham LLP\
 
 |    |                      |
 |---:|:---------------------|
-|  1 | THJakmObCcZOTNyfcffo |
+|  1 | GUpmIWPqtjEPonritEAk |
 
 : {tbl-colwidths="[4,96]"}
 :::
