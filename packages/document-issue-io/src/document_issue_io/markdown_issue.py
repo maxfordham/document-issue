@@ -76,7 +76,7 @@ class MarkdownDocumentIssue:
                 "render", 
                 self.fpth_md.name, 
                 "--to", 
-                "document-issue-schedule-pdf",
+                "document-issue-pdf",
                 "-o",
                 self.fpth_pdf.name
             ])
