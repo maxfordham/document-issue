@@ -40,16 +40,16 @@ Fordham LLP\
 
 | date      | rev   | status   | description              | issue notes           |
 |:----------|:------|:---------|:-------------------------|:----------------------|
-| 26 AUG 20 | P01   | S2       | Suitable for information | This is an issue note |
+| 26 MAY 20 | P01   | S2       | Suitable for information | This is an issue note |
 
 : {tbl-colwidths="[17.5,5,7.5,25,45]"}
 
 ### Contributions
 
-| initials             | role               |
-|:---------------------|:-------------------|
-| OH                   | Director in Charge |
-| AxZzGxqeNcyDtKQWVEFp | Site Engineer      |
+| initials             | role                          |
+|:---------------------|:------------------------------|
+| OH                   | Director in Charge            |
+| RHqqlohZnOvVgAuGtjFt | Building Performance Modeller |
 
 : {tbl-colwidths="[30,70]"}
 
@@ -57,7 +57,7 @@ Fordham LLP\
 
 |    |                      |
 |---:|:---------------------|
-|  1 | GkUUaqzmMNLOpotjqabi |
+|  1 | HxnDciXzFRIehOcNbzcQ |
 
 : {tbl-colwidths="[4,96]"}
 :::

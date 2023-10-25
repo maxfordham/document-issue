@@ -8,9 +8,9 @@ from jinja2 import Environment, FileSystemLoader
 from document_issue.document_issue import DocumentIssueClassification
 from document_issue_io.title_block import build_schedule_title_page_template_pdf
 from document_issue_io.constants import (
-    DIR_TEMPLATES,
-    NAME_MD_DOCISSUE_TEMPLATE,
-    FDIR_MEDIA
+    FDIR_TEMPLATES,
+    FDIR_MEDIA,
+    NAME_MD_DOCISSUE_TEMPLATE
 )
 from document_issue_io.utils import change_dir, install_or_update_document_issue_quarto_extension
 
@@ -33,7 +33,7 @@ class MarkdownDocumentIssue:
         self.fpth_md = fpth_md
         self.fpth_pdf = fpth_pdf
         self.dir_md_docissue = fpth_md.parent
-        self.file_loader = FileSystemLoader(DIR_TEMPLATES)
+        self.file_loader = FileSystemLoader(FDIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
         self.issue_history_cols = {
             "date": "date",
@@ -70,7 +70,7 @@ class MarkdownDocumentIssue:
         with change_dir(self.dir_md_docissue):
             shutil.copy(FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name)
             build_schedule_title_page_template_pdf(document_issue=self.document_issue)
-            install_or_update_document_issue_quarto_extension(branch="15-update-markdown_issue")
+            install_or_update_document_issue_quarto_extension()
             subprocess.run([
                 "quarto", 
                 "render", 
