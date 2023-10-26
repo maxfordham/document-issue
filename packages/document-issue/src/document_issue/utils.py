@@ -101,8 +101,8 @@ def make_disclaimer_spacer(fdir):
     try:
         from PIL import Image
 
-        width = 546
-        height = 48
+        width = 130
+        height = 5
 
         img = Image.new(mode="RGB", size=(width, height), color="white")
         path = fdir / "disclaimer_spacer.png"

@@ -54,13 +54,14 @@ class Issue(BaseModel):
         title="Issue Format",
         json_schema_extra=dict(column_width=COL_WIDTH),
     )
-    issue_notes: str = Field(
+    issue_notes: str = Field(  # TODO: issue_note ?
         "",
         title="Issue Notes",
         description=(
             "free field where the Engineer can briefly summarise changes since previous"
             " issue"
         ),
+        max_length=1000,
         json_schema_extra=dict(column_width=300),
     )
 

@@ -14,7 +14,10 @@ class FormatConfiguration(BaseModel):
 
     date_string_format: str = Field(
         "%d %^b %y",
-        description="date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime",
+        description=(
+            "date display format. refer to:"
+            " https://www.programiz.com/python-programming/datetime/strptime"
+        ),
     )
     output_author: bool = Field(
         False,
@@ -44,9 +47,7 @@ class FormatConfiguration(BaseModel):
 
 
 description_document_code = """document code. Should be the filename when uploaded
-to a CDE. Structured to be machine-readable.""".replace(
-    "\n", ""
-)
+to a CDE. Structured to be machine-readable.""".replace("\n", "")
 description_name_nomenclature = """denotes what each section of of the document code means
 when split on '-' character.
 """.replace(
@@ -54,8 +55,8 @@ when split on '-' character.
 )
 
 
-class Notes(RootModel):
-    root: str = Field(json_schema_extra=dict(layout={"width": "100%"}))
+class Note(RootModel):
+    root: str = Field(json_schema_extra=dict(layout={"width": "100%"}), max_length=1000)
 
 
 class DocumentBase(BaseModel):
@@ -87,26 +88,29 @@ class DocumentBase(BaseModel):
     )
     originator: Literal["Max Fordham LLP"] = Field(
         "Max Fordham LLP",
-        description="the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
+        description=(
+            "the company the info came from (fixed to be Max Fordham LLP). the name"
+            " 'originator' comes from BS EN ISO 19650-2"
+        ),
         json_schema_extra=dict(type="string", disabled=True),
     )  # TODO: remove. should be picked up in classification data.
-    notes: ty.List[str] = Field(["add notes here"])
+    notes: ty.List[Note] = Field(
+        ["add notes here"],
+    )
 
     @field_validator("name_nomenclature")
     @classmethod
     def validate_name_nomenclature(cls, v):
         """fix the author to always be Max Fordham LLP"""
-        li_name = v.split("-")  # values['document_code'].split('-')
+        li_name = v.split("-")
         li_nomenclature = v.split("-")
         len_name = len(li_name)
         len_nomenclature = len(li_nomenclature)
         if len_name != len_nomenclature:
-            raise ValueError(
-                f"""
+            raise ValueError(f"""
             number of sections in document_code == {len_name}
             number of sections in name_nomenclature == {len_nomenclature}
-            they must match!"""
-            )
+            they must match!""")
         li_nomenclature = [s.strip() for s in li_nomenclature]
         return "-".join(li_nomenclature)
 
