@@ -50,12 +50,13 @@ class RoleEnum(Enum):
     eng_passivhaus = "Passivhaus Engineer"
     con_sustainability = "Sustainability Consultant"
     con_bim = "BIM Strategy Advisor"
-    
+
+
 # TODO: map role descriptions ?
-    
+
 
 class PaperSizeEnum(Enum):
-    na = "n/a" # Not a drawing, 3D model for example
+    na = "n/a"  # Not a drawing, 3D model for example
     A5 = "A5"  # probs never used...
     A4 = "A4"  # Sketched only, not normally used for drawings
     A3 = "A3"  # Sketch drawings, small schematics, details
@@ -79,8 +80,7 @@ class ScalesEnum(Enum):
     _1_500 = "1:500"
     _1_1000 = "1:1000"
     _1_1250 = "1:1250"
-    
-    
+
 
 class DocSource(Enum):
     A = "AutoCAD"

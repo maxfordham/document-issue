@@ -30,16 +30,17 @@ class FormatConfiguration(BaseModel):
             " Often avoided but some clients require it."
         ),
     )
-    include_author_and_checked_by: bool = None  # TODO: for migration only. remove in future.
-    
-    @model_validator(mode='after')  # TODO: for migration only. remove in future.
-    def check_include_author_and_checked_by(self)  -> 'UserModel':
+    include_author_and_checked_by: bool = (
+        None  # TODO: for migration only. remove in future.
+    )
+
+    @model_validator(mode="after")  # TODO: for migration only. remove in future.
+    def check_include_author_and_checked_by(self) -> "UserModel":
         v = self.include_author_and_checked_by
         if v is not None:
             self.output_author = v
             self.output_checked_by = v
         return self
-                
 
 
 description_document_code = """document code. Should be the filename when uploaded
@@ -52,31 +53,42 @@ when split on '-' character.
     "\n", ""
 )
 
+
 class Notes(RootModel):
-    root: str = Field(json_schema_extra=dict(layout={"width":"100%"}))
+    root: str = Field(json_schema_extra=dict(layout={"width": "100%"}))
+
 
 class DocumentBase(BaseModel):
     name_nomenclature: str = Field(
         "project-originator-volume-level-type-role-number",
         description=description_name_nomenclature,
     )
-    document_code: str = Field("06667-MXF-XX-XX-SH-M-20003", description=description_document_code, alias="document_name")
-    document_description: str = Field("Document Description", description="human readable description of the document")
+    document_code: str = Field(
+        "06667-MXF-XX-XX-SH-M-20003",
+        description=description_document_code,
+        alias="document_name",
+    )
+    document_description: str = Field(
+        "Document Description", description="human readable description of the document"
+    )
     document_source: str = Field(  # TODO: rename `document_source`
         "WD",
         description="software used to author the document",
         examples=DocSource._member_names_,
-        alias="doc_source"
+        alias="doc_source",
     )
     # document_filetype: str = Field() # include this?
-    paper_size: ty.Union[str, PaperSizeEnum] = Field("A4", description="paper size of the document", alias="size") # TODO: rename `paper_size`
+    paper_size: ty.Union[str, PaperSizeEnum] = Field(
+        "A4", description="paper size of the document", alias="size"
+    )
     scale: ty.Union[str, ScalesEnum] = Field(
         "nts",
         description='if drawing, give scale, else "not to scale" (NTS)',
     )
-    originator: Literal["Max Fordham LLP"] = Field("Max Fordham LLP",
+    originator: Literal["Max Fordham LLP"] = Field(
+        "Max Fordham LLP",
         description="the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2",
-        json_schema_extra=dict(type="string", disabled=True)
+        json_schema_extra=dict(type="string", disabled=True),
     )  # TODO: remove. should be picked up in classification data.
     notes: ty.List[str] = Field(["add notes here"])
 

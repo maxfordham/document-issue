@@ -47,7 +47,9 @@ def test_post_person(post_person_then_delete):
 def test_patch_person(post_person_then_delete):
     response = post_person_then_delete
     person_id = response.json()["id"]
-    response = client.patch(f"/person/{person_id}", json={"name": "JG2", "full_name": "new name"})
+    response = client.patch(
+        f"/person/{person_id}", json={"name": "JG2", "full_name": "new name"}
+    )
     assert response.status_code == 200
     assert response.json()["name"] == "JG2"
 

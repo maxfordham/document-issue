@@ -48,7 +48,9 @@ def test_get_projects(post_project_then_delete):
 def test_patch_project(post_project_then_delete):
     response = post_project_then_delete
     project_id = response.json()["id"]
-    response = client.patch(f"/project/{project_id}", json={"project_name": "test_project2"})
+    response = client.patch(
+        f"/project/{project_id}", json={"project_name": "test_project2"}
+    )
     assert response.status_code == 200
     assert response.json()["project_name"] == "test_project2"
 

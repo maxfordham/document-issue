@@ -31,7 +31,9 @@ def post_document_role(
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to add Document Role.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to add Document Role.\n{err}"
+        )
 
 
 @router.get(
@@ -47,7 +49,9 @@ def get_document_roles(document_id: int, db: Session = Depends(get_db)):
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to get Document Roles.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to get Document Roles.\n{err}"
+        )
 
 
 @router.delete(
@@ -64,4 +68,6 @@ def delete_document_role(document_id: int, role_id: int, db: Session = Depends(g
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to delete Document Role.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to delete Document Role.\n{err}"
+        )

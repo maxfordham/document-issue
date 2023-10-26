@@ -75,7 +75,9 @@ def delete_person(db: Session, person_id: int) -> models.Person:
     return db_
 
 
-def patch_person(db: Session, person_id: int, person: schemas.PersonPatch) -> models.Person:
+def patch_person(
+    db: Session, person_id: int, person: schemas.PersonPatch
+) -> models.Person:
     """Patch a person by ID.
 
     Args:

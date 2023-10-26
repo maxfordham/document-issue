@@ -7,14 +7,10 @@ from pydantic import field_validator
 
 
 description_author = """
-the person who authored the work.""".replace(
-    "\n", ""
-)
+the person who authored the work.""".replace("\n", "")
 description_checked_by = """
 the person who checked the work. 
-""".replace(
-    "\n", ""
-)
+""".replace("\n", "")
 
 # TODO: who issued to?
 
@@ -22,26 +18,49 @@ the person who checked the work.
 class Issue(BaseModel):
     """required information fields that define the metadata of a document issue"""
 
-    revision: str = Field("P01", json_schema_extra=dict(column_width=COL_WIDTH))
-    date: datetime.date = Field(datetime.date(2020, 1, 2), json_schema_extra=dict(column_width=COL_WIDTH))
-    status_code: str = Field("S2", json_schema_extra=dict(column_width=COL_WIDTH))
+    revision: str = Field(
+        "P01", title="Rev", json_schema_extra=dict(column_width=COL_WIDTH)
+    )
+    date: datetime.date = Field(
+        datetime.date(2020, 1, 2),
+        title="Date",
+        json_schema_extra=dict(column_width=COL_WIDTH),
+    )
+    status_code: str = Field(
+        "S2", title="Status", json_schema_extra=dict(column_width=COL_WIDTH)
+    )
     status_description: str = Field(
         "Suitable for information",
+        title="Description",
         description="this is a BIM field that matches directly with status_code.",
         json_schema_extra=dict(column_width=150),
     )
     author: ty.Optional[str] = Field(
-        "EG", description=description_author, json_schema_extra=dict(column_width=COL_WIDTH)
+        "EG",
+        title="Author",
+        description=description_author,
+        max_length=5,
+        json_schema_extra=dict(column_width=COL_WIDTH),
     )
     checked_by: ty.Optional[str] = Field(
-        "CK", description=description_checked_by, json_schema_extra=dict(column_width=COL_WIDTH)
+        "CK",
+        title="Checker",
+        max_length=5,
+        description=description_checked_by,
+        json_schema_extra=dict(column_width=COL_WIDTH),
     )
     issue_format: IssueFormatEnum = Field(
-        IssueFormatEnum.cde, title="Issue Format", json_schema_extra=dict(column_width=COL_WIDTH)
+        IssueFormatEnum.cde,
+        title="Issue Format",
+        json_schema_extra=dict(column_width=COL_WIDTH),
     )
     issue_notes: str = Field(
         "",
-        description="free field where the Engineer can briefly summarise changes since previous issue",
+        title="Issue Notes",
+        description=(
+            "free field where the Engineer can briefly summarise changes since previous"
+            " issue"
+        ),
         json_schema_extra=dict(column_width=300),
     )
 
@@ -54,7 +73,7 @@ class Issue(BaseModel):
             else:
                 v = datetime.datetime.strptime(v, "%m %b %y").date()
         return v  # TODO: i think this validation step can probs be removed if the code runs differently...
-    
+
     @field_validator("issue_format", mode="before")
     @classmethod
     def _issue_format(cls, v):
@@ -62,4 +81,3 @@ class Issue(BaseModel):
             return getattr(IssueFormatEnum, v)
         else:
             return v
-    

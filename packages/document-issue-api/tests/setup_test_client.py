@@ -33,7 +33,9 @@ def get_db_path():
 
 
 get_db_path().unlink(missing_ok=True)
-engine = create_engine(ENV.DOCUMENTISSUE_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    ENV.DOCUMENTISSUE_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)
 app.dependency_overrides[get_db] = override_get_db
@@ -121,5 +123,6 @@ def post_project_role_with_person_and_document_role():
     assert post_project_role_with_person().status_code == 200
     assert post_document().status_code == 200
     return client.post("/document_role/1/1")
+
 
 # ------------------------------------------

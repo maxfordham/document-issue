@@ -1,7 +1,0 @@
-format:
-  pdf:
-    documentclass: scrreprt
-    include-in-header:
-      - preamble.tex
-    template-partials:
-      - before-body.tex

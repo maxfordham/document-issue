@@ -1,8 +1,8 @@
 import pathlib
 
-DIR_PACKAGE = pathlib.Path(__file__).parent
-DIR_TEMPLATES = DIR_PACKAGE / "templates"
-PATH_REFERENCE_DOCX = DIR_TEMPLATES / "default_refdocx.docx"
+FDIR_PACKAGE_ROOT = pathlib.Path(__file__).parents[2]
+FDIR_ARCHIVES = FDIR_PACKAGE_ROOT / "archives"
+FDIR_PACKAGE = pathlib.Path(__file__).parent
+FDIR_TEMPLATES = FDIR_PACKAGE / "templates"
+FDIR_MEDIA = FDIR_PACKAGE / "media"
 NAME_MD_DOCISSUE_TEMPLATE = "docissue.md.jinja"
-NAME_MD_DISCLAIMER_TEMPLATE = "disclaimer.md.jinja"
-PATH_REL_IMG = pathlib.Path("images")

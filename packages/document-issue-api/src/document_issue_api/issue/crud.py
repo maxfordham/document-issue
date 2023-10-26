@@ -9,7 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 # issue
-def post_issue(db: Session, document_id: int, issue: schemas.IssueBasePost) -> models.Issue:
+def post_issue(
+    db: Session, document_id: int, issue: schemas.IssueBasePost
+) -> models.Issue:
     """Create a new issue.
 
     Args:
@@ -42,7 +44,9 @@ def get_issue(db: Session, issue_id: int) -> models.Issue:
     return db_issue
 
 
-def patch_issue(db: Session, issue_id: int, issue: schemas.IssueBasePatch) -> models.Issue:
+def patch_issue(
+    db: Session, issue_id: int, issue: schemas.IssueBasePatch
+) -> models.Issue:
     """Patch an issue.
 
     Args:

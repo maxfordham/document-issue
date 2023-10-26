@@ -23,9 +23,9 @@ classifiers = [
 ]
 dependencies = [
     "pydantic>2",
+    "pydantic-settings",
     "Jinja2",
     "stringcase",
-    "pandas",
     "tabulate",
     "pandoc",
     "pandoc-docx-pagebreak",

@@ -14,12 +14,13 @@
             "path": "../packages/document-issue-io"
         },
         {
-            "path": "../packages/document-issue-latex-schedule"
+            "path": "../packages/document-issue-quarto"
         }
     ],
     "settings": {
         "[python]": {
-            "editor.defaultFormatter": "ms-python.black-formatter"
+            "editor.defaultFormatter": "ms-python.black-formatter",
+            "editor.formatOnSave": true
         },
         "files.exclude": {
             "packages/": true,

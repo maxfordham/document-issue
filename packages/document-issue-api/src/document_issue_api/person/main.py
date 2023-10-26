@@ -42,7 +42,9 @@ def get_person(person_id: int, db: Session = Depends(get_db)):
     except Exception as err:
         raise HTTPException(status_code=404, detail=f"Failed to get Role.\n{err}")
     if db_ is None:
-        raise HTTPException(status_code=204, detail=f"Person id ={person_id} does not exist.")
+        raise HTTPException(
+            status_code=204, detail=f"Person id ={person_id} does not exist."
+        )
     else:
         return db_
 
@@ -67,7 +69,9 @@ def get_people(db: Session = Depends(get_db), limit: int = 100, skip: int = 0):
     tags=["Person"],
     summary="Patch Person.",
 )
-def patch_person(person_id: int, person: schemas.PersonPatch, db: Session = Depends(get_db)):
+def patch_person(
+    person_id: int, person: schemas.PersonPatch, db: Session = Depends(get_db)
+):
     try:
         db_ = crud.patch_person(db=db, person_id=person_id, person=person)
         db.commit()
