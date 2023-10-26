@@ -41,6 +41,25 @@ are used to create the Document Number, this may follow up in the future.
 
 `document-issue` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
 
+
+## Development Install
+
+If using VSCode, we recommend using the [`document-issue.code-workspace`](./.vscode/document-issue.code-workspace) file to open the project.
+
+To install the environment and packages for development, run the following commands:
+```console
+# run line by line
+
+mamba env create -f environment-dev.yml
+mamba activate document-issue-dev
+# ^ base install of dev env (python, pytest, black etc.)
+
+pip install -e ../packages/document-issue 
+pip install -e ../packages/document-issue-api 
+pip install -e ../packages/document-issue-io
+# ^ install editable versions of each package
+```
+
 ## Example `document-issue` data
 
 ```yaml
