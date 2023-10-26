@@ -10,9 +10,23 @@ document issue information using Quarto and ReportLab.
 
 ## Installation
 
-```console
+```bash
 pip install document-issue-io
 ```
+
+## Building
+
+To build the package, run the following command in the root of the package:
+
+```bash
+hatch build
+```
+
+This will first package the Document Issue Quarto extensions, [_extensions/](../document-issue-quarto/_extensions/),
+as a tar file and move it to the templates directory. Then, it will build the package as normal and place it in
+the `dist` directory.
+
+The hatch build hook that packages the Quarto extensions is defined in the [hatch_build.py](hatch_build.py) file.
 
 ## License
 
