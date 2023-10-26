@@ -24,3 +24,10 @@ def test_build_schedule():
     subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
     subprocess.run(["quarto", "render", "document.md", "--to", "document-issue-pdf"])
     assert FPTH_OUTPUT.exists()
+
+
+def test_build_examples():
+    os.chdir(FDIR_ROOT)
+    subprocess.run(
+        ["quarto", "render", "examples/**/document.md", "--to", "document-issue-pdf"]
+    )

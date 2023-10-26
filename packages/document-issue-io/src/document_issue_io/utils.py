@@ -3,9 +3,9 @@ import pathlib
 import subprocess
 from contextlib import contextmanager
 
-from document_issue_io.constants import FDIR_ARCHIVES
+from document_issue_io.constants import FDIR_TEMPLATES
 
-INSTALL_TAR = str(FDIR_ARCHIVES / "document-issue-quarto-v0.1.0.tar.gz")
+INSTALL_TAR = str(FDIR_TEMPLATES / "document-issue-quarto.tar.gz")
 
 
 @contextmanager
