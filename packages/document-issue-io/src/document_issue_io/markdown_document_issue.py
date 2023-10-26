@@ -1,4 +1,3 @@
-import os
 import subprocess
 import pathlib
 import shutil
@@ -73,6 +72,7 @@ class MarkdownDocumentIssue:
                 )
 
     def _to_md(self):
+        """Create markdown file from DocumentIssue object"""
         if self.fpth_md is not None:
             f = open(self.fpth_md, "w")
             f.write(self.md_docissue)
@@ -81,8 +81,11 @@ class MarkdownDocumentIssue:
             raise ValueError("fpth_md not given")
 
     def _to_pdf(self):
+        """Create pdf file from markdown file using quarto."""
         with change_dir(self.dir_md_docissue):
-            shutil.copy(FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name)
+            shutil.copy(
+                FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name
+            )  # Copy footer logo to markdown document issue directory
             build_schedule_title_page_template_pdf(document_issue=self.document_issue)
             install_or_update_document_issue_quarto_extension()
             subprocess.run(
