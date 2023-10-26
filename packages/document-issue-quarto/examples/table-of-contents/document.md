@@ -1,30 +1,8 @@
 ---
-classification: Ac_05
-doc_source: WD
-document_description: A description of the document that is important
-document_name: 06667-MXF-XX-XX-SH-M-20003
-format_configuration:
-    description_in_filename: false
-    include_author_and_checked_by: false
-issue_history:
-    author: EG
-    checked_by: CK
-    date: 2020-01-02
-    issue_format: cde
-    issue_notes: ''
-    revision: P01
-    status_code: S2
-    status_description: Suitable for information
-name_nomenclature: project code-originator-volume-level-type-role-number
-notes: add notes here
-originator: Max Fordham LLP
 project_name: A Max Fordham Project
-project_number: J4321
-roles:
-    name: JG
-    role: Project Engineer
-scale: NTS
-size: A4
+document_description: A description of the document that is important
+footer-logo: logo.png
+title-page: title-page.pdf
 ---
 
 # Page Before Table of Contents
