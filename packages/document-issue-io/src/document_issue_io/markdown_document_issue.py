@@ -39,6 +39,20 @@ class MarkdownDocumentIssue:
         self.dir_md_docissue = fpth_md.parent
         self.file_loader = FileSystemLoader(FDIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
+        if self.fpth_md is None:
+            self.fpth_md = pathlib.Path(
+                self.document_issue.document_code + ".docissue.md"
+            )
+        if self.fpth_pdf is None:
+            self.fpth_pdf = pathlib.Path(
+                self.document_issue.document_code + ".docissue.pdf"
+            )
+        if self.to_md or self.to_pdf:
+            self._to_md()
+        if self.to_pdf:
+            self._to_pdf()
+
+    def _define_issue_history_cols(self):
         self.issue_history_cols = {
             "date": "date",
             "revision": "rev",
@@ -57,18 +71,6 @@ class MarkdownDocumentIssue:
                 self.md_issue_history_col_widths = (
                     ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
                 )
-        if self.fpth_md is None:
-            self.fpth_md = pathlib.Path(
-                self.document_issue.document_code + ".docissue.md"
-            )
-        if self.fpth_pdf is None:
-            self.fpth_pdf = pathlib.Path(
-                self.document_issue.document_code + ".docissue.pdf"
-            )
-        if self.to_md or self.to_pdf:
-            self._to_md()
-        if self.to_pdf:
-            self._to_pdf()
 
     def _to_md(self):
         if self.fpth_md is not None:
@@ -101,6 +103,7 @@ class MarkdownDocumentIssue:
 
     @property
     def md_issue_history(self):
+        self._define_issue_history_cols()
         df = self.document_issue.df_issue_history[self.issue_history_cols.keys()]
         df = df.rename(columns=self.issue_history_cols)
         md_df = df.set_index("date").to_markdown()
