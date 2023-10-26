@@ -26,7 +26,6 @@ dependencies = [
     "pydantic-settings",
     "Jinja2",
     "stringcase",
-    "pandas",
     "tabulate",
     "pandoc",
     "pandoc-docx-pagebreak",

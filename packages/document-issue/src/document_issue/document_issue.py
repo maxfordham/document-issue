@@ -1,6 +1,5 @@
 import datetime
 import typing as ty
-import pandas as pd  # TODO: remove pandas ?
 from tabulate import tabulate
 from pydantic import field_validator, BaseModel, Field
 
@@ -54,10 +53,6 @@ class DocumentIssueClassification(DocumentIssue):
     @property
     def filename(self):
         return self.document_code
-
-    @property
-    def df_current_issue(self):
-        return pd.DataFrame([self.current_issue.model_dump()])
 
     @property
     def issue_history_table(self):
@@ -119,21 +114,6 @@ class DocumentIssueClassification(DocumentIssue):
             li_notes,
             tablefmt="grid",
         )
-
-    @property
-    def df_current_issue_header_table(self):
-        di = {}
-        di["status code"] = self.current_issue.status_code
-        di["revision"] = self.current_issue.revision
-        di["status description"] = self.current_issue.status_description
-        di = {
-            **di,
-            **dict(
-                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
-            ),
-        }
-        di = {k: [v] for k, v in di.items()}
-        return pd.DataFrame.from_dict(di).set_index("status code")
 
     @property
     def current_issue_header_table(self):

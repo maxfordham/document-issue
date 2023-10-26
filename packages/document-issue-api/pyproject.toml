@@ -33,7 +33,6 @@ dependencies = [
     "stringcase",
     "PyYAML",
     "pillow",
-    "pandas",
     "tabulate",
     "pandoc",
     "pandoc-docx-pagebreak",
