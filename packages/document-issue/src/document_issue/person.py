@@ -4,7 +4,9 @@ from document_issue.basemodel import BaseModel
 
 class _Initials(BaseModel):
     initials: str = Field(
-        description="initial of the person fulfilling the Role", alias="name"
+        title="Initials",
+        description="initial of the person fulfilling the Role",
+        alias="name",
     )
 
 

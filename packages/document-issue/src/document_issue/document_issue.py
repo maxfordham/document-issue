@@ -44,7 +44,6 @@ class Classification(BaseModel):
 
 class DocumentIssueClassification(DocumentIssue):
     classification: Classification = Field(None)  # TODO: add classification
-
     # roles: ty.List[Role] #TODO add roles
 
     @field_validator("issue_history")
@@ -57,14 +56,8 @@ class DocumentIssueClassification(DocumentIssue):
         return self.document_code
 
     @property
-    def df_roles(self):
-        df = pd.DataFrame([i.dict() for i in self.document_role]).set_index("initials")
-        df.rename(columns={"role_name": "role"}, inplace=True)
-        return df
-
-    @property
     def df_current_issue(self):
-        return pd.DataFrame([self.current_issue.dict()])
+        return pd.DataFrame([self.current_issue.model_dump()])
 
     @property
     def df_notes(self):
@@ -86,10 +79,10 @@ class DocumentIssueClassification(DocumentIssue):
                 headers.append("Checked by")
 
         # Create list of dicts ordered by date in descending order
-        map_title_to_field = {v.title: k for k, v in Issue.__fields__.items()}
+        map_title_to_field = {v.title: k for k, v in Issue.model_fields.items()}
         li_issue_history = []
         for issue in sorted(self.issue_history, key=lambda d: d.date, reverse=True):
-            di_issue = issue.dict()
+            di_issue = issue.model_dump()
             di_issue["date"] = di_issue["date"].strftime(
                 self.format_configuration.date_string_format
             )
@@ -109,22 +102,28 @@ class DocumentIssueClassification(DocumentIssue):
             tablefmt="grid",
         )
 
-        # if self.document_issue.format_configuration.output_author:
-        # self.issue_history_cols["author"] = "author"
-        # self.md_issue_history_col_widths = (
-        #     ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
-        # )
-        # if self.document_issue.format_configuration.output_checked_by:
-
     @property
     def roles_table(self):
-        df = pd.DataFrame([i.dict() for i in self.document_role]).set_index("initials")
-        df.rename(columns={"role_name": "role"}, inplace=True)
-        return df
+        headers = ["Initials", "Role"]
+        map_title_to_field = {v.title: k for k, v in DocumentRole.model_fields.items()}
+        li_document_roles = []
+        for document_role in self.document_role:
+            di_document_role = document_role.model_dump()
+            di_document_role_with_title = {}
+            for header in headers:
+                di_document_role_with_title[f"**{header}**"] = di_document_role[
+                    map_title_to_field[header]
+                ]
+            li_document_roles.append(di_document_role_with_title)
+        return tabulate(
+            li_document_roles,
+            headers="keys",
+            tablefmt="grid",
+        )
 
     @property
     def current_issue_table(self):
-        return pd.DataFrame([self.current_issue.dict()])
+        return pd.DataFrame([self.current_issue.model_dump()])
 
     @property
     def notes_table(self):
