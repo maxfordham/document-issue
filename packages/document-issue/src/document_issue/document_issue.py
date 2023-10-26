@@ -60,15 +60,6 @@ class DocumentIssueClassification(DocumentIssue):
         return pd.DataFrame([self.current_issue.model_dump()])
 
     @property
-    def df_notes(self):
-        df = pd.DataFrame.from_dict(
-            {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
-        ).set_index("index")
-        df.index.name = ""
-        df.rename(columns={"notes": ""}, inplace=True)
-        return df
-
-    @property
     def issue_history_table(self):
         """Create the markdown grid table using tabulate"""
         # Define headers for tabulate
@@ -122,25 +113,12 @@ class DocumentIssueClassification(DocumentIssue):
         )
 
     @property
-    def current_issue_table(self):
-        return pd.DataFrame([self.current_issue.model_dump()])
-
-    @property
     def notes_table(self):
-        df = pd.DataFrame.from_dict(
-            {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
-        ).set_index("index")
-        df.index.name = ""
-        df.rename(columns={"notes": ""}, inplace=True)
-        return df
-
-    @property
-    def current_issue(self):
-        return self.issue_history[-1]  # Issue(**self.df_issue_history.loc[0].to_dict())
-
-    @property
-    def current_issue_long_date(self):
-        return self.current_issue.date.strftime("%B %Y")
+        li_notes = [[i + 1, note] for i, note in enumerate(self.notes)]
+        return tabulate(
+            li_notes,
+            tablefmt="grid",
+        )
 
     @property
     def df_current_issue_header_table(self):
@@ -156,6 +134,29 @@ class DocumentIssueClassification(DocumentIssue):
         }
         di = {k: [v] for k, v in di.items()}
         return pd.DataFrame.from_dict(di).set_index("status code")
+
+    @property
+    def current_issue_header_table(self):
+        di = {}
+        di["status code"] = self.current_issue.status_code
+        di["revision"] = self.current_issue.revision
+        di["status description"] = self.current_issue.status_description
+        di = {
+            **di,
+            **dict(
+                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
+            ),
+        }
+        di = {k: [v] for k, v in di.items()}
+        return pd.DataFrame.from_dict(di).set_index("status code")
+
+    @property
+    def current_issue(self):
+        return self.issue_history[-1]  # Issue(**self.df_issue_history.loc[0].to_dict())
+
+    @property
+    def current_issue_long_date(self):
+        return self.current_issue.date.strftime("%B %Y")
 
     @property
     def current_status_description(self):

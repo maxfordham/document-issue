@@ -107,7 +107,7 @@ class MarkdownDocumentIssue:
 
     @property
     def md_notes(self):
-        return self.document_issue.df_notes.to_markdown()
+        return self.document_issue.notes_table
 
     @property
     def md_docissue(self):
