@@ -2,7 +2,14 @@
 
 This Quarto format is used to create Max Fordham PDF documents.
 
-<img src="./img/example.png" width="300"/>
+<table>
+  <tr>
+    <td><img src="./img/example-page-1.png" width="300"/></td>
+    <td><img src="./img/example-page-2.png" width="300"/></td>
+    <td><img src="./img/example-page-3.png" width="300"/></td>
+  </tr>
+</table>
+
 
 ## Installation
 
@@ -21,7 +28,7 @@ Ensure you are in the root directory of this repository when running this comman
 
 ## Usage
 
-Before running, feel free to check out the examples in (examples)[examples/].
+Before continuing, feel free to check out the examples in the `examples` folder.
 
 To use the format, you can use the format names `document-issue-pdf` and `document-issue-latex`. For example:
 
