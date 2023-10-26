@@ -23,7 +23,9 @@ class Issue(BaseModel):
     """required information fields that define the metadata of a document issue"""
 
     revision: str = Field("P01", json_schema_extra=dict(column_width=COL_WIDTH))
-    date: datetime.date = Field(datetime.date(2020, 1, 2), json_schema_extra=dict(column_width=COL_WIDTH))
+    date: datetime.date = Field(
+        datetime.date(2020, 1, 2), json_schema_extra=dict(column_width=COL_WIDTH)
+    )
     status_code: str = Field("S2", json_schema_extra=dict(column_width=COL_WIDTH))
     status_description: str = Field(
         "Suitable for information",
@@ -31,13 +33,19 @@ class Issue(BaseModel):
         json_schema_extra=dict(column_width=150),
     )
     author: ty.Optional[str] = Field(
-        "EG", description=description_author, json_schema_extra=dict(column_width=COL_WIDTH)
+        "EG",
+        description=description_author,
+        json_schema_extra=dict(column_width=COL_WIDTH),
     )
     checked_by: ty.Optional[str] = Field(
-        "CK", description=description_checked_by, json_schema_extra=dict(column_width=COL_WIDTH)
+        "CK",
+        description=description_checked_by,
+        json_schema_extra=dict(column_width=COL_WIDTH),
     )
     issue_format: IssueFormatEnum = Field(
-        IssueFormatEnum.cde, title="Issue Format", json_schema_extra=dict(column_width=COL_WIDTH)
+        IssueFormatEnum.cde,
+        title="Issue Format",
+        json_schema_extra=dict(column_width=COL_WIDTH),
     )
     issue_notes: str = Field(
         "",
@@ -54,7 +62,7 @@ class Issue(BaseModel):
             else:
                 v = datetime.datetime.strptime(v, "%m %b %y").date()
         return v  # TODO: i think this validation step can probs be removed if the code runs differently...
-    
+
     @field_validator("issue_format", mode="before")
     @classmethod
     def _issue_format(cls, v):
@@ -62,4 +70,3 @@ class Issue(BaseModel):
             return getattr(IssueFormatEnum, v)
         else:
             return v
-    

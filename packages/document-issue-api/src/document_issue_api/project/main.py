@@ -5,7 +5,9 @@ import document_issue_api.project.schemas as schemas
 import document_issue_api.project.crud as crud
 import typing as ty
 
-from document_issue_api.database import get_db  # TODO: remove this dependency / make configurable
+from document_issue_api.database import (
+    get_db,
+)  # TODO: remove this dependency / make configurable
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -39,7 +41,9 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
     try:
         db_ = crud.get_project(db=db, project_id=project_id)
         if db_ is None:
-            raise HTTPException(status_code=204, detail=f"Project id ={project_id} does not exist.")
+            raise HTTPException(
+                status_code=204, detail=f"Project id ={project_id} does not exist."
+            )
         else:
             return db_
     except Exception as err:
@@ -82,7 +86,9 @@ def delete_project(project_id: int, db: Session = Depends(get_db)):
     tags=["Project"],
     summary="Patch Project.",
 )
-def patch_project(project_id: int, project: schemas.ProjectPatch, db: Session = Depends(get_db)):
+def patch_project(
+    project_id: int, project: schemas.ProjectPatch, db: Session = Depends(get_db)
+):
     try:
         db_ = crud.patch_project(db=db, project_id=project_id, project=project)
         return db_

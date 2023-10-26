@@ -8,7 +8,9 @@ from fastapi.encoders import jsonable_encoder
 logger = logging.getLogger(__name__)
 
 
-def post_document_role(db: Session, role_id: int, document_id: int) -> schemas.ProjectRoleGet:
+def post_document_role(
+    db: Session, role_id: int, document_id: int
+) -> schemas.ProjectRoleGet:
     """Create a new project role.
 
     Args:
@@ -26,7 +28,9 @@ def post_document_role(db: Session, role_id: int, document_id: int) -> schemas.P
     return schemas.ProjectRoleGet.model_validate(db_.role.project_role[0])
 
 
-def get_document_roles(db: Session, document_id: int) -> ty.List[schemas.ProjectRoleGet]:
+def get_document_roles(
+    db: Session, document_id: int
+) -> ty.List[schemas.ProjectRoleGet]:
     """Get all project roles.
 
     Args:
@@ -36,11 +40,17 @@ def get_document_roles(db: Session, document_id: int) -> ty.List[schemas.Project
     Returns:
         models.DocumentRole: The project role
     """
-    db_ = db.query(models.DocumentRole).filter(models.DocumentRole.document_id == document_id).all()
+    db_ = (
+        db.query(models.DocumentRole)
+        .filter(models.DocumentRole.document_id == document_id)
+        .all()
+    )
     return [schemas.ProjectRoleGet.model_validate(_.role.project_role[0]) for _ in db_]
 
 
-def delete_document_role(db: Session, role_id: int, document_id: int) -> schemas.ProjectRoleGet:
+def delete_document_role(
+    db: Session, role_id: int, document_id: int
+) -> schemas.ProjectRoleGet:
     """Delete a project role.
 
     Args:

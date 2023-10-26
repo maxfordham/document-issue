@@ -6,8 +6,12 @@ from document_issue.basemodel import BaseModel, Field
 
 
 class ProjectBase(BaseModel):
-    project_name: str = Field("In House App Testing", description="should be the same as the WebApp")
-    project_number: int = Field(DEFAULT_PROJECT_NUMBER, description="unique number project code")
+    project_name: str = Field(
+        "In House App Testing", description="should be the same as the WebApp"
+    )
+    project_number: int = Field(
+        DEFAULT_PROJECT_NUMBER, description="unique number project code"
+    )
 
 
 class Project(ProjectBase):

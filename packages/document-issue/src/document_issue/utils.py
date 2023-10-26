@@ -6,7 +6,6 @@ import re
 import yaml
 
 
-
 def get_stem(path: pathlib.Path):
     return path.name.replace("".join(path.suffixes), "")
 
@@ -132,5 +131,6 @@ yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
 
 def preview_dict_as_yaml(di: dict, **kwargs):
     from IPython.display import Markdown
+
     s = yaml.dump(di, indent=2, **kwargs)
     return Markdown("\n```yaml\n" + s + "\n```")

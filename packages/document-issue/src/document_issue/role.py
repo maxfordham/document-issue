@@ -4,7 +4,6 @@ from document_issue.person import _Initials
 import typing as ty
 
 
-
 # TODO:
 # do you roles need to be editable data fields (with their own table)
 # or can they just be enums that get defined globally?

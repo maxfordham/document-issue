@@ -4,7 +4,9 @@ import logging
 import document_issue_api.issue.schemas as schemas
 import document_issue_api.issue.crud as crud
 
-from document_issue_api.database import get_db  # TODO: remove this dependency / make configurable
+from document_issue_api.database import (
+    get_db,
+)  # TODO: remove this dependency / make configurable
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -17,7 +19,9 @@ logger = logging.getLogger(__name__)
     tags=["Issue"],
     summary="Post an Issue onto a Document.",
 )
-def post_issue(issue: schemas.IssueBasePost, document_id, db: Session = Depends(get_db)):
+def post_issue(
+    issue: schemas.IssueBasePost, document_id, db: Session = Depends(get_db)
+):
     try:
         db_ = crud.post_issue(db, document_id, issue)
         db.commit()

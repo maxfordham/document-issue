@@ -24,7 +24,8 @@ def post_document_then_delete():
     delete_document(id_)
     delete_project(p_id_)
 
-# NOTE: currently broken test. also broken when manually testing in swagger API. 
+
+# NOTE: currently broken test. also broken when manually testing in swagger API.
 def test_post_document(post_document_then_delete):
     response = post_document_then_delete
     assert response.status_code == 200

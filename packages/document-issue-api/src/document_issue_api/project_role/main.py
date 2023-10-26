@@ -26,13 +26,17 @@ def post_project_role(
     person_id: ty.Optional[int] = None,
 ):
     try:
-        db_ = crud.post_project_role(db=db, project_id=project_id, role_id=role_id, person_id=person_id)
+        db_ = crud.post_project_role(
+            db=db, project_id=project_id, role_id=role_id, person_id=person_id
+        )
         db.commit()
         return db_
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to add Project Role.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to add Project Role.\n{err}"
+        )
 
 
 @router.delete(
@@ -49,7 +53,9 @@ def delete_project_role(project_id: int, role_id: int, db: Session = Depends(get
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to delete Project Role.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to delete Project Role.\n{err}"
+        )
 
 
 @router.get(
@@ -65,4 +71,6 @@ def get_project_roles(project_id: int, db: Session = Depends(get_db)):
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to get Project Roles.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to get Project Roles.\n{err}"
+        )

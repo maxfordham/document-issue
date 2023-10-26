@@ -4,7 +4,9 @@ import logging
 import document_issue_api.role.schemas as schemas
 import document_issue_api.role.crud as crud
 
-from document_issue_api.database import get_db  # TODO: remove this dependency / make configurable
+from document_issue_api.database import (
+    get_db,
+)  # TODO: remove this dependency / make configurable
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

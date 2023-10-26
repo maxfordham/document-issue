@@ -12,7 +12,6 @@ FPTH_TEST_DOC_ISSUE = FDIR_TEST_OUTPUT / "document_issue.json"
 FPTH_TEST_DOC_ISSUE_SCHEMA = FDIR_TEST_OUTPUT / "document_issue.schema.json"
 
 
-
 class DocumentIssueFactory(ModelFactory[DocumentIssueClassification]):
     __model__ = DocumentIssueClassification
 
@@ -25,7 +24,9 @@ def create_test_document_issue():
     document_issue.document_role[0].role_name = "Director in Charge"
     document_issue.document_code = "06667-MXF-XX-XX-SH-M-20003"
     document_issue.document_description = "A description of a Max Fordham Project"
-    document_issue.name_nomenclature = "project-originator-volume-level-type-role-number"
+    document_issue.name_nomenclature = (
+        "project-originator-volume-level-type-role-number"
+    )
     document_issue.issue_history[0].author = "OH"
     document_issue.issue_history[0].checked_by = "JG"
     document_issue.issue_history[0].revision = "P01"
@@ -34,6 +35,7 @@ def create_test_document_issue():
     document_issue.issue_history[0].issue_notes = "This is an issue note"
     document_issue.format_configuration.date_string_format = "%d %^b %y"
     return document_issue
+
 
 class TestMarkdownDocumentIssue:
     def test_to_md(self):
@@ -80,7 +82,9 @@ class TestMarkdownDocumentIssue:
         assert pathlib.Path(markdown_document_issue.fpth_pdf).is_file()
 
     def test_to_pdf_with_author_and_checked_by(self):
-        FDIR_RENDER = FDIR_TEST_OUTPUT / "render" / "test_to_pdf_with_author_and_checked_by"
+        FDIR_RENDER = (
+            FDIR_TEST_OUTPUT / "render" / "test_to_pdf_with_author_and_checked_by"
+        )
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
@@ -89,7 +93,8 @@ class TestMarkdownDocumentIssue:
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
             fpth_md=FDIR_RENDER / "test_to_pdf_with_author_and_checked_by.docissue.md",
-            fpth_pdf=FDIR_TEST_OUTPUT / "test_to_pdf_with_author_and_checked_by.docissue.pdf",
+            fpth_pdf=FDIR_TEST_OUTPUT
+            / "test_to_pdf_with_author_and_checked_by.docissue.pdf",
             to_md=True,
             to_pdf=True,
         )

@@ -16,6 +16,7 @@ def test_install_extension():
     subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
     assert FDIR_EXTENSION_INSTALL_PTH.exists()
 
+
 def test_build_schedule():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)

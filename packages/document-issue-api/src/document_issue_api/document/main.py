@@ -5,7 +5,9 @@ import typing as ty
 import document_issue_api.document.schemas as schemas
 import document_issue_api.document.crud as crud
 
-from document_issue_api.database import get_db  # TODO: remove this dependency / make configurable
+from document_issue_api.database import (
+    get_db,
+)  # TODO: remove this dependency / make configurable
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -79,7 +81,9 @@ def get_documents(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
     tags=["Document"],
     summary="Patch Document.",
 )
-def patch_document(document_id: int, document: schemas.DocumentBasePatch, db: Session = Depends(get_db)):
+def patch_document(
+    document_id: int, document: schemas.DocumentBasePatch, db: Session = Depends(get_db)
+):
     try:
         db_ = crud.patch_document(db=db, document_id=document_id, document=document)
         db.commit()
@@ -103,4 +107,6 @@ def delete_document(document_id: int, db: Session = Depends(get_db)):
     except Exception as err:
         db.rollback()
         logger.exception(err)
-        raise HTTPException(status_code=404, detail=f"Failed to delete Document.\n{err}")
+        raise HTTPException(
+            status_code=404, detail=f"Failed to delete Document.\n{err}"
+        )

@@ -12,24 +12,29 @@ from document_issue.document import DocumentBase, Document
 
 # ------------------------------------------------------------------------------------------
 # NOTE: the DocumentIssue shown here is the ideal output presentation for a single document.
-#       it is not the closest representation of what is in the database. The data will need 
+#       it is not the closest representation of what is in the database. The data will need
 #       reshaping out of the DB to create the format below.
 # ------------------------------------------------------------------------------------------
 
+
 class DocumentIssue(Document, ProjectBase):
-    document_role: ty.List[DocumentRole] = Field([{"role": "director", "initials": "DR"}], alias="roles", min_length=1)
+    document_role: ty.List[DocumentRole] = Field(
+        [{"role": "director", "initials": "DR"}], alias="roles", min_length=1
+    )
     issue_history: ty.List[Issue] = Field(
         [],
         alias="issue",
         description="list of issues",
-        json_schema_extra=dict(format="dataframe"))
-    
+        json_schema_extra=dict(format="dataframe"),
+    )
+
     # TODO: add this validation after ensuring that a director is shown on all existing schedules
     # @field_validator("document_role")
     # @classmethod
     # def _document_role(cls, v):
     #     assert "Director in Charge" in [_.role_name.value in _ in v]
     #     return v
+
 
 class Classification(BaseModel):
     pass
@@ -52,8 +57,12 @@ class DocumentIssueClassification(DocumentIssue):
     @property  # TODO deprecate. used tabulate and no pandas
     def df_issue_history(self):
         li = [i.dict() for i in self.issue_history]
-        df = pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
-        df["date"] = pd.to_datetime(df.date).dt.strftime(self.format_configuration.date_string_format)
+        df = (
+            pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
+        )
+        df["date"] = pd.to_datetime(df.date).dt.strftime(
+            self.format_configuration.date_string_format
+        )
         return df
 
     @property
@@ -68,10 +77,10 @@ class DocumentIssueClassification(DocumentIssue):
 
     @property
     def df_notes(self):
-        df = pd.DataFrame.from_dict({"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}).set_index(
-            "index"
-        )
-        df.index.name= ""
+        df = pd.DataFrame.from_dict(
+            {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
+        ).set_index("index")
+        df.index.name = ""
         df.rename(columns={"notes": ""}, inplace=True)
         return df
 
@@ -91,7 +100,9 @@ class DocumentIssueClassification(DocumentIssue):
         di["status description"] = self.current_issue.status_description
         di = {
             **di,
-            **dict(zip(self.name_nomenclature.split("-"), self.document_code.split("-"))),
+            **dict(
+                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
+            ),
         }
         di = {k: [v] for k, v in di.items()}
         return pd.DataFrame.from_dict(di).set_index("status code")

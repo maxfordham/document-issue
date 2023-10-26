@@ -10,11 +10,15 @@ from document_issue_io.title_block import build_schedule_title_page_template_pdf
 from document_issue_io.constants import (
     FDIR_TEMPLATES,
     FDIR_MEDIA,
-    NAME_MD_DOCISSUE_TEMPLATE
+    NAME_MD_DOCISSUE_TEMPLATE,
 )
-from document_issue_io.utils import change_dir, install_or_update_document_issue_quarto_extension
+from document_issue_io.utils import (
+    change_dir,
+    install_or_update_document_issue_quarto_extension,
+)
 
 FPTH_FOOTER_LOGO = FDIR_MEDIA / "footer-logo.png"
+
 
 class MarkdownDocumentIssue:
     """Create structured markdown header from Document object"""
@@ -45,14 +49,22 @@ class MarkdownDocumentIssue:
         self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
         if self.document_issue.format_configuration.output_author:
             self.issue_history_cols["author"] = "author"
-            self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+            self.md_issue_history_col_widths = (
+                ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+            )
             if self.document_issue.format_configuration.output_checked_by:
                 self.issue_history_cols["checked_by"] = "checked by"
-                self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
+                self.md_issue_history_col_widths = (
+                    ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
+                )
         if self.fpth_md is None:
-            self.fpth_md = pathlib.Path(self.document_issue.document_code + ".docissue.md")
+            self.fpth_md = pathlib.Path(
+                self.document_issue.document_code + ".docissue.md"
+            )
         if self.fpth_pdf is None:
-            self.fpth_pdf = pathlib.Path(self.document_issue.document_code + ".docissue.pdf")
+            self.fpth_pdf = pathlib.Path(
+                self.document_issue.document_code + ".docissue.pdf"
+            )
         if self.to_md or self.to_pdf:
             self._to_md()
         if self.to_pdf:
@@ -71,15 +83,17 @@ class MarkdownDocumentIssue:
             shutil.copy(FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name)
             build_schedule_title_page_template_pdf(document_issue=self.document_issue)
             install_or_update_document_issue_quarto_extension()
-            subprocess.run([
-                "quarto", 
-                "render", 
-                self.fpth_md.name, 
-                "--to", 
-                "document-issue-pdf",
-                "-o",
-                self.fpth_pdf.name
-            ])
+            subprocess.run(
+                [
+                    "quarto",
+                    "render",
+                    self.fpth_md.name,
+                    "--to",
+                    "document-issue-pdf",
+                    "-o",
+                    self.fpth_pdf.name,
+                ]
+            )
             # NOTE: quarto render does not allow to specify a relative or absolute
             # path for "-o" parameter. Therefore, will just move post-render
             if self.fpth_pdf != self.dir_md_docissue / self.fpth_pdf.name:
@@ -89,9 +103,7 @@ class MarkdownDocumentIssue:
     def md_issue_history(self):
         df = self.document_issue.df_issue_history[self.issue_history_cols.keys()]
         df = df.rename(columns=self.issue_history_cols)
-        md_df = df.set_index(
-            'date'
-        ).to_markdown()
+        md_df = df.set_index("date").to_markdown()
         return md_df + "\n\n" + self.md_issue_history_col_widths
 
     @property
@@ -101,7 +113,7 @@ class MarkdownDocumentIssue:
     @property
     def md_notes(self):
         return self.document_issue.df_notes.to_markdown()
-    
+
     @property
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
