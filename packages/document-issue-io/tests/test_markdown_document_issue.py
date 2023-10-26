@@ -34,6 +34,14 @@ def create_test_document_issue():
     document_issue.issue_history[0].status_description = "Suitable for information"
     document_issue.issue_history[0].issue_notes = "This is an issue note"
     document_issue.format_configuration.date_string_format = "%d %^b %y"
+    document_issue.notes = [
+        "This is a note",
+        "This is another note",
+        (
+            "This is a very long note which states something important about the"
+            " document issue"
+        ),
+    ]
     return document_issue
 
 
