@@ -19,7 +19,8 @@
     ],
     "settings": {
         "[python]": {
-            "editor.defaultFormatter": "ms-python.black-formatter"
+            "editor.defaultFormatter": "ms-python.black-formatter",
+            "editor.formatOnSave": true
         },
         "files.exclude": {
             "packages/": true,
