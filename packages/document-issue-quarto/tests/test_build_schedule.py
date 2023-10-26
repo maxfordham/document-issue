@@ -27,7 +27,13 @@ def test_build_schedule():
 
 
 def test_build_examples():
-    os.chdir(FDIR_ROOT)
-    subprocess.run(
-        ["quarto", "render", "examples/**/document.md", "--to", "document-issue-pdf"]
-    )
+    EXAMPLE_DIRS = [i for i in (FDIR_ROOT / "examples").glob("*/")]
+    for EXAMPLE_DIR in EXAMPLE_DIRS:
+        FPTH_OUTPUT = EXAMPLE_DIR / "document.pdf"
+        FPTH_OUTPUT.unlink(missing_ok=True)
+        os.chdir(EXAMPLE_DIR)
+        subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+        subprocess.run(
+            ["quarto", "render", "document.md", "--to", "document-issue-pdf"]
+        )
+        assert FPTH_OUTPUT.exists()
