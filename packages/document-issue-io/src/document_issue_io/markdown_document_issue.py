@@ -51,26 +51,6 @@ class MarkdownDocumentIssue:
         if self.to_pdf:
             self._to_pdf()
 
-    def _define_issue_history_cols(self):
-        self.issue_history_cols = {
-            "date": "date",
-            "revision": "rev",
-            "status_code": "status",
-            "status_description": "description",
-            "issue_notes": "issue notes",
-        }
-        self.md_issue_history_col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
-        if self.document_issue.format_configuration.output_author:
-            self.issue_history_cols["author"] = "author"
-            self.md_issue_history_col_widths = (
-                ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
-            )
-            if self.document_issue.format_configuration.output_checked_by:
-                self.issue_history_cols["checked_by"] = "checked by"
-                self.md_issue_history_col_widths = (
-                    ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
-                )
-
     def _to_md(self):
         """Create markdown file from DocumentIssue object"""
         if self.fpth_md is not None:
@@ -105,12 +85,21 @@ class MarkdownDocumentIssue:
                 shutil.move(self.fpth_pdf.name, self.fpth_pdf)
 
     @property
+    def md_issue_history_col_widths(self):
+        col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
+        if self.document_issue.format_configuration.output_author:
+            col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+            if self.document_issue.format_configuration.output_checked_by:
+                col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
+        return col_widths
+
+    @property
     def md_issue_history(self):
-        self._define_issue_history_cols()
-        df = self.document_issue.df_issue_history[self.issue_history_cols.keys()]
-        df = df.rename(columns=self.issue_history_cols)
-        md_df = df.set_index("date").to_markdown()
-        return md_df + "\n\n" + self.md_issue_history_col_widths
+        return (
+            self.document_issue.issue_history_table
+            + "\n\n"
+            + self.md_issue_history_col_widths
+        )
 
     @property
     def md_roles(self):

@@ -1,5 +1,7 @@
+import datetime
 import typing as ty
 import pandas as pd  # TODO: remove pandas ?
+from tabulate import tabulate
 from pydantic import field_validator, BaseModel, Field
 
 from document_issue.project import ProjectBase
@@ -54,17 +56,6 @@ class DocumentIssueClassification(DocumentIssue):
     def filename(self):
         return self.document_code
 
-    @property  # TODO deprecate. used tabulate and no pandas
-    def df_issue_history(self):
-        li = [i.dict() for i in self.issue_history]
-        df = (
-            pd.DataFrame(li).sort_values("date", ascending=False).reset_index(drop=True)
-        )
-        df["date"] = pd.to_datetime(df.date).dt.strftime(
-            self.format_configuration.date_string_format
-        )
-        return df
-
     @property
     def df_roles(self):
         df = pd.DataFrame([i.dict() for i in self.document_role]).set_index("initials")
@@ -77,6 +68,66 @@ class DocumentIssueClassification(DocumentIssue):
 
     @property
     def df_notes(self):
+        df = pd.DataFrame.from_dict(
+            {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
+        ).set_index("index")
+        df.index.name = ""
+        df.rename(columns={"notes": ""}, inplace=True)
+        return df
+
+    @property
+    def issue_history_table(self):
+        """Create the markdown grid table using tabulate"""
+        # Define headers for tabulate
+        headers = ["Date", "Rev", "Status", "Description", "Issue Notes"]
+        if self.format_configuration.output_author:
+            headers.append("Author")
+            if self.format_configuration.output_checked_by:
+                headers.append("Checked by")
+
+        # Create list of dicts ordered by date in descending order
+        map_title_to_field = {v.title: k for k, v in Issue.__fields__.items()}
+        li_issue_history = []
+        for issue in sorted(self.issue_history, key=lambda d: d.date, reverse=True):
+            di_issue = issue.dict()
+            di_issue["date"] = di_issue["date"].strftime(
+                self.format_configuration.date_string_format
+            )
+            di_issue_with_title = {}
+            for header in headers:
+                if header in map_title_to_field.keys():
+                    di_issue_with_title[f"**{header}**"] = di_issue[
+                        map_title_to_field[header]
+                    ]
+                else:
+                    raise ValueError(f"Header '{header}' not defined in Issue schema.")
+            li_issue_history.append(di_issue_with_title)
+
+        return tabulate(
+            li_issue_history,
+            headers="keys",
+            tablefmt="grid",
+        )
+
+        # if self.document_issue.format_configuration.output_author:
+        # self.issue_history_cols["author"] = "author"
+        # self.md_issue_history_col_widths = (
+        #     ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+        # )
+        # if self.document_issue.format_configuration.output_checked_by:
+
+    @property
+    def roles_table(self):
+        df = pd.DataFrame([i.dict() for i in self.document_role]).set_index("initials")
+        df.rename(columns={"role_name": "role"}, inplace=True)
+        return df
+
+    @property
+    def current_issue_table(self):
+        return pd.DataFrame([self.current_issue.dict()])
+
+    @property
+    def notes_table(self):
         df = pd.DataFrame.from_dict(
             {"notes": self.notes, "index": list(range(1, len(self.notes) + 1))}
         ).set_index("index")
