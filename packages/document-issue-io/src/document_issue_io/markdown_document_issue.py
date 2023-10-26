@@ -88,9 +88,9 @@ class MarkdownDocumentIssue:
     def md_issue_history_col_widths(self):
         col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,45]"}'
         if self.document_issue.format_configuration.output_author:
-            col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,35,10]"}'
+            col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,32.5,12.5]"}'
             if self.document_issue.format_configuration.output_checked_by:
-                col_widths = ': {tbl-colwidths="[17.5,5,7.5,25,25,10,10]"}'
+                col_widths = ': {tbl-colwidths="[17.5,5,7.5,20,25,10,15]"}'
         return col_widths
 
     @property

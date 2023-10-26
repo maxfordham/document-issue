@@ -39,11 +39,13 @@ class Issue(BaseModel):
         "EG",
         title="Author",
         description=description_author,
+        max_length=5,
         json_schema_extra=dict(column_width=COL_WIDTH),
     )
     checked_by: ty.Optional[str] = Field(
         "CK",
-        title="Checked by",
+        title="Checker",
+        max_length=5,
         description=description_checked_by,
         json_schema_extra=dict(column_width=COL_WIDTH),
     )

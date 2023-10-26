@@ -62,7 +62,7 @@ class DocumentIssueClassification(DocumentIssue):
         if self.format_configuration.output_author:
             headers.append("Author")
             if self.format_configuration.output_checked_by:
-                headers.append("Checked by")
+                headers.append("Checker")
 
         # Create list of dicts ordered by date in descending order
         map_title_to_field = {v.title: k for k, v in Issue.model_fields.items()}
@@ -79,7 +79,9 @@ class DocumentIssueClassification(DocumentIssue):
                         map_title_to_field[header]
                     ]
                 else:
-                    raise ValueError(f"Header '{header}' not defined in Issue schema.")
+                    raise ValueError(
+                        f"Header '{header}' not defined as a title in Issue schema."
+                    )
             li_issue_history.append(di_issue_with_title)
 
         return tabulate(
@@ -97,9 +99,15 @@ class DocumentIssueClassification(DocumentIssue):
             di_document_role = document_role.model_dump()
             di_document_role_with_title = {}
             for header in headers:
-                di_document_role_with_title[f"**{header}**"] = di_document_role[
-                    map_title_to_field[header]
-                ]
+                if header in map_title_to_field.keys():
+                    di_document_role_with_title[f"**{header}**"] = di_document_role[
+                        map_title_to_field[header]
+                    ]
+                else:
+                    raise ValueError(
+                        f"Header '{header}' not defined as a title in DocumentRole"
+                        " schema."
+                    )
             li_document_roles.append(di_document_role_with_title)
         return tabulate(
             li_document_roles,
