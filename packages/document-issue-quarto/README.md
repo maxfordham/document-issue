@@ -24,17 +24,11 @@ To use the format, you can use the format names `document-issue-pdf` and `docume
 
 ## Installing Quarto
 
-As an aside, here is how to install Quarto on Ubuntu 20.04:
-
-Download Quarto
-```bash
-wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb
-```
+As an aside, here is how to install Quarto using mamba:
 
 Install Quarto
 ```bash
-sudo dpkg -i quarto-1.3.450-linux-amd64.deb 
-sudo apt-get install -f 
+mamba install quarto
 ```
 
 Install tinytex
