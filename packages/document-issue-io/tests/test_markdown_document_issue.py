@@ -4,7 +4,7 @@ import pytest
 from polyfactory.factories.pydantic_factory import ModelFactory
 
 from document_issue.document_issue import DocumentIssueClassification
-from document_issue_io.markdown_issue import MarkdownDocumentIssue
+from document_issue_io.markdown_document_issue import MarkdownDocumentIssue
 
 from tests.constants import FDIR_TEST_OUTPUT
 
