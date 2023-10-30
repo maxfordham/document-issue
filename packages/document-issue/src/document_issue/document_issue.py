@@ -20,7 +20,9 @@ from document_issue.document import DocumentBase, Document
 
 class DocumentIssue(Document, ProjectBase):
     document_role: ty.List[DocumentRole] = Field(
-        [{"role": "director", "initials": "DR"}], alias="roles", min_length=1
+        [{"role": RoleEnum.director.value, "initials": "DR"}],
+        alias="roles",
+        min_length=1,
     )
     issue_history: ty.List[Issue] = Field(
         [],
