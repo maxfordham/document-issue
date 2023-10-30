@@ -37,11 +37,11 @@ class FormatConfiguration(BaseModel):
         ),
     )
     include_author_and_checked_by: bool = (
-        None  # TODO: for migration only. remove in future.
+        False  # TODO: for migration only. remove in future.
     )
 
     @model_validator(mode="after")  # TODO: for migration only. remove in future.
-    def check_include_author_and_checked_by(self) -> "UserModel":
+    def check_include_author_and_checked_by(self) -> "FormatConfiguration":
         v = self.include_author_and_checked_by
         if v is not None:
             self.output_author = v
@@ -62,7 +62,7 @@ when split on '-' character.
 Note = Annotated[
     str,
     Len(max_length=1000),
-    WithJsonSchema({"type": "string", "maxLength": 100, "layout": {"width": "100%"}}),
+    WithJsonSchema({"type": "string", "maxLength": 1000, "layout": {"width": "100%"}}),
 ]
 # ^ json_schema_extra not added to schema
 
