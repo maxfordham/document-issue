@@ -1,4 +1,3 @@
-import datetime
 import typing as ty
 from tabulate import tabulate
 from pydantic import field_validator, BaseModel, Field
@@ -20,7 +19,7 @@ from document_issue.document import DocumentBase, Document
 
 class DocumentIssue(Document, ProjectBase):
     document_role: ty.List[DocumentRole] = Field(
-        [{"role": RoleEnum.director.value, "initials": "DR"}],
+        [DocumentRole(role_name=RoleEnum.director.value, initials="DR")],
         alias="roles",
         min_length=1,
     )
@@ -30,22 +29,6 @@ class DocumentIssue(Document, ProjectBase):
         description="list of issues",
         json_schema_extra=dict(format="dataframe"),
     )
-
-    # TODO: add this validation after ensuring that a director is shown on all existing schedules
-    # @field_validator("document_role")
-    # @classmethod
-    # def _document_role(cls, v):
-    #     assert "Director in Charge" in [_.role_name.value in _ in v]
-    #     return v
-
-
-class Classification(BaseModel):
-    pass
-
-
-class DocumentIssueClassification(DocumentIssue):
-    classification: Classification = Field(None)  # TODO: add classification
-    # roles: ty.List[Role] #TODO add roles
 
     @field_validator("issue_history")
     @classmethod
@@ -161,3 +144,19 @@ class DocumentIssueClassification(DocumentIssue):
         for role in self.document_role:
             if role.role_name == RoleEnum.director.value:
                 return role.initials
+
+    # TODO: add this validation after ensuring that a director is shown on all existing schedules
+    # @field_validator("document_role")
+    # @classmethod
+    # def _document_role(cls, v):
+    #     assert "Director in Charge" in [_.role_name.value in _ in v]
+    #     return v
+
+
+class Classification(BaseModel):
+    pass
+
+
+class DocumentIssueClassification(DocumentIssue):
+    classification: Classification = Field(None)  # TODO: add classification
+    # roles: ty.List[Role] #TODO add roles
