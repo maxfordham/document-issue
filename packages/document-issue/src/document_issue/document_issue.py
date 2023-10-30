@@ -109,21 +109,6 @@ class DocumentIssue(Document, ProjectBase):
         )
 
     @property
-    def current_issue_header_table(self):
-        di = {}
-        di["status code"] = self.current_issue.status_code
-        di["revision"] = self.current_issue.revision
-        di["status description"] = self.current_issue.status_description
-        di = {
-            **di,
-            **dict(
-                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
-            ),
-        }
-        di = {k: [v] for k, v in di.items()}
-        return pd.DataFrame.from_dict(di).set_index("status code")
-
-    @property
     def current_issue(self):
         return self.issue_history[-1]  # Issue(**self.df_issue_history.loc[0].to_dict())
 
