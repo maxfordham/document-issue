@@ -10,7 +10,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, Image, TableStyle, SimpleDocTemplate, TopPadder
 from reportlab.pdfgen import canvas
 
-from document_issue.document_issue import DocumentIssueClassification
+from document_issue.document_issue import DocumentIssue
 
 FDIR_MEDIA = pathlib.Path(__file__).parent / "media"
 
@@ -65,7 +65,7 @@ def get_title_block_image(fpth_img: pathlib.Path) -> Image:
 
 
 def construct_title_block_data(
-    document_issue: DocumentIssueClassification,
+    document_issue: DocumentIssue,
 ) -> list[list]:
     """Using the document issue, layout the data in preparation to be styled
     correctly by ReportLab."""
@@ -160,7 +160,7 @@ def create_title_block_table(data: list):
 
 
 def build_title_block_pdf(
-    document_issue: DocumentIssueClassification,
+    document_issue: DocumentIssue,
     fpth_output: pathlib.Path = pathlib.Path("title-block.pdf"),
 ):
     """Build a PDF with just the Max Fordham title block at the bottom of an
@@ -209,7 +209,7 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
 
 
 def build_schedule_title_page_template_pdf(
-    document_issue: DocumentIssueClassification,
+    document_issue: DocumentIssue,
     fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
 ):
     """Build a PDF with a title block and the Max Fordham background."""

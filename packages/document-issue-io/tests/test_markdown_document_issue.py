@@ -3,7 +3,7 @@ import shutil
 import pytest
 from polyfactory.factories.pydantic_factory import ModelFactory
 
-from document_issue.document_issue import DocumentIssueClassification
+from document_issue.document_issue import DocumentIssue
 from document_issue_io.markdown_document_issue import MarkdownDocumentIssue
 
 from tests.constants import FDIR_TEST_OUTPUT
@@ -12,8 +12,8 @@ FPTH_TEST_DOC_ISSUE = FDIR_TEST_OUTPUT / "document_issue.json"
 FPTH_TEST_DOC_ISSUE_SCHEMA = FDIR_TEST_OUTPUT / "document_issue.schema.json"
 
 
-class DocumentIssueFactory(ModelFactory[DocumentIssueClassification]):
-    __model__ = DocumentIssueClassification
+class DocumentIssueFactory(ModelFactory[DocumentIssue]):
+    __model__ = DocumentIssue
 
 
 def create_test_document_issue():
