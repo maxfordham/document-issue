@@ -1,22 +1,15 @@
-import subprocess
 import pathlib
-import shutil
 import typing as ty
 from jinja2 import Environment, FileSystemLoader
 
 from document_issue.document_issue import DocumentIssue
-from document_issue_io.title_block import build_schedule_title_page_template_pdf
 from document_issue_io.constants import (
     FDIR_TEMPLATES,
-    FDIR_MEDIA,
     NAME_MD_DOCISSUE_TEMPLATE,
 )
 from document_issue_io.utils import (
-    change_dir,
-    install_or_update_document_issue_quarto_extension,
+    document_issue_md_to_pdf,
 )
-
-FPTH_FOOTER_LOGO = FDIR_MEDIA / "footer-logo.png"
 
 
 class MarkdownDocumentIssue:
@@ -62,27 +55,11 @@ class MarkdownDocumentIssue:
 
     def _to_pdf(self):
         """Create pdf file from markdown file using quarto."""
-        with change_dir(self.dir_md_docissue):
-            shutil.copy(
-                FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name
-            )  # Copy footer logo to markdown document issue directory
-            build_schedule_title_page_template_pdf(document_issue=self.document_issue)
-            install_or_update_document_issue_quarto_extension()
-            subprocess.run(
-                [
-                    "quarto",
-                    "render",
-                    self.fpth_md.name,
-                    "--to",
-                    "document-issue-pdf",
-                    "-o",
-                    self.fpth_pdf.name,
-                ]
-            )
-            # NOTE: quarto render does not allow to specify a relative or absolute
-            # path for "-o" parameter. Therefore, will just move post-render
-            if self.fpth_pdf != self.dir_md_docissue / self.fpth_pdf.name:
-                shutil.move(self.fpth_pdf.name, self.fpth_pdf)
+        document_issue_md_to_pdf(
+            document_issue=self.document_issue,
+            fpth_md=self.fpth_md,
+            fpth_pdf=self.fpth_pdf,
+        )
 
     @property
     def md_issue_history_col_widths(self):
