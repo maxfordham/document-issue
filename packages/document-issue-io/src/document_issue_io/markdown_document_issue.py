@@ -28,17 +28,12 @@ class MarkdownDocumentIssue:
         self.to_pdf = to_pdf
         self.fpth_md = fpth_md
         self.fpth_pdf = fpth_pdf
-        self.dir_md_docissue = fpth_md.parent
         self.file_loader = FileSystemLoader(FDIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
         if self.fpth_md is None:
-            self.fpth_md = pathlib.Path(
-                self.document_issue.document_code + ".docissue.md"
-            )
+            self.fpth_md = pathlib.Path(self.document_issue.document_code + ".docissue.md")
         if self.fpth_pdf is None:
-            self.fpth_pdf = pathlib.Path(
-                self.document_issue.document_code + ".docissue.pdf"
-            )
+            self.fpth_pdf = pathlib.Path(self.document_issue.document_code + ".docissue.pdf")
         if self.to_md or self.to_pdf:
             self._to_md()
         if self.to_pdf:
@@ -72,11 +67,7 @@ class MarkdownDocumentIssue:
 
     @property
     def md_issue_history(self):
-        return (
-            self.document_issue.issue_history_table
-            + "\n\n"
-            + self.md_issue_history_col_widths
-        )
+        return self.document_issue.issue_history_table + "\n\n" + self.md_issue_history_col_widths
 
     @property
     def md_roles(self):
