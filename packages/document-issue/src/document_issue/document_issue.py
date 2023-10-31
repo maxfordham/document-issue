@@ -1,4 +1,3 @@
-import datetime
 import typing as ty
 from tabulate import tabulate
 from pydantic import field_validator, BaseModel, Field
@@ -30,22 +29,6 @@ class DocumentIssue(Document, ProjectBase):
         description="list of issues",
         json_schema_extra=dict(format="dataframe"),
     )
-
-    # TODO: add this validation after ensuring that a director is shown on all existing schedules
-    # @field_validator("document_role")
-    # @classmethod
-    # def _document_role(cls, v):
-    #     assert "Director in Charge" in [_.role_name.value in _ in v]
-    #     return v
-
-
-class Classification(BaseModel):
-    pass
-
-
-class DocumentIssueClassification(DocumentIssue):
-    classification: Classification = Field(None)  # TODO: add classification
-    # roles: ty.List[Role] #TODO add roles
 
     @field_validator("issue_history")
     @classmethod
@@ -126,21 +109,6 @@ class DocumentIssueClassification(DocumentIssue):
         )
 
     @property
-    def current_issue_header_table(self):
-        di = {}
-        di["status code"] = self.current_issue.status_code
-        di["revision"] = self.current_issue.revision
-        di["status description"] = self.current_issue.status_description
-        di = {
-            **di,
-            **dict(
-                zip(self.name_nomenclature.split("-"), self.document_code.split("-"))
-            ),
-        }
-        di = {k: [v] for k, v in di.items()}
-        return pd.DataFrame.from_dict(di).set_index("status code")
-
-    @property
     def current_issue(self):
         return self.issue_history[-1]  # Issue(**self.df_issue_history.loc[0].to_dict())
 
@@ -161,3 +129,19 @@ class DocumentIssueClassification(DocumentIssue):
         for role in self.document_role:
             if role.role_name == RoleEnum.director.value:
                 return role.initials
+
+    # TODO: add this validation after ensuring that a director is shown on all existing schedules
+    # @field_validator("document_role")
+    # @classmethod
+    # def _document_role(cls, v):
+    #     assert "Director in Charge" in [_.role_name.value in _ in v]
+    #     return v
+
+
+class Classification(BaseModel):
+    pass
+
+
+class DocumentIssueClassification(DocumentIssue):
+    classification: Classification = Field(None)  # TODO: add classification
+    # roles: ty.List[Role] #TODO add roles

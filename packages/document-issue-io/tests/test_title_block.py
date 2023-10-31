@@ -1,6 +1,6 @@
 from polyfactory.factories.pydantic_factory import ModelFactory
 
-from document_issue.document_issue import DocumentIssueClassification
+from document_issue.document_issue import DocumentIssue
 from document_issue_io.title_block import (
     build_title_block_pdf,
     build_schedule_title_page_template_pdf,
@@ -9,8 +9,8 @@ from document_issue_io.title_block import (
 from tests.constants import FDIR_TEST_OUTPUT
 
 
-class DocumentIssueFactory(ModelFactory[DocumentIssueClassification]):
-    __model__ = DocumentIssueClassification
+class DocumentIssueFactory(ModelFactory[DocumentIssue]):
+    __model__ = DocumentIssue
 
 
 def test_build_title_block_pdf():

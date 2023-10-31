@@ -4,7 +4,7 @@ import shutil
 import typing as ty
 from jinja2 import Environment, FileSystemLoader
 
-from document_issue.document_issue import DocumentIssueClassification
+from document_issue.document_issue import DocumentIssue
 from document_issue_io.title_block import build_schedule_title_page_template_pdf
 from document_issue_io.constants import (
     FDIR_TEMPLATES,
@@ -24,7 +24,7 @@ class MarkdownDocumentIssue:
 
     def __init__(
         self,
-        document_issue: DocumentIssueClassification,
+        document_issue: DocumentIssue,
         fpth_md: ty.Optional[pathlib.Path] = None,
         fpth_pdf: ty.Optional[pathlib.Path] = None,
         to_md=True,
