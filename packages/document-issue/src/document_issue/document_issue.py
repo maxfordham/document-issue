@@ -19,7 +19,7 @@ from document_issue.document import DocumentBase, Document
 
 class DocumentIssue(Document, ProjectBase):
     document_role: ty.List[DocumentRole] = Field(
-        [DocumentRole(role_name=RoleEnum.director.value, initials="DR")],
+        [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})],
         alias="roles",
         min_length=1,
     )
