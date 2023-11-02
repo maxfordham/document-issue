@@ -24,10 +24,16 @@ def test_build_schedule():
     subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
     subprocess.run(["quarto", "render", "document.md", "--to", "document-issue-pdf"])
     assert FPTH_OUTPUT.exists()
+    FPTH_LOG = FDIR_TESTDATA / "document.log"
+    assert (
+        not FPTH_LOG.exists()
+    )  # log file should be deleted if Quarto PDF compilation is successful
 
 
 def test_build_examples():
-    EXAMPLE_DIRS = [i for i in (FDIR_ROOT / "examples").glob("*/")]
+    EXAMPLE_DIRS = [
+        i for i in (FDIR_ROOT / "examples").glob("*/") if "resource-path" not in i.name
+    ]
     for EXAMPLE_DIR in EXAMPLE_DIRS:
         FPTH_OUTPUT = EXAMPLE_DIR / "document.pdf"
         FPTH_OUTPUT.unlink(missing_ok=True)
@@ -37,3 +43,7 @@ def test_build_examples():
             ["quarto", "render", "document.md", "--to", "document-issue-pdf"]
         )
         assert FPTH_OUTPUT.exists()
+        FPTH_LOG = EXAMPLE_DIR / "document.log"
+        assert (
+            not FPTH_LOG.exists()
+        )  # log file should be deleted if Quarto PDF compilation is successful
