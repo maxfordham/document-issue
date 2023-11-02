@@ -1,6 +1,15 @@
 ---
 project_name: A Max Fordham Project
+project_number : J4321
+director_in_charge: OH
 document_description: A description of a Max Fordham Project
+document_code: 06667-MXF-XX-XX-SH-M-20003
+name_nomenclature: project-originator-volume-level-type-role-number
+current_issue:
+    date: 2021-12-25
+    revision: P01
+    status_code: S2
+    status_description: Suitable for information
 footer-logo: footer-logo.png
 title-page: title-page.pdf
 ---
@@ -41,7 +50,7 @@ Fordham LLP\
 +------------+-----------+--------------+--------------------------+-----------------------+--------------+
 | **Date**   | **Rev**   | **Status**   | **Description**          | **Issue Notes**       | **Author**   |
 +============+===========+==============+==========================+=======================+==============+
-| 13 MAY 20  | P01       | S2           | Suitable for information | This is an issue note | OH           |
+| 25 DEC 21  | P01       | S2           | Suitable for information | This is an issue note | OH           |
 +------------+-----------+--------------+--------------------------+-----------------------+--------------+
 
 : {tbl-colwidths="[17.5,5,7.5,25,32.5,12.5]"}
