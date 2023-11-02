@@ -117,14 +117,6 @@ class DocumentIssue(Document, ProjectBase):
         return self.current_issue.date.strftime("%B %Y")
 
     @property
-    def current_status_description(self):
-        return self.current_issue.status_description
-
-    @property
-    def current_revision(self):
-        return self.current_issue.revision
-
-    @property
     def director_in_charge(self):
         for role in self.document_role:
             if role.role_name == RoleEnum.director.value:

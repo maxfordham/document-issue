@@ -53,7 +53,15 @@ class MarkdownDocumentIssue:
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
             project_name=self.document_issue.project_name,
+            project_number=self.document_issue.project_number,
+            director_in_charge=self.document_issue.director_in_charge,
             document_description=self.document_issue.document_description,
+            document_code=self.document_issue.document_code,
+            name_nomenclature=self.document_issue.name_nomenclature,
+            current_issue_date=self.document_issue.current_issue.date,
+            current_issue_revision=self.document_issue.current_issue.revision,
+            current_issue_status_code=self.document_issue.current_issue.status_code,
+            current_issue_status_description=self.document_issue.current_issue.status_description,
             md_issue_history=self.md_issue_history,
             md_roles=self.md_roles,
             md_notes=self.md_notes,
