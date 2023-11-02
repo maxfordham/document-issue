@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "document-issue-io"
 description = ''
 readme = "README.md"
+dynamic = ["version"]
 requires-python = ">=3.7"
 license = "MIT"
 keywords = []
@@ -21,13 +22,27 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["pillow", "reportlab"]
-dynamic = ["version"]
+dependencies = [
+    "pillow", 
+    "pydantic",
+    "jinja2",
+    "reportlab",
+    "quarto-cli @ git+https://git@github.com/quarto-dev/quarto-cli.git@v1.4.466",
+    # document-issue # TODO: How do we get this to install?
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "polyfactory",
+    "hatch"
+]
+
 
 [project.urls]
-Documentation = "https://github.com/unknown/document-issue-io#readme"
-Issues = "https://github.com/unknown/document-issue-io/issues"
-Source = "https://github.com/unknown/document-issue-io"
+Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"
+Issues = "https://github.com/maxfordham/document-issue-io/issues"
+Source = "https://github.com/maxfordham/document-issue/packages/document-issue-io"
 
 [tool.hatch.version]
 path = "src/document_issue_io/__about__.py"
@@ -50,3 +65,6 @@ omit = ["src/document_issue_io/__about__.py"]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.hatch.build.hooks.custom]
+
+[tool.hatch.metadata]
+allow-direct-references = true
