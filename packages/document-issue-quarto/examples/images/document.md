@@ -15,9 +15,9 @@ Above we can see an image of a red circle.
 
 {{< pagebreak >}}
 
-## Radiators
+## Radiator Widths
 
-::: {layout-ncol=3}
+::: {layout-ncol=3 layout-valign="bottom"}
 ![A Radiator](./media/radiator.jpg){width=30mm}
 
 ![Another radiator](./media/radiator-2.jpg){width=30mm}
@@ -26,3 +26,13 @@ Above we can see an image of a red circle.
 :::
 
 Above we can see many lovely looking radiators.
+
+## Radiator Heights
+
+::: {layout-ncol=3 layout-valign="bottom"}
+![A Radiator](./media/radiator.jpg){height=30mm}
+
+![Another radiator](./media/radiator-2.jpg)
+
+![Look at that, another radiator!](./media/radiator-3.jpg)
+:::
