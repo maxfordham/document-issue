@@ -18,43 +18,10 @@ class MarkdownDocumentIssue:
     def __init__(
         self,
         document_issue: DocumentIssue,
-        fpth_md: ty.Optional[pathlib.Path] = None,
-        fpth_pdf: ty.Optional[pathlib.Path] = None,
-        to_md=True,
-        to_pdf=False,
     ):
         self.document_issue = document_issue
-        self.to_md = to_md
-        self.to_pdf = to_pdf
-        self.fpth_md = fpth_md
-        self.fpth_pdf = fpth_pdf
         self.file_loader = FileSystemLoader(FDIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
-        if self.fpth_md is None:
-            self.fpth_md = pathlib.Path(self.document_issue.document_code + ".docissue.md")
-        if self.fpth_pdf is None:
-            self.fpth_pdf = pathlib.Path(self.document_issue.document_code + ".docissue.pdf")
-        if self.to_md or self.to_pdf:
-            self._to_md()
-        if self.to_pdf:
-            self._to_pdf()
-
-    def _to_md(self):
-        """Create markdown file from DocumentIssue object"""
-        if self.fpth_md is not None:
-            f = open(self.fpth_md, "w")
-            f.write(self.md_docissue)
-            f.close()
-        else:
-            raise ValueError("fpth_md not given")
-
-    def _to_pdf(self):
-        """Create pdf file from markdown file using quarto."""
-        document_issue_md_to_pdf(
-            document_issue=self.document_issue,
-            fpth_md=self.fpth_md,
-            fpth_pdf=self.fpth_pdf,
-        )
 
     @property
     def md_issue_history_col_widths(self):
@@ -67,7 +34,11 @@ class MarkdownDocumentIssue:
 
     @property
     def md_issue_history(self):
-        return self.document_issue.issue_history_table + "\n\n" + self.md_issue_history_col_widths
+        return (
+            self.document_issue.issue_history_table
+            + "\n\n"
+            + self.md_issue_history_col_widths
+        )
 
     @property
     def md_roles(self):
@@ -86,4 +57,19 @@ class MarkdownDocumentIssue:
             md_issue_history=self.md_issue_history,
             md_roles=self.md_roles,
             md_notes=self.md_notes,
+        )
+
+    def to_file(self, fpth_md: pathlib.Path):
+        """Create markdown file from DocumentIssue object"""
+        f = open(fpth_md, "w")
+        f.write(self.md_docissue)
+        f.close()
+
+    def to_pdf(self, fpth_md: pathlib.Path, fpth_pdf: pathlib.Path):
+        """Create pdf file from markdown file using quarto."""
+        self.to_file(fpth_md)
+        document_issue_md_to_pdf(
+            document_issue=self.document_issue,
+            fpth_md=fpth_md,
+            fpth_pdf=fpth_pdf,
         )

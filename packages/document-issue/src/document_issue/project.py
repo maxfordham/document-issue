@@ -1,6 +1,7 @@
 """
 define base characteristics of a Project
 """
+import typing as ty
 from document_issue.constants import DEFAULT_PROJECT_NUMBER
 from document_issue.basemodel import BaseModel, Field
 
@@ -9,7 +10,7 @@ class ProjectBase(BaseModel):
     project_name: str = Field(
         "In House App Testing", description="should be the same as the WebApp"
     )
-    project_number: int = Field(
+    project_number: ty.Union[str, int] = Field(
         DEFAULT_PROJECT_NUMBER, description="unique number project code"
     )
 
