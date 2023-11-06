@@ -1,6 +1,5 @@
 import pathlib
 import shutil
-import pytest
 from polyfactory.factories.pydantic_factory import ModelFactory
 
 from document_issue.document_issue import DocumentIssue
@@ -51,14 +50,12 @@ class TestMarkdownDocumentIssue:
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
         )
-        FPTH_MD = FDIR_TEST_OUTPUT / "test_to_file.docissue.md"
+        FPTH_MD = FDIR_TEST_OUTPUT / f"test_to_file.md"
         markdown_document_issue.to_file(FPTH_MD)
-        assert pathlib.Path(FPTH_MD).is_file()
+        assert FPTH_MD.is_file()
 
     def test_to_pdf(self):
-        FDIR_RENDER = FDIR_TEST_OUTPUT / "render" / "test_to_pdf"
-        FPTH_MD = FDIR_RENDER / "test_to_pdf.docissue.md"
-        FPTH_PDF = FDIR_TEST_OUTPUT / "test_to_pdf.docissue.pdf"
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
@@ -67,21 +64,19 @@ class TestMarkdownDocumentIssue:
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
         )
-        markdown_document_issue.to_pdf(
-            FPTH_MD,
-            FPTH_PDF,
-        )
-        assert pathlib.Path(FPTH_MD).is_file()
-        assert pathlib.Path(FPTH_PDF).is_file()
-        FPTH_LOG = FDIR_RENDER / "test_to_pdf.docissue.log"
-        assert (
-            not FPTH_LOG.is_file()
-        )  # log file should be deleted if Quarto PDF compilation is successful
+        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.md"
+        ).is_file()
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        ).is_file()
+        assert not (
+            FDIR_RENDER / f"{document_issue.document_code}.log"
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
 
     def test_to_pdf_with_author(self):
-        FDIR_RENDER = FDIR_TEST_OUTPUT / "render" / "test_to_pdf_with_author"
-        FPTH_MD = FDIR_RENDER / "test_to_pdf_with_author.docissue.md"
-        FPTH_PDF = FDIR_TEST_OUTPUT / "test_to_pdf_with_author.docissue.pdf"
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_author"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
@@ -90,25 +85,19 @@ class TestMarkdownDocumentIssue:
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
         )
-        markdown_document_issue.to_pdf(
-            FPTH_MD,
-            FPTH_PDF,
-        )
-        assert pathlib.Path(FPTH_MD).is_file()
-        assert pathlib.Path(FPTH_PDF).is_file()
-        FPTH_LOG = FDIR_RENDER / "test_to_pdf_with_author.docissue.log"
-        assert (
-            not FPTH_LOG.is_file()
-        )  # log file should be deleted if Quarto PDF compilation is successful
+        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.md"
+        ).is_file()
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        ).is_file()
+        assert not (
+            FDIR_RENDER / f"{document_issue.document_code}.log"
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
 
     def test_to_pdf_with_author_and_checked_by(self):
-        FDIR_RENDER = (
-            FDIR_TEST_OUTPUT / "render" / "test_to_pdf_with_author_and_checked_by"
-        )
-        FPTH_MD = FDIR_RENDER / "test_to_pdf_with_author_and_checked_by.docissue.md"
-        FPTH_PDF = (
-            FDIR_TEST_OUTPUT / "test_to_pdf_with_author_and_checked_by.docissue.pdf"
-        )
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_author_and_checked_by"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
@@ -117,13 +106,13 @@ class TestMarkdownDocumentIssue:
         markdown_document_issue = MarkdownDocumentIssue(
             document_issue,
         )
-        markdown_document_issue.to_pdf(
-            FPTH_MD,
-            FPTH_PDF,
-        )
-        assert pathlib.Path(FPTH_MD).is_file()
-        assert pathlib.Path(FPTH_PDF).is_file()
-        FPTH_LOG = FDIR_RENDER / "test_to_pdf_with_author_and_checked_by.docissue.log"
-        assert (
-            not FPTH_LOG.is_file()
-        )  # log file should be deleted if Quarto PDF compilation is successful
+        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.md"
+        ).is_file()
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        ).is_file()
+        assert not (
+            FDIR_RENDER / f"{document_issue.document_code}.log"
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
