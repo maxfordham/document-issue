@@ -67,14 +67,16 @@ class MarkdownDocumentIssue:
             md_notes=self.md_notes,
         )
 
-    def to_file(self, fpth_md: pathlib.Path):
-        """Create markdown file from DocumentIssue object"""
-        f = open(fpth_md, "w")
+    def to_file(self, fpth: pathlib.Path):
+        """Create markdown file from DocumentIssue object."""
+        f = open(fpth, "w")
         f.write(self.md_docissue)
         f.close()
 
-    def to_pdf(self, fpth_md: pathlib.Path, fpth_pdf: pathlib.Path):
-        """Create pdf file from markdown file using quarto."""
+    def to_pdf(self, fdir: pathlib.Path):
+        """Create a schedule PDF in a specified file directory."""
+        fpth_md = fdir / f"{self.document_issue.document_code}.md"
+        fpth_pdf = fdir / f"{self.document_issue.document_code}.pdf"
         self.to_file(fpth_md)
         document_issue_md_to_pdf(
             document_issue=self.document_issue,
