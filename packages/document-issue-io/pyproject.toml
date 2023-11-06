@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -45,7 +45,8 @@ Issues = "https://github.com/maxfordham/document-issue-io/issues"
 Source = "https://github.com/maxfordham/document-issue/packages/document-issue-io"
 
 [tool.hatch.version]
-path = "src/document_issue_io/__about__.py"
+source = "vcs"
+raw-options = { root = "../.." }
 
 [tool.hatch.envs.default]
 dependencies = ["pytest", "pytest-cov"]

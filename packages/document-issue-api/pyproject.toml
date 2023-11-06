@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -45,7 +45,8 @@ Issues = "https://github.com/unknown/document-issue-api/issues"
 Source = "https://github.com/unknown/document-issue-api"
 
 [tool.hatch.version]
-path = "src/document_issue_api/__about__.py"
+source = "vcs"
+raw-options = { root = "../.." }
 
 [tool.hatch.envs.lint]
 detached = true
