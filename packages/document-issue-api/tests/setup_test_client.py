@@ -1,15 +1,22 @@
+import pathlib
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import pathlib
+from fastapi.encoders import jsonable_encoder
 
+from document_issue.issue import Issue
+from document_issue.person import Person
+from document_issue.role import Role
+from document_issue.project import ProjectBase
 from document_issue_api.main import app
 from document_issue_api.database import get_db
 from document_issue_api.env import ApiEnv
 from document_issue_api.models import Base
+from document_issue_api.document.schemas import DocumentBasePost
 
 
-FPTH_API_TEST_ENV = pathlib.Path(__file__).parent.parent / "api-test.env"
+FDIR_TEST = pathlib.Path(__file__).parent
+FPTH_API_TEST_ENV = FDIR_TEST / "api-test.env"
 ENV = ApiEnv(_env_file=FPTH_API_TEST_ENV, _env_file_encoding="utf-8")
 
 # --------------- equivalent to: document_issue_api./database.py ---------------------
@@ -27,57 +34,15 @@ def get_db_path():
     return pathlib.Path(ENV.DOCUMENTISSUE_DATABASE_URL.replace("sqlite:///", ""))
 
 
-# @pytest.fixture(scope="session")
-# def clean_session():
-#     """Delete old test.db before creating it again"""
-
-
 get_db_path().unlink(missing_ok=True)
-engine = create_engine(
-    ENV.DOCUMENTISSUE_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+engine = create_engine(ENV.DOCUMENTISSUE_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)
 app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
-# client = clean_session()
-
-
-# ---- utils ----
-
-
-def _clear_data():
-    pass
-
-
-# @contextmanager
-# def _clear_data():
-#     clean_session()
-#     yield
-
-
-# @pytest.fixture(scope="function")
-# def clear_data_func():
-#     """
-#     with _clear_data() as result:
-#         yield result
-#     """
-#     yield clean_session()
-#     get_db_path().unlink(missing_ok=True)
-
-
 # -------- rest_funcs.py ------------
-
-from setup_test_client import client, get_db_path
-from fastapi.encoders import jsonable_encoder
-from document_issue.issue import Issue
-from document_issue.person import Person
-from document_issue.role import Role
-from document_issue.project import ProjectBase
-
-from document_issue_api.document.schemas import DocumentBasePost
 
 
 def post_project():
