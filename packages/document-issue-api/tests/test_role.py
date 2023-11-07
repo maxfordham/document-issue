@@ -1,9 +1,5 @@
-from setup_test_client import client, get_db_path  # clean_session, clear_data_func
-from fastapi.encoders import jsonable_encoder
-from document_issue.role import Role
 import pytest
-
-from setup_test_client import post_role, delete_role
+from setup_test_client import client, post_role, delete_role
 
 
 @pytest.fixture

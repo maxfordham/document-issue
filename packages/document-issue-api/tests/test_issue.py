@@ -1,9 +1,5 @@
 import pytest
-from setup_test_client import client, get_db_path
-from fastapi.encoders import jsonable_encoder
-from document_issue.issue import Issue
-
-from setup_test_client import post_issue, post_document
+from setup_test_client import client, post_issue
 
 
 def delete_issue(issue_id=1):

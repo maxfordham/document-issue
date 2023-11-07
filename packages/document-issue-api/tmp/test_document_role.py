@@ -1,9 +1,4 @@
-from setup_test_client import client, get_db_path  # , clear_data_func, clean_session
-from fastapi.encoders import jsonable_encoder
-import pytest
-
-# from document_issue.role import Project, Role
-from setup_test_client import post_project_role_with_person_and_document_role
+from setup_test_client import client, post_project_role_with_person_and_document_role
 
 
 # @pytest.mark.usefixtures("clear_data_func")

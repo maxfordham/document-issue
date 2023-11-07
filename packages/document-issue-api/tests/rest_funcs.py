@@ -1,5 +1,6 @@
-from setup_test_client import client, get_db_path
+from setup_test_client import client
 from fastapi.encoders import jsonable_encoder
+
 from document_issue.issue import Issue
 from document_issue.person import Person
 from document_issue.role import Role

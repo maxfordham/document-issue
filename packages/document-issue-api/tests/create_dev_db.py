@@ -1,15 +1,14 @@
+import pathlib
+import shutil
+import pytest
 from setup_test_client import (
     client,
-    post_project_role_with_person_and_document_role,
     post_issue,
     post_person,
     post_project,
     post_role,
     post_document,
 )
-import pathlib
-import shutil
-import pytest
 
 
 @pytest.fixture

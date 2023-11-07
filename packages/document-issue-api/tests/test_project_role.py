@@ -1,9 +1,5 @@
-from setup_test_client import client, get_db_path, post_project, post_role, post_person
-from fastapi.encoders import jsonable_encoder
 import pytest
-
-# from document_issue.role import Project, Role
-# from rest_funcs import post_document, post_project, post_role, post_person
+from setup_test_client import client, post_project, post_role, post_person
 
 
 def post_project_role():

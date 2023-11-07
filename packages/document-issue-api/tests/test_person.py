@@ -1,10 +1,5 @@
-from setup_test_client import get_db_path, client
-from fastapi.encoders import jsonable_encoder
-from document_issue.person import Person
 import pytest
-
-# from polyfactory.factories import ModelFactory
-from setup_test_client import post_person
+from setup_test_client import client, post_person
 
 
 def delete_person(person_id=1):
@@ -47,9 +42,7 @@ def test_post_person(post_person_then_delete):
 def test_patch_person(post_person_then_delete):
     response = post_person_then_delete
     person_id = response.json()["id"]
-    response = client.patch(
-        f"/person/{person_id}", json={"name": "JG2", "full_name": "new name"}
-    )
+    response = client.patch(f"/person/{person_id}", json={"name": "JG2", "full_name": "new name"})
     assert response.status_code == 200
     assert response.json()["name"] == "JG2"
 
