@@ -1,18 +1,8 @@
 # document-issue
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI - Version](https://img.shields.io/pypi/v/document-issue.svg)](https://pypi.org/project/document-issue)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/document-issue.svg)](https://pypi.org/project/document-issue)
+[![Test](https://github.com/maxfordham/document-issue/actions/workflows/test-python-package.yml/badge.svg)](https://github.com/maxfordham/document-issue/actions/workflows/test-python-package.yml)
 
------
-
-## Installation
-
-```console
-pip install document-issue  # TODO: when it is public
-```
-
-## Scope
 
 `document-issue` defines the metadata required to accompany every issued document during the course of
 a AEC (Architecture, Engineering, Construction) project.
