@@ -48,6 +48,9 @@ pip install -e packages/document-issue
 pip install -e packages/document-issue-api 
 pip install -e packages/document-issue-io 
 # ^ install editable versions of each package
+
+quarto install tinytex
+# ^ installs latex engine... 
 ```
 
 ## Example `document-issue` data
