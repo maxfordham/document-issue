@@ -28,7 +28,6 @@ dependencies = [
     "stringcase",
     "tabulate",
     "pandoc",
-    "pandoc-docx-pagebreak",
 ]
 dynamic = ["version"]
 
