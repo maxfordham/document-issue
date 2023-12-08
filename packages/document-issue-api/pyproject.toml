@@ -35,7 +35,6 @@ dependencies = [
     "pillow",
     "tabulate",
     "pandoc",
-    "pandoc-docx-pagebreak",
     "python-dotenv",
 ]
 

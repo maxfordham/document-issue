@@ -12,7 +12,12 @@ document issue information using Quarto and ReportLab.
 
 ```bash
 pip install document-issue-io
+quarto install tinytex
 ```
+
+**NOTE**: the `quarto` command installs the latex engine. This command should be put in the `postBuild` file in repo2docker repos. 
+An alternative might be to add [r-tinytex](https://anaconda.org/conda-forge/r-tinytex) to the mamba file but I just tried that and it didn't work... 
+
 
 ## Building
 
