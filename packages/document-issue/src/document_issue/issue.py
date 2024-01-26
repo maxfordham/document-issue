@@ -7,10 +7,14 @@ from pydantic import field_validator
 
 
 description_author = """
-the person who authored the work.""".replace("\n", "")
+the person who authored the work.""".replace(
+    "\n", ""
+)
 description_checked_by = """
 the person who checked the work. 
-""".replace("\n", "")
+""".replace(
+    "\n", ""
+)
 
 # TODO: who issued to?
 
@@ -61,7 +65,7 @@ class Issue(BaseModel):
             "free field where the Engineer can briefly summarise changes since previous"
             " issue"
         ),
-        max_length=1000,
+        max_length=1e8,
         json_schema_extra=dict(column_width=300),
     )
 

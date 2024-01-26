@@ -61,8 +61,8 @@ when split on '-' character.
 
 Note = Annotated[
     str,
-    Len(max_length=1000),
-    WithJsonSchema({"type": "string", "maxLength": 1000, "layout": {"width": "100%"}}),
+    Len(max_length=1e8),
+    WithJsonSchema({"type": "string", "maxLength": 1e8, "layout": {"width": "100%"}}),
 ]
 # ^ json_schema_extra not added to schema
 
