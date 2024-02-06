@@ -27,7 +27,7 @@ dependencies = [
     "pydantic",
     "jinja2",
     "reportlab",
-    "quarto-cli @ git+https://git@github.com/quarto-dev/quarto-cli.git@v1.4.466",
+    "quarto-cli @ git+https://git@github.com/quarto-dev/quarto-cli.git@v1.4.549",
     # document-issue # TODO: How do we get this to install?
 ]
 
