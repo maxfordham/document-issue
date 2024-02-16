@@ -63,3 +63,4 @@ def document_issue_md_to_pdf(
         # path for "-o" parameter. Therefore, will just move post-render
         if fpth_pdf != fpth_md.parent / fpth_pdf.name:
             shutil.move(fpth_pdf.name, fpth_pdf)
+    return fpth_pdf
