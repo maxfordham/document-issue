@@ -40,7 +40,7 @@ To install the environment and packages for development, run the following comma
 ```console
 # run line by line
 
-mamba env create -f environment-dev.yml
+mamba env create -f environment.yml
 mamba activate document-issue-dev
 # ^ base install of dev env (python, pytest, black etc.)
 
