@@ -13,6 +13,10 @@ document issue information using Quarto and ReportLab.
 ```bash
 pip install document-issue-io
 quarto install tinytex
+
+# if required... 
+sudo apt-get update
+sudo apt-get install libfontconfig
 ```
 
 **NOTE**: the `quarto` command installs the latex engine. This command should be put in the `postBuild` file in repo2docker repos. 
