@@ -50,7 +50,11 @@ pip install -e packages/document-issue-io
 # ^ install editable versions of each package
 
 quarto install tinytex
-# ^ installs latex engine... 
+# ^ installs latex engine...
+
+# if required... 
+sudo apt-get update
+sudo apt-get install libfontconfig
 ```
 
 ## Example `document-issue` data
