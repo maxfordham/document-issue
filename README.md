@@ -3,24 +3,46 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Test](https://github.com/maxfordham/document-issue/actions/workflows/test-python-package.yml/badge.svg)](https://github.com/maxfordham/document-issue/actions/workflows/test-python-package.yml)
 
-
-`document-issue` defines the metadata required to accompany every issued document during the course of
-a AEC (Architecture, Engineering, Construction) project.
+`document-issue` information defines the metadata required to accompany every issued document during the course of
+an AEC (Architecture, Engineering, Construction) project.
 
 Generally speaking each document must contain the following information to situate it within a project:
 
-- a summary description
-- when it was issued
-- for what purpose
+- a unique code, name, title and summary description
+- categorisation information that defines to what the document pertains
+- when it was issued, at what version
 - by who
+- for what purpose
 
-This package formalises those information fields and
-defines a schema for storing them in a consistent manor. The structure is compliant
-with BS EN ISO 19650-2. The information fields defined here may not required to be
-shown in every document issued, but the aspiration is that no issued document
-will require any additional datafields to those defined here. For internal use it
+The `document-issue` package formalises those information fields and
+defines a schema for storing them consistently. The structure is compliant
+with BS EN ISO 19650-2. The information fields defined here may not be required to be
+output in every document issued, but the aspiration is that no issued document
+will require any additional data-fields to those defined here. For internal use it
 is suggested that all the information fields are competed to ensure a consistent
 record of issued information is maintained.
+
+As a suite of tools, the packages in the **document-issue** monorepo provide:
+
+- a schema and datastore of the `document-issue` meta-data that accompanies every document
+- a simple application interface for users to manage the issue history of documents on a project
+- a Revit toolbar to support Revit sync
+- standardised report format document templates for schedules and other report style documents
+
+## Repo-structure
+
+This project is structured as a monorepo. In the `packages` directory, each package is built and installable independently. Using the VS Code you can open the monorepo as a multi-package workspace defined in `.vscode/document-issue.code-workspace`.
+
+## Packages
+
+- `document-issue`: schema definitions (as pydantic models) defining document-issue information fields.
+  - ***future*** *Includes logic for building document codes from categorisation fields.*
+- `document-issue-io`: provides input/output functionality. Currently its main use is to define the markdown first couple of pages for report format documents.
+- `document-issue-quarto`: defines the quarto/latex templates for creating branded report format documents. Used with `document-issue-io`.
+- ***future*** *`document-issue-api`: API and associated database that maintains a reference of documents issued across projects.*
+- ***future*** *`document-issue-ui`: user application for Engineers and Project Administrators for creating document codes and recording issued documents.*
+- ***future*** *`document-issue-pyrevit`: pyRevit toolbar to create sheets and views by interacting with the `document-issue-api`.*
+
 
 ```{Note}
 for now, `document-issue` intentionally avoids considering the datafields that
