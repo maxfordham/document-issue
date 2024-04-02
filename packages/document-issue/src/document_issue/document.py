@@ -32,10 +32,6 @@ class FormatConfiguration(BaseModel):
             " Often avoided but some clients require it."
         ),
     )
-    include_author_and_checked_by: bool = Field(
-        False,
-        description="for migration only. remove in future. IGNORE.",  # TODO: for migration only. remove in future.
-    )
 
     @model_validator(mode="after")  # TODO: for migration only. remove in future.
     def check_include_author_and_checked_by(self) -> "FormatConfiguration":
