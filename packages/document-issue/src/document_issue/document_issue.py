@@ -3,12 +3,11 @@ from tabulate import tabulate
 from pydantic import field_validator, BaseModel, Field
 
 from document_issue.project import ProjectBase
-from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource, RoleEnum
-from document_issue.basemodel import BaseModel, Field, validator
+from document_issue.enums import RoleEnum
+from document_issue.basemodel import BaseModel, Field
 from document_issue.issue import Issue
-from document_issue.project_role import ProjectRoles
 from document_issue.role import DocumentRole
-from document_issue.document import DocumentBase, Document
+from document_issue.document import Document
 
 # ------------------------------------------------------------------------------------------
 # NOTE: the DocumentIssue shown here is the ideal output presentation for a single document.
@@ -22,6 +21,7 @@ class DocumentIssue(Document, ProjectBase):
         [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})],
         alias="roles",
         min_length=1,
+        description="indicates people involved and responsible for the production of this document",
     )
     issue_history: ty.List[Issue] = Field(
         [],

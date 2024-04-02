@@ -1,12 +1,8 @@
 import typing as ty
 from typing_extensions import Literal
-from pydantic import RootModel, field_validator, Field, model_validator
-
-from document_issue.project import ProjectBase
+from pydantic import field_validator, Field, model_validator
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
 from document_issue.basemodel import BaseModel, Field
-from document_issue.issue import Issue
-from document_issue.project_role import ProjectRoles
 from annotated_types import Len
 from typing_extensions import Annotated
 from pydantic import WithJsonSchema
@@ -36,8 +32,9 @@ class FormatConfiguration(BaseModel):
             " Often avoided but some clients require it."
         ),
     )
-    include_author_and_checked_by: bool = (
-        False  # TODO: for migration only. remove in future.
+    include_author_and_checked_by: bool = Field(
+        False,
+        description="for migration only. remove in future. IGNORE.",  # TODO: for migration only. remove in future.
     )
 
     @model_validator(mode="after")  # TODO: for migration only. remove in future.
@@ -49,20 +46,15 @@ class FormatConfiguration(BaseModel):
         return self
 
 
-description_document_code = """document code. Should be the filename when uploaded
-to a CDE. Structured to be machine-readable.""".replace(
-    "\n", ""
-)
-description_name_nomenclature = """denotes what each section of of the document code means
-when split on '-' character.
-""".replace(
-    "\n", ""
-)
+description_document_code = "document code. Should be the filename when uploaded to a CDE. Structured to be machine-readable."
+description_name_nomenclature = "denotes what each section of of the document code means when split on '-' character."
 
 Note = Annotated[
     str,
     Len(max_length=1e8),
-    WithJsonSchema({"type": "string", "maxLength": 1e8, "layout": {"width": "100%"}}),
+    WithJsonSchema(
+        {"type": "string", "title" "maxLength": 1e8, "layout": {"width": "100%"}}
+    ),
 ]
 # ^ json_schema_extra not added to schema
 
@@ -80,7 +72,7 @@ class DocumentBase(BaseModel):
     document_description: str = Field(
         "Document Description", description="human readable description of the document"
     )
-    document_source: str = Field(  # TODO: rename `document_source`
+    document_source: str = Field(
         "WD",
         description="software used to author the document",
         examples=DocSource._member_names_,
@@ -103,7 +95,7 @@ class DocumentBase(BaseModel):
         json_schema_extra=dict(type="string", disabled=True),
     )  # TODO: remove. should be picked up in classification data.
     notes: ty.List[Note] = Field(
-        ["add notes here"],
+        ["add notes here"], description="Engineering Notes to accompany the Document."
     )
 
     @field_validator("name_nomenclature")
