@@ -1,27 +1,5 @@
 from enum import Enum
-
-
-# director
-# crm
-# management
-# commercial
-# design
-# mechanical
-# electrical
-# acoustics
-# h_and_s
-# sustainability
-# bpm
-# building_phys
-# bim
-# digital
-# acoustics
-# passivhaus
-# coordinator
-# admin
-# strategy
-# technical
-# site
+import csv
 
 
 class RoleEnum(Enum):
@@ -96,6 +74,7 @@ class DocSource(Enum):
     WD = "Word"
     EXL = "Excel"
     AM = "Ametch"
+    DS = "DigitalSchedulesApp"
 
 
 class IssueFormatEnum(Enum):
@@ -106,3 +85,27 @@ class IssueFormatEnum(Enum):
     el = "Sent as Email with a link to file download"
     p = "paper - full size"
     r = "paper - reduced size"
+
+
+# status_code,status_description,revision_code,revision_description,description
+MAP_STATUS = {
+    f"{l[0]}_{l[2]}": " - ".join(l)
+    for l in csv.reader(
+        """S0,work in progress,P,Preliminary revision and version,Initial Status
+S1,shared (non-contractual),P,Preliminary revision,Suitable for Coordination
+S2,shared (non-contractual),P,Preliminary revision,Suitable for Information
+S3,shared (non-contractual),P,Preliminary revision,Suitable for review and comment
+S4,shared (non-contractual),P,Preliminary revision,Suitable for stage approval
+S5,shared (non-contractual),P,Preliminary revision,Withdrawn
+S6,shared (non-contractual),P,Preliminary revision,Suitable for PIM authorization
+S7,shared (non-contractual),P,Preliminary revision,Suitable for AIM authorization
+A1,published (contractual),C,Contractual revision,Issued for Tender (1st Stage)
+A2,published (contractual),C,Contractual revision,Issued for Tender (2nd Stage)
+A3,published (contractual),C,Contractual revision,Issued for Contract
+A4,published (contractual),C,Contractual revision,Issued for Contractor design, procurement & coordination
+A5,published (contractual),C,Contractual revision,Issued for procurement, manufacture & installation
+CR,published (for AIM acceptance),C,Contractual revision,As constructed record document""".splitlines()
+    )
+}
+
+StatusRevisionEnum = Enum("StatusRevisionEnum", MAP_STATUS)
