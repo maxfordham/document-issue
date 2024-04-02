@@ -33,14 +33,6 @@ class FormatConfiguration(BaseModel):
         ),
     )
 
-    @model_validator(mode="after")  # TODO: for migration only. remove in future.
-    def check_include_author_and_checked_by(self) -> "FormatConfiguration":
-        v = self.include_author_and_checked_by
-        if v is not None:
-            self.output_author = v
-            self.output_checked_by = v
-        return self
-
 
 description_document_code = "document code. Should be the filename when uploaded to a CDE. Structured to be machine-readable."
 description_name_nomenclature = "denotes what each section of of the document code means when split on '-' character."
