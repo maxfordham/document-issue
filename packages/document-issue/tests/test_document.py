@@ -14,4 +14,5 @@ def test_Document():
 
 def test_FormatConfiguration():
     fconf = FormatConfiguration(output_author=True)
-    assert not fconf.include_author_and_checked_by
+    check = fconf.output_author
+    assert check

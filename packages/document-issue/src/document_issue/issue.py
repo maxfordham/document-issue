@@ -1,20 +1,13 @@
 from document_issue.basemodel import BaseModel, Field, validator
-from document_issue.enums import IssueFormatEnum
+from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 from document_issue.constants import COL_WIDTH
 import datetime
 import typing as ty
-from pydantic import field_validator
+from pydantic import field_validator, model_validator, ConfigDict
 
 
-description_author = """
-the person who authored the work.""".replace(
-    "\n", ""
-)
-description_checked_by = """
-the person who checked the work. 
-""".replace(
-    "\n", ""
-)
+description_author = "the person who authored the work."
+description_checked_by = "the person who checked the work."
 
 # TODO: who issued to?
 
@@ -22,22 +15,32 @@ the person who checked the work.
 class Issue(BaseModel):
     """required information fields that define the metadata of a document issue"""
 
-    revision: str = Field(
-        "P01", title="Rev", json_schema_extra=dict(column_width=COL_WIDTH)
-    )
+    revision_number: int = Field(1, json_schema_extra=dict(column_width=1))
     date: datetime.date = Field(
         datetime.date(2020, 1, 2),
         title="Date",
         json_schema_extra=dict(column_width=COL_WIDTH),
     )
+    status_revision: StatusRevisionEnum = Field(
+        StatusRevisionEnum.S0_P,
+        title="Status Revision Selector",
+        json_schema_extra=dict(column_width=1),
+    )
+    revision: str = Field(
+        "",
+        title="Rev",
+        json_schema_extra=dict(column_width=COL_WIDTH, disabled=True),
+    )
     status_code: str = Field(
-        "S2", title="Status", json_schema_extra=dict(column_width=COL_WIDTH)
+        "S2",
+        title="Status",
+        json_schema_extra=dict(column_width=COL_WIDTH, disabled=True),
     )
     status_description: str = Field(
         "Suitable for information",
         title="Description",
         description="this is a BIM field that matches directly with status_code.",
-        json_schema_extra=dict(column_width=150),
+        json_schema_extra=dict(column_width=150, disabled=True),
     )
     author: ty.Optional[str] = Field(
         "EG",
@@ -62,8 +65,7 @@ class Issue(BaseModel):
         "",
         title="Issue Notes",
         description=(
-            "free field where the Engineer can briefly summarise changes since previous"
-            " issue"
+            "free field where the Engineer can briefly summarise changes/progress."
         ),
         max_length=1e8,
         json_schema_extra=dict(column_width=300),
@@ -86,3 +88,19 @@ class Issue(BaseModel):
             return getattr(IssueFormatEnum, v)
         else:
             return v
+
+    @model_validator(mode="after")
+    def update_status_revision_fields(self) -> "Issue":
+        status_revision = (
+            lambda sr: sr.value if isinstance(sr, StatusRevisionEnum) else sr
+        )(self.status_revision)
+        (
+            self.status_code,
+            status_description,
+            revision_code,
+            revision_description,
+            description,
+        ) = status_revision.split(" - ")
+        self.revision = f"{revision_code}{str(self.revision_number).zfill(2)}"
+        self.status_description = description
+        return self
