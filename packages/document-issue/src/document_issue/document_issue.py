@@ -1,7 +1,13 @@
 import typing as ty
 from tabulate import tabulate
-from pydantic import field_validator, BaseModel, Field
-
+from pydantic import (
+    field_validator,
+    BaseModel,
+    Field,
+    AfterValidator,
+    BeforeValidator,
+)
+from typing_extensions import Annotated
 from document_issue.project import ProjectBase
 from document_issue.enums import RoleEnum
 from document_issue.basemodel import BaseModel, Field
@@ -16,12 +22,37 @@ from document_issue.document import Document
 # ------------------------------------------------------------------------------------------
 
 
+def document_role_before(v: ty.List) -> ty.List:
+    if len(v) == 0:
+        v = [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})]
+    else:
+        pass
+    return v
+
+
+def document_role_after(v: ty.List[DocumentRole]) -> ty.List[DocumentRole]:
+    if len(v) > 0:
+        if v[0].role_name != RoleEnum.director:
+            if v[0].role_name != "Director in Charge":
+                v = [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})] + v
+    else:
+        pass
+    return v
+
+
 class DocumentIssue(Document, ProjectBase):
-    document_role: ty.List[DocumentRole] = Field(
-        [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})],
+    """metadata classifying a document and it's status within a project"""
+
+    document_role: Annotated[
+        ty.List[DocumentRole],
+        BeforeValidator(document_role_before),
+        AfterValidator(document_role_after),
+    ] = Field(
+        [],
         alias="roles",
         min_length=1,
-        description="indicates people involved and responsible for the production of this document",
+        description="indicates people responsible for this document",
+        validate_default=True,
     )
     issue_history: ty.List[Issue] = Field(
         [],
