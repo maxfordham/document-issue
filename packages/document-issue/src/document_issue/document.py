@@ -40,11 +40,8 @@ description_name_nomenclature = "denotes what each section of of the document co
 Note = Annotated[
     str,
     Len(max_length=1e8),
-    WithJsonSchema(
-        {"type": "string", "title" "maxLength": 1e8, "layout": {"width": "100%"}}
-    ),
+    WithJsonSchema({"type": "string", "maxLength": 1e8, "layout": {"width": "100%"}}),
 ]
-# ^ json_schema_extra not added to schema
 
 
 class DocumentBase(BaseModel):
