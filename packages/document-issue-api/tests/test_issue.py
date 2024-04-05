@@ -32,7 +32,7 @@ def test_get_issue(post_issue_then_delete):
 def test_patch_issue(post_issue_then_delete):
     response = post_issue_then_delete
     issue_id = response.json()["id"]
-    response = client.patch(f"/issue/{issue_id}", json={"revision": "P02"})
+    response = client.patch(f"/issue/{issue_id}", json={"revision_number": 2})
     assert response.status_code == 200
     assert response.json()["revision"] == "P02"
 

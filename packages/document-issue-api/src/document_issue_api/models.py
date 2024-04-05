@@ -98,9 +98,11 @@ class Issue(Base):
     __tablename__ = "issue"
 
     id = Column(Integer, primary_key=True, index=True)
+    revision_number = Column(Integer)
     revision = Column(String)
     date = Column(Date)
     # status = Column(String)  # maps to status code...
+    status_revision = Column(String)
     status_code = Column(String)
     status_description = Column(String)
     author = Column(String)  # must be in project
