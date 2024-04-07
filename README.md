@@ -70,6 +70,7 @@ pip install -e packages/document-issue
 pip install -e packages/document-issue-api 
 pip install -e packages/document-issue-io 
 # ^ install editable versions of each package
+# ^ TODO: move to environment file? 
 
 quarto install tinytex
 # ^ installs latex engine...
