@@ -16,10 +16,11 @@ from document_issue.document_issue import DocumentIssue, Issue
 from ipyautoui.autoobject import AutoObjectForm
 import traitlets as tr
 from ipyautoui.custom.editgrid import EditGrid, DataHandler
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, Field, RootModel, field_validator
 import typing as ty
 from typing import Union, Type, Optional, Callable, Any
 import ipywidgets as w
+from datetime import date
 
 
 # + endofcell="--"
@@ -70,9 +71,16 @@ class DocumentIssueUi(DocumentIssue):
         alias="issue",
         description="list of issues",
         json_schema_extra=dict(
-            autoui="__main__.IssueGrid"
+            autoui="document_issue_ui.document_issue_form.IssueGrid"
         ),  # HOTFIX: # https://github.com/maxfordham/ipyautoui/issues/309
     )
+
+    @field_validator("issue_history")
+    @classmethod
+    def _issue_history(cls, v):
+        if len(v) == 0:
+            v += [Issue(date=date.today())]
+        return sorted(v, key=lambda d: d.date)
 
 
 # -------------------------------------------------------------------------------------
@@ -115,12 +123,9 @@ class DocumentIssueForm(
         self.di_widgets["project_name"].value = self.map_projects[self.project_number]
 
 
-if __name__ == "__main__":
-    from IPython.display import display
-
-    project_numbers = {"J5003 - Default Project": 5003, "J5001 - Test Project": 5001}
-    map_projects = {v: k.split(" - ")[1] for k, v in project_numbers.items()}
-    project_number = 5003
+def get_document_issue_form(
+    project_number: int, map_projects: dict, **kwargs
+) -> DocumentIssueForm:
     ui = DocumentIssueForm.from_pydantic_model(
         DocumentIssueUi,
         nested_widgets=[],
@@ -129,7 +134,18 @@ if __name__ == "__main__":
         show_null=True,
         align_horizontal=False,
         display_bn_shownull=False,
+        **kwargs
     )
+    return ui
+
+
+if __name__ == "__main__":
+    from IPython.display import display
+
+    project_numbers = {"J5003 - Default Project": 5003, "J5001 - Test Project": 5001}
+    map_projects = {v: k.split(" - ")[1] for k, v in project_numbers.items()}
+    project_number = 5003
+    ui = get_document_issue_form(project_number, map_projects)
     display(ui)
 
 # --
