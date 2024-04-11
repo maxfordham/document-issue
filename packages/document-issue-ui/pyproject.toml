@@ -32,7 +32,8 @@ Issues = "https://github.com/unknown/document-issue-ui/issues"
 Source = "https://github.com/unknown/document-issue-ui"
 
 [tool.hatch.version]
-path = "src/document_issue_ui/__about__.py"
+source = "vcs"
+raw-options = { root = "../.." }
 
 [tool.hatch.envs.default]
 dependencies = [
