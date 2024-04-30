@@ -116,3 +116,31 @@ class TestMarkdownDocumentIssue:
         assert not (
             FDIR_RENDER / f"{document_issue.document_code}.log"
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
+
+    def test_to_pdf_loads_of_notes_and_issues(self):
+        """Test to make sure that the PDF is created when there are lots of notes and issues.
+        Please check the PDF after this test to make sure that the tables are formatted correctly.
+        """
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_loads_of_notes_and_issues"
+        shutil.rmtree(FDIR_RENDER, ignore_errors=True)
+        FDIR_RENDER.mkdir(parents=True, exist_ok=True)
+        document_issue = create_test_document_issue()
+        document_issue.document_role = document_issue.document_role * 5
+        document_issue.issue_history = document_issue.issue_history * 10
+        document_issue.notes[2] = document_issue.notes[2] * 5
+        document_issue.notes = document_issue.notes * 5
+        document_issue.format_configuration.output_author = True
+        document_issue.format_configuration.output_checked_by = True
+        markdown_document_issue = MarkdownDocumentIssue(
+            document_issue,
+        )
+        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.md"
+        ).is_file()
+        assert pathlib.Path(
+            FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        ).is_file()
+        assert not (
+            FDIR_RENDER / f"{document_issue.document_code}.log"
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful

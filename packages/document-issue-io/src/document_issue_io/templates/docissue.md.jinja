@@ -14,7 +14,7 @@ footer-logo: footer-logo.png
 title-page: title-page.pdf
 ---
 {% raw %}
-:::: {layout="[ 26.5, -2.5, 71 ]"}
+:::: {layout="[ 26.5, -2.5, 71 ]" fig-pos="H"}
 
 ::: {#first-column}
 \addcontentsline{toc}{section}{Document Information}
@@ -45,9 +45,6 @@ Fordham LLP\
 
 ::: {#second-column}
 {% endraw %}
-### Issue History
-
-{{ md_issue_history }}
 
 ### Contributions
 
@@ -55,14 +52,19 @@ Fordham LLP\
 
 : {tbl-colwidths="[30,70]"}
 
+:::
+
+::::
+
+### Issue History
+
+{{ md_issue_history }}
+
 ### Notes
 
 {{ md_notes }}
 
 : {tbl-colwidths="[4,96]"}
-:::
-
-::::
 
 \newpage
 \toc
