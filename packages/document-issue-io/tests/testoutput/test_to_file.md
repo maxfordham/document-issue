@@ -6,7 +6,7 @@ document_description: A description of a Max Fordham Project
 document_code: 06667-MXF-XX-XX-SH-M-20003
 name_nomenclature: project-originator-volume-level-type-role-number
 current_issue:
-    date: 2022-08-28
+    date: 2022-11-11
     revision: P01
     status_code: S2
     status_description: Suitable for information
@@ -14,7 +14,7 @@ footer-logo: footer-logo.png
 title-page: title-page.pdf
 ---
 
-:::: {layout="[ 26.5, -2.5, 71 ]"}
+:::: {layout="[ 26.5, -2.5, 71 ]" fig-pos="H"}
 
 ::: {#first-column}
 \addcontentsline{toc}{section}{Document Information}
@@ -45,27 +45,34 @@ Fordham LLP\
 
 ::: {#second-column}
 
-### Issue History
-
-+------------+-----------+--------------+--------------------------+-----------------------+--------------+---------------+
-| **Date**   | **Rev**   | **Status**   | **Description**          | **Issue Notes**       | **Author**   | **Checker**   |
-+============+===========+==============+==========================+=======================+==============+===============+
-| 28 AUG 22  | P01       | S2           | Suitable for information | This is an issue note | OH           | JG            |
-+------------+-----------+--------------+--------------------------+-----------------------+--------------+---------------+
-
-: {tbl-colwidths="[17.5,5,7.5,20,25,10,15]"}
 
 ### Contributions
 
-+----------------+--------------------------------+
-| **Initials**   | **Role**                       |
-+================+================================+
-| OH             | Director in Charge             |
-+----------------+--------------------------------+
-| 17df           | Lead Sustainability Consultant |
-+----------------+--------------------------------+
++----------------+----------------------+
+| **Initials**   | **Role**             |
++================+======================+
+| OH             | Director in Charge   |
++----------------+----------------------+
+| 7f3cf          | Design Strategy Lead |
++----------------+----------------------+
+| ee             | Commercial Lead      |
++----------------+----------------------+
 
 : {tbl-colwidths="[30,70]"}
+
+:::
+
+::::
+
+### Issue History
+
++------------+-----------+--------------+--------------------------+-----------------------+--------------+
+| **Date**   | **Rev**   | **Status**   | **Description**          | **Issue Notes**       | **Author**   |
++============+===========+==============+==========================+=======================+==============+
+| 11 NOV 22  | P01       | S2           | Suitable for information | This is an issue note | OH           |
++------------+-----------+--------------+--------------------------+-----------------------+--------------+
+
+: {tbl-colwidths="[12,5,7.5,30,35,10.5]"}
 
 ### Notes
 
@@ -78,9 +85,6 @@ Fordham LLP\
 +---+------------------------------------------------------------------------------------+
 
 : {tbl-colwidths="[4,96]"}
-:::
-
-::::
 
 \newpage
 \toc
