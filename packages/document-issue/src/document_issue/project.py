@@ -9,7 +9,7 @@ from document_issue.basemodel import BaseModel, Field
 from pydantic import BeforeValidator
 
 
-def validate_project_number(v):
+def validate_project_number(v: ty.Union[str, int]) -> int:
     """Validate project number. If it starts with 'J', remove it and convert to int.
     If it is not a number, log a warning and use the default project number."""
     try:
