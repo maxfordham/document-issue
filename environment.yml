@@ -11,6 +11,9 @@ dependencies:
   - black
   - tomli
   - pytest-pretty
+  - ipywidgets
+  - jupyterlab
+  - ipyautoui
   - pip
   - pip:
       - polyfactory
