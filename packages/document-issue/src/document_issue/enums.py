@@ -102,8 +102,8 @@ S7,shared (non-contractual),P,Preliminary revision,Suitable for AIM authorizatio
 A1,published (contractual),C,Contractual revision,Issued for Tender (1st Stage)
 A2,published (contractual),C,Contractual revision,Issued for Tender (2nd Stage)
 A3,published (contractual),C,Contractual revision,Issued for Contract
-A4,published (contractual),C,Contractual revision,Issued for Contractor design, procurement & coordination
-A5,published (contractual),C,Contractual revision,Issued for procurement, manufacture & installation
+A4,published (contractual),C,Contractual revision,"Issued for Contractor design, procurement & coordination"
+A5,published (contractual),C,Contractual revision,"Issued for procurement, manufacture & installation"
 CR,published (for AIM acceptance),C,Contractual revision,As constructed record document""".splitlines()
     )
 }

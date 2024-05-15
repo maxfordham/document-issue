@@ -12,15 +12,16 @@
 #     name: python3
 # ---
 
-from document_issue.document_issue import DocumentIssue, Issue
-from ipyautoui.autoobject import AutoObjectForm
-import traitlets as tr
-from ipyautoui.custom.editgrid import EditGrid, DataHandler
-from pydantic import BaseModel, Field, RootModel, field_validator
-import typing as ty
-from typing import Union, Type, Optional, Callable, Any
 import ipywidgets as w
+import traitlets as tr
+import typing as ty
 from datetime import date
+from typing import Union, Type, Optional, Callable, Any
+from pydantic import BaseModel, Field, RootModel, ConfigDict, field_validator
+
+from ipyautoui.autoobject import AutoObjectForm
+from ipyautoui.custom.editgrid import EditGrid, DataHandler
+from document_issue.document_issue import DocumentIssue, Issue
 
 
 # + endofcell="--"
@@ -64,7 +65,7 @@ class IssueGrid(EditGrid):
 
 
 class DocumentIssueUi(DocumentIssue):
-    """metadata classifying a document and it's status within a project"""
+    """Metadata classifying a document and its status within a project"""
 
     issue_history: ty.List[Issue] = Field(
         [],
@@ -81,6 +82,8 @@ class DocumentIssueUi(DocumentIssue):
         if len(v) == 0:
             v += [Issue(date=date.today())]
         return sorted(v, key=lambda d: d.date)
+
+    model_config = ConfigDict(title="Document Issue")
 
 
 # -------------------------------------------------------------------------------------
@@ -99,6 +102,10 @@ class DocumentIssueForm(
 ):
     project_number = tr.Int(default_value=5001)
     map_projects = tr.Dict()  # e.g. {5003: "Default Project"}
+
+    @property
+    def project_name(self):
+        return self.map_projects[self.project_number]
 
     def _set_children(self):
         self.children = [
@@ -123,11 +130,11 @@ class DocumentIssueForm(
     @tr.observe("project_number")
     def _project_number(self, on_change):
         self.di_widgets["project_number"].value = self.project_number
-        self.di_widgets["project_name"].value = self.map_projects[self.project_number]
+        self.di_widgets["project_name"].value = self.project_name
 
 
 def get_document_issue_form(
-    project_number: int, map_projects: dict, **kwargs
+    map_projects: dict, project_number: int = 5001, **kwargs
 ) -> DocumentIssueForm:
     ui = DocumentIssueForm.from_pydantic_model(
         DocumentIssueUi,
