@@ -1,0 +1,18 @@
+% CENTRE TEXT IN IMAGE
+% REF: https://stackoverflow.com/a/62283887
+\usepackage{ifthen}
+$if(footer-logo)$
+\rofoot{    
+    \begin{tikzpicture}
+        \node at (0,0) {\includegraphics[width=1.75cm]{$footer-logo$}};
+        \node at (current bounding box.center) {\thepage\ / \pageref*{LastPage}};
+    \end{tikzpicture}
+    }
+$endif$
+
+% TITLEPAGE
+% Set generated reportlab PDF as title page background
+$if(title-page)$
+\usepackage{wallpaper}
+\ThisCenterWallPaper{}{title-page.pdf}
+$endif$
