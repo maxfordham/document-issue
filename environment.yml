@@ -8,10 +8,13 @@ channels:
 dependencies:
   - python>=3.8,<3.12.0a0
   - pytest
+  - flake8
   - black
   - tomli
   - pytest-pretty
   - pip
   - pip:
       - polyfactory
-      - jupyter-black
+      - -e packages/document-issue 
+      - -e packages/document-issue-io
+      - -e packages/document-issue-api

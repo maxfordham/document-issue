@@ -6,7 +6,7 @@ document_description: A description of a Max Fordham Project
 document_code: 06667-MXF-XX-XX-SH-M-20003
 name_nomenclature: project-originator-volume-level-type-role-number
 current_issue:
-    date: 2022-11-11
+    date: 2024-04-28
     revision: P01
     status_code: S2
     status_description: Suitable for information
@@ -48,15 +48,15 @@ Fordham LLP\
 
 ### Contributions
 
-+----------------+----------------------+
-| **Initials**   | **Role**             |
-+================+======================+
-| OH             | Director in Charge   |
-+----------------+----------------------+
-| 7f3cf          | Design Strategy Lead |
-+----------------+----------------------+
-| ee             | Commercial Lead      |
-+----------------+----------------------+
++----------------+-------------------------------------------+
+| **Initials**   | **Role**                                  |
++================+===========================================+
+| OH             | Director in Charge                        |
++----------------+-------------------------------------------+
+| 2230           | Client Relationship Management (CRM) Lead |
++----------------+-------------------------------------------+
+|                | Project Administrator                     |
++----------------+-------------------------------------------+
 
 : {tbl-colwidths="[30,70]"}
 
@@ -69,10 +69,11 @@ Fordham LLP\
 +------------+-----------+--------------+--------------------------+-----------------------+--------------+
 | **Date**   | **Rev**   | **Status**   | **Description**          | **Issue Notes**       | **Author**   |
 +============+===========+==============+==========================+=======================+==============+
-| 11 NOV 22  | P01       | S2           | Suitable for information | This is an issue note | OH           |
+| 28 APR 24  | P01       | S2           | Suitable for information | This is an issue note | OH           |
 +------------+-----------+--------------+--------------------------+-----------------------+--------------+
 
 : {tbl-colwidths="[12,5,7.5,30,35,10.5]"}
+
 
 ### Notes
 
@@ -85,6 +86,7 @@ Fordham LLP\
 +---+------------------------------------------------------------------------------------+
 
 : {tbl-colwidths="[4,96]"}
+
 
 \newpage
 \toc

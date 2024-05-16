@@ -93,9 +93,12 @@ class DocumentIssueUi(DocumentIssue):
 
 # -
 
+from ipyautoui.autoui import WrapSaveButtonBar, AutoUiFileMethods
 
 class DocumentIssueForm(
     AutoObjectForm,
+    WrapSaveButtonBar,
+    AutoUiFileMethods,
 ):
     project_number = tr.Int(default_value=5001)
     map_projects = tr.Dict()  # e.g. {5003: "Default Project"}
@@ -148,11 +151,15 @@ def get_document_issue_form(
 
 if __name__ == "__main__":
     from IPython.display import display
+    import pathlib
 
     project_numbers = {"J5003 - Default Project": 5003, "J5001 - Test Project": 5001}
     map_projects = {v: k.split(" - ")[1] for k, v in project_numbers.items()}
     project_number = 5003
-    ui = get_document_issue_form(project_number, map_projects)
+    ui = get_document_issue_form(project_number, map_projects, path=pathlib.Path("docissue.json"))
+    # ui.path = pathlib.Path("docissue.json")
     display(ui)
 
 # --
+
+

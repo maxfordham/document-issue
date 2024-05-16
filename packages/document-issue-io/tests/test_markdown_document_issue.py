@@ -1,9 +1,12 @@
-import pathlib
+import pytest
 import shutil
 from polyfactory.factories.pydantic_factory import ModelFactory
 
 from document_issue.document_issue import DocumentIssue
-from document_issue_io.markdown_document_issue import MarkdownDocumentIssue
+from document_issue_io.markdown_document_issue import (
+    MarkdownDocumentIssue,
+    document_issue_md_to_pdf,
+)
 
 from tests.constants import FDIR_TEST_OUTPUT
 
@@ -54,6 +57,31 @@ class TestMarkdownDocumentIssue:
         markdown_document_issue.to_file(FPTH_MD)
         assert FPTH_MD.is_file()
 
+
+MD = """
+# title
+
+1.  One
+2.  Two
+3.  Three
+
+-   convert this notebook to markdown
+-   read `docissue.json`
+-   convert using `document_issue_md_to_pdf`
+
+## My Project
+
+| Tables   |      Are      | Cool |
+|----------|:-------------:|-----:|
+| col 1 is |  left-aligned | 1600 |
+| col 2 is |    centered   |   12 |
+| col 3 is | right-aligned |    1 |
+"""
+
+
+class TestDocumentIssueMdToPdf:
+    """Test the function `document_issue_md_to_pdf`."""
+
     def test_to_pdf(self):
         FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
@@ -61,19 +89,33 @@ class TestMarkdownDocumentIssue:
         document_issue = create_test_document_issue()
         document_issue.format_configuration.output_author = False
         document_issue.format_configuration.output_checked_by = False
-        markdown_document_issue = MarkdownDocumentIssue(
-            document_issue,
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        document_issue_md_to_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
         )
-        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.md"
-        ).is_file()
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        ).is_file()
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
         assert not (
-            FDIR_RENDER / f"{document_issue.document_code}.log"
+            fpth_pdf.with_suffix(".log")
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
+
+    def test_to_pdf_with_markdown_content(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_markdown_content"
+        shutil.rmtree(FDIR_RENDER, ignore_errors=True)
+        FDIR_RENDER.mkdir(parents=True, exist_ok=True)
+        fpth_md = FDIR_RENDER / "test.md"
+        fpth_md.write_text(MD)
+        document_issue = create_test_document_issue()
+        document_issue.format_configuration.output_author = False
+        document_issue.format_configuration.output_checked_by = False
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        document_issue_md_to_pdf(
+            document_issue=document_issue, fpth_md=fpth_md, fpth_pdf=fpth_pdf
+        )
+        assert fpth_pdf.is_file()
+        # Check that the markdown file created contains the correct content
+        assert MD in fpth_pdf.with_suffix(".md").read_text()
 
     def test_to_pdf_with_author(self):
         FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_author"
@@ -82,18 +124,15 @@ class TestMarkdownDocumentIssue:
         document_issue = create_test_document_issue()
         document_issue.format_configuration.output_author = True
         document_issue.format_configuration.output_checked_by = False
-        markdown_document_issue = MarkdownDocumentIssue(
-            document_issue,
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        document_issue_md_to_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
         )
-        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.md"
-        ).is_file()
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        ).is_file()
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
         assert not (
-            FDIR_RENDER / f"{document_issue.document_code}.log"
+            fpth_pdf.with_suffix(".log")
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
 
     def test_to_pdf_with_author_and_checked_by(self):
@@ -103,18 +142,15 @@ class TestMarkdownDocumentIssue:
         document_issue = create_test_document_issue()
         document_issue.format_configuration.output_author = True
         document_issue.format_configuration.output_checked_by = True
-        markdown_document_issue = MarkdownDocumentIssue(
-            document_issue,
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        document_issue_md_to_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
         )
-        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.md"
-        ).is_file()
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        ).is_file()
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
         assert not (
-            FDIR_RENDER / f"{document_issue.document_code}.log"
+            fpth_pdf.with_suffix(".log")
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
 
     def test_to_pdf_loads_of_notes_and_issues(self):
@@ -131,16 +167,26 @@ class TestMarkdownDocumentIssue:
         document_issue.notes = document_issue.notes * 5
         document_issue.format_configuration.output_author = True
         document_issue.format_configuration.output_checked_by = True
-        markdown_document_issue = MarkdownDocumentIssue(
-            document_issue,
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        document_issue_md_to_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
         )
-        markdown_document_issue.to_pdf(fdir=FDIR_RENDER)
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.md"
-        ).is_file()
-        assert pathlib.Path(
-            FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        ).is_file()
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
         assert not (
-            FDIR_RENDER / f"{document_issue.document_code}.log"
+            fpth_pdf.with_suffix(".log")
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
+
+    def test_to_pdf_error(self):
+        """If the markdown file has the same file path as the output markdown file, raise an error."""
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_markdown_content"
+        fpth_md = FDIR_RENDER / "test.md"
+        fpth_pdf = FDIR_RENDER / "test.pdf"
+        document_issue = create_test_document_issue()
+        document_issue.format_configuration.output_author = False
+        document_issue.format_configuration.output_checked_by = False
+        with pytest.raises(ValueError):
+            document_issue_md_to_pdf(
+                document_issue=document_issue, fpth_md=fpth_md, fpth_pdf=fpth_pdf
+            )
