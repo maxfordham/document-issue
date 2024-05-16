@@ -90,7 +90,7 @@ def check_markdown_file_paths(fpth_md: pathlib.Path, fpth_md_output: pathlib.Pat
 
 def run_quarto(fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path):
     """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
-    subprocess.run(
+    return subprocess.run(
         [
             "quarto",
             "render",
@@ -124,5 +124,5 @@ def document_issue_md_to_pdf(
         install_or_update_document_issue_quarto_extension()
         markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
         fpth_md_output.write_text(markdown)
-        run_quarto(fpth_md_output, fpth_pdf)
+        completed_process = run_quarto(fpth_md_output, fpth_pdf)
     return fpth_pdf
