@@ -14,3 +14,7 @@ dependencies:
   - pip
   - pip:
       - polyfactory
+      - -e packages/document-issue 
+      - -e packages/document-issue-io
+      - -e packages/document-issue-api
+      - -e packages/document-issue-ui
