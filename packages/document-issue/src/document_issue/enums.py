@@ -94,11 +94,12 @@ MAP_STATUS = {
         """S0,work in progress,P,Preliminary revision and version,Initial Status
 S1,shared (non-contractual),P,Preliminary revision,Suitable for Coordination
 S2,shared (non-contractual),P,Preliminary revision,Suitable for Information
-S3,shared (non-contractual),P,Preliminary revision,Suitable for review and comment
-S4,shared (non-contractual),P,Preliminary revision,Suitable for stage approval
-S5,shared (non-contractual),P,Preliminary revision,Withdrawn
-S6,shared (non-contractual),P,Preliminary revision,Suitable for PIM authorization
-S7,shared (non-contractual),P,Preliminary revision,Suitable for AIM authorization
+S3,shared (non-contractual),P,Preliminary revision,Suitable for Review and Comment
+S4,shared (non-contractual),P,Preliminary revision,Suitable for Stage Approval
+S5,shared (non-contractual),P,Preliminary revision,Suitable for Review and Acceptance
+S6,shared (non-contractual),P,Preliminary revision,Withdrawn
+S7,shared (non-contractual),P,Preliminary revision,Suitable for PIM Authorization
+S8,shared (non-contractual),P,Preliminary revision,Suitable for AIM Authorization
 A1,published (contractual),C,Contractual revision,Issued for Tender (1st Stage)
 A2,published (contractual),C,Contractual revision,Issued for Tender (2nd Stage)
 A3,published (contractual),C,Contractual revision,Issued for Contract
