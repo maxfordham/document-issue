@@ -1,15 +1,15 @@
 ---
 project_name: A Max Fordham Project
-project_number : J4321
+project_number : 4321
 director_in_charge: OH
 document_description: A description of a Max Fordham Project
 document_code: 06667-MXF-XX-XX-SH-M-20003
 name_nomenclature: project-originator-volume-level-type-role-number
 current_issue:
-    date: 2024-04-28
+    date: 2020-01-02
     revision: P01
-    status_code: S2
-    status_description: Suitable for information
+    status_code: S0
+    status_description: Initial Status
 footer-logo: footer-logo.png
 title-page: title-page.pdf
 ---
@@ -48,15 +48,11 @@ Fordham LLP\
 
 ### Contributions
 
-+----------------+-------------------------------------------+
-| **Initials**   | **Role**                                  |
-+================+===========================================+
-| OH             | Director in Charge                        |
-+----------------+-------------------------------------------+
-| 2230           | Client Relationship Management (CRM) Lead |
-+----------------+-------------------------------------------+
-|                | Project Administrator                     |
-+----------------+-------------------------------------------+
++----------------+--------------------+
+| **Initials**   | **Role**           |
++================+====================+
+| OH             | Director in Charge |
++----------------+--------------------+
 
 : {tbl-colwidths="[30,70]"}
 
@@ -66,13 +62,13 @@ Fordham LLP\
 
 ### Issue History
 
-+------------+-----------+--------------+--------------------------+-----------------------+--------------+
-| **Date**   | **Rev**   | **Status**   | **Description**          | **Issue Notes**       | **Author**   |
-+============+===========+==============+==========================+=======================+==============+
-| 28 APR 24  | P01       | S2           | Suitable for information | This is an issue note | OH           |
-+------------+-----------+--------------+--------------------------+-----------------------+--------------+
++------------+-----------+--------------+-------------------+-----------------------+
+| **Date**   | **Rev**   | **Status**   | **Description**   | **Issue Notes**       |
++============+===========+==============+===================+=======================+
+| 02 JAN 20  | P01       | S0           | Initial Status    | This is an issue note |
++------------+-----------+--------------+-------------------+-----------------------+
 
-: {tbl-colwidths="[12,5,7.5,30,35,10.5]"}
+: {tbl-colwidths="[12,5,7.5,30,45.5]"}
 
 
 ### Notes

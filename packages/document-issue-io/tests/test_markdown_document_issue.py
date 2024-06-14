@@ -19,32 +19,32 @@ class DocumentIssueFactory(ModelFactory[DocumentIssue]):
 
 
 def create_test_document_issue():
-    document_issue = DocumentIssueFactory.build()
-    document_issue.project_name = "A Max Fordham Project"
-    document_issue.project_number = "J4321"
-    document_issue.document_role[0].initials = "OH"
-    document_issue.document_role[0].role_name = "Director in Charge"
-    document_issue.document_code = "06667-MXF-XX-XX-SH-M-20003"
-    document_issue.document_description = "A description of a Max Fordham Project"
-    document_issue.name_nomenclature = (
-        "project-originator-volume-level-type-role-number"
+    return DocumentIssue(
+        project_name="A Max Fordham Project",
+        project_number="J4321",
+        document_role=[dict(initials="OH", role_name="Director in Charge")],
+        document_description="A description of a Max Fordham Project",
+        name_nomenclature="project-originator-volume-level-type-role-number",
+        issue_history=[
+            dict(
+                author="OH",
+                checked_by="JG",
+                revision="P01",
+                status_code="S2",
+                status_description="Suitable for information",
+                issue_notes="This is an issue note",
+            )
+        ],
+        format_configuration=dict(date_string_format="%d %^b %y"),
+        notes=[
+            "This is a note",
+            "This is another note",
+            (
+                "This is a very long note which states something important about the"
+                " document issue"
+            ),
+        ],
     )
-    document_issue.issue_history[0].author = "OH"
-    document_issue.issue_history[0].checked_by = "JG"
-    document_issue.issue_history[0].revision = "P01"
-    document_issue.issue_history[0].status_code = "S2"
-    document_issue.issue_history[0].status_description = "Suitable for information"
-    document_issue.issue_history[0].issue_notes = "This is an issue note"
-    document_issue.format_configuration.date_string_format = "%d %^b %y"
-    document_issue.notes = [
-        "This is a note",
-        "This is another note",
-        (
-            "This is a very long note which states something important about the"
-            " document issue"
-        ),
-    ]
-    return document_issue
 
 
 class TestMarkdownDocumentIssue:
