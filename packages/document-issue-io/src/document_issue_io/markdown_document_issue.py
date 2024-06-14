@@ -92,17 +92,18 @@ def run_quarto(
     fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
-    return subprocess.run(
-        [
-            "quarto",
-            "render",
-            fpth_md_output.name,
-            "--to",
-            "document-issue-pdf",
-            "-o",
-            fpth_pdf.name,
-        ]
-    )
+    cmd = [
+        "quarto",
+        "render",
+        fpth_md_output.name,
+        "--to",
+        "document-issue-pdf",
+        "-o",
+        fpth_pdf.name,
+    ]
+    if fpth_md_output.suffix == ".ipynb":
+        cmd += ["--execute", "true"]
+    return subprocess.run(cmd)
 
 
 def document_issue_md_to_pdf(
