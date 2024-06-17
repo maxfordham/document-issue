@@ -29,6 +29,7 @@ from ipyautoui.custom.editgrid import EditGrid, DataHandler, UiDelete
 from ipyautoui.custom.buttonbars import CrudView, CrudOptions
 
 from document_issue.document_issue import DocumentIssue, Issue
+
 # -
 
 HEADER_BACKGROUND_COLOUR = "rgb(207, 212, 252, 1)"
@@ -51,7 +52,9 @@ class IssueDelete(UiDelete):
     def _update_display(self):
         with self.out_delete:
             clear_output()
-            display(preview_yaml_string(yaml.dump(self.value_summary)))
+            display(
+                preview_yaml_string(yaml.dump(self.value_summary))
+            )  # TODO: Move to ipyautoui https://github.com/maxfordham/ipyautoui/issues/324
 
 
 BUTTONBAR_CONFIG_TYPES = CrudView(
@@ -96,11 +99,7 @@ class IssueForm(AutoObjectForm):
 
 
 class IssueGrid(EditGrid):
-    def __init__(
-        self,
-        schema: Union[dict, Type[BaseModel]] = None,
-        **kwargs
-    ):
+    def __init__(self, schema: Union[dict, Type[BaseModel]] = None, **kwargs):
         kwargs["schema"] = IssueHistory
         kwargs["ui_add"] = IssueForm
         kwargs["ui_edit"] = IssueForm
@@ -111,12 +110,22 @@ class IssueGrid(EditGrid):
         super().__init__(**kwargs)
         self.buttonbar_grid.crud_view = BUTTONBAR_CONFIG_TYPES
         self._set_date_desc()
+        # HOTFIX: Be good to move save message to ipyautoui when `close_crud_dialogue_on_action` set to True
+        self.ui_add.savebuttonbar.bn_save.on_click(self._show_save_message)
+        self.ui_edit.savebuttonbar.bn_save.on_click(self._show_save_message)
 
     def _set_date_desc(self):
         if "Date" not in self.grid.data.columns:
             raise ValueError("Missing 'Date' from data.")
         column_index = list(self.grid.data.columns).index("Date") + 1
-        self.grid.transform([{'type': 'sort', 'columnIndex': column_index, 'desc': True}])
+        self.grid.transform(
+            [{"type": "sort", "columnIndex": column_index, "desc": True}]
+        )
+
+    def _show_save_message(self, onchange):
+        self.buttonbar_grid.message.value = (
+            f'<i>changes saved: {datetime.now().strftime("%H:%M:%S")}</i>'
+        )
 
 
 class DocumentIssueUi(DocumentIssue):
@@ -144,6 +153,7 @@ class DocumentIssueUi(DocumentIssue):
 # -------------------------------------------------------------------------------------
 # ^ HOTFIX: https://github.com/maxfordham/ipyautoui/issues/309
 # -------------------------------------------------------------------------------------
+
 
 class DocumentIssueForm(
     AutoObjectForm,
@@ -194,7 +204,7 @@ def get_document_issue_form(
         show_null=True,
         align_horizontal=False,
         display_bn_shownull=False,
-        **kwargs
+        **kwargs,
     )
     return ui
 
@@ -206,6 +216,12 @@ if __name__ == "__main__":
     project_numbers = {"J5003 - Default Project": 5003, "J5001 - Test Project": 5001}
     map_projects = {v: k.split(" - ")[1] for k, v in project_numbers.items()}
     project_number = 5003
-    ui = get_document_issue_form(project_number=project_number, map_projects=map_projects, path=pathlib.Path("docissue.json"))
+    ui = get_document_issue_form(
+        project_number=project_number,
+        map_projects=map_projects,
+        path=pathlib.Path("docissue.json"),
+    )
     # ui.path = pathlib.Path("docissue.json")
     display(ui)
+
+# -
