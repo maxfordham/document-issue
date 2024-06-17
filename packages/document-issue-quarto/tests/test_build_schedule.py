@@ -32,7 +32,9 @@ def test_build_schedule():
 
 def test_build_examples():
     EXAMPLE_DIRS = [
-        i for i in (FDIR_ROOT / "examples").glob("*/") if "resource-path" not in i.name
+        i
+        for i in (FDIR_ROOT / "examples").glob("*/")
+        if "resource-path" not in i.name or "quarto-yaml" not in i.name
     ]
     for EXAMPLE_DIR in EXAMPLE_DIRS:
         FPTH_OUTPUT = EXAMPLE_DIR / "document.pdf"
@@ -47,3 +49,13 @@ def test_build_examples():
         assert (
             not FPTH_LOG.exists()
         )  # log file should be deleted if Quarto PDF compilation is successful
+
+
+def test_build_quarto_yaml():
+    FDIR = FDIR_ROOT / "examples" / "tables-docissue-in-quarto-yaml"
+    FPTH_OUTPUT = FDIR / "document.pdf"
+    FPTH_LOG = FDIR / "document.log"
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "render", "document.md"])
+    assert FPTH_OUTPUT.exists()
+    assert not FPTH_LOG.exists()

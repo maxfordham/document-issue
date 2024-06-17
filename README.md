@@ -66,12 +66,9 @@ mamba env create -f environment.yml
 mamba activate document-issue-dev
 # ^ base install of dev env (python, pytest, black etc.)
 
-pip install -e packages/document-issue 
-pip install -e packages/document-issue-api 
-pip install -e packages/document-issue-io 
 pip install -e packages/document-issue-ui
-# ^ install editable versions of each package
-# ^ TODO: move to environment file? 
+# ^ remove ui install from env file as the env file is used for CI 
+#   and we don't need the ui deps for CI tests. 
 
 quarto install tinytex
 # ^ installs latex engine...

@@ -1,14 +1,20 @@
 import pathlib
+import shutil
+import subprocess
 import typing as ty
 from jinja2 import Environment, FileSystemLoader
 
 from document_issue.document_issue import DocumentIssue
+from document_issue_io.title_block import build_schedule_title_page_template_pdf
+
 from document_issue_io.constants import (
     FDIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
 )
 from document_issue_io.utils import (
-    document_issue_md_to_pdf,
+    change_dir,
+    install_or_update_document_issue_quarto_extension,
+    FPTH_FOOTER_LOGO,
 )
 
 
@@ -73,13 +79,53 @@ class MarkdownDocumentIssue:
         f.write(self.md_docissue)
         f.close()
 
-    def to_pdf(self, fdir: pathlib.Path):
-        """Create a schedule PDF in a specified file directory."""
-        fpth_md = fdir / f"{self.document_issue.document_code}.md"
-        fpth_pdf = fdir / f"{self.document_issue.document_code}.pdf"
-        self.to_file(fpth_md)
-        document_issue_md_to_pdf(
-            document_issue=self.document_issue,
-            fpth_md=fpth_md,
-            fpth_pdf=fpth_pdf,
+
+def check_markdown_file_paths(fpth_md: pathlib.Path, fpth_md_output: pathlib.Path):
+    """Check if input and output markdown files are the same."""
+    if fpth_md == fpth_md_output:
+        raise ValueError(
+            f"Input and output markdown file paths must be different. Please change file name of input markdown."
         )
+
+
+def run_quarto(
+    fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path
+) -> subprocess.CompletedProcess:
+    """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
+    cmd = [
+        "quarto",
+        "render",
+        fpth_md_output.name,
+        "--to",
+        "document-issue-pdf",
+        "-o",
+        fpth_pdf.name,
+    ]
+    if fpth_md_output.suffix == ".ipynb":
+        cmd += ["--execute", "true"]
+    return subprocess.run(cmd)
+
+
+def document_issue_md_to_pdf(
+    document_issue: DocumentIssue,
+    fpth_pdf: pathlib.Path,
+    fpth_md: ty.Union[pathlib.Path, None] = None,
+):
+    """Convert markdown document issue to pdf using quarto.
+    The files will be built in the parent directory of fpth_pdf."""
+    fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
+    if fpth_md is not None:
+        check_markdown_file_paths(fpth_md, fpth_md_output)
+        md_content = fpth_md.read_text()
+    else:
+        md_content = ""
+    with change_dir(fpth_pdf.parent):
+        shutil.copy(
+            FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name
+        )  # Copy footer logo to markdown document issue directory
+        build_schedule_title_page_template_pdf(document_issue=document_issue)
+        install_or_update_document_issue_quarto_extension()
+        markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
+        fpth_md_output.write_text(markdown)
+        completed_process = run_quarto(fpth_md_output, fpth_pdf)
+    return fpth_pdf

@@ -1,0 +1,13 @@
+project:
+  type: book
+book:
+  title: "Spec-100"
+  author: "Norah Jones"
+  date: "5/17/2024"
+  chapters:
+    - index.qmd
+    - cooling.qmd
+    - heating.qmd
+
+format:
+  pdf: default 
