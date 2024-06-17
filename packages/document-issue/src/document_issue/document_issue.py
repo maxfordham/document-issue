@@ -61,11 +61,6 @@ class DocumentIssue(Document, ProjectBase):
         json_schema_extra=dict(format="dataframe"),
     )
 
-    @field_validator("issue_history")
-    @classmethod
-    def _issue_history(cls, v):
-        return sorted(v, key=lambda d: d.date)
-
     @property
     def filename(self):
         return self.document_code
