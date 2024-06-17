@@ -5,26 +5,84 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.16.1
+#       jupytext_version: 1.16.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
 
+import yaml
 import ipywidgets as w
 import traitlets as tr
 import typing as ty
-from datetime import date
+from datetime import date, datetime
 from typing import Union, Type, Optional, Callable, Any
 from pydantic import BaseModel, Field, RootModel, ConfigDict, field_validator
+from IPython.display import clear_output
 
+# +
 from ipyautoui.autoobject import AutoObjectForm
-from ipyautoui.custom.editgrid import EditGrid, DataHandler
+from ipyautoui.autodisplay_renderers import preview_yaml_string
+from ipyautoui.autoui import WrapSaveButtonBar, AutoUiFileMethods
+from ipyautoui.custom.editgrid import EditGrid, DataHandler, UiDelete
+from ipyautoui.custom.buttonbars import CrudView, CrudOptions
+
 from document_issue.document_issue import DocumentIssue, Issue
+# -
+
+HEADER_BACKGROUND_COLOUR = "rgb(207, 212, 252, 1)"
 
 
-# + endofcell="--"
+class IssueDelete(UiDelete):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    @property
+    def value_summary(self):
+        if self.columns:
+            return {
+                k: {k_: v_ for k_, v_ in v.items() if k_ in self.columns}
+                for k, v in self.value.items()
+            }
+        else:
+            return self.value
+
+    def _update_display(self):
+        with self.out_delete:
+            clear_output()
+            display(preview_yaml_string(yaml.dump(self.value_summary)))
+
+
+BUTTONBAR_CONFIG_TYPES = CrudView(
+    add=CrudOptions(
+        tooltip="Add Issue",
+        tooltip_clicked="Go back to table",
+        button_style="success",
+        message="➕ <i>Add Issue</i>",
+    ),
+    edit=CrudOptions(
+        tooltip="Edit Selected Issue",
+        tooltip_clicked="Go back to table",
+        button_style="warning",
+        message="✏️ <i>Edit Issue</i>",
+    ),
+    copy=CrudOptions(
+        tooltip="Copy Selected Issues",
+        tooltip_clicked="Go back to table",
+        button_style="primary",
+        message="📝 <i>Copy Issue</i>",
+    ),
+    delete=CrudOptions(
+        tooltip="Delete Selected Issues",
+        tooltip_clicked="Go back to table",
+        button_style="danger",
+        message="🗑️ <i>Delete Issue</i>",
+    ),
+)
+
+
+# +
 class IssueHistory(RootModel):
     root: list[Issue]
 
@@ -41,27 +99,24 @@ class IssueGrid(EditGrid):
     def __init__(
         self,
         schema: Union[dict, Type[BaseModel]] = None,
-        value: Optional[list[dict[str, Any]]] = None,
-        by_alias: bool = False,
-        by_title: bool = True,
-        datahandler: Optional[DataHandler] = None,
-        ui_add: Optional[Callable] = None,
-        ui_edit: Optional[Callable] = None,
-        ui_delete: Optional[Callable] = None,
-        ui_copy: Optional[Callable] = None,
-        warn_on_delete: bool = False,
-        show_copy_dialogue: bool = False,
-        close_crud_dialogue_on_action: bool = False,
-        title: str = None,
-        description: str = None,
-        show_title: bool = True,
         **kwargs
     ):
         kwargs["schema"] = IssueHistory
         kwargs["ui_add"] = IssueForm
         kwargs["ui_edit"] = IssueForm
-
+        kwargs["ui_delete"] = IssueDelete
+        kwargs["close_crud_dialogue_on_action"] = True
+        kwargs["warn_on_delete"] = True
+        kwargs["grid_style"] = {"header_background_color": HEADER_BACKGROUND_COLOUR}
         super().__init__(**kwargs)
+        self.buttonbar_grid.crud_view = BUTTONBAR_CONFIG_TYPES
+        self._set_date_desc()
+
+    def _set_date_desc(self):
+        if "Date" not in self.grid.data.columns:
+            raise ValueError("Missing 'Date' from data.")
+        column_index = list(self.grid.data.columns).index("Date") + 1
+        self.grid.transform([{'type': 'sort', 'columnIndex': column_index, 'desc': True}])
 
 
 class DocumentIssueUi(DocumentIssue):
@@ -79,9 +134,9 @@ class DocumentIssueUi(DocumentIssue):
     @field_validator("issue_history")
     @classmethod
     def _issue_history(cls, v):
-        if len(v) == 0:
+        if not v:
             v += [Issue(date=date.today())]
-        return sorted(v, key=lambda d: d.date)
+        return v
 
     model_config = ConfigDict(title="Document Issue")
 
@@ -89,11 +144,6 @@ class DocumentIssueUi(DocumentIssue):
 # -------------------------------------------------------------------------------------
 # ^ HOTFIX: https://github.com/maxfordham/ipyautoui/issues/309
 # -------------------------------------------------------------------------------------
-
-
-# -
-
-from ipyautoui.autoui import WrapSaveButtonBar, AutoUiFileMethods
 
 class DocumentIssueForm(
     AutoObjectForm,
@@ -156,10 +206,6 @@ if __name__ == "__main__":
     project_numbers = {"J5003 - Default Project": 5003, "J5001 - Test Project": 5001}
     map_projects = {v: k.split(" - ")[1] for k, v in project_numbers.items()}
     project_number = 5003
-    ui = get_document_issue_form(project_number, map_projects, path=pathlib.Path("docissue.json"))
+    ui = get_document_issue_form(project_number=project_number, map_projects=map_projects, path=pathlib.Path("docissue.json"))
     # ui.path = pathlib.Path("docissue.json")
     display(ui)
-
-# --
-
-
