@@ -38,7 +38,9 @@ class IssueDelete(UiDelete):
     def _update_display(self):
         with self.out_delete:
             clear_output()
-            display(preview_yaml_string(yaml.dump(self.value_summary)))
+            display(
+                preview_yaml_string(yaml.dump(self.value_summary))
+            )  # TODO: Move to ipyautoui https://github.com/maxfordham/ipyautoui/issues/324
 
 
 BUTTONBAR_CONFIG_TYPES = CrudView(
@@ -94,6 +96,9 @@ class IssueGrid(EditGrid):
         super().__init__(**kwargs)
         self.buttonbar_grid.crud_view = BUTTONBAR_CONFIG_TYPES
         self._set_date_desc()
+        # HOTFIX: Be good to move save message to ipyautoui when `close_crud_dialogue_on_action` set to True
+        self.ui_add.savebuttonbar.bn_save.on_click(self._show_save_message)
+        self.ui_edit.savebuttonbar.bn_save.on_click(self._show_save_message)
 
     def _set_date_desc(self):
         if "Date" not in self.grid.data.columns:
@@ -101,6 +106,11 @@ class IssueGrid(EditGrid):
         column_index = list(self.grid.data.columns).index("Date") + 1
         self.grid.transform(
             [{"type": "sort", "columnIndex": column_index, "desc": True}]
+        )
+
+    def _show_save_message(self, onchange):
+        self.buttonbar_grid.message.value = (
+            f'<i>changes saved: {datetime.now().strftime("%H:%M:%S")}</i>'
         )
 
 
@@ -180,7 +190,7 @@ def get_document_issue_form(
         show_null=True,
         align_horizontal=False,
         display_bn_shownull=False,
-        **kwargs
+        **kwargs,
     )
     return ui
 
