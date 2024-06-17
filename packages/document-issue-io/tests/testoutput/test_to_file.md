@@ -6,7 +6,7 @@ document_description: A description of a Max Fordham Project
 document_code: 06667-MXF-XX-XX-SH-M-20003
 name_nomenclature: project-originator-volume-level-type-role-number
 current_issue:
-    date: 2020-01-02
+    date: 2023-12-01
     revision: P01
     status_code: S0
     status_description: Initial Status
@@ -53,6 +53,8 @@ Fordham LLP\
 +================+====================+
 | OH             | Director in Charge |
 +----------------+--------------------+
+|                | Project Engineer   |
++----------------+--------------------+
 
 : {tbl-colwidths="[30,70]"}
 
@@ -62,13 +64,12 @@ Fordham LLP\
 
 ### Issue History
 
-+------------+-----------+--------------+-------------------+-----------------------+
-| **Date**   | **Rev**   | **Status**   | **Description**   | **Issue Notes**       |
-+============+===========+==============+===================+=======================+
-| 02 JAN 20  | P01       | S0           | Initial Status    | This is an issue note |
-+------------+-----------+--------------+-------------------+-----------------------+
++------------+-----------+--------------+--------------------------+-----------------------+--------------+
+| **Date**   | **Rev**   | **Status**   | **Description**          | **Issue Notes**       | **Author**   |
++============+===========+==============+==========================+=======================+==============+
+| 01 DEC 23  | P01       | S2           | Suitable for information | This is an issue note | OH           |
++------------+-----------+--------------+--------------------------+-----------------------+--------------+
 
-: {tbl-colwidths="[12,5,7.5,30,45.5]"}
 
 
 ### Notes

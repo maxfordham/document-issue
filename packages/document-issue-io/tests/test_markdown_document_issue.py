@@ -1,8 +1,10 @@
 import pytest
 import shutil
+import datetime
 from polyfactory.factories.pydantic_factory import ModelFactory
 
-from document_issue.document_issue import DocumentIssue
+from document_issue.document_issue import DocumentIssue, Issue
+from document_issue.issue import StatusRevisionEnum
 from document_issue_io.markdown_document_issue import (
     MarkdownDocumentIssue,
     document_issue_md_to_pdf,
@@ -162,7 +164,57 @@ class TestDocumentIssueMdToPdf:
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
         document_issue.document_role = document_issue.document_role * 5
-        document_issue.issue_history = document_issue.issue_history * 10
+        document_issue.issue_history = document_issue.issue_history * 5
+        document_issue.issue_history += [
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S1_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S2_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S3_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S4_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S5_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S6_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S7_P,
+                date=datetime.date(2024, 1, 1),
+            ),
+            Issue(
+                author="OH",
+                checked_by="JG",
+                status_revision=StatusRevisionEnum.S8_P,
+                date=datetime.date(2024, 1, 2),
+            ),
+        ]
         document_issue.notes[2] = document_issue.notes[2] * 5
         document_issue.notes = document_issue.notes * 5
         document_issue.format_configuration.output_author = True

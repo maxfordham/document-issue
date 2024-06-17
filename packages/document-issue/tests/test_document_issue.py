@@ -1,4 +1,4 @@
-from document_issue.document_issue import Issue
+from document_issue.document_issue import DocumentIssue, Issue
 from document_issue.issue import StatusRevisionEnum
 
 
@@ -14,3 +14,26 @@ def test_StatusRevisionEnum():
     for enum in StatusRevisionEnum:
         issue = Issue(status_revision=enum)
         assert issue
+
+
+def test_current_issue():
+    """Test that the current issue property gets the latest issue (by date)."""
+    document_issue = DocumentIssue()
+    document_issue.issue_history = [
+        Issue(
+            revision="P01",
+            status_revision=StatusRevisionEnum.S0_P,
+            date="2021-01-01",
+        ),
+        Issue(
+            revision="P02",
+            status_revision=StatusRevisionEnum.S2_P,
+            date="2021-01-02",
+        ),
+        Issue(
+            revision="P03",
+            status_revision=StatusRevisionEnum.S3_P,
+            date="2021-01-03",
+        ),
+    ]
+    assert document_issue.current_issue.status_revision == StatusRevisionEnum.S3_P.value

@@ -138,7 +138,11 @@ def construct_title_block_data(
             "",
             document_issue.current_issue.status_code,
             document_issue.current_issue.revision,
-            document_issue.current_issue.status_description,
+            document_issue.current_issue.status_description.replace(
+                "Suitable for ", ""
+            ).replace(
+                "Issued for ", ""
+            ),  # TODO: Need to deal with length of status codes more robustly
             "",
             "",
             document_code,
