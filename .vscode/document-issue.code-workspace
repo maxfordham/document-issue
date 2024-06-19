@@ -18,6 +18,9 @@
         },
         {
             "path": "../packages/document-issue-ui"
+        },
+        {
+            "path": "../packages/issue-sheet"
         }
     ],
     "settings": {
