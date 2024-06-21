@@ -189,10 +189,13 @@ class DocumentMetadataMap(BaseModel):
     size: dict[str, str]
     status: dict[str, str]
     issue_format: dict[str, str]
-    document_source: dict[str, str]
+    doc_source: dict[str, str]
     classification_uniclass: dict[DrwgClassificationCode, UniclassClassificationCode]
     # role: dict[DrwgClassificationCode, str]
     # info_sub_type: dict[str, str]
+    
+class LookupData(DocumentCodesMap, DocumentMetadataMap):
+    pass
     
 class DocumentCodeSpec(BaseModel):
     # regex: DocumentCodesRegex
@@ -214,24 +217,28 @@ class IssueSheetConfig(BaseModel):
     
     
 def get_table_data(name: str) -> dict:
-    if name == "role":  
-        print("role")
-        
-    
     data = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand='table').value
     return data[f"{name}_des"].to_dict()
 
-def get_map_codes() -> DocumentCodesMap:
+def get_lookup_data() -> DocumentCodesMap: # get_lookup_data
     names = [k for k in list(DocumentCodeParts.__members__.keys()) if k != "sequence"]
+    names = names + [stringcase.camelcase(f) for f in DocumentMetadataMap.model_fields.keys() if f not in ["classification_uniclass"]]
     sheet_names = [s.name for s in xw.sheets]
     names = [n for n in names if n in sheet_names]
-    data = {n: get_table_data(n) for n in names}
+    data = {stringcase.snakecase(n): get_table_data(n) for n in names}
     
+    # classification_uniclass
+    name = "classification"
+    df = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand='table').value
+    data[f"classification_uniclass"] = df[f"uniclass_classification"].to_dict()
+    
+    # sequence
     name = "sequence"
     type_sequences = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand='table').value
     type_sequences = type_sequences.to_dict()
     type_sequences = {k: {_k:_v for _k, _v in v.items() if _v is not None} for k, v in type_sequences.items()}
-    return DocumentCodesMap(**data|type_sequences)
+    data["type_sequences"] = type_sequences
+    return LookupData(**data | type_sequences)
 
 import stringcase
 
@@ -241,19 +248,21 @@ def get_issues(data):
     #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
     return [c for c in data.columns if re.match(match_str, c) is not None]
 
-map_codes = get_map_codes()
+lookup = get_lookup_data()
 projectinfo = project_info()
-config = user_config(projectinfo.get("Job Number"))
+config = user_config(projectinfo.get("Job Number")) # define this in the UI
 data = get_pandas_data()
 li_issues = get_issues(data)
 doc_revs = data["Current Rev"].to_dict()
 doc_descriptions = data[[c for c in data.columns if c not in li_issues+["Current Rev"]]].T.to_dict()
 doc_issues = data[li_issues].T.to_dict()
-
 dist_data = get_distribution_data(li_issues=li_issues)
 print("data loaded")
 
 
+
+
+import pathlib
 ### THE INTERFACE fpor the wizard###
 class DialogWindow(MFTk):
     ''' This is the window that will appear on top of excel to control saving
@@ -287,7 +296,11 @@ class DialogWindow(MFTk):
         self.open_on_save.set(self.config["open_on_save"])
         self.check_on_save = tkinter.BooleanVar(self)
         self.check_on_save.set(self.config["check_on_save"])
+        
         self.outgoingfolder = ""
+        if pathlib.Path(r"C:\Users\j.gunstone\Desktop\dgn").exists():
+            self.outgoingfolder = r"C:\Users\j.gunstone\Desktop\dgn"
+        
         self.sid_info = sid_info()
         self.status_info = status_info()
         self.last_col = None
@@ -333,21 +346,23 @@ class DialogWindow(MFTk):
         except:
             warning_messagebox(message="Something has gone wrong with your distribution table. You probably haven't expanded it to the correct size to match the document revision information.", title="Distribution Table Error")
             self._quit()
-
-    def cols_to_plot(self, history=False, part=-1):
+            
+    
+    @staticmethod
+    def cols_to_plot(history=False, part=-1, max_cols_in_part=MAX_COLS_IN_PART, selected_issues=[], li_issues=[]):
         '''get the columns to include in the pdf from the listbox'''
 
         if part>0:
-            startindex = (part-1)*self.max_cols_in_part.get()
-            endindex = part*self.max_cols_in_part.get()
-            return DEFAULT_COLS + self.dates()[startindex:endindex]
+            startindex = (part-1)*max_cols_in_part.get()
+            endindex = part*max_cols_in_part.get()
+            return DEFAULT_COLS + li_issues[startindex:endindex]
 
         if history: 
-            return DEFAULT_COLS + self.dates()
+            return DEFAULT_COLS + li_issues
 
         cols = []
-        for i in map(int, self.listbox.curselection()):
-            cols.append(self.dates()[i])
+        for i in map(int, selected_issues):
+            cols.append(li_issues[i])
         return DEFAULT_COLS + cols
 
     def document_number(self, history, part, add_space=False):  # TODO: fix this
@@ -526,7 +541,9 @@ class DialogWindow(MFTk):
                 else:
                     missing_from_issue.append(basename)
 
-        cols = self.cols_to_plot(False)
+        cols = self.__class__.cols_to_plot(history=False,
+                 selected_issues=self.listbox.curselection(), 
+                 li_issues=li_issues)
         self.last_col = last_col = cols[-1]
         if last_col not in self.dates(): warning_messagebox("No Specific Issue selected", "Input error")
         mask = self.data[last_col].str.len() >= 1
@@ -551,45 +568,18 @@ class DialogWindow(MFTk):
         warning_messagebox(message=msg, title="Document Check Results")
 
     def day_month_year_status(self, index, history):
-        cols_to_plot = self.cols_to_plot(history=history)[index]
+        cols_to_plot = self.__class__.cols_to_plot(history=history,
+                 selected_issues=self.listbox.curselection(), 
+                 li_issues=li_issues)[index]
         d = cols_to_plot[6:8]
         m = cols_to_plot[4:6]
         y = cols_to_plot[2:4]
         s = cols_to_plot[9:]
         return d, m, y, s
+    
+# def create_issue_sheet(fname, history=False, part=-1))
 
-    def output_doc(self, fname, history=False, part=-1):
 
-        self.document.filename = fname
-        if not self.document.filename: 
-            return False
-        #data_list is a list of lists containing the cells of the final table.
-        #sid_style is the additional styling applied to the cells over and above the standard.
-        data_list, sid_style = self.data_table(history, part)
-        headings = self.create_heading(self.cols_to_plot(history=history, part=part))
-        try:
-            data_list, sid_style = self.distribution_table(data_list, sid_style, history, part)
-        except Exception as exc:
-            message = "Potential problem with distribution table - expand manually to be same size as Revisions table \n"
-            warning_messagebox(message=message+str(exc), title="Distribution Table Error")
-            return False
-        cw = self.get_column_widths()
-        projectinfo_list = self.project_info_list()
-        titleblockdata = self.construct_title_block(history=history, part=part)
-        tstyle = self.tablestyle(history, sid_style, data_list, headings)
-        self.document = issue_sheet(data_list,
-                                        self.document,
-                                        infodata=projectinfo_list,
-                                        titleblockdata = titleblockdata,
-                                        headings=headings,
-                                        tablestyle=tstyle,
-                                        col_widths = cw[:3])
-        try:
-            pass
-        except Exception as exc:
-            warning_messagebox(message=exc, title="PDF Creation Error")
-            return False
-        return True
 
     def project_info_list(self):
         ''' unused '''
@@ -601,17 +591,22 @@ class DialogWindow(MFTk):
         infodata.append([self.document.address_compact[2], "", "", ""])
         return infodata
 
-    def data_table(self, history, part):
-        cols = self.cols_to_plot(history=history, part=part)
+    def data_table(self, history, part):       
+        cols = self.__class__.cols_to_plot(history=history,
+                 selected_issues=self.listbox.curselection(), 
+                 li_issues=li_issues, part=part)
         self.last_col = last_col = cols[-1]
         data_tmp = self.data.sort_values("System Identifier Description")
         data_list = [] #this is a list of rows in the table. #list for styling output.
         sid_style = []
 
-        df_cat = self.data[["System Identifier", "uniclass"]].set_index("System Identifier")
-        for isid, uniclass in enumerate(self.sid_info['uniclass_classification']):
-        # for isid, uniclass in enumerate(df_cat):
-            sid = self.sid_info['classification_des'].iloc[isid]
+        uniclass_classifications = sorted(list(set([d["uniclass"] for d in doc_descriptions.values()])))
+        map_uniclass_description =  {v: lookup.classification[k] for k, v in lookup.classification_uniclass.items()}
+        # for isid, uniclass in enumerate(self.sid_info['uniclass_classification']):
+            
+        for isid, uniclass in enumerate(uniclass_classifications):
+            # sid = self.sid_info['classification_des'].iloc[isid]
+            sid = map_uniclass_description[uniclass]
             if uniclass == "N/A": 
                 uniclass = ""
 
@@ -638,16 +633,17 @@ class DialogWindow(MFTk):
 
     def distribution_table(self, data_list, sid_style, history, part):
         ###LET's Do the Distribution List
-        cols = self.cols_to_plot(history=history, part=part)
+        cols = self.__class__.cols_to_plot(history=history,
+                 selected_issues=self.listbox.curselection(), 
+                 li_issues=li_issues, part=part)
+        
         data_list += [[""]] #blank line
         sid_style += dist_line_style(4+len(data_list))
         data_list += [["Distribution"]]
         sid_style += dist_line_style(4+len(data_list))
         distcols = ['Name']*len(DEFAULT_COLS) + [x for x in cols if not x in DEFAULT_COLS]
-
         for i, line in enumerate(self.dist_data[distcols].values.tolist()):
             sid_style.append(('SPAN', (0, 5+len(data_list)+i), (len(DEFAULT_COLS)-1, 5+len(data_list)+i)))
-
         data_list += self.dist_data[distcols].values.tolist()
         return data_list, sid_style
 
@@ -657,15 +653,49 @@ class DialogWindow(MFTk):
         except Exception as exc: warning_messagebox(message=exc, title="Column Width Error")
         if len(cw) != 3: warning_messagebox(message="Must define three columns widths separated by a comma", title="Column Width Error")
         return cw
+    
+    def output_doc(self, fname, history=False, part=-1):
+
+        self.document.filename = fname
+        if not self.document.filename: 
+            return False
+        #data_list is a list of lists containing the cells of the final table.
+        #sid_style is the additional styling applied to the cells over and above the standard.
+        data_list, sid_style = self.data_table(history, part)
+        cols_to_plot = self.__class__.cols_to_plot(history=history,
+                 selected_issues=self.listbox.curselection(), 
+                 li_issues=li_issues, part=part)
+        headings = self.create_heading(cols_to_plot)
+        try:
+            data_list, sid_style = self.distribution_table(data_list, sid_style, history, part)
+        except Exception as exc:
+            message = "Potential problem with distribution table - expand manually to be same size as Revisions table \n"
+            warning_messagebox(message=message+str(exc), title="Distribution Table Error")
+            return False
+        cw = self.get_column_widths()
+        titleblockdata = self.construct_title_block(history=history, part=part)
+        tstyle = self.tablestyle(history, sid_style, data_list, headings)
+        self.document = issue_sheet(data_list,
+                                        self.document,
+                                        titleblockdata = titleblockdata,
+                                        headings=headings,
+                                        tablestyle=tstyle,
+                                        col_widths = cw[:3])
+        try:
+            pass
+        except Exception as exc:
+            warning_messagebox(message=exc, title="PDF Creation Error")
+            return False
+        return True
 
     def save(self):
         ''' create and save the pdf file'''
-        
         
         self.update_config()
         if self.check_on_save.get():
             if not self.compare_docs(): 
                 return False
+            
 
         filescreated = []
         #output doc.
@@ -693,16 +723,13 @@ class DialogWindow(MFTk):
             else: 
                 filescreated.append(self.savefilenamehistory)
 
-        self.create_links(self.cols_to_plot()[-1])
         info_messagebox(message="Documents saved:\n" + "\n".join(filescreated))
         if self.open_on_save.get():
             for file_created in filescreated:
                 show_file(file_created)
-
-        #click("create_pdf", "DocumentIssue", self.job_number_as_int())
         return self.document
 
-    def create_links(self, last_col):
+    def create_links(self, last_col): # TODO: delete ... not req. / no one uses it
         ''' add some hyperlinks to the spreadsheet'''
         iov = index_of_value("Document Number", '1. Document Numbering')
         excel_col = iov[1] + 1 +list(self.data.columns.values).index(last_col) #add three to get it back on track.
@@ -711,7 +738,8 @@ class DialogWindow(MFTk):
         if self.outgoingfolder:
             xw.sheets['1. Document Numbering'].range(iov[0]-1, excel_col).value = "=hyperlink(\"" + self.outgoingfolder + "\", \"Outgoing Folder\")"
 
-    def create_heading(self, cols_to_plot):
+    @staticmethod
+    def create_heading(cols_to_plot):
         ''' format the thing that goes at the top '''
         headings = [[""]*len(cols_to_plot) + [""],
                     [""]*len(cols_to_plot),
