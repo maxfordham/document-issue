@@ -20,7 +20,7 @@ from mf_reportlab.mf_styles import p_nospace, get_titleblockimage
 from mf_reportlab.mf_styles import dist_line_style, sid_line_style, small_grey_style
 from constants import address_from_loc, address_from_loc_compact, OFFICES
 from d_i_ui import warning_messagebox
-from d_i_gui import DialogWindow, NumGeneratorWindow, run, generate_numbers
+from d_i_gui import DialogWindow, NumGeneratorWindow, run
 
 from datetime import datetime
 gettime = lambda: datetime.now().strftime('%H-%M-%S')

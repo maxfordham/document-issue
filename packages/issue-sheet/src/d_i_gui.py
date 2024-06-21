@@ -12,6 +12,7 @@ from d_i_functions import *
 import tkinter
 from tkinter import END, RIGHT, LEFT, EXTENDED, MULTIPLE, Scrollbar, VERTICAL, Y, X, BOTH, Text, Entry, BOTTOM
 from textwrap import wrap
+from pydantic import BaseModel
 
 def run():
     ''' go go go!!!!'''
@@ -19,10 +20,10 @@ def run():
     main_window.mainloop()
     return True
 
-def generate_numbers(jn):
-    main_window = NumGeneratorWindow(None, jn)
-    main_window.mainloop()
-    return True
+# def generate_numbers(jn):
+#     main_window = NumGeneratorWindow(None, jn)
+#     main_window.mainloop()
+#     return True
 
 class NumGeneratorWindow(MFTk):
 
@@ -113,22 +114,144 @@ class IssueSheet:
     def __init__(self):
         pass
 
+# mapping tables
+from typing import Any, List
+import typing as ty
+from typing_extensions import Annotated
+from pydantic.functional_validators import AfterValidator
 
-class GetData:
-    def __init__(self):
-        self.projectinfo = project_info()
-        self.config = user_config(self.projectinfo.get("Job Number"))
-        self.data = get_pandas_data()
-        self.li_issues = self.get_issues()
-        self.dist_data = get_distribution_data(li_issues=self.li_issues)
-        
-        
-    def get_issues(self):
-        '''work out which columns are dates'''
-        match_str = r"^20(\d{2}\d{2}\d{2})-.*$" # string match date format 20YYMMDD-...
-        #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
-        return [c for c in self.data.columns if re.match(match_str, c) is not None]
+DRWG_CLASSIFICATION_CODE_REGEX = r"^[A-Z]{1}-[0-9]{2}$" # TODO: make configurable on a project basis
+UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$" # TODO
+DrwgClassificationCode = Annotated[str, AfterValidator(lambda s: re.match(DRWG_CLASSIFICATION_CODE_REGEX, s)) is not None]
+UniclassClassificationCode = Annotated[str, AfterValidator(lambda s: re.match(DRWG_CLASSIFICATION_CODE_REGEX, s)) is not None]
 
+from typing import Annotated, Hashable, List, TypeVar
+from typing import Optional
+from pydantic_core import PydanticCustomError
+from pydantic import AfterValidator, Field, ValidationError
+from pydantic.type_adapter import TypeAdapter
+import enum
+
+T = TypeVar('T', bound=Hashable)
+
+# class DocumentCodesRegex(BaseModel):    
+#     project: str = DRWG_CLASSIFICATION_CODE_REGEX
+#     originator: str = r"^.*$"
+#     classification: str = r"^.*$"
+#     info_type: str = r"^.*$"
+#     drwg_type: str = r"^.*$"
+#     volume: str = r"^.*$"
+#     level: str = r"^.*$"
+#     sequence: str = r"^.*$"
+#
+# class DocumentCodesExtraRegex(BaseModel):
+#     classification_uniclass: str =  UNICLASS_CLASSIFICATION_CODE_REGEX
+#     classification_role: str = r"^.*$"
+#
+# NOTE: ^ maybe regex not req. as we are using enums
+
+def _validate_unique_list(v: list[T]) -> list[T]:
+    if len(v) != len(set(v)):
+        raise PydanticCustomError('unique_list', 'List must be unique')
+    return v
+
+UniqueList = Annotated[List[T], AfterValidator(_validate_unique_list), Field(json_schema_extra={'uniqueItems': True})]
+
+class DocumentCodeParts(enum.Enum):
+    project: str = "project"
+    originator: str = "originator"
+    role: str = "role"
+    classification: str = "classification"
+    type: str = "type" # info_type
+    subtype: str = "subtype" # drwg_type
+    volume: str = "volume"
+    level: str = "level"
+    sequence: str = "sequence" # remove?
+
+
+class DocumentCodesMap(BaseModel): #MapDocumentCodeDescription
+    project: dict[str, str]
+    originator: dict[ty.Literal["MXF"], ty.Literal["Max Fordham LLP"]]
+    # role: dict[str, str]
+    classification: dict[str, str]
+    type: dict[str, str]
+    # drwg_type: dict[int, str]  # info_sub_type
+    volume: dict[str, str]
+    level: dict[str, str]
+    type_sequences: Optional[dict[str, dict[str, str]]] = None  # info_type_sequences
+    
+    nested_codes: dict[DocumentCodeParts, tuple[str]] = {"classification": ("role", "subrole"), "type": ("type", "subtype")}
+    nested_codes_delimiter: str = "-"
+
+
+class DocumentMetadataMap(BaseModel):
+    scale: dict[str, str]
+    size: dict[str, str]
+    status: dict[str, str]
+    issue_format: dict[str, str]
+    document_source: dict[str, str]
+    classification_uniclass: dict[DrwgClassificationCode, UniclassClassificationCode]
+    # role: dict[DrwgClassificationCode, str]
+    # info_sub_type: dict[str, str]
+    
+class DocumentCodeSpec(BaseModel):
+    # regex: DocumentCodesRegex
+    order: UniqueList[DocumentCodeParts] = Field(max_length=len(DocumentCodeParts.__members__))
+    map_codes: DocumentCodesMap
+    map_metadata: DocumentMetadataMap
+    
+class Recipient(BaseModel):
+    name: str
+    email: str
+    role: str
+    
+class DistributionList(BaseModel):
+    recipients: List[Recipient]
+
+    
+class IssueSheetConfig(BaseModel):
+    pass
+    
+    
+def get_table_data(name: str) -> dict:
+    if name == "role":  
+        print("role")
+        
+    
+    data = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand='table').value
+    return data[f"{name}_des"].to_dict()
+
+def get_map_codes() -> DocumentCodesMap:
+    names = [k for k in list(DocumentCodeParts.__members__.keys()) if k != "sequence"]
+    sheet_names = [s.name for s in xw.sheets]
+    names = [n for n in names if n in sheet_names]
+    data = {n: get_table_data(n) for n in names}
+    
+    name = "sequence"
+    type_sequences = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand='table').value
+    type_sequences = type_sequences.to_dict()
+    type_sequences = {k: {_k:_v for _k, _v in v.items() if _v is not None} for k, v in type_sequences.items()}
+    return DocumentCodesMap(**data|type_sequences)
+
+import stringcase
+
+def get_issues(data):
+    '''work out which columns are dates'''
+    match_str = r"^20(\d{2}\d{2}\d{2})-.*$" # string match date format 20YYMMDD-...
+    #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
+    return [c for c in data.columns if re.match(match_str, c) is not None]
+
+map_codes = get_map_codes()
+projectinfo = project_info()
+config = user_config(projectinfo.get("Job Number"))
+data = get_pandas_data()
+li_issues = get_issues(data)
+doc_revs = data["Current Rev"].to_dict()
+doc_descriptions = data[[c for c in data.columns if c not in li_issues+["Current Rev"]]].T.to_dict()
+doc_issues = data[li_issues].T.to_dict()
+
+dist_data = get_distribution_data(li_issues=li_issues)
+print("data loaded")
 
 
 ### THE INTERFACE fpor the wizard###
@@ -138,7 +261,7 @@ class DialogWindow(MFTk):
 
     def __init__(self, parent):
         MFTk.__init__(self, parent)
-        data = GetData()
+        
         self.title("Document Issue")
         self.parent = parent
         self.projectinfo = project_info()
@@ -159,12 +282,7 @@ class DialogWindow(MFTk):
             self.max_cols_in_part.set(self.config["max_cols_in_part"])
         except:
             self.max_cols_in_part.set(MAX_COLS_IN_PART)
-        self.lookupdata = {} #table containing all the lookup tables
-        try:
-            for l in SHEETTABLEDICT:
-                self.lookupdata[l[0]] = table_info(l[0], l[1], l[2])
-        except:
-            pass
+
         self.open_on_save = tkinter.BooleanVar(self)
         self.open_on_save.set(self.config["open_on_save"])
         self.check_on_save = tkinter.BooleanVar(self)
@@ -248,8 +366,6 @@ class DialogWindow(MFTk):
         #TODO popout to allow custom document number.
         return doc_numb
 
-    def generate_numbers(self):
-        generate_numbers(self.job_number_as_int())
 
     def initialise(self):
         '''create the interface'''
@@ -257,12 +373,6 @@ class DialogWindow(MFTk):
         MFHeader(self, text="Document Issue").pack(fill=BOTH)
         MFLabelBlack(self, text=TITLETEXT).pack(fill=BOTH)
         MFButton(text="Help ‽", command=gotohelp, width=10).pack(fill=BOTH)
-
-        ###Import/Generate Doc Numbers###
-        numberconfig = MFLabelFrame(self, text="Import/Generate Doc Numbers", padx=5, pady=5)
-        numberconfig.pack(fill=X)
-        MFButton(master=numberconfig, text="Generate Doc Numbers", command=self.generate_numbers, width=25).pack(side=BOTTOM)
-        #MFButton(master=numberconfig, text="Import from Revit", command=self.import_from_revit, width=25).pack(side=BOTTOM)
 
         ###Config information###
         groupconfig = MFLabelFrame(self, text="Config", padx=5, pady=5)
@@ -623,73 +733,6 @@ class DialogWindow(MFTk):
             headings[4][i] = DEFAULT_TITLES[i]
         return headings
 
-    def import_from_revit(self):
-        if len(self.lookupdata.keys()) < 1:
-            warning_messagebox("Newer version of the spreadsheet is required", "Import problem")
-            return False
-        fname = getfilename(filetypes=(("excel files","*.xlsx, .xls"),("all files","*.*")))
-        if not fname: return False
-
-        df = pd.read_excel(fname, sheet_name="Printing Sheets")
-        headerrow = index_of_value(SHEETTABLEDICT[0][3], '1. Document Numbering')[0] #so we know where to insert the new row
-        for i in range(len(df)):
-            try:
-                item = self.construct_doc_item(df.iloc[i])
-                add_doc(headerrow + len(self.data), SHEETTABLEDICT, item)
-            except Exception as e:
-                warning_messagebox(str(e) + " not found in lookup tables try adding it to the relevant one.", "Import Error")
-        #construct items from row in table.
-        #click("import_revit", "DocumentIssue", self.job_number_as_int())
-        return df
-
-    def add_key(self, line, key):
-        rowcol = index_of_value(line[1], line[0])
-        rowcol = (rowcol[0] + 1, rowcol[1])
-        xw.sheets[line[0]].range(str(rowcol[0])+":" + str(rowcol[0])).api.Insert(xw.constants.InsertShiftDirection.xlShiftToRight)
-        xw.sheets[line[0]].range(rowcol).value = str(key)
-        rowcol = (rowcol[0], rowcol[1] + 1)
-        xw.sheets[line[0]].range(rowcol).value = str(key)
-        ###reload
-        self.lookupdata[line[0]] = table_info(line[0], line[1], line[2])
-
-    def construct_doc_item(self, item):  # only used by the revit link which is not in use
-        #i is a list from excel.
-        res = []
-        for i, line in enumerate(SHEETTABLEDICT):
-            r = ""
-            if line[2]: #dealing with a dict
-                keys = self.lookupdata[line[0]].keys()
-                pandaskey = line[4]
-                if pandaskey:
-                    d = item[pandaskey]
-                    #handle ech one individually.
-                    if line[0] == "volume" or line[0] == "level":
-                        k = str(d)
-                        if len(k) == 1: k = "0" + k
-                        if k not in keys: self.add_key(line, k)
-                        r = self.lookupdata[line[0]][k]
-                    elif line[0] == "drwgType":
-                        r = str(d)[-3]
-                else: #we have some exceptions
-                    if line[0] == "project" or line[0] == "originator":
-                        k = list(keys)[-1]
-                        r = self.lookupdata[line[0]][k] #get the last one
-                    if line[0] == "infoType":
-                        r = "Drawing" #revit always will export a drawing.
-            else: #we have a dataframe in the lookup table.
-                pandaskey = line[4]
-                d = item[pandaskey]
-                d = str(d).replace("_0", "_00")
-                if line[0] == "classification":
-                    k = d[:14]
-                    data = self.lookupdata[line[0]]
-                    selected_row = data[data['uniclass_classification']==k].iloc[0]
-                    r = selected_row['classification_des']
-                elif line[0] == "sequence":
-                    r = str(d)[-2:]
-            res.append(r)
-
-        return res
 
     def _quit(self):
         self.update_config()
