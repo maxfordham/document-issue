@@ -5,22 +5,12 @@ Created on Fri Feb  14 13:37:03 2019
 @author: o.beckett
 """
 
-import sys, getopt
+import sys
 import pathlib
 import xlwings as xw
-import pandas as pd
-import math as math
-from reportlab.lib import colors
-from d_i_ui import warning_messagebox, info_messagebox, getsavefilename, getfoldername
-from d_i_ui import MFButton, MFLabelFrame, MFLabel, MFLabelBlack
-from d_i_ui import MFHeader, MFOptionMenu, MFCheckButton, MFTk
-from mf_reportlab.issuesheet_reportlab import issue_sheet
-from mf_reportlab.mf_styles import MFDoc, DEFAULTTABLESTYLE, highlight_last_format
-from mf_reportlab.mf_styles import p_nospace, get_titleblockimage
-from mf_reportlab.mf_styles import dist_line_style, sid_line_style, small_grey_style
-from constants import address_from_loc, address_from_loc_compact, OFFICES
 from d_i_ui import warning_messagebox
-from d_i_gui import DialogWindow, NumGeneratorWindow, run
+from d_i_gui import run
+
 
 from datetime import datetime
 gettime = lambda: datetime.now().strftime('%H-%M-%S')
