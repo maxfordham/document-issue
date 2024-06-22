@@ -186,7 +186,7 @@ def get_pandas_data():
             res['Document Number'] = res.index
         res = res[res['Document Number'] != -2146826246]
         cols_to_remove = list(set(res.columns).intersection(map(str, range(0, 999))))
-        cols_to_remove += [x for x in res.columns if "Column" in x or "blank" in x or "→" in x]
+        cols_to_remove += [x for x in res.columns if "Column" in x or "blank" in x or "→" in x or "?" in x or "Add to " in x]
         res = res.sort_values('Document Number')
         res = res.dropna(subset=["Document Number"])
         pd.options.display.float_format = '{:,.0f}'.format
