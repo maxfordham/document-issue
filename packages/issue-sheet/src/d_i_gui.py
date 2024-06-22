@@ -2,10 +2,11 @@
 """
 Created on Tue May 14 13:37:03 2019
 
-@author: o.beckett
+@author: o.beckett, j.gunstone
 """
 
 import time
+import pathlib
 import re
 from d_i_functions import *
 #from mf_modules.tool_usage_tracking import click
@@ -248,6 +249,227 @@ def get_issues(data):
     #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
     return [c for c in data.columns if re.match(match_str, c) is not None]
 
+
+class BuildIssueSheet:
+
+    @staticmethod
+    def cols_to_plot(history=False, part=-1, max_cols_in_part=MAX_COLS_IN_PART, selected_issues=[], li_issues=[]):
+        '''get the columns to include in the pdf from the listbox'''
+
+        if part>0:
+            startindex = (part-1)*max_cols_in_part
+            endindex = part*max_cols_in_part
+            return DEFAULT_COLS + li_issues[startindex:endindex]
+
+        if history: 
+            return DEFAULT_COLS + li_issues
+
+        cols = []
+        for i in map(int, selected_issues):
+            cols.append(li_issues[i])
+        return DEFAULT_COLS + cols
+
+    @staticmethod
+    def document_number(history, part, project_code, add_space=False):  # TODO: fix this
+        ''' number has the form VWXYZ '''
+        VW = "00" #by definition
+        if history:
+            if part < 1: XYZ = "001"
+            elif part<10: XYZ = "00" + str(int(part))
+            else: XYZ = "0" + str(int(part))
+        else:
+            # XYZ = str(int(self.listbox.curselection()[0] + 100))
+            XYZ = "100"
+        doc_numb = project_code + "  -  MXF  -  XX  -  XX  -  IS  -  J  -  " + VW + XYZ
+        if not add_space: 
+            return doc_numb.replace(" ", "")
+
+        #TODO popout to allow custom document number.
+        return doc_numb
+    
+    @staticmethod
+    def construct_title_block(history, part, selected_issues, li_issues, projectinfo, config):
+        ''' title block for the document'''
+        d, m, y, s = BuildIssueSheet.day_month_year_status(-1, history, selected_issues=selected_issues, li_issues=li_issues)
+        try:
+            status_description = lookup.status[s].split(" - ")[2]
+        except:
+            status_description = ""
+            warning_messagebox(s + " - status not found in lookup table, consider checking", "Status Warning")
+
+        if history:
+            part_str = str(part)
+            if part_str:
+                doc_title = " History: Part " + part_str
+            else:
+                doc_title = " History"
+        else:
+            doc_title = "\n" + d + "/" + m + "/" + y + " - " + s
+        project_code = projectinfo.get("Project Code")
+        data = []
+        data.append([get_titleblockimage(config['office']), "", "", "client", "", "", "project", "", "", "document title", "", ""])
+        data.append(["", "", "", projectinfo.get("Client Name"), "", "", projectinfo.get("Project Name"), "", "", "Document Issue Sheet" + doc_title, "", ""])
+        data.append(["", "", "", "job no.", "project leader", "scale at A3", "", "", "", "", "", ""])
+        data.append(["", "", "",  projectinfo.get("Job Number"), projectinfo.get("Project Leader") ,"NTS", "", "", "", "", "", ""])
+        data.append(["", "", "", "status code and description", "", "", "issue date", "classification", "revision", projectinfo.get("Naming Convention"), "", ""])
+        data.append(["", "", "", s + status_description, "", "", d + "/" + m + "/" + y, "-", "-", BuildIssueSheet.document_number(history, part, project_code, add_space=True), "", ""])
+        return data    
+
+
+    @staticmethod
+    def day_month_year_status(index, history, selected_issues=[], li_issues=[]):
+        cols_to_plot = BuildIssueSheet.cols_to_plot(history=history,
+                 selected_issues=selected_issues,
+                 li_issues=li_issues)[index]
+        d = cols_to_plot[6:8]
+        m = cols_to_plot[4:6]
+        y = cols_to_plot[2:4]
+        s = cols_to_plot[9:]
+        return d, m, y, s
+
+    @staticmethod
+    def data_table(history, part, selected_issues, li_issues, data):       
+        cols = BuildIssueSheet.cols_to_plot(history=history,
+                 selected_issues=selected_issues, 
+                 li_issues=li_issues, part=part)
+        last_col = cols[-1]
+        data_tmp = data.sort_values("System Identifier Description")
+        data_list = [] #this is a list of rows in the table. #list for styling output.
+        sid_style = []
+
+        uniclass_classifications = sorted(list(set([d["uniclass"] for d in doc_descriptions.values()])))
+        map_uniclass_description =  {v: lookup.classification[k] for k, v in lookup.classification_uniclass.items()}
+            
+        for uniclass in uniclass_classifications:
+            sid = map_uniclass_description[uniclass]
+            if uniclass == "N/A": 
+                uniclass = ""
+
+            df = data_tmp[data_tmp["System Identifier Description"] == sid].sort_values('Document Number')
+            if history: 
+                mask = df["Current Rev"].str.len() > 0
+            else: 
+                mask = df[last_col].str.len() >= 1
+
+            if df.loc[mask, cols].values.tolist():
+                data_list += [[p_nospace("{0}    {1}".format(sid,uniclass), [])]]
+                sid_style += sid_line_style(4+len(data_list))
+                data_list += format_data_rows(df.loc[mask, cols].values.tolist()) #This is where they get added.
+                data_list += [[""]*len(cols)]
+
+        return data_list, sid_style
+
+    @staticmethod
+    def tablestyle(history, sid_style, data_list, headings):
+        if history:
+            tablestyle = highlight_last_format(headings+data_list, startrow=5, rev_position=len(DEFAULT_COLS)-1) + sid_style
+        else:
+            tablestyle = DEFAULTTABLESTYLE(defaultcols = len(DEFAULT_COLS)-1) + sid_style
+        return tablestyle
+
+    @staticmethod
+    def distribution_table(dist_data, data_list, sid_style, history, part, selected_issues, li_issues):
+        ###LET's Do the Distribution List
+        cols = BuildIssueSheet.cols_to_plot(history=history,
+                 selected_issues=selected_issues, 
+                 li_issues=li_issues, part=part)
+        
+        data_list += [[""]] #blank line
+        sid_style += dist_line_style(4+len(data_list))
+        data_list += [["Distribution"]]
+        sid_style += dist_line_style(4+len(data_list))
+        distcols = ['Name']*len(DEFAULT_COLS) + [x for x in cols if not x in DEFAULT_COLS]
+        for i, line in enumerate(dist_data[distcols].values.tolist()):
+            sid_style.append(('SPAN', (0, 5+len(data_list)+i), (len(DEFAULT_COLS)-1, 5+len(data_list)+i)))
+        data_list += dist_data[distcols].values.tolist()
+        return data_list, sid_style
+
+    @staticmethod
+    def create_heading(cols_to_plot):
+        ''' format the thing that goes at the top '''
+        headings = [[""]*len(cols_to_plot) + [""],
+                    [""]*len(cols_to_plot),
+                    [""]*len(cols_to_plot),
+                    [""]*len(cols_to_plot),
+                    cols_to_plot]
+
+        for i in range(len(DEFAULT_COLS), len(cols_to_plot)):
+            headings[0][i] = cols_to_plot[i][6:8]
+            headings[1][i] = cols_to_plot[i][4:6]
+            headings[2][i] = cols_to_plot[i][2:4]
+            headings[3][i] = cols_to_plot[i][9:]
+            headings[4][i] = ""
+
+        for i, string in enumerate(["Day", "Month", "Year", "Status"]):
+            headings[i][len(DEFAULT_COLS)-1] = string
+
+        for i in range(1, len(DEFAULT_TITLES)):
+            headings[4][i] = DEFAULT_TITLES[i]
+        return headings
+    
+    
+    @staticmethod
+    def output_doc(document, fname, data, projectinfo, config, history=False, part=-1, selected_issues=[], column_widths=[100, 40, 9], li_issues=[]):
+
+        document.filename = fname
+        if not document.filename: 
+            return False
+        #data_list is a list of lists containing the cells of the final table.
+        #sid_style is the additional styling applied to the cells over and above the standard.
+        
+        data_list, sid_style = BuildIssueSheet.data_table(history, part, selected_issues, li_issues, data=data)
+        cols_to_plot = BuildIssueSheet.cols_to_plot(history=history,
+                 selected_issues=selected_issues, 
+                 li_issues=li_issues, part=part)
+        headings = BuildIssueSheet.create_heading(cols_to_plot)
+        data_list, sid_style = BuildIssueSheet.distribution_table(dist_data, data_list, sid_style, history, part, selected_issues, li_issues)
+        titleblockdata = BuildIssueSheet.construct_title_block(history, part, selected_issues, li_issues, projectinfo, config)
+        tstyle = BuildIssueSheet.tablestyle(history, sid_style, data_list, headings)
+        document = issue_sheet(data_list,
+                                document,
+                                titleblockdata = titleblockdata,
+                                headings=headings,
+                                tablestyle=tstyle,
+                                col_widths = column_widths[:3])  # This saves the file to pdf
+        return True
+    
+    @staticmethod
+    def print_issue_and_issue_history(data, projectinfo, config, selected_issues, column_widths, project_name, office, max_cols_in_part, li_issues, project_code) -> tuple[str, str]:
+        filescreated = []
+        document = new_document(project_name, office)
+        no_issues = len(li_issues)
+        #output doc.
+        savefilename = getsavefilename(extension="pdf", initialfile="IssueSheet.pdf")
+        savefilenamehistory = savefilename.replace(".pdf", "_history " + BuildIssueSheet.document_number(True, -1, project_code) + ".pdf")
+        fname = savefilename.replace(".pdf", " " + BuildIssueSheet.document_number(False, -1, project_code) + ".pdf")
+        
+        # output issue sheet
+        if not BuildIssueSheet.output_doc(document, fname, data, projectinfo, config, selected_issues=selected_issues, li_issues=li_issues, column_widths=column_widths): 
+            return False
+        else:
+            filescreated.append(savefilename.replace(".pdf", " " + BuildIssueSheet.document_number(False, -1, project_code) + ".pdf"))
+ 
+        # continue to output issue istory
+        #output history
+        if no_issues > max_cols_in_part: #Pagination required.
+            num_parts = math.ceil(no_issues/max_cols_in_part)
+            for part in range(1, num_parts+1):
+                fname = savefilename.replace(".pdf", "_history " + BuildIssueSheet.document_number(True, part, project_code) + ".pdf")
+                if not BuildIssueSheet.output_doc(document, fname, data, projectinfo, config, history=True, part=part, selected_issues=selected_issues, li_issues=li_issues, column_widths=column_widths): 
+                    return False
+                else: 
+                    filescreated.append(fname)
+            savefilenamehistory = filescreated[-1]
+        else:
+            if not BuildIssueSheet.output_doc(document, savefilenamehistory, data, projectinfo, config, history=True, selected_issues=selected_issues, li_issues=li_issues, column_widths=column_widths): 
+                return False
+            else: 
+                filescreated.append(savefilenamehistory)
+                
+        return filescreated
+
+
+
 lookup = get_lookup_data()
 projectinfo = project_info()
 config = user_config(projectinfo.get("Job Number")) # define this in the UI
@@ -259,20 +481,7 @@ doc_issues = data[li_issues].T.to_dict()
 dist_data = get_distribution_data(li_issues=li_issues)
 print("data loaded")
 
-import pathlib
-class BuildIssueSheet:
-    def __init__(self, 
-                history=False, 
-                max_cols_in_part=MAX_COLS_IN_PART, 
-                selected_issues=[],
-                col_widths=[100, 40, 9],
-                outgoingfolder=pathlib.Path("."),
-                
-                ):
-        self.history=history, self.part=part, self.max_cols_in_part=max_cols_in_part, self.selected_issues=selected_issues
-        pass
 
-import pathlib
 ### THE INTERFACE fpor the wizard###
 class DialogWindow(MFTk):
     ''' This is the window that will appear on top of excel to control saving
@@ -289,7 +498,7 @@ class DialogWindow(MFTk):
         self.headers = self.data.columns
         self.dist_data = get_distribution_data()
         self.fix_dist_data()
-        self.document = new_document(self.get_project_info("Project Name"), self.config)
+        
         self.col_widths = tkinter.StringVar(self)
         try: #try for backwards compat.
             cw = self.config["col_widths"]
@@ -316,8 +525,6 @@ class DialogWindow(MFTk):
         self.last_col = None
         self.initialise()
         self.protocol("WM_DELETE_WINDOW", self._quit) #Ovveride close event.
-
-        #click("run", "DocumentIssue", self.job_number_as_int())
 
     def job_number_as_int(self):
         jn = self.get_project_info("number")
@@ -357,42 +564,6 @@ class DialogWindow(MFTk):
             warning_messagebox(message="Something has gone wrong with your distribution table. You probably haven't expanded it to the correct size to match the document revision information.", title="Distribution Table Error")
             self._quit()
             
-    
-    @staticmethod
-    def cols_to_plot(history=False, part=-1, max_cols_in_part=MAX_COLS_IN_PART, selected_issues=[], li_issues=[]):
-        '''get the columns to include in the pdf from the listbox'''
-
-        if part>0:
-            startindex = (part-1)*max_cols_in_part.get()
-            endindex = part*max_cols_in_part.get()
-            return DEFAULT_COLS + li_issues[startindex:endindex]
-
-        if history: 
-            return DEFAULT_COLS + li_issues
-
-        cols = []
-        for i in map(int, selected_issues):
-            cols.append(li_issues[i])
-        return DEFAULT_COLS + cols
-
-    @staticmethod
-    def document_number(history, part, add_space=False):  # TODO: fix this
-        ''' number has the form VWXYZ '''
-        VW = "00" #by definition
-        if history:
-            if part < 1: XYZ = "001"
-            elif part<10: XYZ = "00" + str(int(part))
-            else: XYZ = "0" + str(int(part))
-        else:
-            # XYZ = str(int(self.listbox.curselection()[0] + 100))
-            XYZ = "100"
-        doc_numb = projectinfo.get("Project Code") + "  -  MXF  -  XX  -  XX  -  IS  -  J  -  " + VW + XYZ
-        if not add_space: 
-            return doc_numb.replace(" ", "")
-
-        #TODO popout to allow custom document number.
-        return doc_numb
-
 
     def initialise(self):
         '''create the interface'''
@@ -458,8 +629,6 @@ class DialogWindow(MFTk):
         MFButton(master=frame1, text="Save", command=self.save, width=10).pack(side=LEFT)
         MFButton(master=frame1, text="Quit", command=self._quit, width=10).pack(side=LEFT)
         MFButton(master=frame1, text="Check Docs", command=self.compare_docs, width=10).pack(side=LEFT)
-
-
         ### Errors ###
         MFLabelFrame(self, text="Errors", padx=15, pady=15).pack()
 
@@ -480,35 +649,6 @@ class DialogWindow(MFTk):
         except:
             pass
         
-        
-    @staticmethod
-    def construct_title_block(history, part, selected_issues, li_issues, projectinfo=projectinfo, config=config):
-        ''' title block for the document'''
-        d, m, y, s = DialogWindow.day_month_year_status(-1, history, selected_issues=selected_issues, li_issues=li_issues)
-        try:
-            status_description = lookup.status[s].split(" - ")[2]
-        except:
-            status_description = ""
-            warning_messagebox(s + " - status not found in lookup table, consider checking", "Status Warning")
-
-        if history:
-            part_str = str(part)
-            if part_str:
-                doc_title = " History: Part " + part_str
-            else:
-                doc_title = " History"
-        else:
-            doc_title = "\n" + d + "/" + m + "/" + y + " - " + s
-
-        data = []
-        data.append([get_titleblockimage(config['office']), "", "", "client", "", "", "project", "", "", "document title", "", ""])
-        data.append(["", "", "", projectinfo.get("Client Name"), "", "", projectinfo.get("Project Name"), "", "", "Document Issue Sheet" + doc_title, "", ""])
-        data.append(["", "", "", "job no.", "project leader", "scale at A3", "", "", "", "", "", ""])
-        data.append(["", "", "",  projectinfo.get("Job Number"), projectinfo.get("Project Leader") ,"NTS", "", "", "", "", "", ""])
-        data.append(["", "", "", "status code and description", "", "", "issue date", "classification", "revision", projectinfo.get("Naming Convention"), "", ""])
-        data.append(["", "", "", s + status_description, "", "", d + "/" + m + "/" + y, "-", "-", DialogWindow.document_number(history, part, add_space=True), "", ""])
-        return data
-
     def get_outgoingfolder(self):
         ''' user select the outgoing folder'''
         try:
@@ -555,7 +695,7 @@ class DialogWindow(MFTk):
                 else:
                     missing_from_issue.append(basename)
 
-        cols = DialogWindow.cols_to_plot(history=False,
+        cols = BuildIssueSheet.cols_to_plot(history=False,
                  selected_issues=self.listbox.curselection(), 
                  li_issues=li_issues)
         self.last_col = last_col = cols[-1]
@@ -581,160 +721,37 @@ class DialogWindow(MFTk):
         msg += "\n\nN.B. this check does not consider file extensions."
         warning_messagebox(message=msg, title="Document Check Results")
 
-    @staticmethod
-    def day_month_year_status(index, history, selected_issues=[], li_issues=li_issues):
-        cols_to_plot = DialogWindow.cols_to_plot(history=history,
-                 selected_issues=selected_issues,
-                 li_issues=li_issues)[index]
-        d = cols_to_plot[6:8]
-        m = cols_to_plot[4:6]
-        y = cols_to_plot[2:4]
-        s = cols_to_plot[9:]
-        return d, m, y, s
 
-    @staticmethod
-    def data_table(history, part, selected_issues, li_issues, data=data):       
-        cols = DialogWindow.cols_to_plot(history=history,
-                 selected_issues=selected_issues, 
-                 li_issues=li_issues, part=part)
-        last_col = cols[-1]
-        data_tmp = data.sort_values("System Identifier Description")
-        data_list = [] #this is a list of rows in the table. #list for styling output.
-        sid_style = []
-
-        uniclass_classifications = sorted(list(set([d["uniclass"] for d in doc_descriptions.values()])))
-        map_uniclass_description =  {v: lookup.classification[k] for k, v in lookup.classification_uniclass.items()}
-            
-        for uniclass in uniclass_classifications:
-            sid = map_uniclass_description[uniclass]
-            if uniclass == "N/A": 
-                uniclass = ""
-
-            df = data_tmp[data_tmp["System Identifier Description"] == sid].sort_values('Document Number')
-            if history: 
-                mask = df["Current Rev"].str.len() > 0
-            else: 
-                mask = df[last_col].str.len() >= 1
-
-            if df.loc[mask, cols].values.tolist():
-                data_list += [[p_nospace("{0}    {1}".format(sid,uniclass), [])]]
-                sid_style += sid_line_style(4+len(data_list))
-                data_list += format_data_rows(df.loc[mask, cols].values.tolist()) #This is where they get added.
-                data_list += [[""]*len(cols)]
-
-        return data_list, sid_style
-
-    @staticmethod
-    def tablestyle(history, sid_style, data_list, headings):
-        if history:
-            tablestyle = highlight_last_format(headings+data_list, startrow=5, rev_position=len(DEFAULT_COLS)-1) + sid_style
-        else:
-            tablestyle = DEFAULTTABLESTYLE(defaultcols = len(DEFAULT_COLS)-1) + sid_style
-        return tablestyle
-
-    @staticmethod
-    def distribution_table(dist_data, data_list, sid_style, history, part, selected_issues, li_issues):
-        ###LET's Do the Distribution List
-        cols = DialogWindow.cols_to_plot(history=history,
-                 selected_issues=selected_issues, 
-                 li_issues=li_issues, part=part)
-        
-        data_list += [[""]] #blank line
-        sid_style += dist_line_style(4+len(data_list))
-        data_list += [["Distribution"]]
-        sid_style += dist_line_style(4+len(data_list))
-        distcols = ['Name']*len(DEFAULT_COLS) + [x for x in cols if not x in DEFAULT_COLS]
-        for i, line in enumerate(dist_data[distcols].values.tolist()):
-            sid_style.append(('SPAN', (0, 5+len(data_list)+i), (len(DEFAULT_COLS)-1, 5+len(data_list)+i)))
-        data_list += dist_data[distcols].values.tolist()
-        return data_list, sid_style
-
-
-    
-    def output_doc(self, fname, history=False, part=-1, selected_issues=[], column_widths=[100, 40, 9], li_issues=li_issues, data=data):
-
-        self.document.filename = fname
-        if not self.document.filename: 
-            return False
-        #data_list is a list of lists containing the cells of the final table.
-        #sid_style is the additional styling applied to the cells over and above the standard.
-        
-        data_list, sid_style = DialogWindow.data_table(history, part, selected_issues, li_issues, data=data)
-        cols_to_plot = DialogWindow.cols_to_plot(history=history,
-                 selected_issues=selected_issues, 
-                 li_issues=li_issues, part=part)
-        headings = self.create_heading(cols_to_plot)
-        try:
-            data_list, sid_style = DialogWindow.distribution_table(dist_data, data_list, sid_style, history, part, selected_issues, li_issues)
-        except Exception as exc:
-            message = "Potential problem with distribution table - expand manually to be same size as Revisions table \n"
-            warning_messagebox(message=message+str(exc), title="Distribution Table Error")
-            return False
-        titleblockdata = DialogWindow.construct_title_block(history=history, part=part, selected_issues=selected_issues, li_issues=li_issues)
-        tstyle = DialogWindow.tablestyle(history, sid_style, data_list, headings)
-        self.document = issue_sheet(data_list,
-                                        self.document,
-                                        titleblockdata = titleblockdata,
-                                        headings=headings,
-                                        tablestyle=tstyle,
-                                        col_widths = column_widths[:3])
-        try:
-            pass
-        except Exception as exc:
-            warning_messagebox(message=exc, title="PDF Creation Error")
-            return False
-        return True
-    
-    
     def get_column_widths(self):
         cw = self.col_widths.get()
         try: cw = list(map(int,cw.split(",")))
         except Exception as exc: warning_messagebox(message=exc, title="Column Width Error")
         if len(cw) != 3: warning_messagebox(message="Must define three columns widths separated by a comma", title="Column Width Error")
         return cw
-
+        
     def save(self):
         ''' create and save the pdf file'''
         selected_issues = self.listbox.curselection()
         column_widths = self.get_column_widths()
+        project_name = self.get_project_info("Project Name")
+        project_code = self.get_project_info("Project Code")
+        office = self.config["office"]
+        max_cols_in_part = self.max_cols_in_part.get()
         
         self.update_config()
         if self.check_on_save.get():
             if not self.compare_docs(): 
                 return False
             
-        filescreated = []
-        #output doc.
-        self.savefilename = getsavefilename(extension="pdf", initialfile="IssueSheet.pdf")
-        self.savefilenamehistory = self.savefilename.replace(".pdf", "_history " + DialogWindow.document_number(True, -1) + ".pdf")
-        fname = self.savefilename.replace(".pdf", " " + DialogWindow.document_number(False, -1) + ".pdf")
-        if not self.output_doc(fname, selected_issues=selected_issues, column_widths=column_widths): 
-            return False
-        else:
-            filescreated.append(self.savefilename.replace(".pdf", " " + DialogWindow.document_number(False, -1) + ".pdf"))
-
-        #output history
-        if len(self.dates())>self.max_cols_in_part.get(): #Pagination required.
-            num_parts = math.ceil(len(self.dates())/self.max_cols_in_part.get())
-            for part in range(1, num_parts+1):
-                self.projectinfo['Part'] = str(part) + " of " + str(num_parts)
-                fname = self.savefilename.replace(".pdf", "_history " + DialogWindow.document_number(True, part) + ".pdf")
-                if not self.output_doc(fname, history=True, part=part, selected_issues=selected_issues, column_widths=column_widths): 
-                    return False
-                else: 
-                    filescreated.append(fname)
-            self.savefilenamehistory = filescreated[-1]
-        else:
-            if not self.output_doc(self.savefilenamehistory, history=True, selected_issues=selected_issues, column_widths=column_widths): 
-                return False
-            else: 
-                filescreated.append(self.savefilenamehistory)
+        
+        filescreated = BuildIssueSheet.print_issue_and_issue_history(self.data, self.projectinfo, self.config, selected_issues, column_widths, project_name, office, max_cols_in_part, li_issues, project_code)
+        self.savefilename, self.savefilenamehistory = filescreated[0], filescreated[1]
 
         info_messagebox(message="Documents saved:\n" + "\n".join(filescreated))
         if self.open_on_save.get():
             for file_created in filescreated:
                 show_file(file_created)
-        return self.document
+        return filescreated
 
     def create_links(self, last_col): # TODO: delete ... not req. / no one uses it
         ''' add some hyperlinks to the spreadsheet'''
@@ -744,29 +761,6 @@ class DialogWindow(MFTk):
         xw.sheets['1. Document Numbering'].range(iov[0]-2, excel_col).value = "=hyperlink(\"" + self.savefilenamehistory + "\", \"History\")"
         if self.outgoingfolder:
             xw.sheets['1. Document Numbering'].range(iov[0]-1, excel_col).value = "=hyperlink(\"" + self.outgoingfolder + "\", \"Outgoing Folder\")"
-
-    @staticmethod
-    def create_heading(cols_to_plot):
-        ''' format the thing that goes at the top '''
-        headings = [[""]*len(cols_to_plot) + [""],
-                    [""]*len(cols_to_plot),
-                    [""]*len(cols_to_plot),
-                    [""]*len(cols_to_plot),
-                    cols_to_plot]
-
-        for i in range(len(DEFAULT_COLS), len(cols_to_plot)):
-            headings[0][i] = cols_to_plot[i][6:8]
-            headings[1][i] = cols_to_plot[i][4:6]
-            headings[2][i] = cols_to_plot[i][2:4]
-            headings[3][i] = cols_to_plot[i][9:]
-            headings[4][i] = ""
-
-        for i, string in enumerate(["Day", "Month", "Year", "Status"]):
-            headings[i][len(DEFAULT_COLS)-1] = string
-
-        for i in range(1, len(DEFAULT_TITLES)):
-            headings[4][i] = DEFAULT_TITLES[i]
-        return headings
 
 
     def _quit(self):
