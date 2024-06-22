@@ -259,8 +259,18 @@ doc_issues = data[li_issues].T.to_dict()
 dist_data = get_distribution_data(li_issues=li_issues)
 print("data loaded")
 
-
-
+import pathlib
+class BuildIssueSheet:
+    def __init__(self, 
+                history=False, 
+                max_cols_in_part=MAX_COLS_IN_PART, 
+                selected_issues=[],
+                col_widths=[100, 40, 9],
+                outgoingfolder=pathlib.Path("."),
+                
+                ):
+        self.history=history, self.part=part, self.max_cols_in_part=max_cols_in_part, self.selected_issues=selected_issues
+        pass
 
 import pathlib
 ### THE INTERFACE fpor the wizard###
@@ -365,7 +375,8 @@ class DialogWindow(MFTk):
             cols.append(li_issues[i])
         return DEFAULT_COLS + cols
 
-    def document_number(self, history, part, add_space=False):  # TODO: fix this
+    @staticmethod
+    def document_number(history, part, add_space=False):  # TODO: fix this
         ''' number has the form VWXYZ '''
         VW = "00" #by definition
         if history:
@@ -373,8 +384,9 @@ class DialogWindow(MFTk):
             elif part<10: XYZ = "00" + str(int(part))
             else: XYZ = "0" + str(int(part))
         else:
-            XYZ = str(int(self.listbox.curselection()[0] + 100))
-        doc_numb = self.get_project_info("Project Code") + "  -  MXF  -  XX  -  XX  -  IS  -  J  -  " + VW + XYZ
+            # XYZ = str(int(self.listbox.curselection()[0] + 100))
+            XYZ = "100"
+        doc_numb = projectinfo.get("Project Code") + "  -  MXF  -  XX  -  XX  -  IS  -  J  -  " + VW + XYZ
         if not add_space: 
             return doc_numb.replace(" ", "")
 
@@ -467,18 +479,20 @@ class DialogWindow(MFTk):
             save_config(self.config)
         except:
             pass
-
-    def construct_title_block(self, history, part):
+        
+        
+    @staticmethod
+    def construct_title_block(history, part, selected_issues, li_issues, projectinfo=projectinfo, config=config):
         ''' title block for the document'''
-        d, m, y, s = self.day_month_year_status(-1, history)
+        d, m, y, s = DialogWindow.day_month_year_status(-1, history, selected_issues=selected_issues, li_issues=li_issues)
         try:
-            status_description = " - " + str(self.status_info[self.status_info["status_code"]==s]["Description"][0])
+            status_description = lookup.status[s].split(" - ")[2]
         except:
             status_description = ""
             warning_messagebox(s + " - status not found in lookup table, consider checking", "Status Warning")
 
         if history:
-            part_str = self.get_project_info("Part")
+            part_str = str(part)
             if part_str:
                 doc_title = " History: Part " + part_str
             else:
@@ -487,12 +501,12 @@ class DialogWindow(MFTk):
             doc_title = "\n" + d + "/" + m + "/" + y + " - " + s
 
         data = []
-        data.append([get_titleblockimage(self.config['office']), "", "", "client", "", "", "project", "", "", "document title", "", ""])
-        data.append(["", "", "", self.get_project_info("Client Name"), "", "", self.get_project_info("Project Name"), "", "", "Document Issue Sheet" + doc_title, "", ""])
+        data.append([get_titleblockimage(config['office']), "", "", "client", "", "", "project", "", "", "document title", "", ""])
+        data.append(["", "", "", projectinfo.get("Client Name"), "", "", projectinfo.get("Project Name"), "", "", "Document Issue Sheet" + doc_title, "", ""])
         data.append(["", "", "", "job no.", "project leader", "scale at A3", "", "", "", "", "", ""])
-        data.append(["", "", "",  self.get_project_info("Job Number"), self.get_project_info("Project Leader") ,"NTS", "", "", "", "", "", ""])
-        data.append(["", "", "", "status code and description", "", "", "issue date", "classification", "revision", self.get_project_info("Naming Convention"), "", ""])
-        data.append(["", "", "", s + status_description, "", "", d + "/" + m + "/" + y, "-", "-", self.document_number(history, part, add_space=True), "", ""])
+        data.append(["", "", "",  projectinfo.get("Job Number"), projectinfo.get("Project Leader") ,"NTS", "", "", "", "", "", ""])
+        data.append(["", "", "", "status code and description", "", "", "issue date", "classification", "revision", projectinfo.get("Naming Convention"), "", ""])
+        data.append(["", "", "", s + status_description, "", "", d + "/" + m + "/" + y, "-", "-", DialogWindow.document_number(history, part, add_space=True), "", ""])
         return data
 
     def get_outgoingfolder(self):
@@ -541,7 +555,7 @@ class DialogWindow(MFTk):
                 else:
                     missing_from_issue.append(basename)
 
-        cols = self.__class__.cols_to_plot(history=False,
+        cols = DialogWindow.cols_to_plot(history=False,
                  selected_issues=self.listbox.curselection(), 
                  li_issues=li_issues)
         self.last_col = last_col = cols[-1]
@@ -567,45 +581,31 @@ class DialogWindow(MFTk):
         msg += "\n\nN.B. this check does not consider file extensions."
         warning_messagebox(message=msg, title="Document Check Results")
 
-    def day_month_year_status(self, index, history):
-        cols_to_plot = self.__class__.cols_to_plot(history=history,
-                 selected_issues=self.listbox.curselection(), 
+    @staticmethod
+    def day_month_year_status(index, history, selected_issues=[], li_issues=li_issues):
+        cols_to_plot = DialogWindow.cols_to_plot(history=history,
+                 selected_issues=selected_issues,
                  li_issues=li_issues)[index]
         d = cols_to_plot[6:8]
         m = cols_to_plot[4:6]
         y = cols_to_plot[2:4]
         s = cols_to_plot[9:]
         return d, m, y, s
-    
-# def create_issue_sheet(fname, history=False, part=-1))
 
-
-
-    def project_info_list(self):
-        ''' unused '''
-        titles = ["project code", "project name", "project address"]
-        infodata = [[self.document.address_compact[0]]+titles]
-        dictvalues = ["Project Code", "Project Name", "Project Address"]
-        dv = [self.get_project_info(i) for i in dictvalues]
-        infodata.append([self.document.address_compact[1]] + dv)
-        infodata.append([self.document.address_compact[2], "", "", ""])
-        return infodata
-
-    def data_table(self, history, part):       
-        cols = self.__class__.cols_to_plot(history=history,
-                 selected_issues=self.listbox.curselection(), 
+    @staticmethod
+    def data_table(history, part, selected_issues, li_issues, data=data):       
+        cols = DialogWindow.cols_to_plot(history=history,
+                 selected_issues=selected_issues, 
                  li_issues=li_issues, part=part)
-        self.last_col = last_col = cols[-1]
-        data_tmp = self.data.sort_values("System Identifier Description")
+        last_col = cols[-1]
+        data_tmp = data.sort_values("System Identifier Description")
         data_list = [] #this is a list of rows in the table. #list for styling output.
         sid_style = []
 
         uniclass_classifications = sorted(list(set([d["uniclass"] for d in doc_descriptions.values()])))
         map_uniclass_description =  {v: lookup.classification[k] for k, v in lookup.classification_uniclass.items()}
-        # for isid, uniclass in enumerate(self.sid_info['uniclass_classification']):
             
-        for isid, uniclass in enumerate(uniclass_classifications):
-            # sid = self.sid_info['classification_des'].iloc[isid]
+        for uniclass in uniclass_classifications:
             sid = map_uniclass_description[uniclass]
             if uniclass == "N/A": 
                 uniclass = ""
@@ -624,17 +624,19 @@ class DialogWindow(MFTk):
 
         return data_list, sid_style
 
-    def tablestyle(self, history, sid_style, data_list, headings):
+    @staticmethod
+    def tablestyle(history, sid_style, data_list, headings):
         if history:
             tablestyle = highlight_last_format(headings+data_list, startrow=5, rev_position=len(DEFAULT_COLS)-1) + sid_style
         else:
             tablestyle = DEFAULTTABLESTYLE(defaultcols = len(DEFAULT_COLS)-1) + sid_style
         return tablestyle
 
-    def distribution_table(self, data_list, sid_style, history, part):
+    @staticmethod
+    def distribution_table(dist_data, data_list, sid_style, history, part, selected_issues, li_issues):
         ###LET's Do the Distribution List
-        cols = self.__class__.cols_to_plot(history=history,
-                 selected_issues=self.listbox.curselection(), 
+        cols = DialogWindow.cols_to_plot(history=history,
+                 selected_issues=selected_issues, 
                  li_issues=li_issues, part=part)
         
         data_list += [[""]] #blank line
@@ -642,83 +644,88 @@ class DialogWindow(MFTk):
         data_list += [["Distribution"]]
         sid_style += dist_line_style(4+len(data_list))
         distcols = ['Name']*len(DEFAULT_COLS) + [x for x in cols if not x in DEFAULT_COLS]
-        for i, line in enumerate(self.dist_data[distcols].values.tolist()):
+        for i, line in enumerate(dist_data[distcols].values.tolist()):
             sid_style.append(('SPAN', (0, 5+len(data_list)+i), (len(DEFAULT_COLS)-1, 5+len(data_list)+i)))
-        data_list += self.dist_data[distcols].values.tolist()
+        data_list += dist_data[distcols].values.tolist()
         return data_list, sid_style
 
-    def get_column_widths(self):
-        cw = self.col_widths.get()
-        try: cw = list(map(int,cw.split(",")))
-        except Exception as exc: warning_messagebox(message=exc, title="Column Width Error")
-        if len(cw) != 3: warning_messagebox(message="Must define three columns widths separated by a comma", title="Column Width Error")
-        return cw
+
     
-    def output_doc(self, fname, history=False, part=-1):
+    def output_doc(self, fname, history=False, part=-1, selected_issues=[], column_widths=[100, 40, 9], li_issues=li_issues, data=data):
 
         self.document.filename = fname
         if not self.document.filename: 
             return False
         #data_list is a list of lists containing the cells of the final table.
         #sid_style is the additional styling applied to the cells over and above the standard.
-        data_list, sid_style = self.data_table(history, part)
-        cols_to_plot = self.__class__.cols_to_plot(history=history,
-                 selected_issues=self.listbox.curselection(), 
+        
+        data_list, sid_style = DialogWindow.data_table(history, part, selected_issues, li_issues, data=data)
+        cols_to_plot = DialogWindow.cols_to_plot(history=history,
+                 selected_issues=selected_issues, 
                  li_issues=li_issues, part=part)
         headings = self.create_heading(cols_to_plot)
         try:
-            data_list, sid_style = self.distribution_table(data_list, sid_style, history, part)
+            data_list, sid_style = DialogWindow.distribution_table(dist_data, data_list, sid_style, history, part, selected_issues, li_issues)
         except Exception as exc:
             message = "Potential problem with distribution table - expand manually to be same size as Revisions table \n"
             warning_messagebox(message=message+str(exc), title="Distribution Table Error")
             return False
-        cw = self.get_column_widths()
-        titleblockdata = self.construct_title_block(history=history, part=part)
-        tstyle = self.tablestyle(history, sid_style, data_list, headings)
+        titleblockdata = DialogWindow.construct_title_block(history=history, part=part, selected_issues=selected_issues, li_issues=li_issues)
+        tstyle = DialogWindow.tablestyle(history, sid_style, data_list, headings)
         self.document = issue_sheet(data_list,
                                         self.document,
                                         titleblockdata = titleblockdata,
                                         headings=headings,
                                         tablestyle=tstyle,
-                                        col_widths = cw[:3])
+                                        col_widths = column_widths[:3])
         try:
             pass
         except Exception as exc:
             warning_messagebox(message=exc, title="PDF Creation Error")
             return False
         return True
+    
+    
+    def get_column_widths(self):
+        cw = self.col_widths.get()
+        try: cw = list(map(int,cw.split(",")))
+        except Exception as exc: warning_messagebox(message=exc, title="Column Width Error")
+        if len(cw) != 3: warning_messagebox(message="Must define three columns widths separated by a comma", title="Column Width Error")
+        return cw
 
     def save(self):
         ''' create and save the pdf file'''
+        selected_issues = self.listbox.curselection()
+        column_widths = self.get_column_widths()
         
         self.update_config()
         if self.check_on_save.get():
             if not self.compare_docs(): 
                 return False
             
-
         filescreated = []
         #output doc.
         self.savefilename = getsavefilename(extension="pdf", initialfile="IssueSheet.pdf")
-        self.savefilenamehistory = self.savefilename.replace(".pdf", "_history " + self.document_number(True, -1) + ".pdf")
-        if not self.output_doc(self.savefilename.replace(".pdf", " " + self.document_number(False, -1) + ".pdf")): 
+        self.savefilenamehistory = self.savefilename.replace(".pdf", "_history " + DialogWindow.document_number(True, -1) + ".pdf")
+        fname = self.savefilename.replace(".pdf", " " + DialogWindow.document_number(False, -1) + ".pdf")
+        if not self.output_doc(fname, selected_issues=selected_issues, column_widths=column_widths): 
             return False
-        else: 
-            filescreated.append(self.savefilename.replace(".pdf", " " + self.document_number(False, -1) + ".pdf"))
+        else:
+            filescreated.append(self.savefilename.replace(".pdf", " " + DialogWindow.document_number(False, -1) + ".pdf"))
 
         #output history
         if len(self.dates())>self.max_cols_in_part.get(): #Pagination required.
             num_parts = math.ceil(len(self.dates())/self.max_cols_in_part.get())
             for part in range(1, num_parts+1):
                 self.projectinfo['Part'] = str(part) + " of " + str(num_parts)
-                fname = self.savefilename.replace(".pdf", "_history " + self.document_number(True, part) + ".pdf")
-                if not self.output_doc(fname, history=True, part=part): 
+                fname = self.savefilename.replace(".pdf", "_history " + DialogWindow.document_number(True, part) + ".pdf")
+                if not self.output_doc(fname, history=True, part=part, selected_issues=selected_issues, column_widths=column_widths): 
                     return False
                 else: 
                     filescreated.append(fname)
             self.savefilenamehistory = filescreated[-1]
         else:
-            if not self.output_doc(self.savefilenamehistory, history=True): 
+            if not self.output_doc(self.savefilenamehistory, history=True, selected_issues=selected_issues, column_widths=column_widths): 
                 return False
             else: 
                 filescreated.append(self.savefilenamehistory)
