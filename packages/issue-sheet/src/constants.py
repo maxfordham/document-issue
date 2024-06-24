@@ -1,4 +1,5 @@
 import pathlib
+from reportlab.lib import colors
 
 # DIR_ROOT = pathlib.Path(__file__).parent
 DIR_ROOT = pathlib.Path(r"C:\engDev\git_mf\MF_Toolbox\dev\mf_xlwings\document_issue") # Set this to be Y:\drive
@@ -21,6 +22,49 @@ EDINBURGH_ADDRESS_COMPACT = ["Max Fordham LLP", "Exchange Place 3, 3 Semple Stre
 BRISTOL_ADDRESS_COMPACT = ["Max Fordham LLP", "Queen Square House, 18-21 Queen Square", "Bristol BS1 4NH"]
 MANCHESTER_ADDRESS_COMPACT = ["Max Fordham LLP", "Carver's Warehouse, 77 Dale Street", "Manchester M1 2HG"]
 CAMBRIDGE_ADDRESS_COMPACT = ["Max Fordham LLP", "St Andrew's House, 59 St Andrew's Street", "Cambridge CB2 3BZ"]
+
+
+
+
+
+DRWG_CLASSIFICATION_CODE_REGEX = r"^[A-Z]{1}-[0-9]{2}$" # TODO: make configurable on a project basis
+UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$" # TODO
+
+START_ROW = 35 #Default
+START_COL = 1 #B
+MAX_COLS_IN_PART = 30
+CONFIG_DIR = r'J:\J4321\Data\document_issue\config'
+DEFAULT_CONFIG = {"job_number": "4321",
+                  "office": "Cambridge",#edinburgh; bristol; manchester; cambridge; london;
+                  "open_on_save": "False",
+                  "check_on_save": "True",
+                  "col_widths": "100,40,9",
+                  "max_cols_in_part": MAX_COLS_IN_PART,
+                  "users": [],
+                  "timestamps": [],
+                  "filepath": ""}
+
+DEFAULT_COLS = ["Document Title", "Document Number", "docSource", "Scale", "Size", "Current Rev"]
+DEFAULT_TITLES = ["Document Title", "Document Number", "Type",
+                  "Scale", "Size", "Rev", "Dated Issue Revisions"]
+
+HIGHLIGHT_COLOUR = colors.Color(168/255, 231/255, 255/255, alpha=1.)
+
+TITLETEXT = "Check and create issue sheets.\n v0.2.0 - May19"
+
+SHEETTABLEDICT = [ #sheet, first header, dict?, tableheader, header in revit export
+            ["project", "project_code", True, "Project Name", None],
+            ["originator", "originator_code", True, "Originator Description", None],
+            ["volume", "volume_code", True, "Volume Name", "03. Volume"],
+            ["level", "level_code", True, "Level Description", "04. Level"],
+            ["infoType", "infoType_code", True, "Information Type Description", None],
+            ["classification", "classification_code", False, "System Identifier Description", "07. Classification"],
+            ["drwgType", "drwgType_code", True, "X Sequence Number", "08. Number"],
+            ["sequence", "sequence_code", False, "YZ Sequence Number", "08. Number"]
+        ]
+
+
+
 
 def address_from_loc_compact(loc):
     loc_lower = loc.lower()
