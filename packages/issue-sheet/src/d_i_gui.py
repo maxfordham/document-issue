@@ -106,8 +106,6 @@ class DialogWindow(MFTk):
         if pathlib.Path(r"C:\Users\j.gunstone\Desktop\dgn").exists():
             self.outgoingfolder = r"C:\Users\j.gunstone\Desktop\dgn"
 
-        self.sid_info = sid_info()
-        self.status_info = status_info()
         self.last_col = None
         self.initialise()
         self.protocol("WM_DELETE_WINDOW", self._quit)  # Ovveride close event.

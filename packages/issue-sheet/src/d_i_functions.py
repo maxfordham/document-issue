@@ -1,15 +1,9 @@
 import subprocess
-import os
-import sys
-import glob
+import ossaudiodev
 import pathlib
-import pickle
 import json
 import webbrowser
-import xlwings as xw
-import pandas as pd
 import math as math
-from itertools import product
 from reportlab.lib import colors
 from textwrap import wrap
 import logging
@@ -546,78 +540,6 @@ def new_document(projectname, office):
     return document
 
 
-def project_info():
-    """gets the project info from the first sheet"""
-    return (
-        xw.sheets["readme"]
-        .range(index_of_value("Job Number", "readme"))
-        .options(dict, expand="table", numbers=int)
-        .value
-    )
-
-
-def sid_info():
-    """gets the System classification Codes and information from the lookup table"""
-    try:
-        res = (
-            xw.sheets["classification"]
-            .range(index_of_value("classification_code", "classification"))
-            .options(pd.Series, expand="table", numbers=int)
-            .value
-        )
-    except:
-        res = (
-            xw.sheets["0. lookup tables"]
-            .range(index_of_value("role_code", "0. lookup tables"))
-            .options(pd.Series, expand="table", numbers=int)
-            .value
-        )
-        res["uniclass_classification"] = res["classification_des"]
-    return res.sort_values("uniclass_classification")
-
-
-def table_info(sheet, firstheader, getdict=False):
-    try:
-        if getdict:
-            res = (
-                xw.sheets[sheet]
-                .range(index_of_value(firstheader, sheet))
-                .options(dict, expand="table", numbers=int)
-                .value
-            )
-        else:
-            res = (
-                xw.sheets[sheet]
-                .range(index_of_value(firstheader, sheet))
-                .options(pd.Series, expand="table", numbers=int)
-                .value
-            )
-    except:
-        res = None
-    return res
-
-
-def status_info():
-    """gets the System classification Codes and information from the lookup table"""
-    try:
-        res = (
-            xw.sheets["status"]
-            .range(index_of_value("status_code", "status"))
-            .options(pd.Series, expand="table", numbers=int)
-            .value
-        )
-    except:  # backwards compatability
-        res = (
-            xw.sheets["0. lookup tables"]
-            .range(index_of_value("Code", "0. lookup tables"))
-            .options(pd.Series, expand="table", numbers=int)
-            .value
-        )
-    if "status_code" not in res.columns:
-        res["status_code"] = res.index
-    return res
-
-
 def config_filename(job_number):
     """return the filename of the config files."""
     # username = os.environ['username']
@@ -673,36 +595,6 @@ def show_file(filename):
     subprocess.Popen(filename, shell=True)
 
 
-def get_distribution_data(li_issues=None):
-    if index_of_value("Name", "1. Document Numbering"):
-        res = (
-            xw.sheets["1. Document Numbering"]
-            .range(index_of_value("Name", "1. Document Numbering"))
-            .options(pd.Series, expand="table")
-            .value
-        )
-        if type(res) is pd.core.frame.Series:
-            raise ValueError(
-                "Atleast two people in distribution required.\nOnly need one? Just add a dummy one"
-            )
-        res["Name"] = res.index  # TODO: this is bad
-        res = res.fillna("")
-        pd.options.display.float_format = "{:,.0f}".format
-
-        if li_issues is not None:  # TODO: tbc
-            cols = list(res.columns)
-            for i, col in enumerate(li_issues):
-                cols[i] = col
-            res.columns = cols
-            df = res[li_issues + ["Name"]]
-            res = df.loc[df.index.notnull()]
-
-        return res
-    raise Exception(
-        'Cannot Find Distribution Table - ensure First Column is titled "Name"'
-    )
-
-
 def format_data_rows(rows):
     # rows is a list of list.
     for i, row in enumerate(rows):
@@ -710,70 +602,3 @@ def format_data_rows(rows):
         _row[0] = "\n".join(wrap(_row[0], 80))
         rows[i] = _row
     return rows
-
-
-def get_pandas_data():
-    """extract data from spreadsheet and convert it to a pandas dataframe"""
-    if index_of_value("Document Number", "1. Document Numbering"):
-        res = (
-            xw.sheets["1. Document Numbering"]
-            .range(index_of_value("Sort By Uniclass", "1. Document Numbering"))
-            .options(pd.Series, expand="table")
-            .value
-        )
-        res = (
-            res.reset_index(drop=False)
-            .set_index("Document Number")
-            .rename(columns={"Sort By Uniclass": "uniclass"})
-        )
-        if (
-            "Document Number" not in res.columns
-        ):  # backwards compatability for spreadsheet upgrade.
-            res.index.names = ["Document Number Index"]
-            res["Document Number"] = res.index
-
-        if type(res) is pd.core.frame.Series:
-            raise ValueError(
-                "Atleast two documents required.\nOnly need one? Just add a dummy one"
-            )
-        if "Document Number" not in res.columns:
-            res["Document Number"] = res.index
-        res = res[res["Document Number"] != -2146826246]
-        cols_to_remove = list(set(res.columns).intersection(map(str, range(0, 999))))
-        cols_to_remove += [
-            x
-            for x in res.columns
-            if "Column" in x or "blank" in x or "→" in x or "?" in x or "Add to " in x
-        ]
-        res = res.sort_values("Document Number")
-        res = res.dropna(subset=["Document Number"])
-        pd.options.display.float_format = "{:,.0f}".format
-        return res.drop(cols_to_remove, axis=1)  # remove column that are empty.
-    raise Exception(
-        "Cannot Revision Information - Something has gone wrong contact support."
-    )
-
-
-def index_of_value(value, sheet):
-    """look for a value in the spreadsheet"""
-    for i, line in enumerate(xw.sheets[sheet].range((1, 1), (200, 200)).value):
-        try:
-            return (i + 1, line.index(value) + 1)
-        except:
-            pass
-    return False
-
-
-def add_doc(row, sheettabledict, item):
-    xw.sheets["1. Document Numbering"].range(str(row) + ":" + str(row)).api.Insert(
-        xw.constants.InsertShiftDirection.xlShiftToRight
-    )
-    for i, line in enumerate(sheettabledict):
-        rowcol = index_of_value(line[3], "1. Document Numbering")
-        rowcol = (row, rowcol[1])
-        if line[0] == "sequence":
-            xw.sheets["1. Document Numbering"].range(rowcol).value = (
-                "=TEXT(" + str(item[i]) + ',"00")'
-            )
-        else:
-            xw.sheets["1. Document Numbering"].range(rowcol).value = str(item[i])
