@@ -18,7 +18,7 @@ from tkinter import filedialog, Tk, messagebox, scrolledtext, INSERT, StringVar
 from tkinter import OptionMenu, Button, mainloop, Label, LEFT, Entry, W
 from PIL.ImageTk import PhotoImage
 from PIL import Image, ImageTk
-from constants import mf_modules_dir, FPTH_ICON
+from constants import FPTH_ICON
 
 
 MFFONTLARGE = ("Calibri", 32)  # Large Calibri Font
@@ -79,7 +79,6 @@ class MFHeader(tkinter.Label):
 
     def __init__(self, master=None, cnf={}, **kw):
         tkinter.Label.__init__(self, master=master, cnf=cnf, **kw)
-        # img = tkinter.PhotoImage(file = str(os.path.dirname(mf_modules.__file__))+'\\'+'res\\MF_O_250px.gif')
         self.config(bg="black", fg="white", font=MFFONTLARGE)
 
 

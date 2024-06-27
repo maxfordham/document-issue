@@ -7,13 +7,14 @@ Created on Tue May 14 13:37:03 2019
 
 import time
 import pathlib
+import glob
+import os
 import re
 import xlwings as xw
 from d_i_functions import *
 from constants import *
-from d_i_read_excel import read_excel
+from d_i_read_excel import read_excel  # , index_of_value
 
-# from mf_modules.tool_usage_tracking import click
 import tkinter
 from tkinter import (
     END,
@@ -54,6 +55,44 @@ def run():
     return True
 
 
+import json
+
+import pandas as pd
+from pydantic import BaseModel
+
+
+def gotohelp():
+    webbrowser.open_new(r"mailto:helpdesk@maxfordham.com")
+
+
+def show_file(filename):
+    """open a file in default program"""
+    subprocess.Popen(filename, shell=True)
+
+
+def dump(di: dict):
+    """dump the data to the console"""
+    fdir = pathlib.Path(r"dump")
+    fdir.mkdir(exist_ok=True)
+    li = []
+    for k, v in di.items():
+        if isinstance(v, dict):
+            f = fdir / (k + ".json")
+            f.write_text(json.dumps(v, indent=4))
+        elif isinstance(v, pd.DataFrame):
+            f = fdir / (k + ".csv")
+            v.to_csv(f)
+        elif isinstance(v, BaseModel):
+            f = fdir / (k + ".json")
+            f.write_text(v.model_dump_json(indent=4))
+        elif isinstance(v, list):
+            pass
+        else:
+            raise ValueError(f"Cannot dump {k} of type {type(v)}")
+        li.append(f)
+    return li
+
+
 ### THE INTERFACE fpor the wizard###
 class DialogWindow(MFTk):
     """This is the window that will appear on top of excel to control saving
@@ -64,14 +103,6 @@ class DialogWindow(MFTk):
 
         self.title("Document Issue")
         self.parent = parent
-        self.projectinfo = project_info()
-        self.config = user_config(
-            self.get_project_info("number")
-        )  # persistent user settings... don't think this works
-        self.data = get_pandas_data()
-        self.headers = self.data.columns
-        self.dist_data = get_distribution_data()
-        self.fix_dist_data()
 
         (
             self.lookup,
@@ -79,10 +110,10 @@ class DialogWindow(MFTk):
             self.config,
             self.data,
             self.li_issues,
-            self.doc_revs,
+            self.doc_revs,  # doc_issues
             self.doc_descriptions,
             self.doc_issues,
-            self.dist_data,
+            self.doc_distribution,  # doc_distribution
         ) = read_excel()
 
         self.col_widths = tkinter.StringVar(self)
@@ -128,27 +159,6 @@ class DialogWindow(MFTk):
             )
             return "-"
 
-    def dates(self):
-        """work out which columns are dates"""
-        match_str = r"^20(\d{2}\d{2}\d{2})-.*$"  # string match date format 20YYMMDD-...
-        #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
-        return [c for c in self.headers if re.match(match_str, c) is not None]
-
-    def fix_dist_data(self):
-        try:
-            cols = list(self.dist_data.columns)
-            for i, col in enumerate(self.dates()):
-                cols[i] = col
-            self.dist_data.columns = cols
-            df = self.dist_data[self.dates() + ["Name"]]
-            self.dist_data = df.loc[df.index.notnull()]
-        except:
-            warning_messagebox(
-                message="Something has gone wrong with your distribution table. You probably haven't expanded it to the correct size to match the document revision information.",
-                title="Distribution Table Error",
-            )
-            self._quit()
-
     def initialise(self):
         """create the interface"""
         ### Banner ###
@@ -186,7 +196,7 @@ class DialogWindow(MFTk):
         scrollbar.config(command=self.listbox.yview)
         scrollbar.pack(side=RIGHT, fill=Y)
         self.listbox.pack(fill=X)
-        for item in self.dates():
+        for item in self.li_issues:
             self.listbox.insert(END, item)
 
         ### Outgoing folder group ###
@@ -231,23 +241,27 @@ class DialogWindow(MFTk):
         MFLabelFrame(self, text="Errors", padx=15, pady=15).pack()
 
     def update_config(self):
-        try:
-            """save the user configs to Y:"""
-            self.config["job_number"] = self.get_project_info("number")
-            self.config["office"] = self.office.get()
-            self.config["open_on_save"] = self.open_on_save.get()
-            self.config["check_on_save"] = self.check_on_save.get()
-            self.config["col_widths"] = self.col_widths.get()
-            self.config["max_cols_in_part"] = self.max_cols_in_part.get()
-            self.config["filepath"] = xw.Book.caller().fullname
-            if os.environ["username"] not in self.config["users"]:
-                self.config["users"].append(os.environ["username"])
-            self.config["timestamps"].append(
-                time.strftime("%b %d %Y %H:%M:%S", time.localtime())
-            )
-            save_config(self.config)
-        except:
-            pass
+        # try:
+        """save the user configs to Y:"""
+        self.config["job_number"] = self.get_project_info("number")
+        self.config["selected_issues"] = [
+            self.li_issues[l] for l in self.listbox.curselection()
+        ]
+
+        self.config["office"] = self.office.get()
+        self.config["open_on_save"] = self.open_on_save.get()
+        self.config["check_on_save"] = self.check_on_save.get()
+        self.config["col_widths"] = self.col_widths.get()
+        self.config["max_cols_in_part"] = self.max_cols_in_part.get()
+        self.config["filepath"] = xw.Book.caller().fullname
+        if os.environ["username"] not in self.config["users"]:
+            self.config["users"].append(os.environ["username"])
+        self.config["timestamps"].append(
+            time.strftime("%b %d %Y %H:%M:%S", time.localtime())
+        )
+        save_config(self.config)
+        # except:
+        #     pass
 
     def get_outgoingfolder(self):
         """user select the outgoing folder"""
@@ -300,7 +314,7 @@ class DialogWindow(MFTk):
             li_issues=self.li_issues,
         )
         self.last_col = last_col = cols[-1]
-        if last_col not in self.dates():
+        if last_col not in self.li_issues:
             warning_messagebox("No Specific Issue selected", "Input error")
         mask = self.data[last_col].str.len() >= 1
         for doc in list(self.data.loc[mask, cols]["Document Number"]):
@@ -373,7 +387,7 @@ class DialogWindow(MFTk):
         )
         filescreated = BuildIssueSheet.print_issue_and_issue_history(
             self.data,
-            self.dist_data,
+            self.doc_distribution,
             self.projectinfo,
             self.lookup,
             self.config,
@@ -394,22 +408,22 @@ class DialogWindow(MFTk):
                 show_file(file_created)
         return filescreated
 
-    def create_links(self, last_col):  # TODO: delete ... not req. / no one uses it
-        """add some hyperlinks to the spreadsheet"""
-        iov = index_of_value("Document Number", "1. Document Numbering")
-        excel_col = (
-            iov[1] + 1 + list(self.data.columns.values).index(last_col)
-        )  # add three to get it back on track.
-        xw.sheets["1. Document Numbering"].range(iov[0] - 3, excel_col).value = (
-            '=hyperlink("' + self.savefilename + '", "IssueSheet")'
-        )
-        xw.sheets["1. Document Numbering"].range(iov[0] - 2, excel_col).value = (
-            '=hyperlink("' + self.savefilenamehistory + '", "History")'
-        )
-        if self.outgoingfolder:
-            xw.sheets["1. Document Numbering"].range(iov[0] - 1, excel_col).value = (
-                '=hyperlink("' + self.outgoingfolder + '", "Outgoing Folder")'
-            )
+    # def create_links(self, last_col):  # TODO: delete ... not req. / no one uses it
+    #     """add some hyperlinks to the spreadsheet"""
+    #     iov = index_of_value("Document Number", "1. Document Numbering")
+    #     excel_col = (
+    #         iov[1] + 1 + list(self.data.columns.values).index(last_col)
+    #     )  # add three to get it back on track.
+    #     xw.sheets["1. Document Numbering"].range(iov[0] - 3, excel_col).value = (
+    #         '=hyperlink("' + self.savefilename + '", "IssueSheet")'
+    #     )
+    #     xw.sheets["1. Document Numbering"].range(iov[0] - 2, excel_col).value = (
+    #         '=hyperlink("' + self.savefilenamehistory + '", "History")'
+    #     )
+    #     if self.outgoingfolder:
+    #         xw.sheets["1. Document Numbering"].range(iov[0] - 1, excel_col).value = (
+    #             '=hyperlink("' + self.outgoingfolder + '", "Outgoing Folder")'
+    #         )
 
     def _quit(self):
         self.update_config()

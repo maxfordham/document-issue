@@ -11,7 +11,6 @@ import xlwings as xw
 from d_i_ui import warning_messagebox
 from d_i_gui import run
 
-
 from datetime import datetime
 
 gettime = lambda: datetime.now().strftime("%H-%M-%S")

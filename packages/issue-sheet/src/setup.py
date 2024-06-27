@@ -17,7 +17,7 @@ base = None
 if sys.platform == "win32":
     base = "Win32GUI"
 
-executables = [Executable("document_issue.py", base=base)]
+executables = [Executable("__main__.py", base=base)]
 
 additional_mods = ["numpy.core._methods", "numpy.lib.format"]
 exclude_mods = [

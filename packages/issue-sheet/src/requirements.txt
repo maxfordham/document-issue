@@ -7,3 +7,4 @@ PyYAML==6.0.1
 reportlab==4.1.0
 XlsxWriter==1.1.8
 xlwings==0.31.4
+git+https://git@github.com/maxfordham/document-issue.git@0.4.7#subdirectory=packages/document-issue

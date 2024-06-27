@@ -168,23 +168,3 @@ def address_from_loc(loc):
         return MANCHESTER_ADDRESS
     else:
         return LONDON_ADDRESS
-
-
-import os
-
-# DIR = r"Y:\git_projects\MF_Toolbox\dev\mf_modules"
-DIR = r"C:\engDev\MF_Toolbox\dev\mf_modules"
-
-
-def mf_modules_dir():
-    """use this when referencing files."""
-
-    try:
-        pythonpath = os.environ["PYTHONPATH"].split(";")
-        for i in pythonpath:
-            if "mf_toolbox" in i.lower():
-                return i + r"\mf_modules"
-        _MF_ROOT = os.environ["mf_root"]
-        return os.path.join(_MF_ROOT, r"mf_modules")  # fallback
-    except:
-        return os.path.join(DIR)

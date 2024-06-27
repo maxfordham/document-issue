@@ -1,7 +1,8 @@
 import subprocess
-import ossaudiodev
+import pandas as pd
 import pathlib
 import json
+import os
 import webbrowser
 import math as math
 from reportlab.lib import colors
@@ -11,64 +12,27 @@ from mf_reportlab.issuesheet_reportlab import issue_sheet
 from mf_reportlab.mf_styles import MFDoc, DEFAULTTABLESTYLE, highlight_last_format
 from mf_reportlab.mf_styles import p_nospace, get_titleblockimage
 from mf_reportlab.mf_styles import dist_line_style, sid_line_style
-from constants import address_from_loc, address_from_loc_compact, OFFICES
+from constants import (
+    address_from_loc,
+    address_from_loc_compact,
+    OFFICES,
+    SHEETTABLEDICT,
+    TITLETEXT,
+    HIGHLIGHT_COLOUR,
+    DEFAULT_TITLES,
+    DEFAULT_COLS,
+    START_ROW,
+    START_COL,
+    MAX_COLS_IN_PART,
+    CONFIG_DIR,
+    DEFAULT_CONFIG,
+)
+import pathlib
+from frictionless import Package, Resource
+from frictionless.resources import JsonResource
+from models import LookupData
 
 logger = logging.getLogger(__name__)
-
-START_ROW = 35  # Default
-START_COL = 1  # B
-MAX_COLS_IN_PART = 30
-CONFIG_DIR = r"J:\J4321\Data\document_issue\config"
-DEFAULT_CONFIG = {
-    "job_number": "4321",
-    "office": "Cambridge",  # edinburgh; bristol; manchester; cambridge; london;
-    "open_on_save": "False",
-    "check_on_save": "True",
-    "col_widths": "100,40,9",
-    "max_cols_in_part": MAX_COLS_IN_PART,
-    "users": [],
-    "timestamps": [],
-    "filepath": "",
-}
-
-DEFAULT_COLS = [
-    "Document Title",
-    "Document Number",
-    "docSource",
-    "Scale",
-    "Size",
-    "Current Rev",
-]
-DEFAULT_TITLES = [
-    "Document Title",
-    "Document Number",
-    "Type",
-    "Scale",
-    "Size",
-    "Rev",
-    "Dated Issue Revisions",
-]
-
-HIGHLIGHT_COLOUR = colors.Color(168 / 255, 231 / 255, 255 / 255, alpha=1.0)
-
-TITLETEXT = "Check and create issue sheets.\n v0.2.0 - May19"
-
-SHEETTABLEDICT = [  # sheet, first header, dict?, tableheader, header in revit export
-    ["project", "project_code", True, "Project Name", None],
-    ["originator", "originator_code", True, "Originator Description", None],
-    ["volume", "volume_code", True, "Volume Name", "03. Volume"],
-    ["level", "level_code", True, "Level Description", "04. Level"],
-    ["infoType", "infoType_code", True, "Information Type Description", None],
-    [
-        "classification",
-        "classification_code",
-        False,
-        "System Identifier Description",
-        "07. Classification",
-    ],
-    ["drwgType", "drwgType_code", True, "X Sequence Number", "08. Number"],
-    ["sequence", "sequence_code", False, "YZ Sequence Number", "08. Number"],
-]
 
 
 class BuildIssueSheet:
@@ -256,6 +220,72 @@ class BuildIssueSheet:
     def data_table(
         history, part, selected_issues, li_issues, data, doc_descriptions, lookup
     ):
+        
+        pkg = Package(
+            pathlib.Path(r"J:\J4321\Data\document_issue\config\J3870\datapackage.yaml")
+        )
+        lookup = LookupData(**pkg.get_resource("lookup").read_data())
+        config = pkg.get_resource("config").read_data()
+        issue = pkg.get_resource("issue").read_rows()
+        document = pkg.get_resource("document").read_rows()
+
+        df_issue = pd.DataFrame(issue)
+        df_issue_pivot = df_issue.pivot(
+            index="document_code", columns="date_status", values="revision_number"
+        )
+        df_document = pd.DataFrame(document)
+        docs = list(df_issue.document_code.unique())
+        current_revs = {
+            d: df_issue.set_index("document_code")
+            .loc[d]
+            .sort_values("date_status")
+            .revision_number.iloc[-1]
+            for d in docs
+        }
+        df_document["Current Rev"] = df_document.document_code.map(current_revs)
+        if history:
+            cols = DEFAULT_COLS + [i["date_status"] for i in issue]
+        else:
+            cols = DEFAULT_COLS + config["selected_issues"]
+        last_col = cols[-1]
+        uniclass_classifications = df_document.uniclass.unique().tolist()
+        uniclass_classifications.sort()
+        map_uniclass_description = {
+            v: lookup.classification[k]
+            for k, v in lookup.classification_uniclass.items()
+        }
+        df_out = pd.concat(
+            [df_document.set_index("document_code"), df_issue_pivot], axis=1
+        )
+        df_out = df_out.reset_index().rename(
+            columns={"document_code": "Document Number"}
+        )
+        df_out = df_out[cols + ["System Identifier Description"]]
+        df_out.dropna(subset=[c for c in cols if c not in DEFAULT_COLS], inplace=True)
+        data_list = []  # this is a list of rows in the table. #list for styling output.
+        sid_style = []
+
+        for uniclass in uniclass_classifications:
+            sid = map_uniclass_description[uniclass]
+            if uniclass == "N/A":
+                uniclass = ""
+
+            df = df_out[df_out["System Identifier Description"] == sid].sort_values(
+                "Document Number"
+            )
+
+            if df.loc[mask, cols].values.tolist():
+                data_list += [[p_nospace("{0}    {1}".format(sid, uniclass), [])]]
+                sid_style += sid_line_style(4 + len(data_list))
+                data_list += format_data_rows(
+                    df.loc[mask, cols].values.tolist()
+                )  # This is where they get added.
+                data_list += [[""] * len(cols)]
+        check = data_list
+        check1 = sid_style
+
+        # --- old code ---
+
         cols = BuildIssueSheet.cols_to_plot(
             history=history,
             selected_issues=selected_issues,
@@ -315,24 +345,31 @@ class BuildIssueSheet:
 
     @staticmethod
     def distribution_table(
-        dist_data, data_list, sid_style, history, part, selected_issues, li_issues
+        doc_distribution,
+        data_list,
+        sid_style,
+        history,
+        part,
+        selected_issues,
+        li_issues,
     ):
         ###LET's Do the Distribution List
+
         cols = BuildIssueSheet.cols_to_plot(
             history=history,
             selected_issues=selected_issues,
             li_issues=li_issues,
             part=part,
         )
+        cols_issues = [x for x in cols if not x in DEFAULT_COLS]
 
         data_list += [[""]]  # blank line
         sid_style += dist_line_style(4 + len(data_list))
         data_list += [["Distribution"]]
         sid_style += dist_line_style(4 + len(data_list))
-        distcols = ["Name"] * len(DEFAULT_COLS) + [
-            x for x in cols if not x in DEFAULT_COLS
-        ]
-        for i, line in enumerate(dist_data[distcols].values.tolist()):
+
+        doc_dist = doc_distribution.T.to_dict()
+        for i in range(len(doc_dist)):
             sid_style.append(
                 (
                     "SPAN",
@@ -340,7 +377,11 @@ class BuildIssueSheet:
                     (len(DEFAULT_COLS) - 1, 5 + len(data_list) + i),
                 )
             )
-        data_list += dist_data[distcols].values.tolist()
+        li = []
+        for k, v in doc_dist.items():
+            li.append([k] * len(DEFAULT_COLS) + [v[c] for c in cols_issues])
+        data_list += li
+
         return data_list, sid_style
 
     @staticmethod
@@ -373,7 +414,7 @@ class BuildIssueSheet:
         document,
         fname,
         data,
-        dist_data,
+        doc_distribution,
         projectinfo,
         config,
         doc_descriptions,
@@ -402,7 +443,13 @@ class BuildIssueSheet:
         )
         headings = BuildIssueSheet.create_heading(cols_to_plot)
         data_list, sid_style = BuildIssueSheet.distribution_table(
-            dist_data, data_list, sid_style, history, part, selected_issues, li_issues
+            doc_distribution,
+            data_list,
+            sid_style,
+            history,
+            part,
+            selected_issues,
+            li_issues,
         )
         titleblockdata = BuildIssueSheet.construct_title_block(
             history, part, selected_issues, li_issues, projectinfo, config, lookup
@@ -421,7 +468,7 @@ class BuildIssueSheet:
     @staticmethod
     def print_issue_and_issue_history(
         data,
-        dist_data,
+        doc_distribution,
         projectinfo,
         lookup,
         config,
@@ -455,7 +502,7 @@ class BuildIssueSheet:
             document,
             fname,
             data,
-            dist_data,
+            doc_distribution,
             projectinfo,
             config,
             doc_descriptions,
@@ -490,7 +537,7 @@ class BuildIssueSheet:
                     document,
                     fname,
                     data,
-                    dist_data,
+                    doc_distribution,
                     projectinfo,
                     config,
                     doc_descriptions,
@@ -510,7 +557,7 @@ class BuildIssueSheet:
                 document,
                 savefilenamehistory,
                 data,
-                dist_data,
+                doc_distribution,
                 projectinfo,
                 config,
                 doc_descriptions,
@@ -525,10 +572,6 @@ class BuildIssueSheet:
                 filescreated.append(savefilenamehistory)
 
         return filescreated
-
-
-def gotohelp():
-    webbrowser.open_new(r"mailto:helpdesk@maxfordham.com")
 
 
 def new_document(projectname, office):
@@ -575,6 +618,10 @@ def verify_config(config):
 
 def save_config(config):
     """save the config (which is a dict) to a file"""
+
+    fpth = pathlib.Path(CONFIG_DIR) / config["job_number"] / "config.json"
+    fpth.write_text(json.dumps(config, sort_keys=True, indent=4))
+
     file = config_filename(config["job_number"])
     try:
         with open(file, "w") as handle:
@@ -590,11 +637,6 @@ def save_config(config):
         )
 
 
-def show_file(filename):
-    """open a file in default program"""
-    subprocess.Popen(filename, shell=True)
-
-
 def format_data_rows(rows):
     # rows is a list of list.
     for i, row in enumerate(rows):
@@ -602,3 +644,6 @@ def format_data_rows(rows):
         _row[0] = "\n".join(wrap(_row[0], 80))
         rows[i] = _row
     return rows
+
+
+# def read_frictionless()

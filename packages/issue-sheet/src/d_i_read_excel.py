@@ -1,129 +1,14 @@
 # mapping tables
 from typing import Any, List
-import typing as ty
 from typing_extensions import Annotated
 from pydantic import BaseModel
+import typing as ty
 from pydantic.functional_validators import AfterValidator
-import stringcase
 import re
+import stringcase
 import xlwings as xw
-
-from constants import DRWG_CLASSIFICATION_CODE_REGEX, UNICLASS_CLASSIFICATION_CODE_REGEX
-
-
-DrwgClassificationCode = Annotated[
-    str,
-    AfterValidator(lambda s: re.match(DRWG_CLASSIFICATION_CODE_REGEX, s)) is not None,
-]
-UniclassClassificationCode = Annotated[
-    str,
-    AfterValidator(lambda s: re.match(DRWG_CLASSIFICATION_CODE_REGEX, s)) is not None,
-]
-
-from typing import Annotated, Hashable, List, TypeVar
-from typing import Optional
-from pydantic_core import PydanticCustomError
-from pydantic import AfterValidator, Field, ValidationError
-from pydantic.type_adapter import TypeAdapter
-import enum
-
-T = TypeVar("T", bound=Hashable)
-
-# class DocumentCodesRegex(BaseModel):
-#     project: str = DRWG_CLASSIFICATION_CODE_REGEX
-#     originator: str = r"^.*$"
-#     classification: str = r"^.*$"
-#     info_type: str = r"^.*$"
-#     drwg_type: str = r"^.*$"
-#     volume: str = r"^.*$"
-#     level: str = r"^.*$"
-#     sequence: str = r"^.*$"
-#
-# class DocumentCodesExtraRegex(BaseModel):
-#     classification_uniclass: str =  UNICLASS_CLASSIFICATION_CODE_REGEX
-#     classification_role: str = r"^.*$"
-#
-# NOTE: ^ maybe regex not req. as we are using enums
-
-
-def _validate_unique_list(v: list[T]) -> list[T]:
-    if len(v) != len(set(v)):
-        raise PydanticCustomError("unique_list", "List must be unique")
-    return v
-
-
-UniqueList = Annotated[
-    List[T],
-    AfterValidator(_validate_unique_list),
-    Field(json_schema_extra={"uniqueItems": True}),
-]
-
-
-class DocumentCodeParts(enum.Enum):
-    project: str = "project"
-    originator: str = "originator"
-    role: str = "role"
-    classification: str = "classification"
-    type: str = "type"  # info_type
-    subtype: str = "subtype"  # drwg_type
-    volume: str = "volume"
-    level: str = "level"
-    sequence: str = "sequence"  # remove?
-
-
-class DocumentCodesMap(BaseModel):  # MapDocumentCodeDescription
-    project: dict[str, str]
-    originator: dict[ty.Literal["MXF"], ty.Literal["Max Fordham LLP"]]
-    # role: dict[str, str]
-    classification: dict[str, str]
-    type: dict[str, str]
-    # drwg_type: dict[int, str]  # info_sub_type
-    volume: dict[str, str]
-    level: dict[str, str]
-    type_sequences: Optional[dict[str, dict[str, str]]] = None  # info_type_sequences
-
-    nested_codes: dict[DocumentCodeParts, tuple[str]] = {
-        "classification": ("role", "subrole"),
-        "type": ("type", "subtype"),
-    }
-    nested_codes_delimiter: str = "-"
-
-
-class DocumentMetadataMap(BaseModel):
-    scale: dict[str, str]
-    size: dict[str, str]
-    status: dict[str, str]
-    issue_format: dict[str, str]
-    doc_source: dict[str, str]
-    classification_uniclass: dict[DrwgClassificationCode, UniclassClassificationCode]
-    # role: dict[DrwgClassificationCode, str]
-    # info_sub_type: dict[str, str]
-
-
-class LookupData(DocumentCodesMap, DocumentMetadataMap):
-    pass
-
-
-class DocumentCodeSpec(BaseModel):
-    # regex: DocumentCodesRegex
-    order: UniqueList[DocumentCodeParts] = Field(
-        max_length=len(DocumentCodeParts.__members__)
-    )
-    map_codes: DocumentCodesMap
-    map_metadata: DocumentMetadataMap
-
-
-class Recipient(BaseModel):
-    name: str
-    email: str
-    role: str
-
-
-class DistributionList(BaseModel):
-    recipients: List[Recipient]
-
-
 import pandas as pd
+from models import LookupData, DocumentCodeParts, DocumentCodesMap, DocumentMetadataMap
 
 
 def index_of_value(value, sheet):
@@ -204,20 +89,7 @@ def get_issues(data):
 import os
 import json
 from d_i_ui import warning_messagebox
-
-MAX_COLS_IN_PART = 30
-DEFAULT_CONFIG = {
-    "job_number": "4321",
-    "office": "Cambridge",  # edinburgh; bristol; manchester; cambridge; london;
-    "open_on_save": "False",
-    "check_on_save": "True",
-    "col_widths": "100,40,9",
-    "max_cols_in_part": MAX_COLS_IN_PART,
-    "users": [],
-    "timestamps": [],
-    "filepath": "",
-}
-CONFIG_DIR = r"J:\J4321\Data\document_issue\config"
+from constants import DEFAULT_CONFIG, MAX_COLS_IN_PART, CONFIG_DIR
 
 
 def verify_config(config):
@@ -325,27 +197,165 @@ def get_distribution_data(li_issues=None):
     )
 
 
-def read_excel():
+def read_excel(output: bool = True) -> Any:
     lookup = get_lookup_data()
+    map_status_rev = {k: v.split(" - ")[0] for k, v in lookup.status.items()}
     projectinfo = project_info()
     config = user_config(projectinfo.get("Job Number"))  # define this in the UI
     data = get_pandas_data()
     li_issues = get_issues(data)
-    doc_revs = data["Current Rev"].to_dict()
     doc_descriptions = data[
         [c for c in data.columns if c not in li_issues + ["Current Rev"]]
     ].T.to_dict()
     doc_issues = data[li_issues].T.to_dict()
-    dist_data = get_distribution_data(li_issues=li_issues)
-    print("data loaded")
+
+    def getlastrev(di, map_status_rev=map_status_rev):
+        if set(di.values()) == {None}:
+            return None
+        else:
+            li = []
+            for k, v in di.items():
+                if v is not None:
+                    rev = map_status_rev[k.split("-")[1]]
+                    li.append(f"{k}-{rev}{v}")
+            return li[-1]
+
+    cols = data.columns.to_list()
+    df_document = data[cols[0 : cols.index("Current Rev")]]
+
+    doc_currentrevs = {}  # {k: getlastrev(v) for k, v in doc_issues.items()}
+    for k, v in doc_issues.items():
+        lastrev = getlastrev(v)
+        if lastrev is not None:
+            doc_currentrevs[k] = lastrev
+
+    doc_distribution = get_distribution_data(li_issues=li_issues)
+    df_distribution = doc_distribution.melt(
+        id_vars=["Name"], var_name="date_status", value_name="issue_format"
+    ).rename(columns={"Name": "recipient"})
+
+    df_issue = data[li_issues]
+    df_issue = (
+        df_issue.reset_index()
+        .rename(columns={"Document Number Index": "document_code"})
+        .melt(
+            id_vars=["document_code"],
+            var_name="date_status",
+            value_name="revision_number",
+        )
+        .dropna(subset=["revision_number"])
+    )
+
+    # df_issue = pd.concat([df_issue['date_status'].str.split("-", expand=True).rename(columns={0:"date", 1:"status"}), df_issue], axis=1)
+    # del df_issue["date_status"]
+
+    if output:
+        fdir = pathlib.Path(CONFIG_DIR) / projectinfo.get("Job Number")
+        fdir.mkdir(exist_ok=True)
+        dng_to_package(
+            lookup,
+            config,
+            projectinfo,
+            df_distribution,
+            df_issue,
+            df_document.reset_index().rename(
+                columns={"Document Number Index": "document_code"}
+            ),
+            fdir=fdir,
+        )
+
     return (
         lookup,
         projectinfo,
         config,
         data,
         li_issues,
-        doc_revs,
+        doc_currentrevs,
         doc_descriptions,
         doc_issues,
-        dist_data,
+        doc_distribution,
     )
+
+
+from contextlib import contextmanager
+from pathlib import Path
+import os
+import pathlib
+from frictionless import Package, Resource
+from frictionless.resources import JsonResource
+
+
+@contextmanager
+def set_directory(path: Path):
+    """Sets the cwd within the context
+
+    Args:
+        path (Path): The path to the cwd
+
+    Yields:
+        None
+    """
+
+    origin = Path().absolute()
+    origin.mkdir(exist_ok=True)
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(origin)
+
+
+def dng_to_package(
+    lookup,
+    config,
+    projectinfo,
+    df_distribution,
+    df_issue,
+    df_document,
+    fdir: Path = pathlib.Path("test"),
+):
+
+    with set_directory(fdir):
+        f_lkup, f_config, f_project, f_dist, f_issue, f_docs = (
+            pathlib.Path("lookup.json"),
+            pathlib.Path("config.json"),
+            pathlib.Path("projectinfo.json"),
+            pathlib.Path("distribution.csv"),
+            pathlib.Path("issue.csv"),
+            pathlib.Path("document.csv"),
+        )
+        f_lkup.write_text(lookup.model_dump_json(indent=4))
+        f_config.write_text(json.dumps(config, indent=4))
+        f_project.write_text(json.dumps(projectinfo, indent=4))
+        df_distribution.to_csv(f_dist, index=None)
+        df_issue.to_csv(f_issue, index=None)
+        df_document.to_csv(f_docs, index=None)
+
+        package = Package(
+            name="document-issue",
+            title="My Package",
+            description="My Package for the Guide",
+            resources=[
+                Resource(path="distribution.csv"),
+                Resource(path="issue.csv"),
+                Resource(path="document.csv"),
+                JsonResource(path="lookup.json"),
+                JsonResource(path="projectinfo.json"),
+                JsonResource(path="config.json"),
+            ],
+            # it's possible to provide all the official properties like homepage, version, etc
+        )
+        print(package)
+        package.to_yaml("datapackage.yaml")
+    print("done")
+
+
+def load_package(fdir: Path = pathlib.Path("test")):
+    with set_directory(fdir):
+        package = Package("datapackage.yaml")
+        print(package)
+
+    return package
+
+
+# def dump_json(data, filename):

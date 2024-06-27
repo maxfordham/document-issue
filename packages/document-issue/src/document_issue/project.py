@@ -30,6 +30,7 @@ class ProjectBase(BaseModel):
     project_name: str = Field(
         "In House App Testing", description="should be the same as the WebApp"
     )
+    project_address: str = Field()
 
 
 class Project(ProjectBase):
