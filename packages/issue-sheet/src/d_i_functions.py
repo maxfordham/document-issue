@@ -220,7 +220,7 @@ class BuildIssueSheet:
     def data_table(
         history, part, selected_issues, li_issues, data, doc_descriptions, lookup
     ):
-        
+
         pkg = Package(
             pathlib.Path(r"J:\J4321\Data\document_issue\config\J3870\datapackage.yaml")
         )
@@ -242,43 +242,56 @@ class BuildIssueSheet:
             .revision_number.iloc[-1]
             for d in docs
         }
-        df_document["Current Rev"] = df_document.document_code.map(current_revs)
+        df_document["Current Rev"] = (
+            df_document.document_code.map(current_revs)
+            .fillna(0)
+            .astype(int)
+            .astype(str)
+            .str.replace("0", "")
+        )
         if history:
-            cols = DEFAULT_COLS + [i["date_status"] for i in issue]
+            cols_issue = sorted(list(set([i["date_status"] for i in issue])))
+            if part > 0:
+                startindex = (part - 1) * MAX_COLS_IN_PART
+                endindex = part * MAX_COLS_IN_PART
+            cols_issue = li_issues[startindex:endindex]
         else:
-            cols = DEFAULT_COLS + config["selected_issues"]
+            cols_issue = config["selected_issues"]
+        cols = DEFAULT_COLS + cols_issue
         last_col = cols[-1]
-        uniclass_classifications = df_document.uniclass.unique().tolist()
-        uniclass_classifications.sort()
-        map_uniclass_description = {
-            v: lookup.classification[k]
-            for k, v in lookup.classification_uniclass.items()
-        }
+
         df_out = pd.concat(
             [df_document.set_index("document_code"), df_issue_pivot], axis=1
-        )
-        df_out = df_out.reset_index().rename(
-            columns={"document_code": "Document Number"}
-        )
+        ).reset_index()
+
+        df_out = df_out.rename(columns={"document_code": "Document Number"})
         df_out = df_out[cols + ["System Identifier Description"]]
-        df_out.dropna(subset=[c for c in cols if c not in DEFAULT_COLS], inplace=True)
+        df_out.dropna(subset=cols_issue, inplace=True, how="all")
+        for c in cols_issue:
+            df_out[c] = df_out[c].fillna(0).astype(int).astype(str).str.replace("0", "")
+
         data_list = []  # this is a list of rows in the table. #list for styling output.
         sid_style = []
 
-        for uniclass in uniclass_classifications:
-            sid = map_uniclass_description[uniclass]
+        doc_classifications = list(
+            set([d["System Identifier"] for d in doc_descriptions.values()])
+        )
+
+        for c in doc_classifications:
+            sid = lookup.classification[c]
+            uniclass = lookup.classification_uniclass[c]
+
             if uniclass == "N/A":
                 uniclass = ""
 
             df = df_out[df_out["System Identifier Description"] == sid].sort_values(
                 "Document Number"
             )
-
-            if df.loc[mask, cols].values.tolist():
+            if len(df) > 0:
                 data_list += [[p_nospace("{0}    {1}".format(sid, uniclass), [])]]
                 sid_style += sid_line_style(4 + len(data_list))
                 data_list += format_data_rows(
-                    df.loc[mask, cols].values.tolist()
+                    df[cols].values.tolist()
                 )  # This is where they get added.
                 data_list += [[""] * len(cols)]
         check = data_list
@@ -286,45 +299,43 @@ class BuildIssueSheet:
 
         # --- old code ---
 
-        cols = BuildIssueSheet.cols_to_plot(
-            history=history,
-            selected_issues=selected_issues,
-            li_issues=li_issues,
-            part=part,
-        )
-        last_col = cols[-1]
-        data_tmp = data.sort_values("System Identifier Description")
-        data_list = []  # this is a list of rows in the table. #list for styling output.
-        sid_style = []
+        # cols = BuildIssueSheet.cols_to_plot(
+        #     history=history,
+        #     selected_issues=selected_issues,
+        #     li_issues=li_issues,
+        #     part=part,
+        # )
+        # last_col = cols[-1]
+        # data_tmp = data.sort_values("System Identifier Description")
+        # data_list = []  # this is a list of rows in the table. #list for styling output.
+        # sid_style = []
 
-        uniclass_classifications = sorted(
-            list(set([d["uniclass"] for d in doc_descriptions.values()]))
-        )
-        map_uniclass_description = {
-            v: lookup.classification[k]
-            for k, v in lookup.classification_uniclass.items()
-        }
+        # doc_classifications = list(
+        #     set([d["System Identifier"] for d in doc_descriptions.values()])
+        # )
 
-        for uniclass in uniclass_classifications:
-            sid = map_uniclass_description[uniclass]
-            if uniclass == "N/A":
-                uniclass = ""
+        # for c in doc_classifications:
+        #     sid = lookup.classification[c]
+        #     uniclass = lookup.classification_uniclass[c]
 
-            df = data_tmp[data_tmp["System Identifier Description"] == sid].sort_values(
-                "Document Number"
-            )
-            if history:
-                mask = df["Current Rev"].str.len() > 0
-            else:
-                mask = df[last_col].str.len() >= 1
+        #     if uniclass == "N/A":
+        #         uniclass = ""
 
-            if df.loc[mask, cols].values.tolist():
-                data_list += [[p_nospace("{0}    {1}".format(sid, uniclass), [])]]
-                sid_style += sid_line_style(4 + len(data_list))
-                data_list += format_data_rows(
-                    df.loc[mask, cols].values.tolist()
-                )  # This is where they get added.
-                data_list += [[""] * len(cols)]
+        #     df = data_tmp[data_tmp["System Identifier Description"] == sid].sort_values(
+        #         "Document Number"
+        #     )
+        #     if history:
+        #         mask = df["Current Rev"].str.len() > 0
+        #     else:
+        #         mask = df[last_col].str.len() >= 1
+
+        #     if df.loc[mask, cols].values.tolist():
+        #         data_list += [[p_nospace("{0}    {1}".format(sid, uniclass), [])]]
+        #         sid_style += sid_line_style(4 + len(data_list))
+        #         data_list += format_data_rows(
+        #             df.loc[mask, cols].values.tolist()
+        #         )  # This is where they get added.
+        #         data_list += [[""] * len(cols)]
 
         return data_list, sid_style
 
