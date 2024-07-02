@@ -30,7 +30,11 @@ if __name__ == "__main__":
 
     if __debug__:
         print("Debug ON")
-        fpth = pathlib.Path(__file__).parent / "DocumentNumberGenerator.xlsm"
+        fpth = (
+            pathlib.Path(__file__).parent.parent.parent
+            / "excel-dng"
+            / "DocumentNumberGenerator.xlsm"
+        )
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:

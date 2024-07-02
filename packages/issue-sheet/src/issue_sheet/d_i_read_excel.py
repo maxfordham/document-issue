@@ -197,7 +197,7 @@ def get_distribution_data(li_issues=None):
     )
 
 
-def read_excel(output: bool = True) -> Any:
+def read_excel(fdir_package=None) -> Any:
     lookup = get_lookup_data()
     map_status_rev = {k: v.split(" - ")[0] for k, v in lookup.status.items()}
     projectinfo = project_info()
@@ -249,9 +249,8 @@ def read_excel(output: bool = True) -> Any:
     # df_issue = pd.concat([df_issue['date_status'].str.split("-", expand=True).rename(columns={0:"date", 1:"status"}), df_issue], axis=1)
     # del df_issue["date_status"]
 
-    if output:
-        fdir = pathlib.Path(CONFIG_DIR) / projectinfo.get("Job Number")
-        fdir.mkdir(exist_ok=True)
+    if fdir_package is not None:
+        fdir_package.mkdir(exist_ok=True)
         dng_to_package(
             lookup,
             config,
@@ -261,7 +260,7 @@ def read_excel(output: bool = True) -> Any:
             df_document.reset_index().rename(
                 columns={"Document Number Index": "document_code"}
             ),
-            fdir=fdir,
+            fdir=fdir_package,
         )
 
     return (
@@ -303,6 +302,32 @@ def set_directory(path: Path):
         yield
     finally:
         os.chdir(origin)
+
+
+def dng_to_frictionless(fpth: pathlib.Path) -> pathlib.Path:
+    (
+        lookup,
+        projectinfo,
+        config,
+        data,
+        li_issues,
+        doc_currentrevs,
+        doc_descriptions,
+        doc_issues,
+        doc_distribution,
+    ) = read_excel(output=False)
+    fdir = fpth.parent
+    fdir.mkdir(exist_ok=True)
+    dng_to_package(
+        lookup,
+        config,
+        projectinfo,
+        doc_distribution,
+        doc_issues,
+        data,
+        fdir=fdir,
+    )
+    return fdir / "datapackage.yaml"
 
 
 def dng_to_package(

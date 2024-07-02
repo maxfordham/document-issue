@@ -35,6 +35,67 @@ from models import LookupData
 logger = logging.getLogger(__name__)
 
 
+def load_datapackage(fdir_package=None):
+    pkg = Package(
+        pathlib.Path(r"J:\J4321\Data\document_issue\config\J3870\datapackage.yaml")
+    )
+    projectinfo = pkg.get_resource("projectinfo").read_data()
+    lookup = LookupData(**pkg.get_resource("lookup").read_data())
+    config = pkg.get_resource("config").read_data()
+    issue = pkg.get_resource("issue").read_rows()
+    document = pkg.get_resource("document").read_rows()
+    distribution = pkg.get_resource("distribution").read_rows()
+
+    df_issue = pd.DataFrame(issue)
+    df_issue_pivot = df_issue.pivot(
+        index="document_code", columns="date_status", values="revision_number"
+    )
+    df_document = pd.DataFrame(document)
+    docs = list(df_issue.document_code.unique())
+    current_revs = {
+        d: df_issue.set_index("document_code")
+        .loc[d]
+        .sort_values("date_status")
+        .revision_number.iloc[-1]
+        for d in docs
+    }
+    df_document["Current Rev"] = (
+        df_document.document_code.map(current_revs)
+        .fillna(0)
+        .astype(int)
+        .astype(str)
+        .str.replace("0", "")
+    )
+
+    df_document_issue = pd.concat(
+        [df_document.set_index("document_code"), df_issue_pivot], axis=1
+    ).reset_index()
+
+    df_distribution = pd.DataFrame(distribution)
+
+    return (
+        df_document,
+        df_issue,
+        df_document_issue,
+        df_distribution,
+        lookup,
+        config,
+        projectinfo,
+    )
+
+
+def cols_to_plot_history(li_issues, part, max_cols_in_part):
+    if part > 0:
+        startindex = (part - 1) * max_cols_in_part
+        endindex = part * max_cols_in_part
+        return li_issues[startindex:endindex]
+    else:
+        return li_issues
+
+
+# def issuesheet_from_package(package):
+
+
 class BuildIssueSheet:
 
     @staticmethod
@@ -86,9 +147,13 @@ class BuildIssueSheet:
         history, part, selected_issues, li_issues, projectinfo, config, lookup
     ):
         """title block for the document"""
-        d, m, y, s = BuildIssueSheet.day_month_year_status(
-            -1, history, selected_issues=selected_issues, li_issues=li_issues
-        )
+        cols_to_plot = BuildIssueSheet.cols_to_plot(
+            history=history, selected_issues=selected_issues, li_issues=li_issues
+        )[-1]
+        d = cols_to_plot[6:8]
+        m = cols_to_plot[4:6]
+        y = cols_to_plot[2:4]
+        s = cols_to_plot[9:]
         try:
             status_description = lookup.status[s].split(" - ")[2]
         except:
@@ -206,17 +271,6 @@ class BuildIssueSheet:
         return data
 
     @staticmethod
-    def day_month_year_status(index, history, selected_issues=[], li_issues=[]):
-        cols_to_plot = BuildIssueSheet.cols_to_plot(
-            history=history, selected_issues=selected_issues, li_issues=li_issues
-        )[index]
-        d = cols_to_plot[6:8]
-        m = cols_to_plot[4:6]
-        y = cols_to_plot[2:4]
-        s = cols_to_plot[9:]
-        return d, m, y, s
-
-    @staticmethod
     def data_table(
         history, part, selected_issues, li_issues, data, doc_descriptions, lookup
     ):
@@ -228,6 +282,13 @@ class BuildIssueSheet:
         config = pkg.get_resource("config").read_data()
         issue = pkg.get_resource("issue").read_rows()
         document = pkg.get_resource("document").read_rows()
+
+        return BuildIssueSheet.data_table_new(
+            lookup, config, issue, document, history, part
+        )
+
+    @staticmethod
+    def data_table_new(lookup, config, issue, document, history=False, part=-1):
 
         df_issue = pd.DataFrame(issue)
         df_issue_pivot = df_issue.pivot(
@@ -249,12 +310,11 @@ class BuildIssueSheet:
             .astype(str)
             .str.replace("0", "")
         )
+
+        #
+        li_issues = sorted(list(set([i["date_status"] for i in issue])))
         if history:
-            cols_issue = sorted(list(set([i["date_status"] for i in issue])))
-            if part > 0:
-                startindex = (part - 1) * MAX_COLS_IN_PART
-                endindex = part * MAX_COLS_IN_PART
-            cols_issue = li_issues[startindex:endindex]
+            cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
         else:
             cols_issue = config["selected_issues"]
         cols = DEFAULT_COLS + cols_issue
@@ -273,9 +333,11 @@ class BuildIssueSheet:
         data_list = []  # this is a list of rows in the table. #list for styling output.
         sid_style = []
 
-        doc_classifications = list(
-            set([d["System Identifier"] for d in doc_descriptions.values()])
-        )
+        # doc_classifications = list(
+        #     set([d["System Identifier"] for d in doc_descriptions.values()])
+        # )
+
+        doc_classifications = list(df_document["System Identifier"].unique())
 
         for c in doc_classifications:
             sid = lookup.classification[c]
@@ -296,7 +358,7 @@ class BuildIssueSheet:
                 data_list += [[""] * len(cols)]
         check = data_list
         check1 = sid_style
-
+        return data_list, sid_style
         # --- old code ---
 
         # cols = BuildIssueSheet.cols_to_plot(
@@ -337,22 +399,20 @@ class BuildIssueSheet:
         #         )  # This is where they get added.
         #         data_list += [[""] * len(cols)]
 
-        return data_list, sid_style
-
     @staticmethod
     def tablestyle(history, sid_style, data_list, headings):
         if history:
-            tablestyle = (
+            _tablestyle = (
                 highlight_last_format(
                     headings + data_list, startrow=5, rev_position=len(DEFAULT_COLS) - 1
                 )
                 + sid_style
             )
         else:
-            tablestyle = (
+            _tablestyle = (
                 DEFAULTTABLESTYLE(defaultcols=len(DEFAULT_COLS) - 1) + sid_style
             )
-        return tablestyle
+        return _tablestyle
 
     @staticmethod
     def distribution_table(
@@ -364,22 +424,53 @@ class BuildIssueSheet:
         selected_issues,
         li_issues,
     ):
-        ###LET's Do the Distribution List
 
-        cols = BuildIssueSheet.cols_to_plot(
+        pkg = Package(
+            pathlib.Path(r"J:\J4321\Data\document_issue\config\J3870\datapackage.yaml")
+        )
+        config = pkg.get_resource("config").read_data()
+        issue = pkg.get_resource("issue").read_rows()
+        distribution = pkg.get_resource("distribution").read_rows()
+
+        return BuildIssueSheet.distribution_table_new(
+            config,
+            issue,
+            distribution,
+            data_list=data_list,
+            sid_style=sid_style,
             history=history,
-            selected_issues=selected_issues,
-            li_issues=li_issues,
             part=part,
         )
-        cols_issues = [x for x in cols if not x in DEFAULT_COLS]
+
+    @staticmethod
+    def distribution_table_new(
+        config,
+        issue,
+        distribution,
+        data_list=[],
+        sid_style=[],
+        history=False,
+        part=-1,
+    ):
+        df_distribution = pd.DataFrame(distribution)
+        df_distribution_pivot = df_distribution.pivot(
+            index="recipient", columns="date_status", values="issue_format"
+        )
+        li_issues = sorted(list(set([i["date_status"] for i in issue])))
+
+        ###LET's Do the Distribution List
+
+        if history:
+            cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
+        else:
+            cols_issue = config["selected_issues"]
 
         data_list += [[""]]  # blank line
         sid_style += dist_line_style(4 + len(data_list))
         data_list += [["Distribution"]]
         sid_style += dist_line_style(4 + len(data_list))
 
-        doc_dist = doc_distribution.T.to_dict()
+        doc_dist = df_distribution_pivot.T.to_dict()
         for i in range(len(doc_dist)):
             sid_style.append(
                 (
@@ -390,10 +481,41 @@ class BuildIssueSheet:
             )
         li = []
         for k, v in doc_dist.items():
-            li.append([k] * len(DEFAULT_COLS) + [v[c] for c in cols_issues])
+            li.append([k] * len(DEFAULT_COLS) + [v[c] for c in cols_issue])
         data_list += li
 
         return data_list, sid_style
+
+        # ## old code
+        # cols = BuildIssueSheet.cols_to_plot(
+        #     history=history,
+        #     selected_issues=selected_issues,
+        #     li_issues=li_issues,
+        #     part=part,
+        # )
+
+        # cols_issues = [x for x in cols if not x in DEFAULT_COLS]
+
+        # data_list += [[""]]  # blank line
+        # sid_style += dist_line_style(4 + len(data_list))
+        # data_list += [["Distribution"]]
+        # sid_style += dist_line_style(4 + len(data_list))
+
+        # doc_dist = doc_distribution.T.to_dict()
+        # for i in range(len(doc_dist)):
+        #     sid_style.append(
+        #         (
+        #             "SPAN",
+        #             (0, 5 + len(data_list) + i),
+        #             (len(DEFAULT_COLS) - 1, 5 + len(data_list) + i),
+        #         )
+        #     )
+        # li = []
+        # for k, v in doc_dist.items():
+        #     li.append([k] * len(DEFAULT_COLS) + [v[c] for c in cols_issues])
+        # data_list += li
+
+        # return data_list, sid_style
 
     @staticmethod
     def create_heading(cols_to_plot):
@@ -657,4 +779,125 @@ def format_data_rows(rows):
     return rows
 
 
-# def read_frictionless()
+def issuesheet_part(
+    fname, history, part, config, issue, document, distribution, projectinfo, lookup
+):
+    li_issues = sorted(list(set([i["date_status"] for i in issue])))
+    document_issue_sheet = new_document(projectinfo.get("project_name"), "London")
+    document_issue_sheet.filename = fname
+
+    data_list, sid_style = BuildIssueSheet.data_table_new(
+        lookup, config, issue, document, history=history, part=part
+    )
+
+    data_list, sid_style = BuildIssueSheet.distribution_table_new(
+        config,
+        issue,
+        distribution,
+        data_list=data_list,
+        sid_style=sid_style,
+        history=history,
+        part=part,
+    )
+
+    if history:
+        cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
+    else:
+        cols_issue = config["selected_issues"]
+    cols_to_plot = DEFAULT_COLS + cols_issue
+    cols_to_plot_indexes = [i for i in range(len(DEFAULT_COLS), len(cols_to_plot))]
+    titleblockdata = BuildIssueSheet.construct_title_block(
+        history, part, cols_to_plot_indexes, li_issues, projectinfo, config, lookup
+    )
+    headings = BuildIssueSheet.create_heading(cols_to_plot)
+    tstyle = BuildIssueSheet.tablestyle(history, sid_style, data_list, headings)
+    document = issue_sheet(
+        data_list,
+        document_issue_sheet,
+        titleblockdata=titleblockdata,
+        headings=headings,
+        tablestyle=tstyle,
+        col_widths=[100, 40, 9],
+    )  # This saves the file to pdf
+
+    return pathlib.Path(fname)
+
+
+def load_datapackage(fdir):
+    pkg = Package(fdir / "datapackage.yaml")
+
+    config = pkg.get_resource("config").read_data()
+    issue = pkg.get_resource("issue").read_rows()
+    document = pkg.get_resource("document").read_rows()
+    distribution = pkg.get_resource("distribution").read_rows()
+    projectinfo = pkg.get_resource("projectinfo").read_data()
+    lookup = LookupData(**pkg.get_resource("lookup").read_data())
+
+    return config, issue, document, distribution, projectinfo, lookup
+
+
+def write_issuesheet(
+    config, issue, document, distribution, projectinfo, lookup, fdir=pathlib.Path(".")
+):
+
+    fdir = pathlib.Path(
+        r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\outputs\datapackage"
+    )
+
+    history = False
+    part = -1
+    fname = str(fdir / f"IssueSheet.pdf")  # {project_code}-
+
+    return issuesheet_part(
+        fname, history, part, config, issue, document, distribution, projectinfo, lookup
+    )
+
+
+def write_issuehistory(
+    config, issue, document, distribution, projectinfo, lookup, fdir=pathlib.Path(".")
+):
+
+    li_issues = sorted(list(set([i["date_status"] for i in issue])))
+    no_issues = len(li_issues)
+    history = True
+
+    fname_base = fdir / f"IssueHistory-0.pdf"  # {project_code}-
+    fpths = []
+    if no_issues > MAX_COLS_IN_PART:  # Pagination required.
+        num_parts = math.ceil(no_issues / MAX_COLS_IN_PART)
+        for part in range(1, num_parts + 1):
+            fname = str(
+                fdir / ("".join(fname_base.stem.split("-")[:-1]) + f"-{part}.pdf")
+            )
+            fpths.append(
+                issuesheet_part(
+                    fname,
+                    history,
+                    part,
+                    config,
+                    issue,
+                    document,
+                    distribution,
+                    projectinfo,
+                    lookup,
+                )
+            )
+    return fpths
+
+
+def write_issuesheet_and_issuehistory(fdir):
+    config, issue, document, distribution, projectinfo, lookup = load_datapackage(fdir)
+    fpth_issuesheet = write_issuesheet(
+        config, issue, document, distribution, projectinfo, lookup, fdir
+    )
+    fpths_issuehistory = write_issuehistory(
+        config, issue, document, distribution, projectinfo, lookup, fdir
+    )
+    return fpth_issuesheet, fpths_issuehistory
+
+
+if __name__ == "__main__":
+    fdir = pathlib.Path(
+        r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\outputs\datapackage"
+    )
+    write_issuesheet_and_issuehistory(fdir)
