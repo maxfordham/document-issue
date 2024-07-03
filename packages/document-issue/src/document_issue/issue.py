@@ -70,11 +70,11 @@ class Issue(BaseModel):
         max_length=1e8,
         json_schema_extra=dict(column_width=300),
     )
-    
+
     @computed_field
     @property
     def issue_id(self) -> str:
-        return f"{self.date.strftime("%Y%m%d")}-{self.status.name}"
+        return f"{self.date.strftime('%Y%m%d')}-{self.status_code}"
 
     @field_validator("date", mode="before")
     @classmethod

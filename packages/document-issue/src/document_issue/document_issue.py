@@ -135,8 +135,11 @@ class DocumentIssue(Document, ProjectBase):
         )
 
     @property
-    def current_issue(self) -> Issue:
-        return sorted(self.issue_history, key=lambda d: d.date, reverse=True)[0]
+    def current_issue(self) -> ty.Union[Issue, None]:
+        if len(self.issue_history) > 0:
+            return sorted(self.issue_history, key=lambda d: d.date, reverse=True)[0]
+        else:
+            return None
 
     @property
     def current_issue_long_date(self):
