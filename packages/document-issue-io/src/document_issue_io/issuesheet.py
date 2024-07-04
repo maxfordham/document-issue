@@ -1,8 +1,11 @@
 import pandas as pd
 import pathlib
 import math as math
-from textwrap import wrap
 import logging
+
+from frictionless import Package
+from textwrap import wrap
+
 from document_issue.document_issue import Issue, DocumentIssue
 from .mf_reportlab.mf_styles import (
     MFDoc,
@@ -21,7 +24,6 @@ from .constants import (
     DEFAULT_COLS,
     MAX_COLS_IN_PART,
 )
-from frictionless import Package
 from .models import LookupData
 
 logger = logging.getLogger(__name__)
