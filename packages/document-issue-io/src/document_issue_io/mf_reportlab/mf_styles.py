@@ -24,7 +24,6 @@ from reportlab.platypus import (
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 
-
 from document_issue.document_issue import DocumentIssue
 from ..title_block import title_block_table
 
@@ -251,9 +250,6 @@ class MFDoc:
         canvas.restoreState()
 
     def draw_titleblock(self, canvas, doc):
-        # self.titleblocktable[3][9] = "Page " + str(doc.page) # TODO: how to paginate?
-        # this gets generated for every page.
-        # title_block_elements
         tab = title_block_table(self.docissue, is_a3=True, office=self.office)
         width, height = self.pagesize
         width = width - 2 * (self.margin + 2 * mm)
@@ -296,24 +292,9 @@ def p_nospace(txt, elements, style=PARASTYLE):
     return elements
 
 
-# def p_table_header(txt, style=PARASTYLE):
-#     """used for distribution header"""
-#     style = ParagraphStyle(name="Normal", fontName="Calibri-Bold", fontSize=18)
-#     para = Paragraph(txt, style)
-#     para = Preformatted(txt, style)
-#     return para
-
-
 def p(txt, elements):
     """write a paragraph of text"""
     return header(txt, elements, style=PARASTYLE, sep=0.1)
-
-
-# def i(fname, width, height, elements, align="CENTER"):
-#     """add an image"""
-#     img = Image(fname, width=width, height=height, hAlign=align)
-#     elements.append(img)
-#     return elements
 
 
 def dist_line_style(line):
@@ -328,21 +309,6 @@ def dist_line_style(line):
     return sid_style
 
 
-# def small_grey_style(line):
-#     sid_style = []
-#     sid_style.append(("SPAN", (0, line), (-1, line)))
-#     sid_style.append(("BACKGROUND", (0, line), (-1, line), HIGHLIGHT_COLOUR))
-#     sid_style.append(
-#         ("LINEABOVE", (0, line), (-1, line), THICKLINE + 0.5, colors.white)
-#     )
-#     sid_style.append(("LINEBELOW", (0, line), (-1, line), THICKLINE, colors.black))
-#     sid_style.append(("VALIGN", (0, line), (-1, line), "MIDDLE"))
-#     sid_style.append(("TOPPADDING", (0, line), (-1, line), 0))
-#     sid_style.append(("FONT", (0, line), (-1, line), "Calibri-Bold", 8))
-#     sid_style.append(("TEXTCOLOR", (0, line), (-1, line), colors.gray))
-#     return sid_style
-
-
 def sid_line_style(line):
     sid_style = []
     sid_style.append(("SPAN", (0, line), (-1, line)))
@@ -350,45 +316,6 @@ def sid_line_style(line):
     sid_style.append(("LINEABOVE", (0, line), (-1, line), THICKLINE, colors.black))
     sid_style.append(("LINEBELOW", (0, line), (-1, line), THICKLINE, colors.black))
     return sid_style
-
-
-# def infotable(data, elements, tablestyle=DEFAULTINFOTABLESTYLE):
-#     """Add a table of project information
-#     requires input of list of lists. First column is label, second column is data.
-#     e.g::
-#     infodata = [["Client Name:", clientname],
-#             ["Project Name:", projectname],
-#             ["Job Number:", jobnumber],
-#             ["Project Address:", projectaddress]]
-#     infotable(infodata, elements)
-#     """
-#     mytable = Table(data, hAlign="LEFT")
-#     mytable.setStyle(TableStyle(tablestyle))
-#     elements.append(mytable)
-#     return elements
-
-
-# def titleblock_table(data, elements):
-#     """Add a table of which creates the title block"""
-#     data[1][6] = "\n".join(
-#         wrap(data[1][6], 30)
-#     )  # Paragraph(data[1][3], WRAPSTYLE) #TODO
-#     mytable = Table(data, colWidths="*")
-#     mystyle = DEFAULTTITLEBLOCKTABLESTYLE(len(data))
-#     mytable.setStyle(TableStyle(mystyle))
-#     elements.append(mytable)
-#     return elements
-
-
-# def titleblock_table(data):
-#     """Add a table of which creates the title block"""
-#     data[1][6] = "\n".join(
-#         wrap(data[1][6], 30)
-#     )  # Paragraph(data[1][3], WRAPSTYLE) #TODO
-#     mytable = Table(data, colWidths="*")
-#     mystyle = DEFAULTTITLEBLOCKTABLESTYLE(len(data))
-#     mytable.setStyle(TableStyle(mystyle))
-#     return mytable
 
 
 def table(
@@ -446,7 +373,6 @@ def change_dir(directory):
 def issue_sheet(
     data,
     document,
-    # titleblockdata: list = [],
     docissue: DocumentIssue,
     headings=[[""] * 4] * 4,
     tablestyle=DEFAULTTABLESTYLE(),
