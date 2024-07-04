@@ -92,6 +92,7 @@ def run_quarto(
     fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
+    # TODO: make quarto and latex an optional dependency. check, and flag if not installed.
     cmd = [
         "quarto",
         "render",
