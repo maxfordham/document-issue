@@ -4,15 +4,17 @@ from datetime import datetime
 from textwrap import wrap
 from reportlab.lib import colors
 from reportlab.lib.units import mm, inch
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, A3, landscape
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, Image, TableStyle, SimpleDocTemplate, TopPadder
 from reportlab.pdfgen import canvas
 
 from document_issue.document_issue import DocumentIssue
+from .constants import MAP_TITLEBLOCK_IMAGES
 
 FDIR_MEDIA = pathlib.Path(__file__).parent / "media"
+FPTH_MF_CIRCLE_IMG = FDIR_MEDIA / "mf-circle.png"
 
 # Register Callibri fonts
 FDIR_FONTS = pathlib.Path(__file__).parent / "fonts"
@@ -28,6 +30,10 @@ TTFFILE = FDIR_FONTS / "calibril.ttf"  # Light
 pdfmetrics.registerFont(TTFont("Calibri-Light", TTFFILE))
 TTFFILE = FDIR_FONTS / "calibrib.ttf"  # Bold Italics
 pdfmetrics.registerFont(TTFont("Calibri-Bold-Italics", TTFFILE))
+
+
+def titleblockimage(loc):
+    return MAP_TITLEBLOCK_IMAGES[loc.lower()]
 
 
 def create_styling(number_of_cols: int) -> list:
@@ -56,21 +62,29 @@ def create_styling(number_of_cols: int) -> list:
     return style
 
 
-def get_title_block_image(fpth_img: pathlib.Path) -> Image:
+def get_title_block_image(
+    fpth_img: pathlib.Path, scale_height=28, scale_width=28
+) -> Image:
     """Get the image that will be used within the title block."""
+
     image = Image(fpth_img)
-    image.drawHeight = 28 * mm * image.drawHeight / image.drawWidth
-    image.drawWidth = 28 * mm
+    image.drawHeight = scale_height * mm * image.drawHeight / image.drawWidth
+    image.drawWidth = scale_width * mm
     return image
 
 
 def construct_title_block_data(
     document_issue: DocumentIssue,
+    fpth_img=FPTH_MF_CIRCLE_IMG,
+    scale_height=28,
+    scale_width=28,
 ) -> list[list]:
     """Using the document issue, layout the data in preparation to be styled
     correctly by ReportLab."""
-    FPTH_MF_CIRCLE_IMG = FDIR_MEDIA / "mf-circle.png"
-    image = get_title_block_image(fpth_img=FPTH_MF_CIRCLE_IMG)
+
+    image = get_title_block_image(
+        fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width
+    )
     issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
     document_description = "\n".join(wrap(document_issue.document_description, 45))
     name_nomenclature = document_issue.name_nomenclature.replace("-", " - ")
@@ -155,32 +169,15 @@ def construct_title_block_data(
     return data
 
 
-def create_title_block_table(data: list):
+def create_title_block_table(data: list, is_a3=False) -> Table:
     """Create the ReportLab table and set the styling."""
-    table = Table(data, colWidths="*")
+    if is_a3:
+        table = Table(data, colWidths=[180] + ["*"] * 5)
+    else:
+        table = Table(data, colWidths="*")
     styling = create_styling(len(data))
     table.setStyle(TableStyle(styling))
     return table
-
-
-def build_title_block_pdf(
-    document_issue: DocumentIssue,
-    fpth_output: pathlib.Path = pathlib.Path("title-block.pdf"),
-):
-    """Build a PDF with just the Max Fordham title block at the bottom of an
-    A4 page."""
-    data = construct_title_block_data(document_issue=document_issue)
-    title_block_table = create_title_block_table(data=data)
-    doc = SimpleDocTemplate(
-        str(fpth_output),
-        pagesize=A4,
-        leftMargin=0.25 * inch,
-        rightMargin=0.25 * inch,
-        bottomMargin=0.5 * inch,
-        topMargin=inch,
-    )
-    elements = [TopPadder(title_block_table)]
-    doc.build(elements)
 
 
 def set_background(canvas: canvas, doc: SimpleDocTemplate):
@@ -212,13 +209,43 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
     canvas.restoreState()
 
 
-def build_schedule_title_page_template_pdf(
+from enum import Enum
+
+
+# class syntax
+class Pagesize(Enum):
+    A4 = A4
+    A3 = A3
+
+
+def title_block_table(
+    document_issue: DocumentIssue,
+    is_a3: bool = False,
+    office: str = "london",
+):
+    if is_a3:
+        fpth_img = titleblockimage(office)
+        scale_height = 88
+        scale_width = 88
+    else:
+        fpth_img = FPTH_MF_CIRCLE_IMG
+        scale_height = 28
+        scale_width = 28
+    data = construct_title_block_data(
+        document_issue=document_issue,
+        fpth_img=fpth_img,
+        scale_height=scale_height,
+        scale_width=scale_width,
+    )
+    return create_title_block_table(data=data, is_a3=is_a3)
+
+
+def title_block_a4(
     document_issue: DocumentIssue,
     fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
+    is_titlepage: bool = False,
 ):
-    """Build a PDF with a title block and the Max Fordham background."""
-    data = construct_title_block_data(document_issue=document_issue)
-    title_block_table = create_title_block_table(data=data)
+    tblock_table = title_block_table(document_issue=document_issue)
     doc = SimpleDocTemplate(
         str(fpth_output),
         pagesize=A4,
@@ -227,5 +254,39 @@ def build_schedule_title_page_template_pdf(
         bottomMargin=0.5 * inch,
         topMargin=inch,
     )
-    elements = [TopPadder(title_block_table)]
-    doc.build(elements, onFirstPage=set_background)
+    elements = [TopPadder(tblock_table)]
+    if is_titlepage:
+        doc.build(elements, onFirstPage=set_background)
+    else:
+        doc.build(elements)
+
+
+def title_block_a3(
+    document_issue: DocumentIssue,
+    fpth_output: pathlib.Path = pathlib.Path("title-block-a3.pdf"),
+    is_titlepage: bool = False,
+):
+    tblock_table = title_block_table(document_issue=document_issue, is_a3=True)
+    doc = SimpleDocTemplate(
+        str(fpth_output),
+        pagesize=landscape(A3),
+        leftMargin=0.25 * inch,
+        rightMargin=0.25 * inch,
+        bottomMargin=0.5 * inch,
+        topMargin=inch,
+    )
+    elements = [TopPadder(tblock_table)]
+    if is_titlepage:
+        doc.build(elements, onFirstPage=set_background)
+    else:
+        doc.build(elements)
+
+
+def build_schedule_title_page_template_pdf(
+    document_issue: DocumentIssue,
+    fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
+):
+    """Build a PDF with a title block and the Max Fordham background."""
+    title_block_a4(
+        document_issue=document_issue, fpth_output=fpth_output, is_titlepage=True
+    )
