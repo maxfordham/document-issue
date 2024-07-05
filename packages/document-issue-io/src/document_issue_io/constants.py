@@ -1,16 +1,7 @@
 import pathlib
 from reportlab.lib import colors
 
-FDIR_PACKAGE_ROOT = pathlib.Path(__file__).parents[2]
-FDIR_PACKAGE = pathlib.Path(__file__).parent
-FDIR_TEMPLATES = FDIR_PACKAGE / "templates"
-FDIR_MEDIA = FDIR_PACKAGE / "media"
 NAME_MD_DOCISSUE_TEMPLATE = "docissue.md.jinja"
-
-
-## -
-
-
 CONFIG_DIR = r"J:\J4321\Data\document_issue\config"  # TODO: move to dgn package
 DIR_ROOT = pathlib.Path(__file__).parent
 # DIR_ROOT = pathlib.Path(
@@ -21,7 +12,7 @@ OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 DIR_MEDIA = DIR_ROOT / "media"
 DIR_FONTS = DIR_ROOT / "fonts"
 LOGO = DIR_MEDIA / "mf_medium.jpg"
-FPTH_MF_CIRCLE_IMG = FDIR_MEDIA / "mf-circle.png"
+FPTH_MF_CIRCLE_IMG = DIR_MEDIA / "mf-circle.png"
 ###FONTS###
 ###Register Callibri fonts###
 FONTS = {
