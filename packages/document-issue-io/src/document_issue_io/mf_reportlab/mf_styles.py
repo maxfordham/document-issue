@@ -28,6 +28,8 @@ from document_issue.document_issue import DocumentIssue
 from ..title_block import title_block_table
 
 DIR = pathlib.Path(__file__).parent
+DIR_MEDIA = DIR / "media"
+DIR_FONTS = DIR / "fonts"
 
 ###Styles###
 STYLES = getSampleStyleSheet()
@@ -46,72 +48,33 @@ HEADERSTYLE2 = ParagraphStyle(
 )
 ADDRESSSTYLE = STYLES["Normal"]
 ADDRESSSTYLE.alignment = TA_RIGHT
-LOGO = DIR / "mf_medium.jpg"
-
-NUM_HEADER_ROWS = 5
-
-THICKLINE = 2
 HIGHLIGHT_COLOUR = colors.Color(255 / 255, 255 / 255, 255 / 255, alpha=1.0)
 CURRENT_COLOUR = colors.Color(205 / 255, 205 / 255, 205 / 255, alpha=1.0)
+NUM_HEADER_ROWS = 5
+THICKLINE = 2
+
+LOGO = DIR / "mf_medium.jpg"
+
 
 ###FONTS###
 ###Register Callibri fonts###
-TTFFILE = str(DIR / "fonts" / "calibri.ttf")
-pdfmetrics.registerFont(TTFont("Calibri", TTFFILE))
-TTFFILE = str(DIR / "fonts" / "calibrib.ttf")  # Bold
-pdfmetrics.registerFont(TTFont("Calibri-Bold", TTFFILE))
-TTFFILE = str(DIR / "fonts" / "calibrili.ttf")  # Light Italics
-pdfmetrics.registerFont(TTFont("Calibri-Light-Italics", TTFFILE))
-TTFFILE = str(DIR / "fonts" / "calibrii.ttf")  # Italics
-pdfmetrics.registerFont(TTFont("Calibri-Italics", TTFFILE))
-TTFFILE = str(DIR / "fonts" / "calibril.ttf")  # Light
-pdfmetrics.registerFont(TTFont("Calibri-Light", TTFFILE))
-TTFFILE = str(DIR / "fonts" / "calibrib.ttf")  # Bold Italics
-pdfmetrics.registerFont(TTFont("Calibri-Bold-Italics", TTFFILE))
-
-
-DEFAULTINFOTABLESTYLE = [
-    ("TEXTCOLOR", (1, 0), (-1, 0), colors.gray),
-    ("FONT", (0, 0), (-1, -1), "Calibri", 8),
-    ("FONT", (1, 1), (-1, 1), "Calibri-Bold", 10),
-]
-
-
-def DEFAULTTITLEBLOCKTABLESTYLE(lines):
-    style = [
-        ("LINEABOVE", (0, 0), (-1, 0), 3, colors.black),  # topline
-        ("LINEBELOW", (0, -1), (-1, -1), 3, colors.black),  # bottomline
-        ("SPAN", (0, 0), (2, -1)),
-        ("SPAN", (3, 1), (5, 1)),  # client
-        ("SPAN", (3, 5), (5, 5)),  # status
-        ("SPAN", (6, 1), (8, 3)),  # project
-        ("SPAN", (9, 1), (11, 2)),  # document title
-        ("SPAN", (9, 4), (11, 4)),  # document number
-        ("SPAN", (9, 5), (11, 5)),  # document number
-    ]
-    for i in range(lines):
-        if i % 2 == 0:
-            style.append(("FONT", (0, i), (-1, i), "Calibri", 10))
-            style.append(("TEXTCOLOR", (0, i), (-1, i), colors.gray))
-            style.append(("VALIGN", (1, i), (-1, i), "BOTTOM"))
-            style.append(("BOTTOMPADDING", (0, i), (-1, i), 0))
-        else:
-            style.append(("FONT", (0, i), (-1, i), "Calibri-Bold", 14))
-            style.append(("TEXTCOLOR", (0, i), (-1, i), colors.black))
-            style.append(("VALIGN", (1, i), (-1, i), "TOP"))
-            style.append(("TOPPADDING", (0, i), (-1, i), 0))
-
-    style.append(("BACKGROUND", (0, 0), (2, -1), colors.black))
-    style.append(("VALIGN", (0, 0), (0, -1), "MIDDLE"))
-    style.append(("LINEBEFORE", (0, 0), (0, -1), 3, colors.black))
-
-    return style
+FONTS = {
+    "Calibri": "calibri.ttf",
+    "Calibri-Bold": "calibrib.ttf",
+    "Calibri-Light-Italics": "calibrili.ttf",
+    "Calibri-Italics": "calibrii.ttf",
+    "Calibri-Light": "calibril.ttf",
+    "Calibri-Bold-Italics": "calibrib.ttf",
+}
+for k, v in FONTS.items():  # TODO: use carlito instead of calibri
+    fpth = str(DIR / "fonts" / v)
+    pdfmetrics.registerFont(TTFont(k, fpth))
 
 
 # (COL, ROW)
 def DEFAULTTABLESTYLE(defaultcols=4):
     # defaultcols in the number of columns BEFORE "Rev"
-    DEFAULTTABLESTYLE = [
+    _style = [
         ("LINEBELOW", (0, 6), (-1, -1), 0.1, colors.grey),  # aplies to all data
         (
             "LINEAFTER",
@@ -197,7 +160,7 @@ def DEFAULTTABLESTYLE(defaultcols=4):
         ("ALIGN", (1, 3), (1, -1), "RIGHT"),  # day,mnnth year, Rev
         ("ALIGN", (defaultcols, 4), (-2, -1), "CENTER"),
     ]  # applies to all revision data
-    return DEFAULTTABLESTYLE
+    return _style
 
 
 class MFDoc:
@@ -263,22 +226,6 @@ class MFDoc:
         canvas.restoreState()
 
 
-def address(mfaddress, elements):
-    """print the address"""
-    for line in mfaddress:
-        elements.append(Paragraph(line, ADDRESSSTYLE))
-    return elements
-
-
-def header(txt, elements, style=HEADERSTYLE2, klass=Paragraph, sep=0.3):
-    """write a header"""
-    spac = Spacer(0.2 * inch, sep * inch)
-    elements.append(spac)
-    para = klass(txt, style)
-    elements.append(para)
-    return elements
-
-
 def p_nospace(txt, elements, style=PARASTYLE):
     """used for sid header"""
     style = ParagraphStyle(
@@ -290,11 +237,6 @@ def p_nospace(txt, elements, style=PARASTYLE):
     para = Preformatted(txt, style)
     elements.append(para)
     return elements
-
-
-def p(txt, elements):
-    """write a paragraph of text"""
-    return header(txt, elements, style=PARASTYLE, sep=0.1)
 
 
 def dist_line_style(line):
