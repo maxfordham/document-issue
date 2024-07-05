@@ -7,16 +7,19 @@ from frictionless import Package
 from textwrap import wrap
 
 from document_issue.document_issue import Issue, DocumentIssue
-from .mf_reportlab.mf_styles import (
+from .styles import (
     MFDoc,
     DEFAULTTABLESTYLE,
     highlight_last_format,
     p_nospace,
-    issue_sheet,
     dist_line_style,
     sid_line_style,
+    table,
+    landscape,
+    A3,
+    mm,
 )
-
+from .utils import change_dir
 from .constants import (
     address_from_loc,
     address_from_loc_compact,
@@ -238,6 +241,31 @@ def create_docissue(
         docissue.document_code = document_code
 
     return docissue
+
+
+def issue_sheet(
+    data,
+    document,
+    docissue: DocumentIssue,
+    headings=[[""] * 4] * 4,
+    tablestyle=DEFAULTTABLESTYLE(),
+    col_widths=[100, 40, 9],
+    fdir=pathlib.Path("."),
+):
+    """populate and draw the issue sheet"""
+
+    data2 = headings + data
+    document.set_page_size(landscape(A3))
+
+    ###CONTENT###
+    Elements = []  ###List of everything in order.
+    Elements = table(
+        data2, Elements, tablestyle=tablestyle, col_widths=[i * mm for i in col_widths]
+    )  # Highlight everything that equals Basement can replace with more sophisticated conditions.
+    with change_dir(fdir):
+        document.go(Elements, docissue)
+
+    return document
 
 
 def issuesheet_part(

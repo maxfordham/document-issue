@@ -1,4 +1,5 @@
 import pathlib
+from reportlab.lib import colors
 
 FDIR_PACKAGE_ROOT = pathlib.Path(__file__).parents[2]
 FDIR_PACKAGE = pathlib.Path(__file__).parent
@@ -10,20 +11,30 @@ NAME_MD_DOCISSUE_TEMPLATE = "docissue.md.jinja"
 ## -
 
 
-import pathlib
-from reportlab.lib import colors
-
+CONFIG_DIR = r"J:\J4321\Data\document_issue\config"  # TODO: move to dgn package
 DIR_ROOT = pathlib.Path(__file__).parent
 # DIR_ROOT = pathlib.Path(
 #     r"C:\engDev\git_mf\MF_Toolbox\dev\mf_xlwings\document_issue"
 # )  # Set this to be Y:\drive
-FPTH_ICON = str(DIR_ROOT / "mf_reportlab" / "MF_O_trans.ico")
-
 OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 
+DIR_MEDIA = DIR_ROOT / "media"
+DIR_FONTS = DIR_ROOT / "fonts"
+LOGO = DIR_MEDIA / "mf_medium.jpg"
+###FONTS###
+###Register Callibri fonts###
+FONTS = {
+    "Calibri": DIR_FONTS / "calibri.ttf",
+    "Calibri-Bold": DIR_FONTS / "calibrib.ttf",
+    "Calibri-Light-Italics": DIR_FONTS / "calibrili.ttf",
+    "Calibri-Italics": DIR_FONTS / "calibrii.ttf",
+    "Calibri-Light": DIR_FONTS / "calibril.ttf",
+    "Calibri-Bold-Italics": DIR_FONTS / "calibrib.ttf",
+}
+
+
 MAP_TITLEBLOCK_IMAGES = {
-    l.lower(): DIR_ROOT / "mf_reportlab" / ("titleblock_" + l.lower() + ".png")
-    for l in OFFICES
+    l.lower(): DIR_MEDIA / ("titleblock_" + l.lower() + ".png") for l in OFFICES
 }
 
 LONDON_ADDRESS = [
@@ -101,7 +112,7 @@ UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$"  # TODO
 START_ROW = 35  # Default
 START_COL = 1  # B
 MAX_COLS_IN_PART = 30
-CONFIG_DIR = r"J:\J4321\Data\document_issue\config"
+
 DEFAULT_CONFIG = {
     "job_number": "4321",
     "office": "Cambridge",  # edinburgh; bristol; manchester; cambridge; london;
