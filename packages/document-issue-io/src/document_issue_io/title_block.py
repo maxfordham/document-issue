@@ -1,35 +1,17 @@
 import PIL
 import pathlib
-from datetime import datetime
 from textwrap import wrap
 from reportlab.lib import colors
 from reportlab.lib.units import mm, inch
 from reportlab.lib.pagesizes import A4, A3, landscape
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, Image, TableStyle, SimpleDocTemplate, TopPadder
 from reportlab.pdfgen import canvas
 
 from document_issue.document_issue import DocumentIssue
-from .constants import MAP_TITLEBLOCK_IMAGES
+from .constants import MAP_TITLEBLOCK_IMAGES, FPTH_MF_CIRCLE_IMG, FDIR_MEDIA
+from .styles import register_fonts
 
-FDIR_MEDIA = pathlib.Path(__file__).parent / "media"
-FPTH_MF_CIRCLE_IMG = FDIR_MEDIA / "mf-circle.png"
-
-# Register Callibri fonts
-FDIR_FONTS = pathlib.Path(__file__).parent / "fonts"
-TTFFILE = FDIR_FONTS / "calibri.ttf"
-pdfmetrics.registerFont(TTFont("Calibri", TTFFILE))
-TTFFILE = FDIR_FONTS / "calibrib.ttf"  # Bold
-pdfmetrics.registerFont(TTFont("Calibri-Bold", TTFFILE))
-TTFFILE = FDIR_FONTS / "calibrili.ttf"  # Light Italics
-pdfmetrics.registerFont(TTFont("Calibri-Light-Italics", TTFFILE))
-TTFFILE = FDIR_FONTS / "calibrii.ttf"  # Italics
-pdfmetrics.registerFont(TTFont("Calibri-Italics", TTFFILE))
-TTFFILE = FDIR_FONTS / "calibril.ttf"  # Light
-pdfmetrics.registerFont(TTFont("Calibri-Light", TTFFILE))
-TTFFILE = FDIR_FONTS / "calibrib.ttf"  # Bold Italics
-pdfmetrics.registerFont(TTFont("Calibri-Bold-Italics", TTFFILE))
+register_fonts()
 
 
 def titleblockimage(loc):
@@ -207,15 +189,6 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
         mask="auto",
     )
     canvas.restoreState()
-
-
-from enum import Enum
-
-
-# class syntax
-class Pagesize(Enum):
-    A4 = A4
-    A3 = A3
 
 
 def title_block_table(

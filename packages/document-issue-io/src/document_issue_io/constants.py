@@ -21,6 +21,7 @@ OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 DIR_MEDIA = DIR_ROOT / "media"
 DIR_FONTS = DIR_ROOT / "fonts"
 LOGO = DIR_MEDIA / "mf_medium.jpg"
+FPTH_MF_CIRCLE_IMG = FDIR_MEDIA / "mf-circle.png"
 ###FONTS###
 ###Register Callibri fonts###
 FONTS = {
