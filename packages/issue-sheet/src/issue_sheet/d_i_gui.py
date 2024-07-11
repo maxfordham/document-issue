@@ -9,9 +9,9 @@ import time
 import pathlib
 import glob
 import os
-import re
 import xlwings as xw
-from d_i_functions import *
+
+# from d_i_functions import *
 from constants import *
 from d_i_read_excel import read_excel  # , index_of_value
 
@@ -21,7 +21,6 @@ from tkinter import (
     RIGHT,
     LEFT,
     EXTENDED,
-    MULTIPLE,
     Scrollbar,
     VERTICAL,
     Y,
@@ -29,7 +28,6 @@ from tkinter import (
     BOTH,
     Text,
     Entry,
-    BOTTOM,
 )
 from d_i_ui import (
     warning_messagebox,
@@ -47,18 +45,47 @@ from d_i_ui import (
     MFTk,
 )
 
+from document_issue_io.issuesheet import write_issuesheet_and_issuehistory
+import json
+import pandas as pd
+from pydantic import BaseModel
+import webbrowser
+import subprocess
+import logging
+
+logger = logging.getLogger(__name__)
+
+def config_filename(job_number):
+    """return the filename of the config files."""
+    # username = os.environ['username']
+    return CONFIG_DIR + "\\" + str(job_number) + ".json"
+
+def save_config(config):
+    """save the config (which is a dict) to a file"""
+
+    fpth = pathlib.Path(CONFIG_DIR) / config["job_number"] / "config.json"
+    fpth.write_text(json.dumps(config, sort_keys=True, indent=4))
+
+    file = config_filename(config["job_number"])
+    try:
+        with open(file, "w") as handle:
+            # pickle.dump(config, handle)
+            print(config)
+            print(file)
+            json.dump(config, handle, sort_keys=True, indent=4)
+    except Exception as e:
+        print(e)
+        logger.warning(
+            "Cannot Save your User Settings. We'll carry on anyway but contact support.",
+            "Config error",
+        )
+
 
 def run():
     """go go go!!!!"""
     main_window = DialogWindow(None)
     main_window.mainloop()
     return True
-
-
-import json
-
-import pandas as pd
-from pydantic import BaseModel
 
 
 def gotohelp():
@@ -91,6 +118,29 @@ def dump(di: dict):
             raise ValueError(f"Cannot dump {k} of type {type(v)}")
         li.append(f)
     return li
+
+
+def cols_to_plot(
+    history=False,
+    part=-1,
+    max_cols_in_part=MAX_COLS_IN_PART,
+    selected_issues=[],
+    li_issues=[],
+):
+    """get the columns to include in the pdf from the listbox"""
+
+    if part > 0:
+        startindex = (part - 1) * max_cols_in_part
+        endindex = part * max_cols_in_part
+        return DEFAULT_COLS + li_issues[startindex:endindex]
+
+    if history:
+        return DEFAULT_COLS + li_issues
+
+    cols = []
+    for i in map(int, selected_issues):
+        cols.append(li_issues[i])
+    return DEFAULT_COLS + cols
 
 
 ### THE INTERFACE fpor the wizard###
@@ -240,6 +290,10 @@ class DialogWindow(MFTk):
         ### Errors ###
         MFLabelFrame(self, text="Errors", padx=15, pady=15).pack()
 
+    @property
+    def fdir_package(self):
+        return pathlib.Path(CONFIG_DIR) / self.get_project_info("number")
+
     def update_config(self):
         # try:
         """save the user configs to Y:"""
@@ -247,7 +301,7 @@ class DialogWindow(MFTk):
         self.config["selected_issues"] = [
             self.li_issues[l] for l in self.listbox.curselection()
         ]
-
+        self.config["outgoing_folder"] = self.outgoingfolder
         self.config["office"] = self.office.get()
         self.config["open_on_save"] = self.open_on_save.get()
         self.config["check_on_save"] = self.check_on_save.get()
@@ -260,8 +314,6 @@ class DialogWindow(MFTk):
             time.strftime("%b %d %Y %H:%M:%S", time.localtime())
         )
         save_config(self.config)
-        # except:
-        #     pass
 
     def get_outgoingfolder(self):
         """user select the outgoing folder"""
@@ -308,7 +360,7 @@ class DialogWindow(MFTk):
                 else:
                     missing_from_issue.append(basename)
 
-        cols = BuildIssueSheet.cols_to_plot(
+        cols = cols_to_plot(
             history=False,
             selected_issues=self.listbox.curselection(),
             li_issues=self.li_issues,
@@ -366,64 +418,16 @@ class DialogWindow(MFTk):
 
     def save(self):
         """create and save the pdf file"""
-        selected_issues = self.listbox.curselection()
-        column_widths = self.get_column_widths()
-        project_name = self.get_project_info("Project Name")
-        project_code = self.get_project_info("Project Code")
-        office = self.config["office"]
-        max_cols_in_part = self.max_cols_in_part.get()
-
         self.update_config()
         if self.check_on_save.get():
             if not self.compare_docs():
                 return False
-
-        savefilename = getsavefilename(extension="pdf", initialfile="IssueSheet.pdf")
-        savefilenamehistory = savefilename.replace(
-            ".pdf",
-            "_history "
-            + BuildIssueSheet.document_number(True, -1, project_code)
-            + ".pdf",
+        fpth_issuesheet, fpths_issuehistory = write_issuesheet_and_issuehistory(
+            self.fdir_package
         )
-        filescreated = BuildIssueSheet.print_issue_and_issue_history(
-            self.data,
-            self.doc_distribution,
-            self.projectinfo,
-            self.lookup,
-            self.config,
-            self.doc_descriptions,
-            selected_issues,
-            column_widths,
-            project_name,
-            office,
-            max_cols_in_part,
-            self.li_issues,
-            project_code,
-        )
-        self.savefilename, self.savefilenamehistory = filescreated[0], filescreated[1]
-
+        filescreated = [str(f) for f in [fpth_issuesheet] + fpths_issuehistory]
         info_messagebox(message="Documents saved:\n" + "\n".join(filescreated))
-        if self.open_on_save.get():
-            for file_created in filescreated:
-                show_file(file_created)
-        return filescreated
-
-    # def create_links(self, last_col):  # TODO: delete ... not req. / no one uses it
-    #     """add some hyperlinks to the spreadsheet"""
-    #     iov = index_of_value("Document Number", "1. Document Numbering")
-    #     excel_col = (
-    #         iov[1] + 1 + list(self.data.columns.values).index(last_col)
-    #     )  # add three to get it back on track.
-    #     xw.sheets["1. Document Numbering"].range(iov[0] - 3, excel_col).value = (
-    #         '=hyperlink("' + self.savefilename + '", "IssueSheet")'
-    #     )
-    #     xw.sheets["1. Document Numbering"].range(iov[0] - 2, excel_col).value = (
-    #         '=hyperlink("' + self.savefilenamehistory + '", "History")'
-    #     )
-    #     if self.outgoingfolder:
-    #         xw.sheets["1. Document Numbering"].range(iov[0] - 1, excel_col).value = (
-    #             '=hyperlink("' + self.outgoingfolder + '", "Outgoing Folder")'
-    #         )
+        return fpth_issuesheet, fpths_issuehistory
 
     def _quit(self):
         self.update_config()

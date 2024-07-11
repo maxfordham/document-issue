@@ -10,6 +10,8 @@ DIR_ROOT = pathlib.Path(__file__).parent.parent
 sys.path.append(str(DIR_ROOT))
 
 import os
+from reportlab.lib.pagesizes import A3, landscape
+from reportlab.lib.units import mm
 from reportlab.platypus import (
     Table,
     Spacer,
@@ -27,9 +29,8 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch, mm
 from reportlab.lib.enums import TA_RIGHT, TA_JUSTIFY
 from textwrap import wrap
-from d_i_ui import getsavefilename, warning_messagebox
 from constants import MAP_TITLEBLOCK_IMAGES
-
+import logging
 import pathlib
 
 DIR = pathlib.Path(__file__).parent
@@ -224,8 +225,6 @@ class MFDoc:
     def go(self, elements, titleblocktable):
         """create the report!"""
         if not self.filename:
-            self.filename = getsavefilename(extension="pdf")
-        if not self.filename:
             return False
         self.titleblocktable = titleblocktable
         # TODO check can write to file.
@@ -247,7 +246,7 @@ class MFDoc:
             msg = "Permission denied: {0} \n Make sure it's not open in another program. \n".format(
                 self.filename
             )
-            warning_messagebox(message=msg)
+            logging.warning(msg)
             raise ValueError(msg)
 
     def my_first_page(self, canvas, doc):
@@ -436,3 +435,36 @@ def highlight_last_format(data, startrow=0, rev_position=4):
             if not line[0] is "":
                 formatting.append(("BACKGROUND", (maxj, i), (maxj, i), CURRENT_COLOUR))
     return formatting
+
+
+###INFO TABLE DATA###
+INFODATA = [
+    ["Client Name:", "MYCLIENT"],
+    ["Project Name:", "MYPROJECTNAME"],
+    ["Job Number:", "J0000"],
+    ["Project Address:", "MYPROJECTADDRESS"],
+]
+
+
+def issue_sheet(
+    data,
+    document,
+    titleblockdata=[],
+    headings=[[""] * 4] * 4,
+    tablestyle=DEFAULTTABLESTYLE(),
+    col_widths=[100, 40, 9],
+):
+    """populate and draw the issue sheet"""
+
+    data2 = headings + data
+    document.set_page_size(landscape(A3))
+
+    ###CONTENT###
+    Elements = []  ###List of everything in order.
+    Elements = table(
+        data2, Elements, tablestyle=tablestyle, col_widths=[i * mm for i in col_widths]
+    )  # Highlight everything that equals Basement can replace with more sophisticated conditions.
+
+    document.go(Elements, titleblockdata)
+
+    return document

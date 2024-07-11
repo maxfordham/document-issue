@@ -1,22 +1,29 @@
 import pathlib
 import sys
 import xlwings as xw
+import shutil
+
 
 FDIR_MODULE = pathlib.Path(__file__).parent.parent / "src" / "issue_sheet"
 sys.path.append(str(FDIR_MODULE))
 FDIR_TEST_OUTPUTS = pathlib.Path(__file__).parent / "outputs"
-FDIR_DATA_PACKAGE = FDIR_TEST_OUTPUTS / "datapackage"
+
 FPTH_DNG = (
     pathlib.Path(__file__).parent.parent / "excel-dng" / "DocumentNumberGenerator.xlsm"
 )
 xw.Book(str(FPTH_DNG)).set_mock_caller()
 
 from d_i_read_excel import read_excel
-import shutil
+from constants import CONFIG_DIR
+
+PROJECT_NUMBER = "J3870"
+FDIR_DATA_PACKAGE = pathlib.Path(CONFIG_DIR) / PROJECT_NUMBER
 
 
 def test_read_excel():
-    shutil.rmtree(FDIR_DATA_PACKAGE)
+    if FDIR_DATA_PACKAGE.is_dir():
+        shutil.rmtree(FDIR_DATA_PACKAGE)
+    FDIR_DATA_PACKAGE.mkdir(exist_ok=True)
     (
         lookup,
         projectinfo,
@@ -27,6 +34,6 @@ def test_read_excel():
         doc_descriptions,
         doc_issues,
         doc_distribution,
-    ) = read_excel(fdir_package=FDIR_DATA_PACKAGE)
+    ) = read_excel()
     assert (FDIR_DATA_PACKAGE / "datapackage.yaml").exists()
     print("done")

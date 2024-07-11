@@ -8,8 +8,13 @@ import math as math
 from reportlab.lib import colors
 from textwrap import wrap
 import logging
-from mf_reportlab.issuesheet_reportlab import issue_sheet
-from mf_reportlab.mf_styles import MFDoc, DEFAULTTABLESTYLE, highlight_last_format
+
+from mf_reportlab.mf_styles import (
+    MFDoc,
+    DEFAULTTABLESTYLE,
+    highlight_last_format,
+    issue_sheet,
+)
 from mf_reportlab.mf_styles import p_nospace, get_titleblockimage
 from mf_reportlab.mf_styles import dist_line_style, sid_line_style
 from constants import (
@@ -333,10 +338,6 @@ class BuildIssueSheet:
         data_list = []  # this is a list of rows in the table. #list for styling output.
         sid_style = []
 
-        # doc_classifications = list(
-        #     set([d["System Identifier"] for d in doc_descriptions.values()])
-        # )
-
         doc_classifications = list(df_document["System Identifier"].unique())
 
         for c in doc_classifications:
@@ -356,8 +357,7 @@ class BuildIssueSheet:
                     df[cols].values.tolist()
                 )  # This is where they get added.
                 data_list += [[""] * len(cols)]
-        check = data_list
-        check1 = sid_style
+
         return data_list, sid_style
         # --- old code ---
 
@@ -779,6 +779,156 @@ def format_data_rows(rows):
     return rows
 
 
+def datatable_distribution(
+    config,
+    issue,
+    distribution,
+    data_list=[],
+    sid_style=[],
+    history=False,
+    part=-1,
+):
+    df_distribution = pd.DataFrame(distribution)
+    df_distribution_pivot = df_distribution.pivot(
+        index="recipient", columns="date_status", values="issue_format"
+    )
+    li_issues = sorted(list(set([i["date_status"] for i in issue])))
+
+    ###LET's Do the Distribution List
+
+    if history:
+        cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
+    else:
+        cols_issue = config["selected_issues"]
+
+    data_list += [[""]]  # blank line
+    sid_style += dist_line_style(4 + len(data_list))
+    data_list += [["Distribution"]]
+    sid_style += dist_line_style(4 + len(data_list))
+
+    doc_dist = df_distribution_pivot.T.to_dict()
+    for i in range(len(doc_dist)):
+        sid_style.append(
+            (
+                "SPAN",
+                (0, 5 + len(data_list) + i),
+                (len(DEFAULT_COLS) - 1, 5 + len(data_list) + i),
+            )
+        )
+    li = []
+    for k, v in doc_dist.items():
+        li.append([k] * len(DEFAULT_COLS) + [v[c] for c in cols_issue])
+    data_list += li
+
+    return data_list, sid_style
+
+
+def datatable_issue(lookup, config, issue, document, history=False, part=-1):
+
+    df_issue = pd.DataFrame(issue)
+    df_issue_pivot = df_issue.pivot(
+        index="document_code", columns="date_status", values="revision_number"
+    )
+    df_document = pd.DataFrame(document)
+    docs = list(df_issue.document_code.unique())
+    current_revs = {
+        d: df_issue.set_index("document_code")
+        .loc[d]
+        .sort_values("date_status")
+        .revision_number.iloc[-1]
+        for d in docs
+    }
+    df_document["Current Rev"] = (
+        df_document.document_code.map(current_revs)
+        .fillna(0)
+        .astype(int)
+        .astype(str)
+        .str.replace("0", "")
+    )
+
+    #
+    li_issues = sorted(list(set([i["date_status"] for i in issue])))
+    if history:
+        cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
+    else:
+        cols_issue = config["selected_issues"]
+    cols = DEFAULT_COLS + cols_issue
+    last_col = cols[-1]
+
+    df_out = pd.concat(
+        [df_document.set_index("document_code"), df_issue_pivot], axis=1
+    ).reset_index()
+
+    df_out = df_out.rename(columns={"document_code": "Document Number"})
+    df_out = df_out[cols + ["System Identifier Description"]]
+    df_out.dropna(subset=cols_issue, inplace=True, how="all")
+    for c in cols_issue:
+        df_out[c] = df_out[c].fillna(0).astype(int).astype(str).str.replace("0", "")
+
+    data_list = []  # this is a list of rows in the table. #list for styling output.
+    sid_style = []
+
+    doc_classifications = list(df_document["System Identifier"].unique())
+
+    for c in doc_classifications:
+        sid = lookup.classification[c]
+        uniclass = lookup.classification_uniclass[c]
+
+        if uniclass == "N/A":
+            uniclass = ""
+
+        df = df_out[df_out["System Identifier Description"] == sid].sort_values(
+            "Document Number"
+        )
+        if len(df) > 0:
+            data_list += [[p_nospace("{0}    {1}".format(sid, uniclass), [])]]
+            sid_style += sid_line_style(4 + len(data_list))
+            data_list += format_data_rows(
+                df[cols].values.tolist()
+            )  # This is where they get added.
+            data_list += [[""] * len(cols)]
+
+    return data_list, sid_style
+
+
+def tablestyle(history, sid_style, data_list, headings):
+    if history:
+        _tablestyle = (
+            highlight_last_format(
+                headings + data_list, startrow=5, rev_position=len(DEFAULT_COLS) - 1
+            )
+            + sid_style
+        )
+    else:
+        _tablestyle = DEFAULTTABLESTYLE(defaultcols=len(DEFAULT_COLS) - 1) + sid_style
+    return _tablestyle
+
+
+def create_issue_headings(cols_to_plot):
+    """format the thing that goes at the top"""
+    headings = [
+        [""] * len(cols_to_plot) + [""],
+        [""] * len(cols_to_plot),
+        [""] * len(cols_to_plot),
+        [""] * len(cols_to_plot),
+        cols_to_plot,
+    ]
+
+    for i in range(len(DEFAULT_COLS), len(cols_to_plot)):
+        headings[0][i] = cols_to_plot[i][6:8]
+        headings[1][i] = cols_to_plot[i][4:6]
+        headings[2][i] = cols_to_plot[i][2:4]
+        headings[3][i] = cols_to_plot[i][9:]
+        headings[4][i] = ""
+
+    for i, string in enumerate(["Day", "Month", "Year", "Status"]):
+        headings[i][len(DEFAULT_COLS) - 1] = string
+
+    for i in range(1, len(DEFAULT_TITLES)):
+        headings[4][i] = DEFAULT_TITLES[i]
+    return headings
+
+
 def issuesheet_part(
     fname, history, part, config, issue, document, distribution, projectinfo, lookup
 ):
@@ -786,11 +936,11 @@ def issuesheet_part(
     document_issue_sheet = new_document(projectinfo.get("project_name"), "London")
     document_issue_sheet.filename = fname
 
-    data_list, sid_style = BuildIssueSheet.data_table_new(
+    data_list, sid_style = datatable_issue(
         lookup, config, issue, document, history=history, part=part
     )
 
-    data_list, sid_style = BuildIssueSheet.distribution_table_new(
+    data_list, sid_style = datatable_distribution(
         config,
         issue,
         distribution,
@@ -809,8 +959,8 @@ def issuesheet_part(
     titleblockdata = BuildIssueSheet.construct_title_block(
         history, part, cols_to_plot_indexes, li_issues, projectinfo, config, lookup
     )
-    headings = BuildIssueSheet.create_heading(cols_to_plot)
-    tstyle = BuildIssueSheet.tablestyle(history, sid_style, data_list, headings)
+    headings = create_issue_headings(cols_to_plot)
+    tstyle = tablestyle(history, sid_style, data_list, headings)
     document = issue_sheet(
         data_list,
         document_issue_sheet,
@@ -840,10 +990,6 @@ def write_issuesheet(
     config, issue, document, distribution, projectinfo, lookup, fdir=pathlib.Path(".")
 ):
 
-    fdir = pathlib.Path(
-        r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\outputs\datapackage"
-    )
-
     history = False
     part = -1
     fname = str(fdir / f"IssueSheet.pdf")  # {project_code}-
@@ -851,6 +997,9 @@ def write_issuesheet(
     return issuesheet_part(
         fname, history, part, config, issue, document, distribution, projectinfo, lookup
     )
+
+
+# from document_issue_io.title_block import title_block_a3
 
 
 def write_issuehistory(

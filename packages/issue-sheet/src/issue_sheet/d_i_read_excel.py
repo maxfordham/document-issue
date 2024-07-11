@@ -9,6 +9,10 @@ import stringcase
 import xlwings as xw
 import pandas as pd
 from models import LookupData, DocumentCodeParts, DocumentCodesMap, DocumentMetadataMap
+import os
+import json
+from d_i_ui import warning_messagebox
+from constants import DEFAULT_CONFIG, MAX_COLS_IN_PART, CONFIG_DIR
 
 
 def index_of_value(value, sheet):
@@ -84,12 +88,6 @@ def get_issues(data):
     match_str = r"^20(\d{2}\d{2}\d{2})-.*$"  # string match date format 20YYMMDD-...
     #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
     return [c for c in data.columns if re.match(match_str, c) is not None]
-
-
-import os
-import json
-from d_i_ui import warning_messagebox
-from constants import DEFAULT_CONFIG, MAX_COLS_IN_PART, CONFIG_DIR
 
 
 def verify_config(config):
@@ -197,7 +195,7 @@ def get_distribution_data(li_issues=None):
     )
 
 
-def read_excel(fdir_package=None) -> Any:
+def read_excel(dump_package=True) -> Any:
     lookup = get_lookup_data()
     map_status_rev = {k: v.split(" - ")[0] for k, v in lookup.status.items()}
     projectinfo = project_info()
@@ -246,10 +244,8 @@ def read_excel(fdir_package=None) -> Any:
         .dropna(subset=["revision_number"])
     )
 
-    # df_issue = pd.concat([df_issue['date_status'].str.split("-", expand=True).rename(columns={0:"date", 1:"status"}), df_issue], axis=1)
-    # del df_issue["date_status"]
-
-    if fdir_package is not None:
+    if dump_package:
+        fdir_package = pathlib.Path(CONFIG_DIR) / projectinfo["Job Number"]
         fdir_package.mkdir(exist_ok=True)
         dng_to_package(
             lookup,
@@ -372,15 +368,4 @@ def dng_to_package(
         )
         print(package)
         package.to_yaml("datapackage.yaml")
-    print("done")
-
-
-def load_package(fdir: Path = pathlib.Path("test")):
-    with set_directory(fdir):
-        package = Package("datapackage.yaml")
-        print(package)
-
-    return package
-
-
-# def dump_json(data, filename):
+    print("done: dng_to_package")
