@@ -69,3 +69,9 @@ exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+# [tool.hatch.build.targets.sdist]
+# include = [
+#   "/src",
+#   "/tests",
+# ]

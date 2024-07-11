@@ -8,7 +8,7 @@ from reportlab.platypus import Table, Image, TableStyle, SimpleDocTemplate, TopP
 from reportlab.pdfgen import canvas
 
 from document_issue.document_issue import DocumentIssue
-from .constants import MAP_TITLEBLOCK_IMAGES, FPTH_MF_CIRCLE_IMG, FDIR_MEDIA
+from .constants import MAP_TITLEBLOCK_IMAGES, FPTH_MF_CIRCLE_IMG, DIR_MEDIA
 from .styles import register_fonts
 
 register_fonts()
@@ -164,11 +164,11 @@ def create_title_block_table(data: list, is_a3=False) -> Table:
 
 def set_background(canvas: canvas, doc: SimpleDocTemplate):
     """Create function that will set the Max Fordham background."""
-    FPTH_MF_TITLE = FDIR_MEDIA / "mf-title.png"
+    FPTH_MF_TITLE = DIR_MEDIA / "mf-title.png"
     image = PIL.Image.open(FPTH_MF_TITLE)
     mf_title_width, mf_title_height = image.size
 
-    FPTH_MF_BACKGROUND = FDIR_MEDIA / "mf-background.png"
+    FPTH_MF_BACKGROUND = DIR_MEDIA / "mf-background.png"
     image = PIL.Image.open(FPTH_MF_BACKGROUND)
     mf_background_width, mf_background_height = image.size
     a4_image_ratio = A4[1] / mf_background_height

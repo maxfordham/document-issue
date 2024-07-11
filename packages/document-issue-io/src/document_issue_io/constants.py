@@ -11,10 +11,10 @@ OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 
 DIR_MEDIA = DIR_ROOT / "media"
 DIR_FONTS = DIR_ROOT / "fonts"
+DIR_TEMPLATES = DIR_ROOT / "templates"
 LOGO = DIR_MEDIA / "mf_medium.jpg"
 FPTH_MF_CIRCLE_IMG = DIR_MEDIA / "mf-circle.png"
-###FONTS###
-###Register Callibri fonts###
+
 FONTS = {
     "Calibri": DIR_FONTS / "calibri.ttf",
     "Calibri-Bold": DIR_FONTS / "calibrib.ttf",
