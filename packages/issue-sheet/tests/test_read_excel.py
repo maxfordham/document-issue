@@ -8,9 +8,7 @@ FDIR_MODULE = pathlib.Path(__file__).parent.parent / "src" / "issue_sheet"
 sys.path.append(str(FDIR_MODULE))
 FDIR_TEST_OUTPUTS = pathlib.Path(__file__).parent / "outputs"
 
-FPTH_DNG = (
-    pathlib.Path(__file__).parent.parent / "excel-dng" / "DocumentNumberGenerator.xlsm"
-)
+FPTH_DNG = pathlib.Path(__file__).parent.parent / "xl" / "DocumentNumberGenerator.xlsm"
 xw.Book(str(FPTH_DNG)).set_mock_caller()
 
 from d_i_read_excel import read_excel

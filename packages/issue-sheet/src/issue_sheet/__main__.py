@@ -16,7 +16,6 @@ from datetime import datetime
 gettime = lambda: datetime.now().strftime("%H-%M-%S")
 getname = lambda: f"df_{gettime()}.csv"
 
-### The Interface for the number generation###
 if __name__ == "__main__":
 
     print(sys.argv)
@@ -32,7 +31,7 @@ if __name__ == "__main__":
         print("Debug ON")
         fpth = (
             pathlib.Path(__file__).parent.parent.parent
-            / "excel-dng"
+            / "xl"
             / "DocumentNumberGenerator.xlsm"
         )
         xw.Book(str(fpth)).set_mock_caller()
