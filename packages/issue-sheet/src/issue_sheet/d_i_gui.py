@@ -154,18 +154,7 @@ class DialogWindow(MFTk):
 
         self.title("Document Issue")
         self.parent = parent
-
-        (
-            self.lookup,
-            self.projectinfo,
-            self.config,
-            self.data,
-            self.li_issues,
-            self.doc_revs,  # doc_issues
-            self.doc_descriptions,
-            self.doc_issues,
-            self.doc_distribution,  # doc_distribution
-        ) = read_excel()
+        self.get_data()
 
         self.col_widths = tkinter.StringVar(self)
         try:  # try for backwards compat.
@@ -191,6 +180,21 @@ class DialogWindow(MFTk):
         self.last_col = None
         self.initialise()
         self.protocol("WM_DELETE_WINDOW", self._quit)  # Ovveride close event.
+
+    def get_data(self):
+        (
+            self.lookup,
+            self.projectinfo,
+            self.config,
+            self.data,
+            self.li_issues,
+            self.doc_revs,  # doc_issues
+            self.doc_descriptions,
+            self.doc_issues,
+            self.doc_distribution,  # doc_distribution
+        ) = read_excel()
+        # note. ^ this also dumps datapackage to dir and the data is read from there
+        #         to build the output issuesheet.
 
     def get_project_info(self, key):
         try:
@@ -419,6 +423,7 @@ class DialogWindow(MFTk):
 
     def save(self):
         """create and save the pdf file"""
+        self.get_data()
         self.update_config()
         if self.check_on_save.get():
             if not self.compare_docs():
