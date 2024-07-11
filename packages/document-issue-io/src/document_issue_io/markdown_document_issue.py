@@ -89,16 +89,16 @@ def check_markdown_file_paths(fpth_md: pathlib.Path, fpth_md_output: pathlib.Pat
         )
 
 
-def check_quarto_version() -> ty.Tuple[bool, str]:
+def check_quarto_version() -> ty.Union[None, str]:
     """Check if quarto version is at least 0.5.0."""
     completed_process = subprocess.run(["quarto", "--version"], capture_output=True)
     if completed_process.returncode != 0:
         return False, ""
     quarto_version = completed_process.stdout.decode("utf-8")
     if not re.match(REGEX_SEMVER, quarto_version):
-        return False, ""
+        return None
     else:
-        return True, quarto_version
+        return quarto_version
 
 
 def run_quarto(
@@ -106,6 +106,12 @@ def run_quarto(
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
     # TODO: make quarto and latex an optional dependency. check, and flag if not installed.
+    check = check_quarto_version()
+    if check is None:
+        raise ValueError(
+            "Quarto is not installed. To run quarto you must have it installed.",
+            "You can install by running: pip install quarto",
+        )
     cmd = [
         "quarto",
         "render",
