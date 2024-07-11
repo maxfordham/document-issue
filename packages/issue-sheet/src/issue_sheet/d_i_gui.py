@@ -11,7 +11,6 @@ import glob
 import os
 import xlwings as xw
 
-# from d_i_functions import *
 from constants import *
 from d_i_read_excel import read_excel  # , index_of_value
 
@@ -55,10 +54,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def config_filename(job_number):
     """return the filename of the config files."""
     # username = os.environ['username']
     return CONFIG_DIR + "\\" + str(job_number) + ".json"
+
 
 def save_config(config):
     """save the config (which is a dict) to a file"""
