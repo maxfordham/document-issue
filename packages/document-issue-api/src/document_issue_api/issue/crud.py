@@ -9,9 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 # issue
-def post_issue(
-    db: Session, document_id: int, issue: schemas.IssueBasePost
-) -> models.Issue:
+def post_issue(db: Session, document_id: int, issue: schemas.IssueBasePost) -> models.Issue:
     """Create a new issue.
 
     Args:
@@ -22,7 +20,7 @@ def post_issue(
         models.Issue: The postd issue
     """
 
-    db_issue = models.Issue(**issue.model_dump() | {"document_id": int(document_id)})  #
+    db_issue = models.Issue(**issue.model_dump(exclude="issue_id") | {"document_id": int(document_id)})  #
     db.add(db_issue)
     db.commit()
     db.refresh(db_issue)
@@ -44,9 +42,7 @@ def get_issue(db: Session, issue_id: int) -> models.Issue:
     return db_issue
 
 
-def patch_issue(
-    db: Session, issue_id: int, issue: schemas.IssueBasePatch
-) -> models.Issue:
+def patch_issue(db: Session, issue_id: int, issue: schemas.IssueBasePatch) -> models.Issue:
     """Patch an issue.
 
     Args:
