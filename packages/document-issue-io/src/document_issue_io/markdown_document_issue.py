@@ -3,12 +3,10 @@ import shutil
 import subprocess
 import typing as ty
 from jinja2 import Environment, FileSystemLoader
-
 from document_issue.document_issue import DocumentIssue
 from document_issue_io.title_block import build_schedule_title_page_template_pdf
-
 from document_issue_io.constants import (
-    FDIR_TEMPLATES,
+    DIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
 )
 from document_issue_io.utils import (
@@ -16,6 +14,9 @@ from document_issue_io.utils import (
     install_or_update_document_issue_quarto_extension,
     FPTH_FOOTER_LOGO,
 )
+import re
+
+REGEX_SEMVER = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
 
 class MarkdownDocumentIssue:
@@ -26,7 +27,7 @@ class MarkdownDocumentIssue:
         document_issue: DocumentIssue,
     ):
         self.document_issue = document_issue
-        self.file_loader = FileSystemLoader(FDIR_TEMPLATES)
+        self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
 
     @property
@@ -88,10 +89,29 @@ def check_markdown_file_paths(fpth_md: pathlib.Path, fpth_md_output: pathlib.Pat
         )
 
 
+def check_quarto_version() -> ty.Union[None, str]:
+    """Check if quarto version is at least 0.5.0."""
+    completed_process = subprocess.run(["quarto", "--version"], capture_output=True)
+    if completed_process.returncode != 0:
+        return False, ""
+    quarto_version = completed_process.stdout.decode("utf-8")
+    if not re.match(REGEX_SEMVER, quarto_version):
+        return None
+    else:
+        return quarto_version
+
+
 def run_quarto(
     fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
+    # TODO: make quarto and latex an optional dependency. check, and flag if not installed.
+    check = check_quarto_version()
+    if check is None:
+        raise ValueError(
+            "Quarto is not installed. To run quarto you must have it installed.",
+            "You can install by running: pip install quarto",
+        )
     cmd = [
         "quarto",
         "render",

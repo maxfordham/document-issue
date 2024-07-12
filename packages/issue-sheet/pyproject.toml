@@ -1,0 +1,20 @@
+[project]
+name = "issue-sheet"
+description = ''
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.7"
+license = "MIT"
+keywords = []
+authors = [{ name = "J Gunstone", email = "j.gunstone@maxfordham.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]

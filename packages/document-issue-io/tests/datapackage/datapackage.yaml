@@ -1,0 +1,40 @@
+name: document-issue
+title: My Package
+description: My Package for the Guide
+resources:
+  - name: distribution
+    type: table
+    path: distribution.csv
+    scheme: file
+    format: csv
+    mediatype: text/csv
+  - name: issue
+    type: table
+    path: issue.csv
+    scheme: file
+    format: csv
+    mediatype: text/csv
+  - name: document
+    type: table
+    path: document.csv
+    scheme: file
+    format: csv
+    mediatype: text/csv
+  - name: lookup
+    type: json
+    path: lookup.json
+    scheme: file
+    format: json
+    mediatype: text/json
+  - name: projectinfo
+    type: json
+    path: projectinfo.json
+    scheme: file
+    format: json
+    mediatype: text/json
+  - name: config
+    type: json
+    path: config.json
+    scheme: file
+    format: json
+    mediatype: text/json

@@ -81,6 +81,7 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     project_number = Column(Integer)
     project_name = Column(String)  #  remove / get from webapp
+    project_address = Column(String)
 
     project_role = relationship("ProjectRole", back_populates="project", cascade="all, delete-orphan")
     document = relationship("Document", back_populates="project", cascade="all, delete-orphan")
@@ -132,7 +133,7 @@ class Document(Base):
     document_code = Column(Integer)
     document_description = Column(String)
     document_source = Column(String)
-    size = Column(String)
+    paper_size = Column(String)
     scale = Column(String)
     notes = Column(JSON)
     originator = Column(String)

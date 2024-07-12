@@ -3,7 +3,7 @@ from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 from document_issue.constants import COL_WIDTH
 import datetime
 import typing as ty
-from pydantic import field_validator, model_validator, ConfigDict
+from pydantic import field_validator, model_validator, ConfigDict, computed_field
 
 
 description_author = "the person who authored the work."
@@ -70,6 +70,11 @@ class Issue(BaseModel):
         max_length=1e8,
         json_schema_extra=dict(column_width=300),
     )
+
+    @computed_field
+    @property
+    def issue_id(self) -> str:
+        return f"{self.date.strftime('%Y%m%d')}-{self.status_code}"
 
     @field_validator("date", mode="before")
     @classmethod

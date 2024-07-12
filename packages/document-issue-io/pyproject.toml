@@ -27,7 +27,6 @@ dependencies = [
     "pydantic",
     "jinja2",
     "reportlab",
-    "quarto-cli",
     # document-issue # TODO: How do we get this to install?
 ]
 
@@ -35,9 +34,12 @@ dependencies = [
 dev = [
     "pytest",
     "polyfactory",
-    "hatch"
+    "hatch",
+    "quarto-cli"
 ]
-
+quarto = [
+    "quarto-cli"
+]
 
 [project.urls]
 Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"
@@ -69,3 +71,9 @@ exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+# [tool.hatch.build.targets.sdist]
+# include = [
+#   "/src",
+#   "/tests",
+# ]

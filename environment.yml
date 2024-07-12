@@ -7,6 +7,8 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.8,<3.12.0a0
+  - frictionless
+  - pandas
   - pytest
   - flake8
   - black
@@ -16,5 +18,5 @@ dependencies:
   - pip:
       - polyfactory
       - -e packages/document-issue 
-      - -e packages/document-issue-io
+      - -e packages/document-issue-io[quarto]
       - -e packages/document-issue-api

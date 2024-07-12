@@ -3,10 +3,10 @@ import pathlib
 import subprocess
 from contextlib import contextmanager
 
-from document_issue_io.constants import FDIR_TEMPLATES, FDIR_MEDIA
+from document_issue_io.constants import DIR_TEMPLATES, DIR_MEDIA
 
-FPTH_INSTALL_TAR = FDIR_TEMPLATES / "document-issue-quarto.tar.gz"
-FPTH_FOOTER_LOGO = FDIR_MEDIA / "footer-logo.png"
+FPTH_INSTALL_TAR = DIR_TEMPLATES / "document-issue-quarto.tar.gz"
+FPTH_FOOTER_LOGO = DIR_MEDIA / "footer-logo.png"
 
 
 @contextmanager
