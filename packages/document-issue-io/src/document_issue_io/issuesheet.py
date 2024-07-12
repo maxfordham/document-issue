@@ -494,8 +494,14 @@ def issuesheet_part(
     return fdir / document_issue_sheet.filename
 
 
-def write_issuesheet(config, issue, document, distribution, projectinfo, lookup):
+def write_issuesheet(
+    config, issue, document, distribution, projectinfo, lookup, fdir_package
+):
+
     fdir = pathlib.Path(config["outgoing_folder"])
+    if not fdir.is_absolute():
+        fdir = fdir_package / fdir
+
     history = False
     part = -1
 
@@ -504,8 +510,12 @@ def write_issuesheet(config, issue, document, distribution, projectinfo, lookup)
     )
 
 
-def write_issuehistory(config, issue, document, distribution, projectinfo, lookup):
+def write_issuehistory(
+    config, issue, document, distribution, projectinfo, lookup, fdir_package
+):
     fdir = pathlib.Path(config["outgoing_folder"])
+    if not fdir.is_absolute():
+        fdir = fdir_package / fdir
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
     no_issues = len(li_issues)
     history = True
@@ -547,9 +557,9 @@ def load_datapackage(fdir):
 def write_issuesheet_and_issuehistory(fdir):
     config, issue, document, distribution, projectinfo, lookup = load_datapackage(fdir)
     fpth_issuesheet = write_issuesheet(
-        config, issue, document, distribution, projectinfo, lookup
+        config, issue, document, distribution, projectinfo, lookup, fdir_package=fdir
     )
     fpths_issuehistory = write_issuehistory(
-        config, issue, document, distribution, projectinfo, lookup
+        config, issue, document, distribution, projectinfo, lookup, fdir_package=fdir
     )
     return fpth_issuesheet, fpths_issuehistory

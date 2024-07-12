@@ -6,7 +6,7 @@
     "max_cols_in_part": 30,
     "office": "Cambridge",
     "open_on_save": false,
-    "outgoing_folder": "C:\\engDev\\git_mf\\document-issue\\packages\\document-issue-io\\tests\\testoutput",
+    "outgoing_folder": "../testoutput",
     "selected_issues": [
         "20190501-S0"
     ],
