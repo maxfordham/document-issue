@@ -49,6 +49,8 @@ from pydantic import BaseModel
 import webbrowser
 import subprocess
 import logging
+from constants import MAX_COLS_IN_PART, CONFIG_DIR, DEFAULT_COLS, TITLETEXT
+from document_issue_io.constants import OFFICES
 
 logger = logging.getLogger(__name__)
 

@@ -5,12 +5,6 @@ from importlib.resources import files
 # ^ REF: https://setuptools.pypa.io/en/latest/userguide/datafiles.html#accessing-data-files-at-runtime
 
 NAME_MD_DOCISSUE_TEMPLATE = "docissue.md.jinja"
-
-data_text = files("document_issue_io.data").joinpath("data1.txt").read_text()
-DIR_ROOT = pathlib.Path(__file__).parent
-# DIR_ROOT = pathlib.Path(
-#     r"C:\engDev\git_mf\MF_Toolbox\dev\mf_xlwings\document_issue"
-# )  # Set this to be Y:\drive
 OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 
 DIR_MEDIA = files("document_issue_io.media")
@@ -18,6 +12,7 @@ DIR_FONTS = files("document_issue_io.fonts")
 DIR_TEMPLATES = files("document_issue_io.templates")
 LOGO = DIR_FONTS.joinpath("mf_medium.jpg")
 FPTH_MF_CIRCLE_IMG = DIR_MEDIA.joinpath("mf-circle.png")
+FPTH_ICON = DIR_MEDIA.joinpath("mf-icon.ico")
 
 FONTS = {
     "Calibri": DIR_FONTS.joinpath("calibri.ttf"),

@@ -18,7 +18,7 @@ from tkinter import filedialog, Tk, messagebox, scrolledtext, INSERT, StringVar
 from tkinter import OptionMenu, Button, mainloop, Label, LEFT, Entry, W
 from PIL.ImageTk import PhotoImage
 from PIL import Image, ImageTk
-from constants import FPTH_ICON
+from document_issue_io.constants import FPTH_ICON
 
 
 MFFONTLARGE = ("Calibri", 32)  # Large Calibri Font

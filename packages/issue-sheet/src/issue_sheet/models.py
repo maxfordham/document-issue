@@ -5,11 +5,13 @@ from pydantic.functional_validators import AfterValidator
 import re
 
 from constants import (
-    DRWG_CLASSIFICATION_CODE_REGEX,
-    UNICLASS_CLASSIFICATION_CODE_REGEX,
     CONFIG_DIR,
 )
 
+DRWG_CLASSIFICATION_CODE_REGEX = (
+    r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
+)
+UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$"  # TODO
 
 DrwgClassificationCode = Annotated[
     str,

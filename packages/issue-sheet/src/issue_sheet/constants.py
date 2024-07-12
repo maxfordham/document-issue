@@ -14,3 +14,12 @@ DEFAULT_CONFIG = {
     "timestamps": [],
     "filepath": "",
 }
+TITLETEXT = "Check and create issue sheets.\n v0.2.0 - May19"
+DEFAULT_COLS = [
+    "Document Title",
+    "Document Number",
+    "docSource",
+    "Scale",
+    "Size",
+    "Current Rev",
+]
