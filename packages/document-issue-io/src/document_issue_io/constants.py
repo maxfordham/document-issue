@@ -1,33 +1,38 @@
 import pathlib
 from reportlab.lib import colors
+from importlib.resources import files
+
+# ^ REF: https://setuptools.pypa.io/en/latest/userguide/datafiles.html#accessing-data-files-at-runtime
 
 NAME_MD_DOCISSUE_TEMPLATE = "docissue.md.jinja"
-CONFIG_DIR = r"J:\J4321\Data\document_issue\config"  # TODO: move to dgn package
+
+data_text = files("document_issue_io.data").joinpath("data1.txt").read_text()
 DIR_ROOT = pathlib.Path(__file__).parent
 # DIR_ROOT = pathlib.Path(
 #     r"C:\engDev\git_mf\MF_Toolbox\dev\mf_xlwings\document_issue"
 # )  # Set this to be Y:\drive
 OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 
-DIR_MEDIA = DIR_ROOT / "media"
-DIR_FONTS = DIR_ROOT / "fonts"
-DIR_TEMPLATES = DIR_ROOT / "templates"
-LOGO = DIR_MEDIA / "mf_medium.jpg"
-FPTH_MF_CIRCLE_IMG = DIR_MEDIA / "mf-circle.png"
+DIR_MEDIA = files("document_issue_io.media")
+DIR_FONTS = files("document_issue_io.fonts")
+DIR_TEMPLATES = files("document_issue_io.templates")
+LOGO = DIR_FONTS.joinpath("mf_medium.jpg")
+FPTH_MF_CIRCLE_IMG = DIR_MEDIA.joinpath("mf-circle.png")
 
 FONTS = {
-    "Calibri": DIR_FONTS / "calibri.ttf",
-    "Calibri-Bold": DIR_FONTS / "calibrib.ttf",
-    "Calibri-Light-Italics": DIR_FONTS / "calibrili.ttf",
-    "Calibri-Italics": DIR_FONTS / "calibrii.ttf",
-    "Calibri-Light": DIR_FONTS / "calibril.ttf",
-    "Calibri-Bold-Italics": DIR_FONTS / "calibrib.ttf",
+    "Calibri": DIR_FONTS.joinpath("calibri.ttf"),
+    "Calibri-Bold": DIR_FONTS.joinpath("calibrib.ttf"),
+    "Calibri-Light-Italics": DIR_FONTS.joinpath("calibrili.ttf"),
+    "Calibri-Italics": DIR_FONTS.joinpath("calibrii.ttf"),
+    "Calibri-Light": DIR_FONTS.joinpath("calibril.ttf"),
+    "Calibri-Bold-Italics": DIR_FONTS.joinpath("calibrib.ttf"),
 }
 
 
 MAP_TITLEBLOCK_IMAGES = {
-    l.lower(): DIR_MEDIA / ("titleblock_" + l.lower() + ".png") for l in OFFICES
+    l.lower(): DIR_MEDIA.joinpath(("titleblock_" + l.lower() + ".png")) for l in OFFICES
 }
+
 
 LONDON_ADDRESS = [
     "Max Fordham LLP",

@@ -7,7 +7,6 @@ import re
 from .constants import (
     DRWG_CLASSIFICATION_CODE_REGEX,
     UNICLASS_CLASSIFICATION_CODE_REGEX,
-    CONFIG_DIR,
 )
 
 

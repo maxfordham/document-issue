@@ -10,8 +10,6 @@ import pathlib
 import glob
 import os
 import xlwings as xw
-
-from constants import *
 from d_i_read_excel import read_excel  # , index_of_value
 
 import tkinter
