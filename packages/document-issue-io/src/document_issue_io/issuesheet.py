@@ -23,14 +23,12 @@ from .models import LookupData
 from .title_block import title_block_table
 from .styles import (
     CURRENT_COLOUR,
-
     NUM_HEADER_ROWS,
     HIGHLIGHT_COLOUR,
     THICKLINE,
     colors,
     PARASTYLE,
     ParagraphStyle,
-
 )
 from reportlab.platypus import (
     Table,
@@ -247,17 +245,28 @@ def create_docissue(
             dict(role="Director in Charge", initials=projectinfo.get("Project Leader"))
         ],
     )
+    naming = [l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")]
+    name = dict(
+        project=projectinfo.get("Project Code"),
+        originator="MXF",
+        volume="XX",
+        level="XX",
+        infotype="IS",
+        role="J",
+        number="",
+    )
+    name = {n: name[n] for n in naming}
 
     if history:
-        document_code = "{}-MXF-XX-XX-IS-J-0000{}".format(project_number, part)
-        c = "06667-MXF-XX-XX-SH-M-2000{0}".format(part)
+        name["number"] = "0000{}".format(part)
         docissue.document_description = f"Issue History: Part {part} of {num_parts}"
-        docissue.document_code = document_code
+
     else:
-        document_code = "{}-MXF-XX-XX-IS-J-00100".format(project_number)
-        c = "06667-MXF-XX-XX-SH-M-20000".format(part)
-        docissue.document_description = f"IssueSheet"
-        docissue.document_code = document_code
+        name["number"] = "00100"
+        docissue.document_description = f"Issue Sheet"
+
+    document_code = "-".join(list(name.values()))
+    docissue.document_code = document_code
 
     return docissue
 
