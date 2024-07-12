@@ -9,7 +9,7 @@ OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 
 DIR_MEDIA = files("document_issue_io.media")
 DIR_FONTS = files("document_issue_io.fonts")
-DIR_TEMPLATES = files("document_issue_io.templates")
+DIR_TEMPLATES = pathlib.Path(__file__).parent / "templates" # pathlib dir required... 
 LOGO = DIR_FONTS.joinpath("mf_medium.jpg")
 FPTH_MF_CIRCLE_IMG = DIR_MEDIA.joinpath("mf-circle.png")
 FPTH_ICON = DIR_MEDIA.joinpath("mf-icon.ico")
