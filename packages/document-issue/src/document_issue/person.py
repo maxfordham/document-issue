@@ -10,7 +10,7 @@ class _Initials(BaseModel):
         max_length=5,
     )
 
-    @field_validator
+    @field_validator("initials")
     def initials_validator(cls, v):
         if len(v) > 5:
             v = v[:5]
