@@ -18,5 +18,5 @@ dependencies:
   - pip:
       - polyfactory
       - -e packages/document-issue 
-      - -e packages/document-issue-io
+      - -e packages/document-issue-io[quarto]
       - -e packages/document-issue-api
