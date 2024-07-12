@@ -15,10 +15,12 @@ from sqlalchemy import (
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import relationship, configure_mappers, validates
-from sqlalchemy.ext.declarative import (
-    declarative_base,
-)  # TODO: from sqlalchemy.orm import declarative_base
 
+# from sqlalchemy.ext.declarative import (
+#     declarative_base,
+# )  # TODO: from sqlalchemy.orm import declarative_base
+
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
@@ -50,9 +52,7 @@ class Role(Base):
     id = Column(Integer, primary_key=True, index=True)
     role_name = Column(String)
     role_description = Column(String)
-    is_archived = Column(
-        Boolean, default=False
-    )  # use if a role is no longer required but already in use historically.
+    is_archived = Column(Boolean, default=False)  # use if a role is no longer required but already in use historically.
 
     document_role = relationship("DocumentRole", back_populates="role")
     project_role = relationship("ProjectRole", back_populates="role")
@@ -82,12 +82,8 @@ class Project(Base):
     project_number = Column(Integer)
     project_name = Column(String)  #  remove / get from webapp
 
-    project_role = relationship(
-        "ProjectRole", back_populates="project", cascade="all, delete-orphan"
-    )
-    document = relationship(
-        "Document", back_populates="project", cascade="all, delete-orphan"
-    )
+    project_role = relationship("ProjectRole", back_populates="project", cascade="all, delete-orphan")
+    document = relationship("Document", back_populates="project", cascade="all, delete-orphan")
     UniqueConstraint(project_number)
 
 
@@ -118,9 +114,7 @@ class DocumentRole(Base):
     __tablename__ = "document_role"
 
     document_id = Column(Integer, ForeignKey("document.id"), primary_key=True)
-    role_id = Column(
-        Integer, ForeignKey("role.id"), primary_key=True
-    )  # TODO: map to project role
+    role_id = Column(Integer, ForeignKey("role.id"), primary_key=True)  # TODO: map to project role
 
     role = relationship("Role", back_populates="document_role")
     document = relationship("Document", back_populates="document_role")
@@ -233,6 +227,4 @@ class ProjectDocumentCodeGenerator(Base):
     map_project = Column(JSON)
     map_originator = Column(JSON)
 
-    document_code_generator_id = Column(
-        Integer, ForeignKey("document_code_generator.id")
-    )
+    document_code_generator_id = Column(Integer, ForeignKey("document_code_generator.id"))

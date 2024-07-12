@@ -16,7 +16,7 @@ from document_issue_api.document.schemas import DocumentBasePost
 
 
 FDIR_TEST = pathlib.Path(__file__).parent
-FPTH_API_TEST_ENV = FDIR_TEST / "api-test.env"
+FPTH_API_TEST_ENV = FDIR_TEST.parent / "api-test.env"
 ENV = ApiEnv(_env_file=FPTH_API_TEST_ENV, _env_file_encoding="utf-8")
 
 # --------------- equivalent to: document_issue_api./database.py ---------------------
@@ -35,6 +35,8 @@ def get_db_path():
 
 
 get_db_path().unlink(missing_ok=True)
+
+p = "sqlite:///./test.db"
 engine = create_engine(ENV.DOCUMENTISSUE_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)
