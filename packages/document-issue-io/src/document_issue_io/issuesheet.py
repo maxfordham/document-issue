@@ -272,7 +272,7 @@ def create_docissue(
             return n
 
     naming = [update_name(n) for n in naming]
-    # - ^ backward compatibility -
+    # - ^ backwards compatibility -
     name = dict(
         project=projectinfo.get("Project Code"),
         originator="MXF",
@@ -565,6 +565,21 @@ def write_issuehistory(
                     num_parts=num_parts,
                 )
             )
+    else:
+        part = 1
+        fpths.append(
+            issuesheet_part(
+                fdir,
+                history,
+                part,
+                config,
+                issue,
+                document,
+                distribution,
+                projectinfo,
+                lookup,
+            )
+        )
     return fpths
 
 
