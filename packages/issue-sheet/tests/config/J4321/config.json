@@ -1,0 +1,33 @@
+{
+    "check_on_save": true,
+    "col_widths": "100,40,9",
+    "filepath": "",
+    "job_number": "J4321",
+    "max_cols_in_part": 30,
+    "office": "Cambridge",
+    "open_on_save": false,
+    "outgoing_folder": "C:\\Users\\j.gunstone\\Desktop\\dgn",
+    "selected_issues": [
+        "20190501-S0",
+        "20190508-S2"
+    ],
+    "timestamps": [
+        "Jul 16 2024 09:13:32",
+        "Jul 16 2024 09:14:14",
+        "Jul 16 2024 09:15:14",
+        "Jul 16 2024 09:18:54",
+        "Jul 16 2024 09:20:45",
+        "Jul 16 2024 15:04:39",
+        "Jul 16 2024 15:07:24",
+        "Jul 16 2024 15:18:56",
+        "Jul 16 2024 17:10:21",
+        "Jul 16 2024 17:18:30",
+        "Jul 16 2024 17:26:34",
+        "Jul 16 2024 17:27:28",
+        "Jul 16 2024 17:28:12",
+        "Jul 16 2024 17:32:04"
+    ],
+    "users": [
+        "j.gunstone"
+    ]
+}

@@ -1,8 +1,18 @@
 import pathlib
 
 MAX_COLS_IN_PART = 30
-CONFIG_DIR = r"J:\J4321\Data\document_issue\config"
-CONFIG_DIR = str(pathlib.Path(__file__).parent.parent.parent / "tests" / "config")
+
+
+def get_config_dir():
+    if pathlib.Path(
+        r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\config"
+    ).exists():
+        return r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\config"
+    else:
+        return r"J:\J4321\Data\document_issue\config"
+
+
+CONFIG_DIR = get_config_dir()
 DEFAULT_CONFIG = {
     "job_number": "4321",
     "office": "Cambridge",  # edinburgh; bristol; manchester; cambridge; london;
