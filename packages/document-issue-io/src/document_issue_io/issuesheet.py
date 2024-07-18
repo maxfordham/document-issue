@@ -119,20 +119,30 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     )
     df_document = pd.DataFrame(document)
     docs = list(df_issue.document_code.unique())
-    current_revs = {
-        d: df_issue.set_index("document_code")
-        .loc[d]
-        .sort_values("date_status")
-        .revision_number.iloc[-1]
-        for d in docs
-    }
-    df_document["Current Rev"] = (
-        df_document.document_code.map(current_revs)
-        .fillna(0)
-        .astype(int)
-        .astype(str)
-        .str.replace("0", "")
-    )
+
+    def get_current_revs(df_issue, d):
+        rev = df_issue.set_index("document_code").loc[d]
+        if isinstance(rev, pd.Series):
+            return rev.revision_number
+        elif isinstance(rev, pd.DataFrame):
+            return (
+                df_issue.set_index("document_code")
+                .loc[d]
+                .sort_values("date_status")
+                .revision_number.to_list()[-1]
+            )
+        else:
+            return ValueError("No revision number found")
+
+    current_revs = {d: get_current_revs(df_issue, d) for d in docs}
+    df_document["Current Rev"] = df_document.document_code.map(current_revs).fillna(0)
+
+    try:
+        df_document["Current Rev"] = (
+            df_document["Current Rev"].astype(int).astype(str).str.replace("0", "")
+        )
+    except:
+        logger.error("Error converting Current Rev to string")
 
     #
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
@@ -151,8 +161,13 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     df_out = df_out[cols + ["System Identifier Description"]]
     df_out.dropna(subset=cols_issue, inplace=True, how="all")
     for c in cols_issue:
-        df_out[c] = df_out[c].fillna(0).astype(int).astype(str).str.replace("0", "")
-
+        df_out[c] = df_out[c].fillna(0)
+        try:
+            df_out[c] = df_out[c].astype(int).astype(str).str.replace("0", "")
+        except:
+            logger.error(
+                "Error converting Current Rev to string... assuming its already a string..."
+            )
     data_list = []  # this is a list of rows in the table. #list for styling output.
     sid_style = []
 
@@ -241,11 +256,23 @@ def create_docissue(
         issue_history=[issue],
         name_nomenclature=projectinfo.get("Naming Convention"),
         status_description="Suitable for information",
-        roles=[
-            dict(role="Director in Charge", initials=projectinfo.get("Project Leader"))
-        ],
+        roles=[dict(role="Director in Charge", name=projectinfo.get("Project Leader"))],
     )
     naming = [l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")]
+
+    # ---------------------------
+    def update_name(n):
+        if n == "orig":
+            return "originator"
+        elif n == "project code":
+            return "project"
+        elif n == "type":
+            return "infotype"
+        else:
+            return n
+
+    naming = [update_name(n) for n in naming]
+    # - ^ backward compatibility -
     name = dict(
         project=projectinfo.get("Project Code"),
         originator="MXF",
