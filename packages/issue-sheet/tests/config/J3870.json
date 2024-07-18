@@ -1,30 +1,25 @@
 {
     "check_on_save": true,
     "col_widths": "100,40,9",
-    "filepath": "C:\\engDev\\git_mf\\document-issue\\packages\\issue-sheet\\excel-dng\\DocumentNumberGenerator.xlsm",
+    "filepath": "",
     "job_number": "J3870",
     "max_cols_in_part": 30,
     "office": "Cambridge",
     "open_on_save": false,
-    "outgoing_folder": "C:\\Users\\j.gunstone\\Desktop\\dgn",
+    "outgoing_folder": "C:\\engDev\\git_mf\\document-issue\\packages\\issue-sheet\\tests\\outputs",
     "selected_issues": [
-        "20240625-S1"
+        "20240622-S1",
+        "20240623-S1"
     ],
     "timestamps": [
-        "Jul 08 2024 10:39:04",
-        "Jul 08 2024 10:58:07",
-        "Jul 11 2024 10:16:15",
-        "Jul 11 2024 10:17:49",
-        "Jul 11 2024 10:52:47",
-        "Jul 11 2024 10:54:31",
-        "Jul 11 2024 10:54:43",
-        "Jul 11 2024 10:55:10",
-        "Jul 11 2024 10:55:22",
-        "Jul 11 2024 11:01:58",
-        "Jul 11 2024 11:02:52",
-        "Jul 11 2024 12:10:18",
-        "Jul 11 2024 14:24:06",
-        "Jul 11 2024 14:29:47"
+        "Jul 18 2024 16:06:10",
+        "Jul 18 2024 16:06:58",
+        "Jul 18 2024 16:10:26",
+        "Jul 18 2024 16:11:58",
+        "Jul 18 2024 16:34:17",
+        "Jul 18 2024 16:34:33",
+        "Jul 18 2024 16:35:12",
+        "Jul 18 2024 16:36:06"
     ],
     "users": [
         "j.gunstone"
