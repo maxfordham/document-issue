@@ -1,12 +1,11 @@
 from typing_extensions import Annotated
 from pydantic import BaseModel
 import typing as ty
-from pydantic.functional_validators import AfterValidator
+from pydantic.functional_validators import AfterValidator, field_validator
 import re
+import logging
 
-from constants import (
-    CONFIG_DIR,
-)
+logger = logging.getLogger(__name__)
 
 DRWG_CLASSIFICATION_CODE_REGEX = (
     r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
@@ -84,7 +83,11 @@ class DocumentCodeParts(enum.Enum):
 
 class DocumentCodesMap(BaseModel):  # MapDocumentCodeDescription
     project: dict[str, str]
-    originator: dict[ty.Literal["MXF"], ty.Literal["Max Fordham LLP"]]
+    # originator: dict[str, str]
+    originator: dict[
+        ty.Literal["MXF"],
+        ty.Union[ty.Literal["Max Fordham LLP"], ty.Literal["Max Fordham"]],
+    ]
     # role: dict[str, str]
     classification: dict[str, str]
     type: dict[str, str]
@@ -98,6 +101,14 @@ class DocumentCodesMap(BaseModel):  # MapDocumentCodeDescription
         "type": ["type", "subtype"],
     }
     nested_codes_delimiter: str = "-"
+
+    # @field_validator("originator")
+    # def validate_originator(cls, v):
+    #     if v != {"MXF": "Max Fordham LLP"}:
+    #         raise logger.error(
+    #             "originator must be either 'Max Fordham LLP' or 'Max Fordham'"
+    #         )
+    #     return {"MXF": "Max Fordham LLP"}
 
 
 class DocumentMetadataMap(BaseModel):

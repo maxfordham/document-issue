@@ -8,7 +8,7 @@ import re
 import stringcase
 import xlwings as xw
 import pandas as pd
-from document_issue_io.models import (
+from document_issue.meta import (
     LookupData,
     DocumentCodeParts,
     DocumentMetadataMap,

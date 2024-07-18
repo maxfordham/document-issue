@@ -19,7 +19,7 @@ from .constants import (
     DEFAULT_COLS,
     MAX_COLS_IN_PART,
 )
-from .models import LookupData
+from document_issue.meta import LookupData
 from .title_block import title_block_table
 from .styles import (
     CURRENT_COLOUR,

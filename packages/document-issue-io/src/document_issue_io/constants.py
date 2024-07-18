@@ -95,12 +95,6 @@ CAMBRIDGE_ADDRESS_COMPACT = [
     "Cambridge CB2 3BZ",
 ]
 
-
-DRWG_CLASSIFICATION_CODE_REGEX = (
-    r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
-)
-UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$"  # TODO
-
 START_ROW = 35  # Default
 START_COL = 1  # B
 MAX_COLS_IN_PART = 30
