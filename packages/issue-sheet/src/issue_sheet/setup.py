@@ -17,7 +17,7 @@ base = None
 if sys.platform == "win32":
     base = "Win32GUI"
 
-executables = [Executable("__main__.py", base=base)]
+executables = [Executable("__main__.py", base=base, target_name="document_issue.exe")]
 
 additional_mods = ["numpy.core._methods", "numpy.lib.format"]
 exclude_mods = [
@@ -50,8 +50,7 @@ os.environ["TK_LIBRARY"] = r"C:\ProgramData\Miniconda3\tcl\tk8.6"
 
 setup(
     name="document_issue",
-    version="0.1",
-    includes=["os"],
+    version="0.5",
     options={"build_exe": build_exe_options},
     description="Document issue freeze",
     executables=executables,

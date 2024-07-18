@@ -1,15 +1,21 @@
 Create env:
-mamba create -n compile python numpy<2 cx_Freeze pandas Pillow PyYAML reportlab xlsxwriter xlwings
+
+```console
+micromamba create -n compile python pydantic>2 numpy<2 cx_Freeze pandas Pillow PyYAML reportlab xlsxwriter xlwings frictionless -c conda-forge
+micromamba activate compile
+pip install -e ../../../document-issue -e ../../../document-issue-io 
+#pip install git+https://git@github.com/maxfordham/document-issue.git@main#subdirectory=packages/document-issue git+https://git@github.com/maxfordham/document-issue.git@main#subdirectory=packages/document-issue-io
+```
 
 TO Compile:
 	1. On ES1 with the conda envrionment "compile" (OWTTE) run.
-	2. on command line: python setup.py build -b build_vX_Y_Z
+	2. on command line: `python setup.py build`
 		where X_Y_Z denote a sensible version number
 	3. test by changing filepath in the macro in the excel vba of the Engineering Document Number Generator.xlsm
 	4. rename build_vX_Y_Z to build to publish
 	5. update table below.
 	
-version 0.2.1: python setup.py build -b build_v0_2_1
+version 0.2.1: python setup.py build
 
 Version    | Date      |Commit	   |Current?   |Notes	
 -----------+-----------+-----------+-----------+-----------
