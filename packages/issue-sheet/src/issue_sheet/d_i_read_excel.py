@@ -8,7 +8,11 @@ import re
 import stringcase
 import xlwings as xw
 import pandas as pd
-from models import LookupData, DocumentCodeParts, DocumentCodesMap, DocumentMetadataMap
+from document_issue_io.models import (
+    LookupData,
+    DocumentCodeParts,
+    DocumentMetadataMap,
+)
 import os
 import json
 from d_i_ui import warning_messagebox
@@ -32,10 +36,30 @@ def get_table_data(name: str) -> dict:
         .options(pd.DataFrame, expand="table")
         .value
     )
+    des = f"{name}_des"
+    # backwards compatibility
+
+    if des not in data.columns:
+        if "Comment" in data.columns:
+            data[des] = data["Comment"]
+
+    if name == "issueFormat" and des not in data.columns:
+        data[des] = data["Status Description"]
+
+    if name == "status" and des not in data.columns:
+        di = dict(zip(data.index.to_list(), [l[0] for l in data["Revision"].to_list()]))
+        data["rev_code"] = data.index.map(di)
+        data[des] = (
+            data["rev_code"]
+            .str.cat(data["Status Description"], sep=" - ")
+            .str.cat(data["Description"], sep=" - ")
+            .str.cat(data["Revision"], sep=" - ")
+        )
+
     return data[f"{name}_des"].to_dict()
 
 
-def get_lookup_data() -> DocumentCodesMap:  # get_lookup_data
+def get_lookup_data() -> LookupData:  # get_lookup_data
     names = [k for k in list(DocumentCodeParts.__members__.keys()) if k != "sequence"]
     names = names + [
         stringcase.camelcase(f)
@@ -45,6 +69,10 @@ def get_lookup_data() -> DocumentCodesMap:  # get_lookup_data
     sheet_names = [s.name for s in xw.sheets]
     names = [n for n in names if n in sheet_names]
     data = {stringcase.snakecase(n): get_table_data(n) for n in names}
+
+    # backwards compatibility
+    if "type" not in sheet_names:
+        data["type"] = get_table_data("infoType")
 
     # classification_uniclass
     name = "classification"
@@ -86,7 +114,7 @@ def project_info():
 def get_issues(data):
     """work out which columns are dates"""
     match_str = r"^20(\d{2}\d{2}\d{2})-.*$"  # string match date format 20YYMMDD-...
-    #                                       ^ Test here: https://regex101.com/r/qH0sU7/1
+    # ^ Test here: https://regex101.com/r/qH0sU7/1
     return [c for c in data.columns if re.match(match_str, c) is not None]
 
 
@@ -145,7 +173,7 @@ def get_pandas_data():
 
         if type(res) is pd.core.frame.Series:
             raise ValueError(
-                "Atleast two documents required.\nOnly need one? Just add a dummy one"
+                "At least two documents required.\nOnly need one? Just add a dummy one"
             )
         if "Document Number" not in res.columns:
             res["Document Number"] = res.index
