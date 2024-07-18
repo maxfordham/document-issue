@@ -148,7 +148,10 @@ class DocumentIssue(Document, ProjectBase):
     @property
     def director_in_charge(self):
         for role in self.document_role:
-            if role.role_name == RoleEnum.director.value:
+            if (
+                role.role_name == RoleEnum.director
+                or role.role_name == RoleEnum.director.value
+            ):
                 return role.initials
 
     # TODO: add this validation after ensuring that a director is shown on all existing schedules
