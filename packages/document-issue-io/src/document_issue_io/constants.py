@@ -9,7 +9,7 @@ OFFICES = ["London", "Cambridge", "Bristol", "Manchester", "Edinburgh"]
 
 DIR_MEDIA = files("document_issue_io.media")
 DIR_FONTS = files("document_issue_io.fonts")
-DIR_TEMPLATES = pathlib.Path(__file__).parent / "templates" # pathlib dir required... 
+DIR_TEMPLATES = pathlib.Path(__file__).parent / "templates"  # pathlib dir required...
 LOGO = DIR_FONTS.joinpath("mf_medium.jpg")
 FPTH_MF_CIRCLE_IMG = DIR_MEDIA.joinpath("mf-circle.png")
 FPTH_ICON = DIR_MEDIA.joinpath("mf-icon.ico")
@@ -105,18 +105,6 @@ START_ROW = 35  # Default
 START_COL = 1  # B
 MAX_COLS_IN_PART = 30
 
-DEFAULT_CONFIG = {
-    "job_number": "4321",
-    "office": "Cambridge",  # edinburgh; bristol; manchester; cambridge; london;
-    "open_on_save": "False",
-    "check_on_save": "True",
-    "col_widths": "100,40,9",
-    "max_cols_in_part": MAX_COLS_IN_PART,
-    "users": [],
-    "timestamps": [],
-    "filepath": "",
-}
-
 DEFAULT_COLS = [
     "Document Title",
     "Document Number",
@@ -136,8 +124,6 @@ DEFAULT_TITLES = [
 ]
 
 HIGHLIGHT_COLOUR = colors.Color(168 / 255, 231 / 255, 255 / 255, alpha=1.0)
-
-TITLETEXT = "Check and create issue sheets.\n v0.2.0 - May19"
 
 SHEETTABLEDICT = [  # sheet, first header, dict?, tableheader, header in revit export
     ["project", "project_code", True, "Project Name", None],

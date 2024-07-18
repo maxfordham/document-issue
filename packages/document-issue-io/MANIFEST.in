@@ -1,2 +1,5 @@
-recursive-include src/ *.tar.gz
-recursive-include src/ *.jinja
+recursive-include src/templates *.tar.gz
+recursive-include src/templates *.jinja
+recursive-include src/media *.png
+recursive-include src/media *.ico
+recursive-include src/fonts *.ttf
