@@ -32,14 +32,14 @@ if __name__ == "__main__":
         fpth = (
             pathlib.Path(__file__).parent.parent.parent
             / "xl"
-            / "DocumentNumberGenerator.xlsm"
+            / "DocumentNumberGenerator-v0_0_12.xlsm"
         )
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
         print("Release Mode")
         try:
-            if fpath:
+            if fpath is not None:
                 xw.Book(fpath).set_mock_caller()
             RESULT = cmd()
         except Exception as exc:

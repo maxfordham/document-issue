@@ -10,7 +10,7 @@ import pathlib
 import glob
 import os
 import xlwings as xw
-from d_i_read_excel import read_excel  # , index_of_value
+from d_i_read_excel import read_excel
 
 import tkinter
 from tkinter import (
@@ -51,6 +51,10 @@ import subprocess
 import logging
 from constants import MAX_COLS_IN_PART, CONFIG_DIR, DEFAULT_COLS, TITLETEXT
 from document_issue_io.constants import OFFICES
+
+DIR_TESTOUTPUTS = pathlib.Path(
+    r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\outputs"
+)
 
 logger = logging.getLogger(__name__)
 
@@ -151,7 +155,6 @@ class DialogWindow(MFTk):
 
     def __init__(self, parent):
         MFTk.__init__(self, parent)
-
         self.title("Document Issue")
         self.parent = parent
         self.get_data()
@@ -174,8 +177,8 @@ class DialogWindow(MFTk):
         self.check_on_save.set(self.config["check_on_save"])
 
         self.outgoingfolder = ""
-        if pathlib.Path(r"C:\Users\j.gunstone\Desktop\dgn").exists():
-            self.outgoingfolder = r"C:\Users\j.gunstone\Desktop\dgn"
+        if DIR_TESTOUTPUTS.exists():
+            self.outgoingfolder = str(DIR_TESTOUTPUTS)
 
         self.last_col = None
         self.initialise()
@@ -312,7 +315,7 @@ class DialogWindow(MFTk):
         self.config["check_on_save"] = self.check_on_save.get()
         self.config["col_widths"] = self.col_widths.get()
         self.config["max_cols_in_part"] = self.max_cols_in_part.get()
-        self.config["filepath"] = xw.Book.caller().fullname
+        # self.config["filepath"] = xw.Book.caller().fullname  # THIS isn't working...
         if os.environ["username"] not in self.config["users"]:
             self.config["users"].append(os.environ["username"])
         self.config["timestamps"].append(
