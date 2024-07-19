@@ -1,6 +1,6 @@
 from polyfactory.factories.pydantic_factory import ModelFactory
 
-from document_issue.document_issue import DocumentIssue
+from document_issue.document_issue import DocumentIssue, DocumentRole, RoleEnum
 from document_issue_io.title_block import (
     title_block_a4,
     title_block_a3,
@@ -20,7 +20,9 @@ class DocumentIssueFactory(ModelFactory[DocumentIssue]):
 
 
 def create_document_issue():
-    document_issue = DocumentIssueFactory.build()
+    document_issue = DocumentIssueFactory.build(
+        document_role=[DocumentRole(**{"role_name": RoleEnum.director, "name": "DR"})]
+    )
     document_issue.project_name = "A Max Fordham Project"
     document_issue.project_number = "J4321"
     document_issue.document_role[0].initials = "OH"
