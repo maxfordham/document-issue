@@ -134,16 +134,19 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
         else:
             return ValueError("No revision number found")
 
+    def prep_isssue_col(ser: pd.Series):
+        ser = ser.fillna(0)
+        try:
+            ser = ser.astype(int)
+        except:
+            logger.error(f"Error converting Current Rev to string: ser = {ser.name}")
+        ser = ser.astype(str)
+        ser = ser.replace("0", "")
+        return ser
+
     current_revs = {d: get_current_revs(df_issue, d) for d in docs}
-    df_document["Current Rev"] = df_document.document_code.map(current_revs).fillna(0)
-
-    try:
-        df_document["Current Rev"] = (
-            df_document["Current Rev"].astype(int).astype(str).str.replace("0", "")
-        )
-    except:
-        logger.error("Error converting Current Rev to string")
-
+    df_document["Current Rev"] = df_document.document_code.map(current_revs)
+    df_document["Current Rev"] = prep_isssue_col(df_document["Current Rev"])
     #
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
     if history:
@@ -163,7 +166,7 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     for c in cols_issue:
         df_out[c] = df_out[c].fillna(0)
         try:
-            df_out[c] = df_out[c].astype(int).astype(str).str.replace("0", "")
+            df_out[c] = prep_isssue_col(df_out[c])
         except:
             logger.error(
                 "Error converting Current Rev to string... assuming its already a string..."
