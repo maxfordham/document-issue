@@ -254,6 +254,7 @@ def create_docissue(
     project_number = projectinfo.get("Project Code")
 
     docissue = DocumentIssue(
+        client_name=projectinfo.get("Client Name"),
         project_name=projectinfo.get("Project Name"),
         project_number=project_number,
         issue_history=[issue],

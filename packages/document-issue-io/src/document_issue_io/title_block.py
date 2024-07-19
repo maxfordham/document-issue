@@ -60,6 +60,7 @@ def construct_title_block_data(
     fpth_img=FPTH_MF_CIRCLE_IMG,
     scale_height=28,
     scale_width=28,
+    is_a3=False,
 ) -> list[list]:
     """Using the document issue, layout the data in preparation to be styled
     correctly by ReportLab."""
@@ -90,7 +91,7 @@ def construct_title_block_data(
         [
             "",
             "",
-            "job number",
+            "project number",
             "director",
             "issue date",
             "",
@@ -148,6 +149,11 @@ def construct_title_block_data(
             "",
         ],
     ]
+    if is_a3:
+        data[0][4] = "client"
+        data[1][4] = document_issue.client_name
+    # data = [d[0:-3] for d in data]
+    # data = [d[0:5] + d[7:] for d in data]
     return data
 
 
@@ -207,6 +213,7 @@ def title_block_table(
     data = construct_title_block_data(
         document_issue=document_issue,
         fpth_img=fpth_img,
+        is_a3=is_a3,
         scale_height=scale_height,
         scale_width=scale_width,
     )
@@ -218,7 +225,7 @@ def title_block_a4(
     fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
     is_titlepage: bool = False,
 ):
-    tblock_table = title_block_table(document_issue=document_issue)
+    tblock_table = title_block_table(document_issue=document_issue, is_a3=False)
     doc = SimpleDocTemplate(
         str(fpth_output),
         pagesize=A4,
