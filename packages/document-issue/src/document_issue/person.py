@@ -1,7 +1,7 @@
 from pydantic import Field
 from document_issue.basemodel import BaseModel
 from typing_extensions import Annotated
-from pydantic import BaseModel
+from pydantic import BaseModel, AliasChoices
 from pydantic.functional_validators import BeforeValidator
 
 
@@ -13,7 +13,7 @@ def reduce_chars(v: str) -> str:
 
 class _Initials(BaseModel):
     initials: Annotated[str, BeforeValidator(reduce_chars)] = Field(
-        alias="name",
+        validation_alias=AliasChoices("initials", "name"),
         title="Initials",
         description="initial of the person fulfilling the Role",
         max_length=5,
