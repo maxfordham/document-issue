@@ -98,6 +98,12 @@ def get_lookup_data() -> LookupData:  # get_lookup_data
         for k, v in type_sequences.items()
     }
     data["type_sequences"] = type_sequences
+
+    # BUGFIX: ignore null classification fields
+    data["classification"] = {
+        k: v for k, v in data["classification"].items() if v is not None
+    }
+
     return LookupData(**data | type_sequences)
 
 
