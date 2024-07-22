@@ -29,10 +29,26 @@ if __name__ == "__main__":
 
     if __debug__:
         print("Debug ON")
+        # fpth = (
+        #     pathlib.Path(__file__).parent.parent.parent
+        #     / "xl"
+        #     / "DocumentNumberGenerator-v0_0_12.xlsm"
+        # )
+        # fpth = pathlib.Path(
+        #     r"J:\J7004\Issue Sheet\Stage 4 - Construction\J7004_DocumentNumberGenerator_Construction.xlsm"
+        # )
+        # fpth = pathlib.Path(
+        #     r"J:\J7081\Project Management\Job Running\J7081 Document Number Generator.xlsm"
+        # )
+        # fpth = (
+        #     pathlib.Path(__file__).parent.parent.parent
+        #     / "xl"
+        #     / "DocumentNumberGenerator-v0_0_7.xlsm"
+        # )
         fpth = (
             pathlib.Path(__file__).parent.parent.parent
             / "xl"
-            / "DocumentNumberGenerator-v0_0_12.xlsm"
+            / "DocumentNumberGenerator.xlsm"
         )
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()

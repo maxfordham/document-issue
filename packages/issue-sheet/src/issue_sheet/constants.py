@@ -3,7 +3,7 @@ import pathlib
 MAX_COLS_IN_PART = 30
 
 
-def get_config_dir(try_debug=True):
+def get_config_dir(try_debug=False):
     if (
         pathlib.Path(
             r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\config"
