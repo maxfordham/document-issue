@@ -6,10 +6,9 @@
     "max_cols_in_part": 30,
     "office": "London",
     "open_on_save": false,
-    "outgoing_folder": "C:/Users/j.gunstone/Desktop/tmp",
+    "outgoing_folder": "C:\\engDev\\git_mf\\document-issue\\packages\\issue-sheet\\tests\\outputs",
     "selected_issues": [
-        "20190501-S0",
-        "20190508-S2"
+        "20190508-A1"
     ],
     "timestamps": [
         "Jul 18 2024 15:20:48",
@@ -26,7 +25,17 @@
         "Jul 18 2024 16:42:16",
         "Jul 18 2024 16:59:19",
         "Jul 18 2024 17:01:55",
-        "Jul 18 2024 17:27:26"
+        "Jul 18 2024 17:27:26",
+        "Jul 19 2024 12:55:02",
+        "Jul 19 2024 12:56:32",
+        "Jul 19 2024 13:41:32",
+        "Jul 19 2024 13:41:38",
+        "Jul 19 2024 13:42:21",
+        "Jul 19 2024 13:46:57",
+        "Jul 19 2024 13:48:42",
+        "Jul 19 2024 13:49:25",
+        "Jul 19 2024 13:49:44",
+        "Jul 19 2024 13:53:24"
     ],
     "users": [
         "j.gunstone"

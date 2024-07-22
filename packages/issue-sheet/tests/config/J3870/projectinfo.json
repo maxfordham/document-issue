@@ -5,5 +5,6 @@
     "Project Name": "Enter Project Name Here",
     "Project Address": "Enter Project Address Here",
     "Project Leader": "PL",
-    "Naming Convention": "project - originator - volume - level - infotype - role - number"
+    "Naming Convention": "project - originator - volume - level - type - role - number",
+    "Excel Version": 15
 }
