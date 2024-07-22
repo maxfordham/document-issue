@@ -23,7 +23,7 @@ def validate_project_number(v: ty.Union[str, int]) -> int:
 
 
 class ProjectBase(BaseModel):
-    client_name: str
+    client_name: ty.Optional[str] = None
     project_number: ty.Annotated[
         int,
         BeforeValidator(validate_project_number),
