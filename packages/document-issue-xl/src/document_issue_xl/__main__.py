@@ -50,6 +50,13 @@ if __name__ == "__main__":
             / "xl"
             / "DocumentNumberGenerator.xlsm"
         )
+        fpth = pathlib.Path(
+            r"J:\J6246\Issue Sheets\6246 _Issue Sheet Document Numbers Register.xlsm"
+        )
+        fpth = pathlib.Path(
+            r"J:\J7561\Project Management\Job Running\J7561_DocumentNumberGenerator.xlsm"
+        )
+
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
