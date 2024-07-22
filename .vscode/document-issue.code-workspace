@@ -20,7 +20,7 @@
             "path": "../packages/document-issue-ui"
         },
         {
-            "path": "../packages/issue-sheet"
+            "path": "../packages/document-issue-xl"
         }
     ],
     "settings": {
