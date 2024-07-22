@@ -117,7 +117,9 @@ class DocumentMetadataMap(BaseModel):
     status: dict[str, str]
     issue_format: dict[str, str]
     doc_source: dict[str, str]
-    classification_uniclass: dict[DrwgClassificationCode, UniclassClassificationCode]
+    classification_uniclass: dict[
+        str, UniclassClassificationCode
+    ]  # DrwgClassificationCode
     # role: dict[DrwgClassificationCode, str]
     # info_sub_type: dict[str, str]
 
