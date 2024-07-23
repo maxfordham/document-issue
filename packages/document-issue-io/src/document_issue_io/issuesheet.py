@@ -251,20 +251,6 @@ def create_docissue(
     projectinfo, issue: Issue, part=0, num_parts=1, history: bool = False
 ) -> DocumentIssue:
 
-    project_number = projectinfo.get("Project Code")
-
-    docissue = DocumentIssue(
-        client_name=projectinfo.get("Client Name"),
-        project_name=projectinfo.get("Project Name"),
-        project_number=project_number,
-        issue_history=[issue],
-        name_nomenclature=projectinfo.get("Naming Convention"),
-        status_description="Suitable for information",
-        roles=[dict(role="Director in Charge", name=projectinfo.get("Project Leader"))],
-    )
-    naming = [l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")]
-
-    # ---------------------------
     def update_name(n):
         if n == "orig":
             return "originator"
@@ -275,7 +261,25 @@ def create_docissue(
         else:
             return n
 
-    naming = [update_name(n) for n in naming]
+    if "Naming Convention" in projectinfo:
+        naming = [
+            l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")
+        ]
+        naming = [update_name(n) for n in naming]
+        name_nomenclature = "-".join(naming)
+    else:
+        name_nomenclature = None
+    projectinfo["name_nomenclature"] = name_nomenclature
+    projectinfo["issue_history"] = [issue]
+    projectinfo["status_description"] = "Suitable for information"
+    projectinfo["roles"] = [
+        dict(role="Director in Charge", name=projectinfo.get("Project Leader"))
+    ]
+    di = {k: v for k, v in projectinfo.items() if v is not None}
+    docissue = DocumentIssue(**di)
+
+    # ---------------------------
+
     # - ^ backwards compatibility -
     name = dict(
         project=projectinfo.get("Project Code"),
@@ -286,7 +290,7 @@ def create_docissue(
         role="J",
         number="",
     )
-    name = {n: name[n] for n in naming}
+    name = {n: name[n] for n in docissue.name_nomenclature.split("-")}
 
     if history:
         name["number"] = "0000{}".format(part)
