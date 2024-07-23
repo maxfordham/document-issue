@@ -7,6 +7,8 @@ from frictionless import Package
 from textwrap import wrap
 
 from document_issue.document_issue import Issue, DocumentIssue
+from document_issue.enums import StatusRevisionEnum, MAP_STATUS
+from datetime import datetime
 from .styles import (
     DEFAULTTABLESTYLE,
     register_fonts,
@@ -246,11 +248,9 @@ def new_document(projectname, office):
 
 
 def create_docissue(
-    projectinfo, part=0, num_parts=1, history: bool = False
+    projectinfo, issue: Issue, part=0, num_parts=1, history: bool = False
 ) -> DocumentIssue:
-    issue = Issue(
-        revision="P01", status_code="S2", status_description="Suitable for information"
-    )
+
     project_number = projectinfo.get("Project Code")
 
     docissue = DocumentIssue(
@@ -279,7 +279,7 @@ def create_docissue(
     # - ^ backwards compatibility -
     name = dict(
         project=projectinfo.get("Project Code"),
-        originator="MXF",
+        originator="MXF",  # TODO: remove hardcoding
         volume="XX",
         level="XX",
         infotype="IS",
@@ -500,14 +500,27 @@ def issuesheet_part(
 
     if history:
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
+        date, status = li_issues[-1].split("-")
+        date = datetime.strptime(date, "%Y%m%d").date()
+        issue = Issue(status_revision=StatusRevisionEnum.S2_P, date=date)
     else:
         cols_issue = config["selected_issues"]
+
+        statuses = {
+            l.split("_")[0]: getattr(StatusRevisionEnum, l) for l in MAP_STATUS.keys()
+        }
+        date, status = cols_issue[0].split("-")  # .split("-")[1]
+
+        date = datetime.strptime(date, "%Y%m%d").date()
+
+        status_revision = statuses.get(status)
+        if status_revision is None:
+            status_revision = StatusRevisionEnum.S2_P
+
+        issue = Issue(status_revision=status_revision, date=date)
     cols_to_plot = DEFAULT_COLS + cols_issue
 
-    issue = Issue(
-        revision="P01", status_code="S2", status_description="Suitable for information"
-    )
-    docissue = create_docissue(projectinfo, part, num_parts, history=history)
+    docissue = create_docissue(projectinfo, issue, part, num_parts, history=history)
 
     headings = create_issue_headings(cols_to_plot)
     tstyle = tablestyle(history, sid_style, data_list, headings)
