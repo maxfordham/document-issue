@@ -46,7 +46,7 @@ Note = Annotated[
 
 class DocumentBase(BaseModel):
     name_nomenclature: str = Field(
-        "project-originator-volume-level-type-role-number",
+        "project-originator-volume-level-infotype-role-number",  # TODO: infotype --> type
         description=description_name_nomenclature,
     )
     document_code: str = Field(
