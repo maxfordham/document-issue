@@ -56,6 +56,9 @@ if __name__ == "__main__":
         fpth = pathlib.Path(
             r"J:\J7561\Project Management\Job Running\J7561_DocumentNumberGenerator.xlsm"
         )
+        fpth = pathlib.Path(
+            r"J:\J6962\Project Management\Job Running\Issue Sheets\MEP\J6962 DocumentNumberGenerator1.xlsm"
+        )
 
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
