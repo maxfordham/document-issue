@@ -279,7 +279,12 @@ def read_excel(dump_package=True) -> Any:
     )
 
     if dump_package:
-        fdir_package = pathlib.Path(CONFIG_DIR) / projectinfo["Job Number"]
+        project_no = projectinfo["Job Number"]
+        if project_no is None:
+            raise ValueError("Project Number not found")
+        if isinstance(project_no, int):
+            project_no = f"J{project_no}"
+        fdir_package = pathlib.Path(CONFIG_DIR) / project_no
         fdir_package.mkdir(exist_ok=True)
         dng_to_package(
             lookup,
