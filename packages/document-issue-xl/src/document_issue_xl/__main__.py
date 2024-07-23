@@ -51,14 +51,29 @@ if __name__ == "__main__":
             / "DocumentNumberGenerator.xlsm"
         )
         fpth = pathlib.Path(
-            r"J:\J6246\Issue Sheets\6246 _Issue Sheet Document Numbers Register.xlsm"
-        )
-        fpth = pathlib.Path(
             r"J:\J7561\Project Management\Job Running\J7561_DocumentNumberGenerator.xlsm"
-        )
+        )  # done
         fpth = pathlib.Path(
             r"J:\J6962\Project Management\Job Running\Issue Sheets\MEP\J6962 DocumentNumberGenerator1.xlsm"
-        )
+        )  # done
+        fpth = pathlib.Path(
+            r"J:\J7194\Project Management\Job Running\Issue Sheet\J7194 DocumentNumberGenerator1.xlsm"
+        )  # darren - done
+        fpth = pathlib.Path(
+            r"J:\J7151\Project Management\Job Running\DocumentNumberGenerator - UPP 2.0 NEW BUILD and RF2 MASTER COPY.xlsm"
+        )  # carys - done
+        fpth = pathlib.Path(
+            r"J:\J7236\Project Management\Job Running\J7236 DocumentNumberGenerator Issue Sheet.xlsm"
+        )  # liz - duplicate doc names - done
+        fpth = pathlib.Path(
+            r"J:\J6793\Issue Sheet\J6793 UOONHB Issue Sheet_Drawing Number Generator.xlsm"
+        )  # cheryl - done
+        fpth = pathlib.Path(
+            r"J:\J6246\Issue Sheets\6246 _Issue Sheet Document Numbers Register.xlsm"
+        )  # stefan / anna - uniclass in doc name - done
+        fpth = pathlib.Path(
+            r"J:\J7516\Project Management\Job Running\Issue Sheet DNG\UoP DNG.xlsm"
+        )  # holly
 
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
