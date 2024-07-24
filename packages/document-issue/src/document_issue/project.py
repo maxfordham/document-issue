@@ -31,9 +31,10 @@ def validate_project_number(v: ty.Union[str, int]) -> int:
 
 class ProjectBase(BaseModel):
     client_name: ty.Optional[str] = Field(
+        None,  # TODO: this should probs be required... should also be taken from WebApp.
         validation_alias=AliasChoices(
             "Client Name",
-        )
+        ),
     )
     project_number: ty.Annotated[
         int,
@@ -43,7 +44,7 @@ class ProjectBase(BaseModel):
         description="unique Max Fordham number project number",
         validation_alias=AliasChoices("Job Number", "job_number"),
     )
-    project_code: ty.Union[str, int, None] = Field(
+    project_code: ty.Optional[str] = Field(
         None,
         description="design team project code",
         validation_alias=AliasChoices("Project Code", "Job Code"),
@@ -65,7 +66,7 @@ class ProjectBase(BaseModel):
     @model_validator(mode="after")
     def validate_project_code(self) -> Self:
         if self.project_code is None:
-            self.project_code = self.project_number
+            self.project_code = f"J{self.project_number}"
         return self
 
 

@@ -23,20 +23,20 @@ def test_get_person(post_person_then_delete):
     response = client.get(f"/person/{person_id}")
     r = response.json()
     assert response.status_code == 200
-    assert isinstance(r["name"], str)
+    assert isinstance(r["initials"], str)
 
 
 def test_get_people(post_person_then_delete):
     response = post_person_then_delete
     response = client.get(f"/person/")
     assert response.status_code == 200
-    assert isinstance(response.json()[0]["name"], str)
+    assert isinstance(response.json()[0]["initials"], str)
 
 
 def test_post_person(post_person_then_delete):
     response = post_person_then_delete
     assert response.status_code == 200
-    assert isinstance(response.json()["name"], str)
+    assert isinstance(response.json()["initials"], str)
 
 
 def test_patch_person(post_person_then_delete):
@@ -44,7 +44,7 @@ def test_patch_person(post_person_then_delete):
     person_id = response.json()["id"]
     response = client.patch(f"/person/{person_id}", json={"name": "JG2", "full_name": "new name"})
     assert response.status_code == 200
-    assert response.json()["name"] == "JG2"
+    assert response.json()["initials"] == "JG2"
 
 
 def test_delete_person():
