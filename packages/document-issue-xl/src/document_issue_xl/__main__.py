@@ -45,11 +45,6 @@ if __name__ == "__main__":
         #     / "xl"
         #     / "DocumentNumberGenerator-v0_0_7.xlsm"
         # )
-        fpth = (
-            pathlib.Path(__file__).parent.parent.parent
-            / "xl"
-            / "DocumentNumberGenerator.xlsm"
-        )
         fpth = pathlib.Path(
             r"J:\J7561\Project Management\Job Running\J7561_DocumentNumberGenerator.xlsm"
         )  # done
@@ -66,15 +61,19 @@ if __name__ == "__main__":
             r"J:\J7236\Project Management\Job Running\J7236 DocumentNumberGenerator Issue Sheet.xlsm"
         )  # liz - duplicate doc names - done
         fpth = pathlib.Path(
-            r"J:\J6793\Issue Sheet\J6793 UOONHB Issue Sheet_Drawing Number Generator.xlsm"
-        )  # cheryl - done
-        fpth = pathlib.Path(
             r"J:\J6246\Issue Sheets\6246 _Issue Sheet Document Numbers Register.xlsm"
         )  # stefan / anna - uniclass in doc name - done
         fpth = pathlib.Path(
             r"J:\J7516\Project Management\Job Running\Issue Sheet DNG\UoP DNG.xlsm"
-        )  # holly
-
+        )  # holly - done
+        fpth = pathlib.Path(
+            r"J:\J6793\Issue Sheet\J6793 UOONHB Issue Sheet_Drawing Number Generator.xlsm"
+        )  # cheryl - done
+        fpth = (
+            pathlib.Path(__file__).parent.parent.parent
+            / "xl"
+            / "DocumentNumberGenerator.xlsm"
+        )
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
