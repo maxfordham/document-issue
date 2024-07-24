@@ -1,6 +1,6 @@
 from polyfactory.factories.pydantic_factory import ModelFactory
-
-from document_issue.document_issue import DocumentIssue, DocumentRole, RoleEnum
+from document_issue.document_issue import DocumentIssue, DocumentRole, RoleEnum, Issue
+from document_issue.enums import StatusRevisionEnum
 from document_issue_io.title_block import (
     title_block_a4,
     title_block_a3,
@@ -20,21 +20,25 @@ class DocumentIssueFactory(ModelFactory[DocumentIssue]):
 
 
 def create_document_issue():
+    issue = Issue(status_revision=StatusRevisionEnum.A4_C)
     document_issue = DocumentIssueFactory.build(
-        document_role=[DocumentRole(**{"role_name": RoleEnum.director, "name": "DR"})]
+        document_role=[DocumentRole(**{"role_name": RoleEnum.director, "name": "DR"})],
+        issue_history=[issue],
     )
-    document_issue.project_name = "A Max Fordham Project"
+    document_issue.project_name = (
+        "A Max Fordham Project:\nRotunda Refurbishment part 1 million"
+    )
+    document_issue.client_name = "Max Fordham LLP Partnership"
     document_issue.project_number = "J4321"
     document_issue.document_role[0].initials = "OH"
     document_issue.document_role[0].role_name = "Director in Charge"
     document_issue.document_code = "06667-MXF-XX-XX-SH-M-20003"
-    document_issue.document_description = "A description of a Max Fordham Project"
+    document_issue.document_description = (
+        "A description of a Max Fordham Project can split lines but no more than two"
+    )
     document_issue.name_nomenclature = (
         "project-originator-volume-level-type-role-number"
     )
-    document_issue.issue_history[0].revision = "P01"
-    document_issue.issue_history[0].status_code = "S2"
-    document_issue.issue_history[0].status_description = "Suitable for information"
     return document_issue
 
 
