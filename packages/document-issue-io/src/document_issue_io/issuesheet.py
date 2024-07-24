@@ -277,6 +277,9 @@ def create_docissue(
     ]
     di = {k: v for k, v in projectinfo.items() if v is not None}
     docissue = DocumentIssue(**di)
+    docissue.issue_history[0].revision = (
+        "-"  # hard-code revision to "-" to avoid having to keep track of it.
+    )
 
     # ---------------------------
 
@@ -501,7 +504,9 @@ def issuesheet_part(
         history=history,
         part=part,
     )
-
+    status_revision = (
+        StatusRevisionEnum.S2_P
+    )  # status hard-coded to S2_P for information
     if history:
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
         date, status = li_issues[-1].split("-")
@@ -509,18 +514,9 @@ def issuesheet_part(
         issue = Issue(status_revision=StatusRevisionEnum.S2_P, date=date)
     else:
         cols_issue = config["selected_issues"]
-
-        statuses = {
-            l.split("_")[0]: getattr(StatusRevisionEnum, l) for l in MAP_STATUS.keys()
-        }
         date, status = cols_issue[0].split("-")  # .split("-")[1]
 
         date = datetime.strptime(date, "%Y%m%d").date()
-
-        status_revision = statuses.get(status)
-        if status_revision is None:
-            status_revision = StatusRevisionEnum.S2_P
-
         issue = Issue(status_revision=status_revision, date=date)
     cols_to_plot = DEFAULT_COLS + cols_issue
 
