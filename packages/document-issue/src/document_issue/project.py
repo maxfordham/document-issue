@@ -9,10 +9,11 @@ from document_issue.basemodel import BaseModel, Field
 from pydantic import (
     BeforeValidator,
     AliasChoices,
-    field_validator,
+    model_validator,
     Field,
     ValidationInfo,
 )
+from typing_extensions import Self
 
 
 def validate_project_number(v: ty.Union[str, int]) -> int:
@@ -61,12 +62,11 @@ class ProjectBase(BaseModel):
         ),
     )
 
-    @field_validator("project_code")
-    def validate_project_address(cls, v, info: ValidationInfo):
-        if v is None:
-            return info.get("project_number")
-        else:
-            return v
+    @model_validator(mode="after")
+    def validate_project_code(self) -> Self:
+        if self.project_code is None:
+            self.project_code = self.project_number
+        return self
 
 
 class Project(ProjectBase):
