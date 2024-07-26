@@ -3,6 +3,11 @@
 Excel file for storing document-issue data and generating issue sheet. 
 Issue sheet generation is done by a compiled python program (executable using cx_Freeze).
 
+## Development
+
+- Create an environment by following the instructions in `./src/document-issue-xl/README.txt`
+- run debug python script in `__main__.py`
+
 ## Deploying
 
 - python program
