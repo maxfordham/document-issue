@@ -247,8 +247,28 @@ def new_document(projectname, office):
     return document
 
 
+def document_number(selected_issue_index, history, part):
+    """number has the form VWXYZ"""
+    VW = "00"  # by definition
+    if history:
+        if part < 1:
+            XYZ = "001"
+        elif part < 10:
+            XYZ = "00" + str(int(part))
+        else:
+            XYZ = "0" + str(int(part))
+    else:
+        XYZ = str(int(selected_issue_index + 100))
+    return VW + XYZ
+
+
 def create_docissue(
-    projectinfo, issue: Issue, part=0, num_parts=1, history: bool = False
+    projectinfo,
+    issue: Issue,
+    part=0,
+    num_parts=1,
+    history: bool = False,
+    selected_issue_index=None,
 ) -> DocumentIssue:
 
     def update_name(n):
@@ -295,12 +315,11 @@ def create_docissue(
     )
     name = {n: name[n] for n in docissue.name_nomenclature.split("-")}
 
+    name["number"] = document_number(selected_issue_index, history, part)
     if history:
         name["number"] = "0000{}".format(part)
         docissue.document_description = f"Issue History: Part {part} of {num_parts}"
-
     else:
-        name["number"] = "00100"
         docissue.document_description = f"Issue Sheet"
 
     document_code = "-".join(list(name.values()))
@@ -486,6 +505,9 @@ def issuesheet_part(
     num_parts=1,
 ):
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
+    selected_issue = config.get("selected_issues")[0]
+    selected_issue_index = li_issues.index(selected_issue)
+
     document_issue_sheet = new_document(
         projectinfo.get("project_name"),
         office=config.get("office"),
@@ -511,16 +533,23 @@ def issuesheet_part(
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
         date, status = li_issues[-1].split("-")
         date = datetime.strptime(date, "%Y%m%d").date()
-        issue = Issue(status_revision=StatusRevisionEnum.S2_P, date=date)
+        issue_ = Issue(status_revision=StatusRevisionEnum.S2_P, date=date)
     else:
         cols_issue = config["selected_issues"]
         date, status = cols_issue[0].split("-")  # .split("-")[1]
 
         date = datetime.strptime(date, "%Y%m%d").date()
-        issue = Issue(status_revision=status_revision, date=date)
+        issue_ = Issue(status_revision=status_revision, date=date)
     cols_to_plot = DEFAULT_COLS + cols_issue
 
-    docissue = create_docissue(projectinfo, issue, part, num_parts, history=history)
+    docissue = create_docissue(
+        projectinfo,
+        issue_,
+        part,
+        num_parts,
+        history=history,
+        selected_issue_index=selected_issue_index,
+    )
 
     headings = create_issue_headings(cols_to_plot)
     tstyle = tablestyle(history, sid_style, data_list, headings)
@@ -541,7 +570,6 @@ def issuesheet_part(
 def write_issuesheet(
     config, issue, document, distribution, projectinfo, lookup, fdir_package
 ):
-
     fdir = pathlib.Path(config["outgoing_folder"])
     if not fdir.is_absolute():
         fdir = fdir_package / fdir
