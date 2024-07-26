@@ -107,7 +107,7 @@ class DocumentIssue(Document, ProjectBase):
         map_title_to_field = {v.title: k for k, v in DocumentRole.model_fields.items()}
         li_document_roles = []
         for document_role in self.document_role:
-            di_document_role = document_role.model_dump()
+            di_document_role = document_role.model_dump(mode="json")
             di_document_role_with_title = {}
             for header in headers:
                 if header in map_title_to_field.keys():
