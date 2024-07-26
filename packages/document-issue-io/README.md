@@ -8,6 +8,46 @@ document issue information using Quarto and ReportLab.
 
 -----
 
+## Issue Sheet and Issue History Document Numbers
+
+how is the `VWXYZ` number generated?
+- e.g. 03870-MXF-XX-XX-IS-J-00001
+- `VW` = `00` always 
+
+
+### Issue History
+
+- The issue history document numbers don't change throughout the course of the project. 
+- The first issue history document has a `XYZ` = `001`, 
+- when there are more issue columns than can fit on the page, another issue history document is produced, `XYZ` = `002`, and so on...
+
+### Issue Sheet
+
+- There is a unique Issue Sheet and document number for every issue (column in DNG spreadsheet). 
+- The `XYZ` = 100 + [number of issues on project]
+  - so the 14th issue Issue Sheet number will be `114`
+  - this gives 899 potential issues which should be sufficient for our projects. 
+- If you create an issue sheet with multiple issues, it will use the first issue you selected to create the number (*maybe this needs revising in the future*).
+
+
+```py
+
+def document_number(selected_issue_index, history, part):
+    """number has the form VWXYZ"""
+    VW = "00"  # by definition
+    if history:
+        if part < 1:
+            XYZ = "001"
+        elif part < 10:
+            XYZ = "00" + str(int(part))
+        else:
+            XYZ = "0" + str(int(part))
+    else:
+        XYZ = str(int(selected_issue_index + 100))
+    return VW + XYZ
+
+```
+
 ## Installation
 
 ```bash
