@@ -1,6 +1,6 @@
 import typing as ty
 from typing_extensions import Literal
-from pydantic import field_validator, Field, model_validator
+from pydantic import field_validator, Field, model_validator, AliasChoices
 from document_issue.enums import ScalesEnum, PaperSizeEnum, DocSource
 from document_issue.basemodel import BaseModel, Field
 from annotated_types import Len
@@ -46,7 +46,7 @@ Note = Annotated[
 
 class DocumentBase(BaseModel):
     name_nomenclature: str = Field(
-        "project-originator-volume-level-type-role-number",
+        "project-originator-volume-level-infotype-role-number",  # TODO: infotype --> type
         description=description_name_nomenclature,
     )
     document_code: str = Field(
@@ -73,6 +73,7 @@ class DocumentBase(BaseModel):
     )
     originator: Literal["Max Fordham LLP"] = Field(
         "Max Fordham LLP",
+        validation_alias=AliasChoices("originator", "orig"),
         description=(
             "the company the info came from (fixed to be Max Fordham LLP). the name"
             " 'originator' comes from BS EN ISO 19650-2"

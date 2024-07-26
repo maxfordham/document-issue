@@ -80,8 +80,10 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     project_number = Column(Integer)
+    project_code = Column(String)  # external facing code...
     project_name = Column(String)  #  remove / get from webapp
     project_address = Column(String)
+    client_name = Column(String)
 
     project_role = relationship("ProjectRole", back_populates="project", cascade="all, delete-orphan")
     document = relationship("Document", back_populates="project", cascade="all, delete-orphan")

@@ -22,9 +22,7 @@ def post_project_role(
         models.ProjectRole: The posted project role
     """
     if person_id is not None:
-        db_ = models.ProjectRole(
-            project_id=project_id, role_id=role_id, person_id=person_id
-        )
+        db_ = models.ProjectRole(project_id=project_id, role_id=role_id, person_id=person_id)
     else:
         db_ = models.ProjectRole(project_id=project_id, role_id=role_id)
     db.add(db_)
@@ -33,9 +31,7 @@ def post_project_role(
     return db_
 
 
-def get_project_role(
-    db: Session, project_id: int, role_id: ty.Optional[int] = None
-) -> list[models.ProjectRole]:
+def get_project_role(db: Session, project_id: int, role_id: ty.Optional[int] = None) -> list[models.ProjectRole]:
     """Get a project role by ID.
 
     Args:
@@ -46,9 +42,7 @@ def get_project_role(
     Returns:
         models.ProjectRole: The project role
     """
-    db_ = db.query(models.ProjectRole).filter(
-        models.ProjectRole.project_id == project_id
-    )
+    db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id)
     if role_id is not None:
         db_ = db_.filter(models.ProjectRole.role_id == role_id).all()
     else:
@@ -66,20 +60,14 @@ def get_project_roles(db: Session, project_id: int) -> schemas.ProjectRolesGet:
     Returns:
         models.ProjectRole: The project role
     """
-    db_ = (
-        db.query(models.ProjectRole)
-        .filter(models.ProjectRole.project_id == project_id)
-        .all()
-    )
-    project_roles = [schemas.PersonRole.model_validate(_) for _ in db_]
+    db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id).all()
+    project_roles = [schemas.PersonRole.model_validate(_, from_attributes=True) for _ in db_]
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
 
     return schemas.ProjectRolesGet(project=project, project_roles=project_roles)
 
 
-def delete_project_role(
-    db: Session, project_id: int, role_id: int
-) -> schemas.ProjectRoleGet:
+def delete_project_role(db: Session, project_id: int, role_id: int) -> schemas.ProjectRoleGet:
     """Delete a project role.
 
     Args:
@@ -96,6 +84,6 @@ def delete_project_role(
         .filter(models.ProjectRole.role_id == role_id)
         .first()
     )
-    _ = schemas.ProjectRoleGet.model_validate(db_)
+    _ = schemas.ProjectRoleGet.model_validate(db_, from_attributes=True)
     db.delete(db_)
     return _

@@ -7,6 +7,8 @@ from frictionless import Package
 from textwrap import wrap
 
 from document_issue.document_issue import Issue, DocumentIssue
+from document_issue.enums import StatusRevisionEnum, MAP_STATUS
+from datetime import datetime
 from .styles import (
     DEFAULTTABLESTYLE,
     register_fonts,
@@ -19,7 +21,7 @@ from .constants import (
     DEFAULT_COLS,
     MAX_COLS_IN_PART,
 )
-from .models import LookupData
+from document_issue.meta import LookupData
 from .title_block import title_block_table
 from .styles import (
     CURRENT_COLOUR,
@@ -119,21 +121,34 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     )
     df_document = pd.DataFrame(document)
     docs = list(df_issue.document_code.unique())
-    current_revs = {
-        d: df_issue.set_index("document_code")
-        .loc[d]
-        .sort_values("date_status")
-        .revision_number.iloc[-1]
-        for d in docs
-    }
-    df_document["Current Rev"] = (
-        df_document.document_code.map(current_revs)
-        .fillna(0)
-        .astype(int)
-        .astype(str)
-        .str.replace("0", "")
-    )
 
+    def get_current_revs(df_issue, d):
+        rev = df_issue.set_index("document_code").loc[d]
+        if isinstance(rev, pd.Series):
+            return rev.revision_number
+        elif isinstance(rev, pd.DataFrame):
+            return (
+                df_issue.set_index("document_code")
+                .loc[d]
+                .sort_values("date_status")
+                .revision_number.to_list()[-1]
+            )
+        else:
+            return ValueError("No revision number found")
+
+    def prep_isssue_col(ser: pd.Series):
+        ser = ser.fillna(0)
+        try:
+            ser = ser.astype(int)
+        except:
+            logger.error(f"Error converting Current Rev to string: ser = {ser.name}")
+        ser = ser.astype(str)
+        ser = ser.replace("0", "")
+        return ser
+
+    current_revs = {d: get_current_revs(df_issue, d) for d in docs}
+    df_document["Current Rev"] = df_document.document_code.map(current_revs)
+    df_document["Current Rev"] = prep_isssue_col(df_document["Current Rev"])
     #
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
     if history:
@@ -151,8 +166,13 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     df_out = df_out[cols + ["System Identifier Description"]]
     df_out.dropna(subset=cols_issue, inplace=True, how="all")
     for c in cols_issue:
-        df_out[c] = df_out[c].fillna(0).astype(int).astype(str).str.replace("0", "")
-
+        df_out[c] = df_out[c].fillna(0)
+        try:
+            df_out[c] = prep_isssue_col(df_out[c])
+        except:
+            logger.error(
+                "Error converting Current Rev to string... assuming its already a string..."
+            )
     data_list = []  # this is a list of rows in the table. #list for styling output.
     sid_style = []
 
@@ -228,34 +248,52 @@ def new_document(projectname, office):
 
 
 def create_docissue(
-    projectinfo, part=0, num_parts=1, history: bool = False
+    projectinfo, issue: Issue, part=0, num_parts=1, history: bool = False
 ) -> DocumentIssue:
-    issue = Issue(
-        revision="P01", status_code="S2", status_description="Suitable for information"
-    )
-    project_number = projectinfo.get("Project Code")
 
-    docissue = DocumentIssue(
-        project_name=projectinfo.get("Project Name"),
-        project_number=project_number,
-        issue_history=[issue],
-        name_nomenclature=projectinfo.get("Naming Convention"),
-        status_description="Suitable for information",
-        roles=[
-            dict(role="Director in Charge", initials=projectinfo.get("Project Leader"))
-        ],
+    def update_name(n):
+        if n == "orig":
+            return "originator"
+        elif n == "project code":
+            return "project"
+        elif n == "type":
+            return "infotype"
+        else:
+            return n
+
+    if "Naming Convention" in projectinfo:
+        naming = [
+            l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")
+        ]
+        naming = [update_name(n) for n in naming]
+        name_nomenclature = "-".join(naming)
+    else:
+        name_nomenclature = None
+    projectinfo["name_nomenclature"] = name_nomenclature
+    projectinfo["issue_history"] = [issue]
+    projectinfo["status_description"] = "Suitable for information"
+    projectinfo["roles"] = [
+        dict(role="Director in Charge", name=projectinfo.get("Project Leader"))
+    ]
+    di = {k: v for k, v in projectinfo.items() if v is not None}
+    docissue = DocumentIssue(**di)
+    docissue.issue_history[0].revision = (
+        "-"  # hard-code revision to "-" to avoid having to keep track of it.
     )
-    naming = [l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")]
+
+    # ---------------------------
+
+    # - ^ backwards compatibility -
     name = dict(
         project=projectinfo.get("Project Code"),
-        originator="MXF",
+        originator="MXF",  # TODO: remove hardcoding
         volume="XX",
         level="XX",
         infotype="IS",
         role="J",
         number="",
     )
-    name = {n: name[n] for n in naming}
+    name = {n: name[n] for n in docissue.name_nomenclature.split("-")}
 
     if history:
         name["number"] = "0000{}".format(part)
@@ -466,17 +504,23 @@ def issuesheet_part(
         history=history,
         part=part,
     )
-
+    status_revision = (
+        StatusRevisionEnum.S2_P
+    )  # status hard-coded to S2_P for information
     if history:
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
+        date, status = li_issues[-1].split("-")
+        date = datetime.strptime(date, "%Y%m%d").date()
+        issue = Issue(status_revision=StatusRevisionEnum.S2_P, date=date)
     else:
         cols_issue = config["selected_issues"]
+        date, status = cols_issue[0].split("-")  # .split("-")[1]
+
+        date = datetime.strptime(date, "%Y%m%d").date()
+        issue = Issue(status_revision=status_revision, date=date)
     cols_to_plot = DEFAULT_COLS + cols_issue
 
-    issue = Issue(
-        revision="P01", status_code="S2", status_description="Suitable for information"
-    )
-    docissue = create_docissue(projectinfo, part, num_parts, history=history)
+    docissue = create_docissue(projectinfo, issue, part, num_parts, history=history)
 
     headings = create_issue_headings(cols_to_plot)
     tstyle = tablestyle(history, sid_style, data_list, headings)
@@ -538,6 +582,21 @@ def write_issuehistory(
                     num_parts=num_parts,
                 )
             )
+    else:
+        part = 1
+        fpths.append(
+            issuesheet_part(
+                fdir,
+                history,
+                part,
+                config,
+                issue,
+                document,
+                distribution,
+                projectinfo,
+                lookup,
+            )
+        )
     return fpths
 
 

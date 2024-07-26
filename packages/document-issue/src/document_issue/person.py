@@ -1,20 +1,23 @@
-from pydantic import Field, field_validator
+from pydantic import Field
 from document_issue.basemodel import BaseModel
+from typing_extensions import Annotated
+from pydantic import BaseModel, AliasChoices
+from pydantic.functional_validators import BeforeValidator
+
+
+def reduce_chars(v: str) -> str:
+    if len(v) > 5:
+        v = v[:5]
+    return v
 
 
 class _Initials(BaseModel):
-    initials: str = Field(
-        alias="name",
+    initials: Annotated[str, BeforeValidator(reduce_chars)] = Field(
+        validation_alias=AliasChoices("initials", "name"),
         title="Initials",
         description="initial of the person fulfilling the Role",
         max_length=5,
     )
-
-    @field_validator("initials")
-    def initials_validator(cls, v):
-        if len(v) > 5:
-            v = v[:5]
-        return v  # TODO: remove this when deployed via an app. This is a temp fix while still using excel
 
 
 # table

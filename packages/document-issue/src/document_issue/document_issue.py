@@ -49,14 +49,14 @@ class DocumentIssue(Document, ProjectBase):
         AfterValidator(document_role_after),
     ] = Field(
         [],
-        alias="roles",
+        alias="roles",  # TODO: make validation alias
         min_length=1,
         description="indicates people responsible for this document",
         validate_default=True,
     )
     issue_history: ty.List[Issue] = Field(
         [],
-        alias="issue",
+        alias="issue",  # TODO: make validation alias
         description="list of issues",
         json_schema_extra=dict(format="dataframe"),
     )
@@ -107,7 +107,7 @@ class DocumentIssue(Document, ProjectBase):
         map_title_to_field = {v.title: k for k, v in DocumentRole.model_fields.items()}
         li_document_roles = []
         for document_role in self.document_role:
-            di_document_role = document_role.model_dump()
+            di_document_role = document_role.model_dump(mode="json")
             di_document_role_with_title = {}
             for header in headers:
                 if header in map_title_to_field.keys():
@@ -148,7 +148,10 @@ class DocumentIssue(Document, ProjectBase):
     @property
     def director_in_charge(self):
         for role in self.document_role:
-            if role.role_name == RoleEnum.director.value:
+            if (
+                role.role_name == RoleEnum.director
+                or role.role_name == RoleEnum.director.value
+            ):
                 return role.initials
 
     # TODO: add this validation after ensuring that a director is shown on all existing schedules

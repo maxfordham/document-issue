@@ -60,6 +60,7 @@ def construct_title_block_data(
     fpth_img=FPTH_MF_CIRCLE_IMG,
     scale_height=28,
     scale_width=28,
+    is_a3=False,
 ) -> list[list]:
     """Using the document issue, layout the data in preparation to be styled
     correctly by ReportLab."""
@@ -68,95 +69,88 @@ def construct_title_block_data(
         fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width
     )
     issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
-    document_description = "\n".join(wrap(document_issue.document_description, 45))
+
+    wrap_len = 70 if is_a3 else 40
+    document_description = "\n".join(
+        wrap(document_issue.document_description, wrap_len)
+    )
     name_nomenclature = document_issue.name_nomenclature.replace("-", " - ")
     document_code = document_issue.document_code.replace("-", " - ")
+    status_description = document_issue.current_issue.status_description.replace(
+        "Suitable for ", ""
+    ).replace("Issued for ", "")
+    # ^ TODO: Need to deal with length of status codes more robustly
+    (
+        project_name,
+        project_number,
+        director_in_charge,
+        status_code,
+        revision,
+        client_name,
+    ) = (
+        document_issue.project_name,
+        document_issue.project_number,
+        document_issue.director_in_charge,
+        document_issue.current_issue.status_code,
+        document_issue.current_issue.revision,
+        document_issue.client_name,
+    )
+
     data = [
-        [image, "", "project", "", "", "", "", "document description", "", "", "", ""],
+        [image, "project", "", "", "client", "document description"],
         [
             "",
-            "",
-            document_issue.project_name,
-            "",
+            project_name,
             "",
             "",
-            "",
+            client_name,
             document_description,
+        ],
+        ["", "revision", "status code", "status description", "", ""],
+        [
             "",
-            "",
+            revision,
+            status_code,
+            status_description,
             "",
             "",
         ],
         [
             "",
-            "",
-            "job number",
+            "project number",
             "director",
             "issue date",
             "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
+            name_nomenclature,
         ],
         [
             "",
-            "",
-            document_issue.project_number,
-            document_issue.director_in_charge,
+            project_number,
+            director_in_charge,
             issue_date,
             "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-        ],
-        [
-            "",
-            "",
-            "status code",
-            "revision",
-            "status description",
-            "",
-            "",
-            name_nomenclature,
-            "",
-            "",
-            "",
-            "",
-        ],
-        [
-            "",
-            "",
-            document_issue.current_issue.status_code,
-            document_issue.current_issue.revision,
-            document_issue.current_issue.status_description.replace(
-                "Suitable for ", ""
-            ).replace(
-                "Issued for ", ""
-            ),  # TODO: Need to deal with length of status codes more robustly
-            "",
-            "",
             document_code,
-            "",
-            "",
-            "",
-            "",
         ],
     ]
+    for n, d in enumerate(data):
+        data[n] = [d[0]] + [""] + d[1:]  # add empty cell for styling
+        data[n] = data[n] + [""]  # must be 8 cols for styling to work...
+        assert len(data[n]) == 8
+
+    if not is_a3:  # remove client name as it doesn't fit on A4
+        data[0][5] = ""
+        data[1][5] = ""
+
     return data
 
 
 def create_title_block_table(data: list, is_a3=False) -> Table:
     """Create the ReportLab table and set the styling."""
     if is_a3:
-        table = Table(data, colWidths=[180] + ["*"] * 5)
+        table = Table(data, colWidths=[280] + [0] + [50] * 2 + [120] + ["*"])
     else:
-        table = Table(data, colWidths="*")
+        table = Table(data, colWidths=[95] + [0] + [50] * 3 + ["*"])
+
     styling = create_styling(len(data))
     table.setStyle(TableStyle(styling))
     return table
@@ -207,6 +201,7 @@ def title_block_table(
     data = construct_title_block_data(
         document_issue=document_issue,
         fpth_img=fpth_img,
+        is_a3=is_a3,
         scale_height=scale_height,
         scale_width=scale_width,
     )
@@ -218,7 +213,7 @@ def title_block_a4(
     fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
     is_titlepage: bool = False,
 ):
-    tblock_table = title_block_table(document_issue=document_issue)
+    tblock_table = title_block_table(document_issue=document_issue, is_a3=False)
     doc = SimpleDocTemplate(
         str(fpth_output),
         pagesize=A4,
