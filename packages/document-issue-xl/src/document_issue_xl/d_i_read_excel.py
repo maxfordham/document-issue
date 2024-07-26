@@ -246,10 +246,10 @@ def read_excel(dump_package=True) -> Any:
             return None
         else:
             li = []
+            di = {k: v for k, v in di.items() if v is not None}
             for k, v in di.items():
-                if v is not None:
-                    rev = map_status_rev[k.split("-")[1]]
-                    li.append(f"{k}-{rev}{v}")
+                rev = map_status_rev[k.split("-")[1]]
+                li.append(f"{k}-{rev}{v}")
             return li[-1]
 
     cols = data.columns.to_list()
