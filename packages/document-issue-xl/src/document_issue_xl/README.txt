@@ -8,12 +8,10 @@ pip install -e ../../../document-issue -e ../../../document-issue-io
 ```
 
 TO Compile:
-	1. On ES1 with the conda envrionment "compile" (OWTTE) run.
-	2. on command line: `python setup.py build`
-		where X_Y_Z denote a sensible version number
-	3. test by changing filepath in the macro in the excel vba of the Engineering Document Number Generator.xlsm
-	4. rename build_vX_Y_Z to build to publish
-	5. update table below.
+	1. on command line: `python setup.py build` in this directory
+	2. test by changing filepath in the macro in the excel vba of the Engineering Document Number Generator.xlsm
+	3. rename build_vX_Y_Z to build to publish
+	4. update table below.
 	
 version 0.2.1: python setup.py build
 

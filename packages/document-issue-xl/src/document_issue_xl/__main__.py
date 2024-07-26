@@ -80,8 +80,10 @@ if __name__ == "__main__":
         fpth = pathlib.Path(
             r"J:\J7207\Project Management\Job Running\J7207 DocumentNumberGenerator.xlsm"
         )  # liz - done
-        fpth = pathlib.Path(r"J:\J7595\Issue Sheet.xlsm")  # emma - wip
-
+        fpth = pathlib.Path(r"J:\J7595\Issue Sheet.xlsm")  # emma - done
+        fpth = pathlib.Path(r"J:\J6771\Issue Sheet\6771 Issue Sheet_DocumentNumberGenerator.xlsm")  # cheryl - done
+        fpth = pathlib.Path(r"J:\J7160\Project Management\Job Running\J7160 Document Number Generator.xlsm")  # liz - done
+        fpth = pathlib.Path(r"J:\J6695\Issue Sheets\J6695 DocumentNumberGenerator -Phase 2 - 27.xlsm")  # anna - done
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
