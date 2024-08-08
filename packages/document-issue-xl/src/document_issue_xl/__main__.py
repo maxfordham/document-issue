@@ -81,9 +81,30 @@ if __name__ == "__main__":
             r"J:\J7207\Project Management\Job Running\J7207 DocumentNumberGenerator.xlsm"
         )  # liz - done
         fpth = pathlib.Path(r"J:\J7595\Issue Sheet.xlsm")  # emma - done
-        fpth = pathlib.Path(r"J:\J6771\Issue Sheet\6771 Issue Sheet_DocumentNumberGenerator.xlsm")  # cheryl - done
-        fpth = pathlib.Path(r"J:\J7160\Project Management\Job Running\J7160 Document Number Generator.xlsm")  # liz - done
-        fpth = pathlib.Path(r"J:\J6695\Issue Sheets\J6695 DocumentNumberGenerator -Phase 2 - 27.xlsm")  # anna - done
+        fpth = pathlib.Path(
+            r"J:\J6771\Issue Sheet\6771 Issue Sheet_DocumentNumberGenerator.xlsm"
+        )  # cheryl - done
+        fpth = pathlib.Path(
+            r"J:\J7160\Project Management\Job Running\J7160 Document Number Generator.xlsm"
+        )  # liz - done
+        fpth = pathlib.Path(
+            r"J:\J6695\Issue Sheets\J6695 DocumentNumberGenerator -Phase 2 - 27.xlsm"
+        )  # anna - done
+        fpth = pathlib.Path(
+            r"J:\J7262\Issue Sheet\7262 Issue Sheet.xlsm"
+        )  # emma - done
+        fpth = pathlib.Path(
+            r"J:\J7081\Project Management\Job Running\J7081 Document Number Generator.xlsm"
+        )  # moa - done
+        fpth = pathlib.Path(
+            r"J:\J6865\Project Management\Job Running\J6865 Document Number Generator.xlsm"
+        )  # moa - WIP
+        fpth = pathlib.Path(
+            r"J:\J7568\Project Management\Job Running\J7568 Issue Sheet_DocumentNumberGenerator previously 6496.xlsm"
+        )  # cheryl - WIP
+        fpth = pathlib.Path(
+            r"J:\J7286\Project Management\Job Running\J7286 Issue Sheet.xlsm"
+        )  # liz - WIP
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
