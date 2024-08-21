@@ -1,5 +1,8 @@
 from document_issue.document_issue import DocumentIssue, Issue
 from document_issue.issue import StatusRevisionEnum
+import pathlib
+
+DIR_TESTS = pathlib.Path(__file__).parent
 
 
 def test_Issue():
@@ -18,7 +21,7 @@ def test_StatusRevisionEnum():
 
 def test_current_issue():
     """Test that the current issue property gets the latest issue (by date)."""
-    document_issue = DocumentIssue()
+    document_issue = DocumentIssue(client_name="Test Client")
     document_issue.issue_history = [
         Issue(
             revision="P01",
@@ -37,3 +40,8 @@ def test_current_issue():
         ),
     ]
     assert document_issue.current_issue.status_revision == StatusRevisionEnum.S3_P.value
+    fdir = DIR_TESTS / "test_document_issue"
+    fdir.mkdir(exist_ok=True)
+    p = fdir / "document_issue.json"
+    p.write_text(document_issue.model_dump_json(indent=4))
+    assert p.exists()

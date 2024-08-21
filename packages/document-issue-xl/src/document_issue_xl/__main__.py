@@ -101,10 +101,13 @@ if __name__ == "__main__":
         )  # moa - WIP
         fpth = pathlib.Path(
             r"J:\J7568\Project Management\Job Running\J7568 Issue Sheet_DocumentNumberGenerator previously 6496.xlsm"
-        )  # cheryl - WIP
+        )  # cheryl - done
         fpth = pathlib.Path(
             r"J:\J7286\Project Management\Job Running\J7286 Issue Sheet.xlsm"
-        )  # liz - WIP
+        )  # liz - done
+        fpth = pathlib.Path(
+            r"J:\J6681\Issue sheets\J6681 CCCSC Engineer Document Number Generator Issue Sheet - Special CC only.xlsm"
+        )  # holly
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
