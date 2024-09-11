@@ -107,10 +107,21 @@ if __name__ == "__main__":
         )  # liz - done
         fpth = pathlib.Path(
             r"J:\J6681\Issue sheets\J6681 CCCSC Engineer Document Number Generator Issue Sheet - Special CC only.xlsm"
-        )  # holly
+        )  # holly - done
         fpth = pathlib.Path(
             r"J:\J6866\New\Issue Sheet\DocumentNumberGenerator1 stage 3 - USE.xlsm"
-        )  # emma
+        )  # emma - done
+        fpth = pathlib.Path(
+            r"J:\J6866\New\Issue Sheet\DocumentNumberGenerator1 stage 3 - USE.xlsm"
+        )  # emma - done
+        fpth = pathlib.Path(
+            r"J:\J6792\Project Management\Job Running\J6792_DocumentNumberGenerator.xlsm"
+        )  # stefan - done
+        fpth = pathlib.Path(
+            r"J:\J6943\ISSUE SHEET\Main issue sheet - DocumentNumberGenerator.xlsm"
+        )  # emma - done
+        fpth = pathlib.Path(r"J:\J7500\J7500 Issue Sheet.xlsm")  # emma - done
+
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
