@@ -121,7 +121,12 @@ if __name__ == "__main__":
             r"J:\J6943\ISSUE SHEET\Main issue sheet - DocumentNumberGenerator.xlsm"
         )  # emma - done
         fpth = pathlib.Path(r"J:\J7500\J7500 Issue Sheet.xlsm")  # emma - done
-
+        fpth = pathlib.Path(
+            r"J:\J7536\Issue Sheet\J7536 - DocumentNumberGenerator.xlsm"
+        )  # emma - done
+        fpth = pathlib.Path(
+            r"C:\engDev\git_mf\document-issue\packages\document-issue-xl\xl\DocumentNumberGenerator.xlsm"
+        )  # JG testing
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
