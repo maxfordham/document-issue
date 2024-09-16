@@ -636,6 +636,10 @@ def load_datapackage(fdir):
     document = pkg.get_resource("document").read_rows()
     distribution = pkg.get_resource("distribution").read_rows()
     projectinfo = pkg.get_resource("projectinfo").read_data()
+    if "Project Name" in projectinfo:
+        projectinfo["Project Name"] = projectinfo["Project Name"].replace("\\n", "\n")
+    if "Client Name" in projectinfo:
+        projectinfo["Client Name"] = projectinfo["Client Name"].replace("\\n", "\n")
     lookup = LookupData(**pkg.get_resource("lookup").read_data())
 
     return config, issue, document, distribution, projectinfo, lookup
