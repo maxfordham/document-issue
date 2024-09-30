@@ -29,22 +29,22 @@ if __name__ == "__main__":
 
     if __debug__:
         print("Debug ON")
-        # fpth = (
-        #     pathlib.Path(__file__).parent.parent.parent
-        #     / "xl"
-        #     / "DocumentNumberGenerator-v0_0_12.xlsm"
-        # )
-        # fpth = pathlib.Path(
-        #     r"J:\J7004\Issue Sheet\Stage 4 - Construction\J7004_DocumentNumberGenerator_Construction.xlsm"
-        # )
-        # fpth = pathlib.Path(
-        #     r"J:\J7081\Project Management\Job Running\J7081 Document Number Generator.xlsm"
-        # )
-        # fpth = (
-        #     pathlib.Path(__file__).parent.parent.parent
-        #     / "xl"
-        #     / "DocumentNumberGenerator-v0_0_7.xlsm"
-        # )
+        fpth = (
+            pathlib.Path(__file__).parent.parent.parent
+            / "xl"
+            / "DocumentNumberGenerator-v0_0_12.xlsm"
+        )
+        fpth = pathlib.Path(
+            r"J:\J7004\Issue Sheet\Stage 4 - Construction\J7004_DocumentNumberGenerator_Construction.xlsm"
+        )
+        fpth = pathlib.Path(
+            r"J:\J7081\Project Management\Job Running\J7081 Document Number Generator.xlsm"
+        )
+        fpth = (
+            pathlib.Path(__file__).parent.parent.parent
+            / "xl"
+            / "DocumentNumberGenerator-v0_0_7.xlsm"
+        )
         fpth = pathlib.Path(
             r"J:\J7561\Project Management\Job Running\J7561_DocumentNumberGenerator.xlsm"
         )  # done
@@ -138,10 +138,13 @@ if __name__ == "__main__":
         )  # emma - done
         fpth = pathlib.Path(
             r"J:\J7294\Project Management\Job Running\J7294 Issue Sheet.xlsm"
-        )
+        )  # anna - done
         fpth = pathlib.Path(
             r"J:\J6790\Project Management\Job Running\Issue Sheet\J6790 - Document Number Generator - Goods Office.xlsm"
-        )
+        )  # anna - done
+        fpth = pathlib.Path(
+            r"J:\J7249\Project Management\Job Running\7249 DocumentNumber Issue Sheet - BSWN.xlsm"
+        )  # anna - done
 
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
