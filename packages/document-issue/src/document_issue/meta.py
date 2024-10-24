@@ -85,7 +85,7 @@ class DocumentCodesMap(BaseModel):  # MapDocumentCodeDescription
     project: dict[str, str]
     # originator: dict[str, str]
     originator: dict[
-        ty.Literal["MXF"],
+        str,  # ty.Literal["MXF"], # NOTE: relaxed MXF req. due to legacy data: 6372
         ty.Union[ty.Literal["Max Fordham LLP"], ty.Literal["Max Fordham"]],
     ]
     # role: dict[str, str]
