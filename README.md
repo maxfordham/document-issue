@@ -71,6 +71,7 @@ To install the environment and packages for development, run the following comma
 
 mamba env create -f environment.yml
 mamba activate document-issue-dev
+mamba install xlwings #  left out of standard install due to Win dependency
 # ^ base install of dev env (python, pytest, black etc.)
 
 pip install -e packages/document-issue-ui
