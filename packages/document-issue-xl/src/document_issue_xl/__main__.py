@@ -151,6 +151,14 @@ if __name__ == "__main__":
         fpth = pathlib.Path(
             r"J:\J6372\Project Management\Job Running\J6372 G1 Document Number Generator.xlsm"
         )  # moa - done
+        fpth = pathlib.Path(
+            r"J:\J7595\Project Management\Job Running\J7595 Drawing Number Generator.xlsm"
+        )  # tina, aidan
+        
+        fpth = pathlib.Path(
+            r"J:\J7251\Project Management\Job Running\Issue Sheet\J7251 - DocumentNumberGenerator1.xlsm"
+        )  # tina - done
+        
 
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
