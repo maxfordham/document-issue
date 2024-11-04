@@ -19,6 +19,23 @@ import re
 REGEX_SEMVER = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
 
+def escape_latex_special_chars(text):
+    """Used to escape the special characters in the text for LaTeX.
+    Mainly to deal with any text passed to the preamble of the LaTeX document."""
+    some_special_chars = {
+        "&": r"\\&",
+        "%": r"\\%",
+        "$": r"\\$",
+        "#": r"\\#",
+        "_": r"\\_",
+        "{": r"\\{",
+        "}": r"\\}",
+    }
+    for char, escape in some_special_chars.items():
+        text = text.replace(char, escape)
+    return text
+
+
 class MarkdownDocumentIssue:
     """Create structured markdown header from Document object"""
 
@@ -59,10 +76,12 @@ class MarkdownDocumentIssue:
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
-            project_name=self.document_issue.project_name,
+            project_name=escape_latex_special_chars(self.document_issue.project_name),
             project_number=self.document_issue.project_number,
             director_in_charge=self.document_issue.director_in_charge,
-            document_description=self.document_issue.document_description,
+            document_description=escape_latex_special_chars(
+                self.document_issue.document_description
+            ),
             document_code=self.document_issue.document_code,
             name_nomenclature=self.document_issue.name_nomenclature,
             current_issue_date=self.document_issue.current_issue.date,

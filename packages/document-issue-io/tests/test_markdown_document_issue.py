@@ -22,7 +22,7 @@ class DocumentIssueFactory(ModelFactory[DocumentIssue]):
 
 def create_test_document_issue():
     return DocumentIssue(
-        project_name="A Max Fordham Project",
+        project_name="A Max Fordham Project & Co",
         project_number="J4321",
         document_role=[dict(initials="OH", role_name="Director in Charge")],
         document_description="A description of a Max Fordham Project",

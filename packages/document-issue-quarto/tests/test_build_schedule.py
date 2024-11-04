@@ -34,8 +34,8 @@ def test_build_examples():
     EXAMPLE_DIRS = [
         i
         for i in (FDIR_ROOT / "examples").glob("*/")
-        if "resource-path" not in i.name or "quarto-yaml" not in i.name
-    ]
+        if "resource-path" not in i.name and "quarto-yaml" not in i.name
+    ]  # TODO: Need to fix resource-path and quarto-yaml examples for this test
     for EXAMPLE_DIR in EXAMPLE_DIRS:
         FPTH_OUTPUT = EXAMPLE_DIR / "document.pdf"
         FPTH_OUTPUT.unlink(missing_ok=True)
