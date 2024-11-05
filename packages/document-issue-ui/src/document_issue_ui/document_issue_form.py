@@ -195,6 +195,8 @@ def get_document_issue_form(
     ui.di_boxes["issue_history"].widget.grid.layout.width = (
         "1250px"  # HOTFIX: Stops grid being squashed
     )
+    ui.di_boxes["notes"].widget.layout.width = "100%"
+    ui.di_boxes["document_role"].widget.layout.width = "100%"
     return ui
 
 
@@ -210,6 +212,5 @@ if __name__ == "__main__":
         map_projects=map_projects,
         path=pathlib.Path("docissue.json"),
     )
-    # ui.path = pathlib.Path("docissue.json")
     display(ui)
 # -
