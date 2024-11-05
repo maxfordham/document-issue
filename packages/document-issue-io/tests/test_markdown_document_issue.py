@@ -1,4 +1,3 @@
-import pytest
 import shutil
 import datetime
 from polyfactory.factories.pydantic_factory import ModelFactory
@@ -7,7 +6,7 @@ from document_issue.document_issue import DocumentIssue, Issue
 from document_issue.issue import StatusRevisionEnum
 from document_issue_io.markdown_document_issue import (
     MarkdownDocumentIssue,
-    document_issue_md_to_pdf,
+    generate_document_issue_pdf,
 )
 
 from tests.constants import FDIR_TEST_OUTPUT
@@ -69,7 +68,7 @@ MD = """
 
 -   convert this notebook to markdown
 -   read `docissue.json`
--   convert using `document_issue_md_to_pdf`
+-   convert using `generate_document_issue_pdf`
 
 ## My Project
 
@@ -82,7 +81,7 @@ MD = """
 
 
 class TestDocumentIssueMdToPdf:
-    """Test the function `document_issue_md_to_pdf`."""
+    """Test the function `generate_document_issue_pdf`."""
 
     def test_to_pdf(self):
         FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf"
@@ -92,7 +91,7 @@ class TestDocumentIssueMdToPdf:
         document_issue.format_configuration.output_author = False
         document_issue.format_configuration.output_checked_by = False
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        document_issue_md_to_pdf(
+        generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
         )
@@ -106,14 +105,12 @@ class TestDocumentIssueMdToPdf:
         FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_markdown_content"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
-        fpth_md = FDIR_RENDER / "test.md"
-        fpth_md.write_text(MD)
         document_issue = create_test_document_issue()
         document_issue.format_configuration.output_author = False
         document_issue.format_configuration.output_checked_by = False
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        document_issue_md_to_pdf(
-            document_issue=document_issue, fpth_md=fpth_md, fpth_pdf=fpth_pdf
+        generate_document_issue_pdf(
+            document_issue=document_issue, fpth_pdf=fpth_pdf, md_content=MD
         )
         assert fpth_pdf.is_file()
         # Check that the markdown file created contains the correct content
@@ -127,7 +124,7 @@ class TestDocumentIssueMdToPdf:
         document_issue.format_configuration.output_author = True
         document_issue.format_configuration.output_checked_by = False
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        document_issue_md_to_pdf(
+        generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
         )
@@ -145,7 +142,7 @@ class TestDocumentIssueMdToPdf:
         document_issue.format_configuration.output_author = True
         document_issue.format_configuration.output_checked_by = True
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        document_issue_md_to_pdf(
+        generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
         )
@@ -220,7 +217,7 @@ class TestDocumentIssueMdToPdf:
         document_issue.format_configuration.output_author = True
         document_issue.format_configuration.output_checked_by = True
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
-        document_issue_md_to_pdf(
+        generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
         )
@@ -230,15 +227,3 @@ class TestDocumentIssueMdToPdf:
             fpth_pdf.with_suffix(".log")
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
 
-    def test_to_pdf_error(self):
-        """If the markdown file has the same file path as the output markdown file, raise an error."""
-        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_markdown_content"
-        fpth_md = FDIR_RENDER / "test.md"
-        fpth_pdf = FDIR_RENDER / "test.pdf"
-        document_issue = create_test_document_issue()
-        document_issue.format_configuration.output_author = False
-        document_issue.format_configuration.output_checked_by = False
-        with pytest.raises(ValueError):
-            document_issue_md_to_pdf(
-                document_issue=document_issue, fpth_md=fpth_md, fpth_pdf=fpth_pdf
-            )

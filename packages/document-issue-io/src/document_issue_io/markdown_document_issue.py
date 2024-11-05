@@ -100,14 +100,6 @@ class MarkdownDocumentIssue:
         f.close()
 
 
-def check_markdown_file_paths(fpth_md: pathlib.Path, fpth_md_output: pathlib.Path):
-    """Check if input and output markdown files are the same."""
-    if fpth_md == fpth_md_output:
-        raise ValueError(
-            f"Input and output markdown file paths must be different. Please change file name of input markdown."
-        )
-
-
 def check_quarto_version() -> ty.Union[None, str]:
     """Check if quarto version is at least 0.5.0."""
     completed_process = subprocess.run(["quarto", "--version"], capture_output=True)
@@ -145,26 +137,25 @@ def run_quarto(
     return subprocess.run(cmd)
 
 
-def document_issue_md_to_pdf(
-    document_issue: DocumentIssue,
-    fpth_pdf: pathlib.Path,
-    fpth_md: ty.Union[pathlib.Path, None] = None,
-):
-    """Convert markdown document issue to pdf using quarto.
+# generate_document_issue_docx(document_issue, fpth_docx, *, md_content="")
+# generate_document_issue_md(document_issue, fpth_md, *, md_content="")
+# ^ TODO: add in future if this functionality is needed
+
+
+def generate_document_issue_pdf(
+    document_issue: DocumentIssue, fpth_pdf: pathlib.Path, *, md_content: str = ""
+) -> subprocess.CompletedProcess:
+    """Convert document issue to pdf using quarto.
+    Extra markdown content can be added to the document using `md_content`.
     The files will be built in the parent directory of fpth_pdf."""
     fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
-    if fpth_md is not None:
-        check_markdown_file_paths(fpth_md, fpth_md_output)
-        md_content = fpth_md.read_text()
-    else:
-        md_content = ""
     with change_dir(fpth_pdf.parent):
         shutil.copy(
-            FPTH_FOOTER_LOGO, FPTH_FOOTER_LOGO.name
+            src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name
         )  # Copy footer logo to markdown document issue directory
         build_schedule_title_page_template_pdf(document_issue=document_issue)
         install_or_update_document_issue_quarto_extension()
         markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
         fpth_md_output.write_text(markdown)
         completed_process = run_quarto(fpth_md_output, fpth_pdf)
-    return fpth_pdf
+    return completed_process
