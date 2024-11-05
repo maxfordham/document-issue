@@ -192,6 +192,9 @@ def get_document_issue_form(
         display_bn_shownull=False,
         **kwargs,
     )
+    ui.di_boxes["issue_history"].widget.grid.layout.width = (
+        "1250px"  # HOTFIX: Stops grid being squashed
+    )
     return ui
 
 
@@ -209,3 +212,4 @@ if __name__ == "__main__":
     )
     # ui.path = pathlib.Path("docissue.json")
     display(ui)
+# -
