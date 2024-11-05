@@ -71,7 +71,6 @@ class Issue(BaseModel):
         json_schema_extra=dict(column_width=300),
     )
 
-    @computed_field
     @property
     def issue_id(self) -> str:
         return f"{self.date.strftime('%Y%m%d')}-{self.status_code}"

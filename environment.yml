@@ -20,3 +20,4 @@ dependencies:
       - -e packages/document-issue 
       - -e packages/document-issue-io[quarto]
       - -e packages/document-issue-api
+      - -e packages/document-issue-ui

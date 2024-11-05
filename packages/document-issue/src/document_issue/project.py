@@ -46,7 +46,7 @@ class ProjectBase(BaseModel):
     )
     project_code: ty.Optional[str] = Field(
         None,
-        description="design team project code",
+        description="design team project code (if different from project number)",
         validation_alias=AliasChoices("Project Code", "Job Code"),
     )
     project_name: str = Field(
