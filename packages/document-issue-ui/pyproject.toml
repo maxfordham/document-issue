@@ -10,9 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
 keywords = []
-authors = [
-  { name = "jgunstone", email = "j.gunstone@maxfordham.com" },
-]
+authors = [{ name = "jgunstone", email = "j.gunstone@maxfordham.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
@@ -24,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["ipyautoui"]
+dependencies = ["ipyautoui", "jupytext"]
 
 [project.urls]
 Documentation = "https://github.com/unknown/document-issue-ui#readme"
@@ -36,29 +34,18 @@ source = "vcs"
 raw-options = { root = "../.." }
 
 [tool.hatch.envs.default]
-dependencies = [
-  "coverage[toml]>=6.5",
-  "pytest",
-]
+dependencies = ["coverage[toml]>=6.5", "pytest"]
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
 test-cov = "coverage run -m pytest {args:tests}"
-cov-report = [
-  "- coverage combine",
-  "coverage report",
-]
-cov = [
-  "test-cov",
-  "cov-report",
-]
+cov-report = ["- coverage combine", "coverage report"]
+cov = ["test-cov", "cov-report"]
 
 [[tool.hatch.envs.all.matrix]]
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.types]
-dependencies = [
-  "mypy>=1.0.0",
-]
+dependencies = ["mypy>=1.0.0"]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/document_issue_ui tests}"
 
@@ -66,17 +53,14 @@ check = "mypy --install-types --non-interactive {args:src/document_issue_ui test
 source_pkgs = ["document_issue_ui", "tests"]
 branch = true
 parallel = true
-omit = [
-  "src/document_issue_ui/__about__.py",
-]
+omit = ["src/document_issue_ui/__about__.py"]
 
 [tool.coverage.paths]
-document_issue_ui = ["src/document_issue_ui", "*/document-issue-ui/src/document_issue_ui"]
+document_issue_ui = [
+  "src/document_issue_ui",
+  "*/document-issue-ui/src/document_issue_ui",
+]
 tests = ["tests", "*/document-issue-ui/tests"]
 
 [tool.coverage.report]
-exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
