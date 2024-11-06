@@ -1,5 +1,5 @@
 ---
-project_name: A Max Fordham Project
+project_name: A Max Fordham Project \\& Co
 project_number : 4321
 director_in_charge: OH
 document_description: A description of a Max Fordham Project
@@ -48,11 +48,11 @@ Fordham LLP\
 
 ### Contributions
 
-+----------------+-------------------+
-| **Initials**   | **Role**          |
-+================+===================+
-| OH             | RoleEnum.director |
-+----------------+-------------------+
++----------------+--------------------+
+| **Initials**   | **Role**           |
++================+====================+
+| OH             | Director in Charge |
++----------------+--------------------+
 
 : {tbl-colwidths="[30,70]"}
 
