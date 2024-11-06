@@ -69,10 +69,8 @@ def construct_title_block_data(
         fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width
     )
     issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
-
-    wrap_len = 70 if is_a3 else 40
     document_description = "\n".join(
-        wrap(document_issue.document_description, wrap_len)
+        wrap(document_issue.document_description, width=70 if is_a3 else 40)
     )
     name_nomenclature = document_issue.name_nomenclature.replace("-", " - ")
     document_code = document_issue.document_code.replace("-", " - ")
@@ -80,15 +78,16 @@ def construct_title_block_data(
         "Suitable for ", ""
     ).replace("Issued for ", "")
     # ^ TODO: Need to deal with length of status codes more robustly
+    project_name = "\n".join(
+        wrap(document_issue.project_name, width=40 if is_a3 else 47)
+    )
     (
-        project_name,
         project_number,
         director_in_charge,
         status_code,
         revision,
         client_name,
     ) = (
-        document_issue.project_name,
         document_issue.project_number,
         document_issue.director_in_charge,
         document_issue.current_issue.status_code,
