@@ -26,7 +26,7 @@ def create_document_issue():
         issue_history=[issue],
     )
     document_issue.project_name = (
-        "A Max Fordham Project:\nRotunda Refurbishment part 1 million"
+        "A Max Fordham Project: Rotunda Refurbishment part 1 million"
     )
     document_issue.client_name = "Max Fordham LLP Partnership"
     document_issue.project_number = "J4321"
