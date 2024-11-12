@@ -7,13 +7,15 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.8,<3.12.0a0
-  - frictionless
+  - frictionless>5
+  - frictionless[json]
   - pandas
   - pytest
   - flake8
   - black
   - tomli
   - pytest-pretty
+  - pypdf
   - pip
   - pip:
       - polyfactory

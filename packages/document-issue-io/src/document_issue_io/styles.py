@@ -4,10 +4,10 @@ Created on Mon Feb  4 14:14:44 2019
 @author: o.beckett
 """
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
+
 
 
 ###Styles###
@@ -19,7 +19,6 @@ NUM_HEADER_ROWS = 5
 THICKLINE = 2
 
 from .constants import FONTS
-
 
 def register_fonts():
     for k, v in FONTS.items():  # TODO: use carlito instead of calibri

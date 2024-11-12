@@ -7,7 +7,7 @@ from frictionless import Package
 from textwrap import wrap
 
 from document_issue.document_issue import Issue, DocumentIssue
-from document_issue.enums import StatusRevisionEnum, MAP_STATUS
+from document_issue.enums import StatusRevisionEnum
 from datetime import datetime
 from .styles import (
     DEFAULTTABLESTYLE,
@@ -30,8 +30,8 @@ from .styles import (
     THICKLINE,
     colors,
     PARASTYLE,
-    ParagraphStyle,
 )
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import (
     Table,
     SimpleDocTemplate,
@@ -39,11 +39,8 @@ from reportlab.platypus import (
     Paragraph,
     Preformatted,
 )
-from reportlab.lib import colors
 from reportlab.lib.pagesizes import A3, landscape
 from reportlab.lib.units import inch, mm
-from reportlab.lib.enums import TA_RIGHT
-from reportlab.lib.styles import ParagraphStyle
 
 
 register_fonts()

@@ -76,6 +76,9 @@ class MarkdownDocumentIssue:
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
+            title=self.document_issue.document_description,
+            project=self.document_issue.project_name,
+            originator=self.document_issue.originator,
             project_name=escape_latex_special_chars(self.document_issue.project_name),
             project_number=self.document_issue.project_number,
             director_in_charge=self.document_issue.director_in_charge,
@@ -91,7 +94,7 @@ class MarkdownDocumentIssue:
             md_issue_history=self.md_issue_history,
             md_roles=self.md_roles,
             md_notes=self.md_notes,
-        )
+        ) # TODO: add major discipline as "subject" document metadata property
 
     def to_file(self, fpth: pathlib.Path):
         """Create markdown file from DocumentIssue object."""

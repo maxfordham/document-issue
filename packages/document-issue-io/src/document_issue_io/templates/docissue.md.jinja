@@ -1,4 +1,9 @@
 ---
+project: {{ project }}
+title: {{ title }}
+author: 
+  - {{ originator }}
+# ^ standard document properties. see: https://quarto.org/docs/reference/formats/pdf.html
 project_name: {{ project_name }}
 project_number : {{ project_number }}
 director_in_charge: {{ director_in_charge }}
@@ -6,10 +11,10 @@ document_description: {{ document_description }}
 document_code: {{ document_code }}
 name_nomenclature: {{ name_nomenclature }}
 current_issue:
-    date: {{ current_issue_date }}
-    revision: {{ current_issue_revision }}
-    status_code: {{ current_issue_status_code }}
-    status_description: {{ current_issue_status_description }}
+  date: {{ current_issue_date }}
+  revision: {{ current_issue_revision }}
+  status_code: {{ current_issue_status_code }}
+  status_description: {{ current_issue_status_description }}
 footer-logo: footer-logo.png
 title-page: title-page.pdf
 ---
