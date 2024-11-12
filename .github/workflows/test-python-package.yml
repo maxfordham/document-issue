@@ -72,9 +72,14 @@ jobs:
       - name: Install tinytex
         shell: bash -l {0}
         run: quarto install tinytex
-
+        
       - name: Run document-issue tests
         working-directory: ./packages/document-issue
+        shell: bash -l {0}
+        run: pytest ./tests
+        
+      - name: Run document-issue-quarto tests
+        working-directory: ./packages/document-issue-quarto
         shell: bash -l {0}
         run: pytest ./tests
 
