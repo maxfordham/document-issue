@@ -1,0 +1,23 @@
+---
+format: pdf
+title: A document from Quarto
+project: dev-testing
+subtitle: with document metadata included
+date: 2024-11-10
+author: 
+  - jgunstone
+  - ohensby
+abstract: A dummy document example to see if the pdf metadata is saved correctly
+subject: mechanical
+keywords: ventilation, pipework, sprinklers
+# ^ standard document properties. see: https://quarto.org/docs/reference/formats/pdf.html
+project_name: dev-testing
+---
+
+Quarto (pandoc probs) automatically applies document properties to the generated pdf document.
+This document shows that, though "subtitle" appears not to be supported.
+
+**TODO**: 
+- ensure that these properties still come through when generating document using the 
+  `document-issue` extension.
+- chat to IT about adding some of these properties to the default file explorer view.
