@@ -76,6 +76,7 @@ class MarkdownDocumentIssue:
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
+            title=self.document_issue.document_description,
             project=self.document_issue.project_name,
             originator=self.document_issue.originator,
             project_name=escape_latex_special_chars(self.document_issue.project_name),
