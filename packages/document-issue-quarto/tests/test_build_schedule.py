@@ -3,6 +3,8 @@ import shutil
 import pathlib
 import subprocess
 
+from tests.utils_check_doc_properties import check_quarto_doc_properties
+
 FDIR_ROOT = pathlib.Path(__file__).parent.parent
 FDIR_TESTS = FDIR_ROOT / "tests"
 FDIR_TESTDATA = FDIR_TESTS / "testdata"
@@ -59,3 +61,16 @@ def test_build_quarto_yaml():
     subprocess.run(["quarto", "render", "document.md"])
     assert FPTH_OUTPUT.exists()
     assert not FPTH_LOG.exists()
+
+def test_build_document_properties():
+    FDIR = FDIR_ROOT / "examples" / "document-properties"
+    FPTH_INPUT = FDIR / "document.md"
+    FPTH_OUTPUT = FDIR / "document.pdf"
+    FPTH_LOG = FDIR / "document.log"
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "render", str(FPTH_INPUT), "--to", "document-issue-pdf"])
+    assert FPTH_OUTPUT.exists()
+    assert not FPTH_LOG.exists()
+
+    checked_props = check_quarto_doc_properties(FPTH_INPUT, FPTH_OUTPUT)
+    assert all(item in ['title', 'author', 'subject'] for item in checked_props)
