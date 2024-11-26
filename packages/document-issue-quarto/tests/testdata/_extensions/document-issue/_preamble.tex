@@ -91,8 +91,9 @@
 % DEFINE \toc COMMAND
 % Make hyperlinks in table of contents black (default is blue)
 \makeatletter
-\newcommand{\toc}
-    {\hypersetup{linkcolor=black}
+\newcommand{\toc}[1][Table of Contents] % Default name is "Table of Contents"
+    {\renewcommand{\contentsname}{#1}
+    \hypersetup{linkcolor=black}
     \tableofcontents
     \hypersetup{linkcolor=blue}}
 \makeatother
