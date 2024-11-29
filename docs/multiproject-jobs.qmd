@@ -19,8 +19,8 @@ format:
 - [ ] Mark Palmer - *not yet discussed*
 
 Typically, projects are simple such that 1no building corresponds to 1no appointment.
-Sometimes, however, we are appointed on larger multi-building projects; on these jobs the correct project setup will depend
-on how these projects are run and procured. This document outlines some common scenarios and the
+Sometimes, however, we are appointed on larger multi-building projects, or single project jobs develop into
+multi-project jobs as the design progresses. This document outlines some common scenarios and the
 appropriate approach for each. 
 
 **Definition of Terms**
@@ -28,20 +28,20 @@ appropriate approach for each.
 - **Design Information**: Refers to a complete pack of design information produced for a Client
 - **Project Team**: An internal team delivering the work, roles and responsibilities within the team must be assigned.
 - **Document Management**: Refers to the BIM process of naming and managing documents. 
-- **Job Folder** / **WebApp**: Refers to a `J:\drive` folder and associated project in WebApp.
+- **Job Folder**/ **WebApp**/ **Project Mail**: Refers to a `J:\drive` folder and associated project in WebApp and Project Mail.
 - **Resourcing, Billing and Spend**: Refers to how the projects financial health is monitored. "Normal" indicates resources
   and time-management done using Timesheets and WebApp with no caveats. 
   
 
-## Typical
+## Typical Single Building Projects
 
 - **Design Information**: 1no single pack
 - **Project Team**:  1no project team
 - **Document Management**: 1no project code and 1no volume code used for all information
-- **Job Folder**/ **WebApp**: 1no `J:\drive` folder and 1no WebApp project
+- **Job Folder**/ **WebApp**/ **Project Mail**: 1no `J:\drive` folder, 1no WebApp project and 1no Project Mail
 - **Resourcing, Billing and Spend**: Normal
 
-## Multi-building
+## Multi-building Projects
 
 There is a single site with the same client and many buildings.
 The contractor is assumed to be the same and the project will likely be delivered in one go / sequentially.
@@ -49,7 +49,7 @@ The contractor is assumed to be the same and the project will likely be delivere
 - **Design Information**: 1no single pack. Different buildings refer to equipment within common schedules and common specifications.
 - **Project Team**:  1no project team
 - **Document Management**: 1no project code, multiple volume codes used to represent different buildings. 1no issue history.
-- **Job Folder**/ **WebApp**: 1no `J:\drive` folder and 1no WebApp project
+- **Job Folder**/ **WebApp**/ **Project Mail**: 1no `J:\drive` folder, 1no WebApp project and 1no Project Mail
 - **Resourcing, Billing and Spend**: Normal
 
 This is typical or large Resi developments.
@@ -64,6 +64,19 @@ This should simply be run as 2no projects, despite the client being the same and
 This requires that the Project Leader separates out the project before people start putting time down to it. 
 :::
 
+### How do I know if I should split my Job?
+
+Often a job will split into multiple projects during the design phase. How do I know if I should split the job into multiple job numbers?
+
+- If the project has a different project team
+  - WebApp is used to record roles and responsibilities on a project.
+  - If a new project with a different project team is emerging, it needs its own WebApp project (and job number) to record that. 
+  - Clearly defining a project team is increasingly important following the Building Safety Act.
+- If the Design Information is unique and has its own standalone Issue History. 
+  - Job numbers are set up such that 1no job contains 1no set of design information (i.e. there is 1no specs folder, 1no schedules folder etc.) 
+  - Nesting within Job Numbers should be avoided, in this scenario create a new job.
+- If your billing is separated and you want to record the spend in isolation
+  
 
 ## Multi-project with shared Resourcing, Billing and Spend
 
@@ -80,7 +93,7 @@ The projects will be procured independently, and may or may not have the same co
 - **Design Information**: multiple packs of design information. Each project has its own schedules and specification.
 - **Project Team**:  2no project teams (though it may be the same team on both).
 - **Document Management**: 2no project codes. 2no issue historys.
-- **Job Folder** / **WebApp**: 2no `J:\drive` folders. 1no fee earning project, 1no zero fee project in WebApp.
+- **Job Folder**/ **WebApp**/ **Project Mail**: 2no `J:\drive` folders. 1no fee earning project, 1no zero fee project in WebApp.
   The 2nd WebApp project allows for a different project team to be assigned and supports creation of another job folder.
   The 2nd WebApp project must not have any work-types associated and will be explicitly given 0 Fee in Fee Manager. 
   This way it is impossible to associate time to it in Timesheets and it will have no Fee associated to it, with all Fee managed through the primary job.
@@ -88,19 +101,15 @@ The projects will be procured independently, and may or may not have the same co
 
 ### Justification
 
-Whilst this is not recommended and 2no independent projects is always preferred, if splitting the Time Management and Billing is no longer an option
-the project should still be split into 2no projects for the following reasons:
+Whilst this is not recommended and 2no independent projects is always preferred, sometimes splitting the Time Management and Billing is no longer an option
+(for example, if work has already been done and assigned to the old job number). In those scenario's it is still beneficical to split the job for the following reasons:
 
-- It makes the responsibilities of a Project Team for a specific project more explicit. It is unknown (and unlikely that) the same Engineers will have the 
-  same responsibilities on both projects. To correctly capture the Project Team for each project, each project needs its own project in WebApp.
-- Given that the Design Information for each project is independent, this would require duplication of information within the same job folder 
-  (e.g. 2no sets of schedules, 2no sets of calcs, 2no sets of specs etc.). This goes against how the job folder structure has been designed and is why each job has 
-  its own folder in the first place. By separating into 2no project folders, the folder structures can be identical for each project.
-- It ensures that there is accurate mapping between our Design Information and our information in WebApp. Currently tools (pyRevit, Digital Schedules) use the
+- Clearly defining responsibilities of a Project Team for a specific project
+- Avoid "nesting" of Design Information within a job folder
+- It ensures that there is accurate mapping between our Design Information and our information in WebApp. Currently automation tools (pyRevit, Digital Schedules) use the
  WebApp data to retrieve the Project Name from the Project Number, ensuring that this information is consistent across the project. As our Digitalisation journey
- continues more information will be centrally stored in this way. Tools can of course be configured to work differently, but removing the strict 1-to-1 relationship
- between a project in WebApp and a project Design Information reduces the ability to automate and degrades our understanding of the project data.
+ continues more information will be centrally stored in this way, improving project automation and ultimately reducing the administrative burden of delivering a project.
 - Autodesk Construction Cloud is "project-centric"... more here...
 - It is acknowledged that multiple projects for the same Client are likely to have to common reference information (e.g. 2no buildings on a University Campus). In
   this Scenario it is up to the Project Teams to communicate and come up with a plan to manage this. It would likely require either choosing a single project as a common
-  location to keep that type of information and using shortcuts to link to it from the other project, or accepting that duplicate information will be required.
+  location to keep shared information and using shortcuts to link to it from the other project, or accepting that duplicate information will be required.
