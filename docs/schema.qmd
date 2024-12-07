@@ -1,4 +1,6 @@
-# Document Issue Schema
+---
+title: "Document Issue Schema"
+---
 
 
 *metadata to be accompanied by every formal document issue.
@@ -163,6 +165,8 @@ but no document will require additional data fields.*
   - **Items** *(string)*
 - **`originator`** *(string)*: the company the info came from (fixed to be Max Fordham LLP). the name 'originator' comes from BS EN ISO 19650-2. Default: `Max Fordham LLP`.
 - **`format_configuration`**: Default: `{'date_string_format': '%d %^b %y', 'include_author_and_checked_by': False}`.
+
+
 ## Definitions
 
 - **`Role`** *(object)*
