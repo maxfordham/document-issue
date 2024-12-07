@@ -16,8 +16,6 @@ website:
         href: document-issue/index.html
       - text: "document-issue-io"
         href: document-issue-io/index.html
-      - text: "document-issue-quarto"
-        href: document-issue-quarto/index.html
       - text: "document-issue-api"
         href: document-issue-api/index.html
 
