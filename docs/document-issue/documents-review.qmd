@@ -1,16 +1,12 @@
-# Current Templates
+---
+title: "Documents Issue Info Review (2023OCT) "
+---
 
-```{figure} images/doc-issue-summary.png
----
-name: doc-issue-summary
----
-a summary of what document issue information is being shown on which
-information type
-```
+![doc-issue-summary](../images/doc-issue-summary.png){fig-alt="a summary of what document issue information is being shown on which information type"}
 
 ## Drawings
 
-![drawings](images/drawings.png)
+![ ](../images/drawings.png)
 
 - no "_authored by_" or "_checked by_" fields (or any authoring information)
 - "_project leader_" only (same for all information)
@@ -19,7 +15,7 @@ information type
 
 ## Specifications
 
-![ ](images/spec.png)
+![ ](../images/spec.png)
 
 - shows issue history
 - no "_authored by_" or "_checked by_" fields
@@ -29,14 +25,14 @@ information type
 
 ## Reports
 
-![ ](images/reports.png)
+![ ](../images/reports.png)
 
 - no structured filename information
 - doesn't include Uniclass classification field
 
 ## Schedules
 
-![ ](images/schedule.png)
+![ ](../images/schedule.png)
 
 - shows issue history
 - includes "_engineer_" and "_project leader_" for every issue
@@ -44,7 +40,7 @@ information type
 
 ## Issue Sheets
 
-![ ](images/issuesheet.png)
+![ ](../images/issuesheet.png)
 
 - no authoring information
 - doesn't include Uniclass classification field

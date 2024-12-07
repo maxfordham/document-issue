@@ -1,0 +1,5 @@
+---
+title: "Entity Relationship Diagram - Single Document"
+---
+
+![](../images/erd-DocumentIssue.png){fig-alt="metadata stored (and sometimes rendered) with every document."}

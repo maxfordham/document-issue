@@ -1,0 +1,69 @@
+project:
+  type: website
+  pre-render: 
+    - ./_make_erd.sh
+website:
+  # title: "document-issue"
+  image: images/document-icon.png
+  site-url: https://github.com/maxfordham/document-issue
+  repo-url: https://github.com/maxfordham/document-issue
+  favicon: "images/document-icon.png"
+  page-navigation: true
+  navbar:
+    logo: "images/document-icon.png"
+    left:
+      - text: "document-issue"
+        href: document-issue/index.html
+      - text: "document-issue-io"
+        href: document-issue-io/index.html
+      - text: "document-issue-api"
+        href: document-issue-api/index.html
+
+    right:
+      - text: "release notes"
+        href: release-notes/index.html
+      - text: "feedback"
+        href: feedback.html
+      - icon: github
+        href: https://github.com/maxfordham/document-issue
+        aria-label: GitHub
+
+  sidebar:
+    - id: document-issue
+      title: "document-issue"
+      logo: "images/document-icon.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - document-issue/index.qmd
+        - document-issue/documents-review.qmd
+        - text: "Entity Relationship Diagram"
+          href: document-issue/erd.qmd
+
+    - id: document-issue-io
+      title: "document-issue-io"
+      logo: "images/document-icon.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - document-issue-io/index.qmd
+
+    - id: document-issue-api
+      title: "document-issue-api"
+      logo: "images/document-icon.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - document-issue-api/index.qmd
+        - text: "Entity Relationship Diagram"
+          href: document-issue-api/erd.qmd
+        
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true

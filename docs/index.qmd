@@ -1,0 +1,7 @@
+---
+pagetitle: "document-issue"
+image: images/document-icon.png
+hide-description: true
+---
+
+{{< include ../README.md >}}

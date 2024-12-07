@@ -1,4 +1,4 @@
-name: document-issue-dev
+name: document-issue
 # channels priority
 # see https://bioconda.github.io/
 # conda-forge has highest prioriy
@@ -7,15 +7,21 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.8,<3.12.0a0
-  - frictionless>5
-  - frictionless[json]
+  # - frictionless>5
+  # - frictionless[json]
   - pandas
   - pytest
   - flake8
   - black
   - tomli
+  - pytest
   - pytest-pretty
   - pypdf
+  - ruff
+  - eralchemy # for docs
+  - erdantic # for docs
+  - graphviz # for docs
+  - quarto # for docs
   - pip
   - pip:
       - polyfactory
