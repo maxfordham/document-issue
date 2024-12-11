@@ -22,10 +22,6 @@ jobs:
     name: ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Install tinytex
-        shell: bash -l {0}
-        run: quarto install tinytex
-
       - uses: actions/checkout@v4
       - uses: prefix-dev/setup-pixi@v0.8.1
         with:
@@ -33,4 +29,5 @@ jobs:
             pixi-version: v0.39.0
             cache: true
             cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+      - run: quarto install tinytex
       - run: pixi run tests
