@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "document-issue"
 description = ''
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.7,<3.12"
 license = "MIT"
 keywords = []
 authors = [{ name = "J Gunstone", email = "j.gunstone@maxfordham.com" }]

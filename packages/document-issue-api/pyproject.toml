@@ -7,10 +7,10 @@ name = "document-issue-api"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.7,<3.12"
 license = "MIT"
 keywords = []
-authors = [{ name = "U.N. Owen", email = "void@some.where" }]
+authors = [{ name = "J Gunstone", email = "j.gunstone@maxfordham.com" }]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python",
