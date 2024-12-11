@@ -10,17 +10,8 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            label: linux-64
-
-          - os: windows-latest
-            label: win-64
+    runs-on: ubuntu-latest
             
-    name: ${{ matrix.label }}
-    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: prefix-dev/setup-pixi@v0.8.1

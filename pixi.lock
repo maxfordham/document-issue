@@ -743,8 +743,6 @@ packages:
   - pycparser
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
-  arch: x86_64
-  platform: linux
   license: MIT
   license_family: MIT
   purls:
@@ -840,8 +838,6 @@ packages:
   - libstdcxx >=13
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
-  arch: x86_64
-  platform: linux
   license: MIT
   license_family: MIT
   purls:
@@ -877,8 +873,8 @@ packages:
   timestamp: 1733238487461
 - pypi: packages/document-issue
   name: document-issue
-  version: 0.6.3.dev5+g41f1a34
-  sha256: 851b6b967458ec3a2d6f0a28fb73214f1528a075b193789e92b06762abcf6b55
+  version: 0.6.3.dev8+g2a57b3e.d20241211
+  sha256: d7ada87d634f84352c13d63d5d669ca0e27402753f2c594831dc8d229ca105f5
   requires_dist:
   - jinja2
   - pandoc
@@ -886,12 +882,12 @@ packages:
   - pydantic>2
   - stringcase
   - tabulate
-  requires_python: '>=3.7'
+  requires_python: '>=3.7,<3.12'
   editable: true
 - pypi: packages/document-issue-api
   name: document-issue-api
-  version: 0.6.3.dev5+g41f1a34
-  sha256: b1b8d68b0ab82a30a693f329efbbcddc406ba0cebca0f55b7948814b50164d0b
+  version: 0.6.3.dev8+g2a57b3e.d20241211
+  sha256: 79e049c7a28d77914104e632959e7f745dab600dc77a7aad039c60462f515aa5
   requires_dist:
   - fastapi
   - httpx
@@ -906,12 +902,12 @@ packages:
   - stringcase
   - tabulate
   - uvicorn
-  requires_python: '>=3.7'
+  requires_python: '>=3.7,<3.12'
   editable: true
 - pypi: packages/document-issue-io
   name: document-issue-io
-  version: 0.6.3.dev5+g41f1a34.d20241211
-  sha256: caffb16a58ab24a1e3f793b7e44745602e31d653da26c856f1e0627cb9756c47
+  version: 0.6.3.dev8+g2a57b3e.d20241211
+  sha256: 1ed603db1b027bf98142986faa136dfc80b67823d07c8c653ec7a20cc067b40d
   requires_dist:
   - frictionless>5
   - frictionless[json]
@@ -925,7 +921,7 @@ packages:
   - pytest ; extra == 'dev'
   - quarto-cli ; extra == 'dev'
   - quarto-cli ; extra == 'quarto'
-  requires_python: '>=3.7,<3.13'
+  requires_python: '>=3.7,<3.12'
   editable: true
 - pypi: packages/document-issue-ui
   name: document-issue-ui
@@ -2759,8 +2755,6 @@ packages:
   - libgcc >=13
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
-  arch: x86_64
-  platform: linux
   license: BSD-3-Clause
   license_family: BSD
   purls:
@@ -2939,8 +2933,6 @@ packages:
   - tzdata
   constrains:
   - python_abi 3.11.* *_cp311
-  arch: x86_64
-  platform: linux
   license: Python-2.0
   purls: []
   size: 30624804
@@ -2983,8 +2975,6 @@ packages:
   md5: 139a8d40c8a2f430df31048949e450de
   constrains:
   - python 3.11.* *_cpython
-  arch: x86_64
-  platform: linux
   license: BSD-3-Clause
   license_family: BSD
   purls: []
@@ -3003,8 +2993,6 @@ packages:
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
   - yaml >=0.2.5,<0.3.0a0
-  arch: x86_64
-  platform: linux
   license: MIT
   license_family: MIT
   purls:
@@ -3022,8 +3010,6 @@ packages:
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
   - zeromq >=4.3.5,<4.4.0a0
-  arch: x86_64
-  platform: linux
   license: BSD-3-Clause
   license_family: BSD
   purls:
@@ -3332,8 +3318,6 @@ packages:
   - libgcc >=13
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
-  arch: x86_64
-  platform: linux
   license: Apache-2.0
   license_family: Apache
   purls:
@@ -3413,8 +3397,6 @@ packages:
   - libstdcxx >=13
   - python >=3.11,<3.12.0a0
   - python_abi 3.11.* *_cp311
-  arch: x86_64
-  platform: linux
   license: MIT
   license_family: MIT
   purls:
