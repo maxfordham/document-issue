@@ -20,5 +20,7 @@ jobs:
             pixi-version: v0.39.0
             cache: true
             cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-      - run: quarto install tinytex
+      - run: | 
+          quarto install tinytex
+        shell: pixi run bash -e {0}
       - run: pixi run tests
