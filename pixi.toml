@@ -3,35 +3,23 @@ channels = ["conda-forge"]
 platforms = ["linux-64"]
 name = "document-issue"
 
-[environments]
-dev = { features = ["dev"], solve-group = "default" }
-default = { features = ["dev"], solve-group = "default" }
+[dependencies]
+python = ">=3.7,<3.12"
+rich = ">=13.9.3,<14"
+pytest = "*"
+pre-commit = ">=4.0.1,<5"
+ipykernel = ">=6.29.5,<7"
 
 [pypi-dependencies]
-document-issue = { path = "packages/document-issue", editable = true }
-document-issue-io = { path = "packages/document-issue-io", editable = true }
-document-issue-api = { path = "packages/document-issue-api", editable = true }
-document-issue-ui = { path = "packages/document-issue-ui", editable = true }
-
-[feature.dev.pypi-dependencies]
 document-issue-io = { path = "packages/document-issue-io", extras = [
     "dev",
 ], editable = true }
+document-issue = { path = "packages/document-issue", editable = true }
+document-issue-api = { path = "packages/document-issue-api", editable = true }
+document-issue-ui = { path = "packages/document-issue-ui", editable = true }
 
-[tasks.tests-document-issue]
-cmd = "cd packages/document-issue && pytest"
-
-[tasks.tests-document-issue-quarto]
-cmd = "cd packages/document-issue-quarto && pytest"
-
-[tasks.tests-document-issue-io]
-cmd = "cd packages/document-issue-io && pytest"
-
-[tasks.tests-document-issue-api]
-cmd = "cd packages/document-issue-api && pytest"
-
-[tasks.tests]
-cmd = """
+[tasks]
+tests = """
     cd packages/document-issue
 &&  pytest 
 &&  cd ../document-issue-quarto 
@@ -41,10 +29,7 @@ cmd = """
 &&  cd ../document-issue-api 
 &&  pytest
 """
-
-[dependencies]
-python = ">=3.7,<3.12"
-rich = ">=13.9.3,<14"
-pytest = "*"
-pre-commit = ">=4.0.1,<5"
-ipykernel = ">=6.29.5,<7"
+test-document-issue = "cd packages/document-issue && pytest"
+test-document-issue-quarto = "cd packages/document-issue-quarto && pytest"
+test-document-issue-io = "cd packages/document-issue-io && pytest"
+test-document-issue-api = "cd packages/document-issue-api && pytest"
