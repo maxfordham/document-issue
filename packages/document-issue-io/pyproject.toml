@@ -7,7 +7,7 @@ name = "document-issue-io"
 description = ''
 readme = "README.md"
 dynamic = ["version"]
-requires-python = ">=3.7"
+requires-python = ">=3.7,<3.12"
 license = "MIT"
 keywords = []
 authors = [{ name = "J Gunstone", email = "j.gunstone@maxfordham.com" }]
@@ -23,23 +23,19 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "pillow", 
+    "pillow",
     "pydantic",
     "jinja2",
     "reportlab",
+    "pypdf",
+    "frictionless>5",
+    "frictionless[json]",
     # document-issue # TODO: How do we get this to install?
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest",
-    "polyfactory",
-    "hatch",
-    "quarto-cli"
-]
-quarto = [
-    "quarto-cli"
-]
+dev = ["pytest", "polyfactory", "hatch", "quarto-cli"]
+quarto = ["quarto-cli"]
 
 [project.urls]
 Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"

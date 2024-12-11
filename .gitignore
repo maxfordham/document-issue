@@ -173,3 +173,5 @@ TOKENS/
 _version.py
 
 /.quarto/
+
+.pixi/
