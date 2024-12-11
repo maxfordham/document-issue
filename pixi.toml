@@ -4,7 +4,7 @@ platforms = ["linux-64"]
 name = "document-issue"
 
 [dependencies]
-python = ">=3.7,<3.12"
+python = ">=3.8"
 rich = ">=13.9.3,<14"
 pytest = "*"
 pre-commit = ">=4.0.1,<5"

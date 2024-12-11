@@ -8,7 +8,7 @@ def test_Document():
     assert doc.document_code == "06667-MXF-XX-XX-SH-M-20003"
     di = doc.model_dump(mode="json")
     assert di["document_code"] == "06667-MXF-XX-XX-SH-M-20003"
-    assert schema["properties"]["notes"]["items"]["maxLength"] == 1e8
+    assert schema["properties"]["notes"]["items"]["maxLength"] == 10000
     # assert schema["properties"]["notes"]["items"]["layout"] == {"width": "100%"}
 
 
