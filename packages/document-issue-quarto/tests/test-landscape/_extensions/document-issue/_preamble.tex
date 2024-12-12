@@ -1,0 +1,99 @@
+% FOR ALIGNING IN MARKDOWN
+\usepackage{ragged2e}
+
+% SET FONT TO CARLITO
+% REF https://ctan.org/tex-archive/fonts/carlito?lang=en
+\usepackage[sfdefault,lf]{carlito}
+
+% SET PAGE MARGINS
+\areaset{380mm}{235mm}
+
+% REMOVE FIGURE AND TABLE LABELS
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}
+\captionsetup[longtable]{labelformat=empty}
+
+% ADDS A LINE BETWEEN TABLES
+% REF: https://tex.stackexchange.com/a/596005
+\usepackage{ctable} % for \specialrule command
+\newcommand{\projectNumberCode}{CODE }
+\newcommand{\projectName}{Project Name }
+\newcommand{\coreSystemName}{Core Name }
+\newcommand{\bt}[1]{\fcolorbox{gray}{lightgray}{#1}}
+\defaultfontfeatures{Extension = .otf}
+\usepackage{fontawesome}
+\usepackage{tocloft}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{glossaries}
+\setglossarystyle{altlistgroup}
+\usepackage{xparse}
+\usepackage{lscape}
+\makenoidxglossaries
+\usepackage{etoolbox}
+\usepackage{xstring}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\renewcommand{\arraystretch}{1.2}
+\makeatletter
+\patchcmd{\LT@array}{\@mkpream{#2}}{\StrGobbleLeft{#2}{2}[\pream]\StrGobbleRight{\pream}{2}[\pream]\StrSubstitute{\pream}{l}{|l}[\pream]\@mkpream{@{}\pream|@{}}}{}{}
+\apptocmd{\LT@tabularcr}{\specialrule{0.05em}{0em}{0em}}{}{}
+\makeatother
+
+% ADD PAGE NUMBER AND HEADER NAME TO FOOTER
+\usepackage{scrlayer-scrpage}
+\renewcommand{\chapterpagestyle}{scrheadings} % Change style of chapter pages
+\usepackage{titleref}
+\usepackage{lastpage}
+\usepackage{stackengine}
+\usepackage{tikz}
+\makeatletter
+% \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}} % Create call \thetitle which will get the title defined in the preamble
+% \def\subtitle#1{\gdef\@subtitle{#1}\gdef\thesubtitle{#1}} % Create call \thesubtitle which will get the subtitle defined in the preamble
+\newcommand*{\currentname}{\TR@currentTitle} % Create call \currentname which will get the current section name
+\makeatother
+\def\stackalignment{l}
+\lofoot{\stackanchor{\stackanchor{\raggedleft{\color{gray}$${{< meta project_name >}}$$}}{\raggedleft{$${{< meta document_description >}}$$}}}{\raggedleft{\currentname}}}
+\cofoot{}
+% CENTRE TEXT IN IMAGE
+% REF: https://stackoverflow.com/a/62283887
+\rofoot{    
+    \begin{tikzpicture}
+        \node at (0,0) {\includegraphics[width=1.75cm]{ {{< meta footer-logo >}} }};
+        \node at (current bounding box.center) {\thepage\ / \pageref*{LastPage}};
+    \end{tikzpicture}
+    }
+
+% TITLEPAGE
+% Set generated reportlab PDF as title page background
+\usepackage{wallpaper}
+\ThisCenterWallPaper{}{ {{< meta title-page >}} }
+
+% STYLE FRONTMATTER
+\usepackage{anyfontsize}
+% Renew maketitle command
+\makeatletter
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
+\vspace*{\fill} % To centre in the middle of the page
+\begin{tabular}{>{\raggedright}p{0.65\linewidth}} % Create table: left-align and wrap text
+    % Note that the $$ is used to escape the Hugo variables
+    % Without them it does not work when wrapping with e.g. \textbf, etc
+    \fontsize{30}{36}\selectfont {\bfseries {{< meta project_name >}} }\\[10pt]
+    \fontsize{20}{24}\selectfont {{< meta document_description >}}\\[10pt]
+    % NOTE: \fontsize{SIZE}{LINE SPACING}
+\end{tabular}
+\vspace*{\fill}
+\egroup
+}
+\makeatother
+
+% DEFINE \toc COMMAND
+% Make hyperlinks in table of contents black (default is blue)
+\makeatletter
+\newcommand{\toc}[1][Table of Contents] % Default name is "Table of Contents"
+    {\renewcommand{\contentsname}{#1}
+    \hypersetup{linkcolor=black}
+    \tableofcontents
+    \hypersetup{linkcolor=blue}}
+\makeatother
