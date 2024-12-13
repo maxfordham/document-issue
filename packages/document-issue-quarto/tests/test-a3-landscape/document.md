@@ -3,6 +3,8 @@ project_name: A Max Fordham Project
 document_description: A description of the document that is important
 footer-logo: logo.png
 title-page: title-page.pdf
+classoption: landscape
+papersize: a3
 ---
 
 :::: {layout="[ 26.5, -2.5, 71 ]"}

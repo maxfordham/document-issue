@@ -6,8 +6,6 @@ contributes:
   format:
     pdf:
       documentclass: scrreprt
-      classoption: landscape
-      papersize: a3
       include-in-header: _preamble.tex
       template-partials: 
         - "partials/before-body.tex"
