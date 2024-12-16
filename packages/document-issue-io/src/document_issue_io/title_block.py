@@ -209,7 +209,7 @@ def title_block_table(
 
 def title_block_a4(
     document_issue: DocumentIssue,
-    fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
+    fpth_output: pathlib.Path = pathlib.Path("title-block.pdf"),
     is_titlepage: bool = False,
 ):
     tblock_table = title_block_table(document_issue=document_issue, is_a3=False)

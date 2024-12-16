@@ -4,7 +4,10 @@ import subprocess
 import typing as ty
 from jinja2 import Environment, FileSystemLoader
 from document_issue.document_issue import DocumentIssue
-from document_issue_io.title_block import build_schedule_title_page_template_pdf
+from document_issue_io.title_block import (
+    build_schedule_title_page_template_pdf,
+    title_block_a4,
+)
 from document_issue_io.constants import (
     DIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
@@ -94,7 +97,7 @@ class MarkdownDocumentIssue:
             md_issue_history=self.md_issue_history,
             md_roles=self.md_roles,
             md_notes=self.md_notes,
-        ) # TODO: add major discipline as "subject" document metadata property
+        )  # TODO: add major discipline as "subject" document metadata property
 
     def to_file(self, fpth: pathlib.Path):
         """Create markdown file from DocumentIssue object."""
@@ -116,9 +119,12 @@ def check_quarto_version() -> ty.Union[None, str]:
 
 
 def run_quarto(
-    fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path
+    fpth_md_output: pathlib.Path,
+    fpth_pdf: pathlib.Path,
+    output_format: str = "document-issue-pdf",
 ) -> subprocess.CompletedProcess:
-    """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
+    """Run quarto to convert markdown to pdf using a specified output format.
+    The default output format is the document-issue-pdf quarto extension."""
     # TODO: make quarto and latex an optional dependency. check, and flag if not installed.
     check = check_quarto_version()
     if check is None:
@@ -131,7 +137,7 @@ def run_quarto(
         "render",
         fpth_md_output.name,
         "--to",
-        "document-issue-pdf",
+        output_format,
         "-o",
         fpth_pdf.name,
     ]
@@ -161,4 +167,20 @@ def generate_document_issue_pdf(
         markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
         fpth_md_output.write_text(markdown)
         completed_process = run_quarto(fpth_md_output, fpth_pdf)
+    return completed_process
+
+
+def generate_pdf_report(
+    document_issue: DocumentIssue, fpth_pdf: pathlib.Path, *, md_content: str = ""
+) -> subprocess.CompletedProcess:
+    """Convert document issue to pdf using quarto.
+    Extra markdown content can be added to the document using `md_content`.
+    The files will be built in the parent directory of fpth_pdf."""
+    fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
+    with change_dir(fpth_pdf.parent):
+        shutil.copy(
+            src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name
+        )  # Copy footer logo to markdown document issue directory
+        title_block_a4(document_issue=document_issue)
+        completed_process = run_quarto(fpth_md_output, fpth_pdf, "pdf")
     return completed_process
