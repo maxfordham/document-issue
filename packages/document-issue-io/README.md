@@ -77,6 +77,12 @@ the `dist` directory.
 
 The hatch build hook that packages the Quarto extensions is defined in the [hatch_build.py](hatch_build.py) file.
 
+## Updating Quarto extension
+
+To pack `document-issue-quarto` and use it in this repo, run the following command (from root folder):
+
+```tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto --transform 's,^_extensions,_extensions,' _extensions```
+
 ## License
 
 `document-issue-io` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
