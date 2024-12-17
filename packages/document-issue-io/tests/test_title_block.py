@@ -4,7 +4,6 @@ from document_issue.enums import StatusRevisionEnum
 from document_issue_io.title_block import (
     title_block_a4,
     title_block_a3,
-    build_schedule_title_page_template_pdf,
 )
 
 from tests.constants import (
@@ -69,11 +68,13 @@ def test_title_block_a3():
     assert fpth.exists()
 
 
-def test_build_schedule_title_page_template_pdf():
+def test_title_page_a4():
     fpth = FPTH_SCHEDULE_TITLE_PAGE_PDF
     document_issue = create_document_issue()
     fpth.unlink(missing_ok=True)
-    build_schedule_title_page_template_pdf(
-        document_issue=document_issue, fpth_output=fpth
+    title_block_a4(
+        document_issue=document_issue,
+        fpth_output=fpth,
+        is_titlepage=True,
     )
     assert fpth.exists()

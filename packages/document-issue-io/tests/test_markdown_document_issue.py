@@ -103,7 +103,7 @@ class TestDocumentIssueMdToPdf:
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
         fpth_md = fpth_pdf.with_suffix(".md")
         checked_props = check_quarto_doc_properties(fpth_md, fpth_pdf)
-        assert all(item in ['title', 'author'] for item in checked_props) # , 'subject' 
+        assert all(item in ["title", "author"] for item in checked_props)  # , 'subject'
         # TODO: add "subject" as high-level discipline (e.g. mechanical, electrical etc.)
 
     def test_to_pdf_with_markdown_content(self):
@@ -231,4 +231,3 @@ class TestDocumentIssueMdToPdf:
         assert not (
             fpth_pdf.with_suffix(".log")
         ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
-

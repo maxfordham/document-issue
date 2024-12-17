@@ -5,8 +5,15 @@
 % REF https://ctan.org/tex-archive/fonts/carlito?lang=en
 \usepackage[sfdefault,lf]{carlito}
 
+\usepackage{geometry}
+
 % SET PAGE MARGINS
-\areaset{175mm}{240mm}
+\geometry{
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=40mm
+}
 
 % REMOVE FIGURE AND TABLE LABELS
 \usepackage{caption}
@@ -91,8 +98,9 @@
 % DEFINE \toc COMMAND
 % Make hyperlinks in table of contents black (default is blue)
 \makeatletter
-\newcommand{\toc}
-    {\hypersetup{linkcolor=black}
+\newcommand{\toc}[1][Table of Contents] % Default name is "Table of Contents"
+    {\renewcommand{\contentsname}{#1}
+    \hypersetup{linkcolor=black}
     \tableofcontents
     \hypersetup{linkcolor=blue}}
 \makeatother
