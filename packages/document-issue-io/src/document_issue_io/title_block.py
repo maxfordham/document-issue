@@ -247,13 +247,3 @@ def title_block_a3(
         doc.build(elements, onFirstPage=set_background)
     else:
         doc.build(elements)
-
-
-def build_schedule_title_page_template_pdf(
-    document_issue: DocumentIssue,
-    fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
-):
-    """Build a PDF with a title block and the Max Fordham background."""
-    title_block_a4(
-        document_issue=document_issue, fpth_output=fpth_output, is_titlepage=True
-    )

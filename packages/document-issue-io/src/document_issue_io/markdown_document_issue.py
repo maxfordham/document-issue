@@ -1,12 +1,14 @@
 import pathlib
+import re
 import shutil
 import subprocess
 import typing as ty
+from enum import Enum
 from jinja2 import Environment, FileSystemLoader
 from document_issue.document_issue import DocumentIssue
 from document_issue_io.title_block import (
-    build_schedule_title_page_template_pdf,
     title_block_a4,
+    title_block_a3,
 )
 from document_issue_io.constants import (
     DIR_TEMPLATES,
@@ -17,7 +19,6 @@ from document_issue_io.utils import (
     install_or_update_document_issue_quarto_extension,
     FPTH_FOOTER_LOGO,
 )
-import re
 
 REGEX_SEMVER = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
@@ -118,10 +119,25 @@ def check_quarto_version() -> ty.Union[None, str]:
         return quarto_version
 
 
+class OutputFormat(Enum):
+    DOCUMENT_ISSUE_NOTE = "document-issue-note-pdf"
+    DOCUMENT_ISSUE_REPORT = "document-issue-report-pdf"
+
+
+class Orientation(Enum):
+    PORTRAIT = "portrait"
+    LANDSCAPE = "landscape"
+
+
+class PaperSize(Enum):
+    A4 = "a4"
+    A3 = "a3"
+
+
 def run_quarto(
     fpth_md_output: pathlib.Path,
     fpth_pdf: pathlib.Path,
-    output_format: str = "document-issue-pdf",
+    output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using a specified output format.
     The default output format is the document-issue-pdf quarto extension."""
@@ -152,35 +168,39 @@ def run_quarto(
 
 
 def generate_document_issue_pdf(
-    document_issue: DocumentIssue, fpth_pdf: pathlib.Path, *, md_content: str = ""
-) -> subprocess.CompletedProcess:
-    """Convert document issue to pdf using quarto.
-    Extra markdown content can be added to the document using `md_content`.
-    The files will be built in the parent directory of fpth_pdf."""
+    document_issue: DocumentIssue,
+    fpth_pdf: pathlib.Path,
+    *,
+    md_content: str = "",
+    output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
+    orientation: Orientation = Orientation.PORTRAIT,
+    paper_size: PaperSize = PaperSize.A4
+):
     fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
     with change_dir(fpth_pdf.parent):
-        shutil.copy(
-            src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name
-        )  # Copy footer logo to markdown document issue directory
-        build_schedule_title_page_template_pdf(document_issue=document_issue)
+        shutil.copy(src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name)
         install_or_update_document_issue_quarto_extension()
-        markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
-        fpth_md_output.write_text(markdown)
-        completed_process = run_quarto(fpth_md_output, fpth_pdf)
-    return completed_process
-
-
-def generate_pdf_report(
-    document_issue: DocumentIssue, fpth_pdf: pathlib.Path, *, md_content: str = ""
-) -> subprocess.CompletedProcess:
-    """Convert document issue to pdf using quarto.
-    Extra markdown content can be added to the document using `md_content`.
-    The files will be built in the parent directory of fpth_pdf."""
-    fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
-    with change_dir(fpth_pdf.parent):
-        shutil.copy(
-            src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name
-        )  # Copy footer logo to markdown document issue directory
-        title_block_a4(document_issue=document_issue)
-        completed_process = run_quarto(fpth_md_output, fpth_pdf, "pdf")
-    return completed_process
+        if orientation == Orientation.PORTRAIT and paper_size == PaperSize.A4:
+            title_block_a4(
+                document_issue=document_issue,
+                fpth_output=pathlib.Path("title-page.pdf"),
+                is_titlepage=True,
+            )
+        elif orientation == Orientation.LANDSCAPE and paper_size == PaperSize.A3:
+            title_block_a3(
+                document_issue=document_issue,
+                fpth_output=pathlib.Path("title-page.pdf"),
+                is_titlepage=True,
+            )
+        else:
+            raise ValueError(
+                "Other paper sizes and orientations are not supported at this time."
+            )
+        if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
+            markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
+            fpth_md_output.write_text(markdown)
+        run_quarto(
+            fpth_md_output=fpth_md_output,
+            fpth_pdf=fpth_pdf,
+            output_format=output_format.value,
+        )
