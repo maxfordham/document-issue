@@ -3,8 +3,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/document-issue-io.svg)](https://pypi.org/project/document-issue-io)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/document-issue-io.svg)](https://pypi.org/project/document-issue-io)
 
-Document Issue IO is a Python package for generating PDF documents from
-document issue information using Quarto and ReportLab.
+Document Issue IO is a Python package for generating PDF documents from document issue information using Quarto and ReportLab.
 
 -----
 
@@ -81,7 +80,7 @@ The hatch build hook that packages the Quarto extensions is defined in the [hatc
 
 To pack `document-issue-quarto` and use it in this repo, run the following command (from root folder):
 
-```tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto --transform 's,^_extensions,_extensions,' _extensions```
+```pixi run update-quarto-extensions```
 
 ## License
 
