@@ -1,0 +1,8 @@
+$if(has-frontmatter)$
+\frontmatter
+$endif$
+
+% PREDEFINING TABLE OF CONTENTS STYLING
+% IT SHOULD GET CALLED IN THE MARKDOWN
+\addtocontents{toc}{\protect\thispagestyle{scrheadings}}
+\addtocontents{toc}{\protect\hypertarget{toc}{}}
