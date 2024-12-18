@@ -50,11 +50,6 @@ for now, `document-issue` intentionally avoids considering the datafields that
 are used to create the Document Number, this may follow up in the future.
 ```
 
-## License
-
-`document-issue` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
-
-
 ## Development Install
 
 ```{warning}
@@ -62,26 +57,27 @@ are used to create the Document Number, this may follow up in the future.
 For dev instructions see: `packages/document-issue-xl/README.md`
 ```
 
+We use [pixi](https://prefix.dev/) to manage the monorepo. Install `pixi` (on linux) with the following command:
+
+```bash
+curl -fsSL https://pixi.sh/install.sh | bash
+```
+
 If using VSCode, we recommend using the [`document-issue.code-workspace`](./.vscode/document-issue.code-workspace) file to open the project.
 
-To install the environment and packages for development, run the following commands:
+To install the environment and packages for development, run the following commands from ROOT:
 
-```console
-# run line by line
+```bash
+pixi install
+```
 
-mamba env create -f environment.yml
-mamba activate document-issue-dev
-mamba install xlwings #  left out of standard install due to Win dependency
-# ^ base install of dev env (python, pytest, black etc.)
-
-pip install -e packages/document-issue-ui
-# ^ remove ui install from env file as the env file is used for CI 
-#   and we don't need the ui deps for CI tests. 
-
+Install latex engine:
+```bash
 quarto install tinytex
-# ^ installs latex engine...
+```
 
-# if required... 
+Install `libfontconfig` if required:
+```bash 
 sudo apt-get update
 sudo apt-get install libfontconfig
 ```
@@ -118,3 +114,7 @@ roles:
 scale: NTS
 size: 
 ```
+
+## License
+
+`document-issue` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
