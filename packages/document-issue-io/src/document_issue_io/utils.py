@@ -27,7 +27,7 @@ def update_document_issue_quarto_extension():
     subprocess.run(["quarto", "update", str(FPTH_INSTALL_TAR), "--no-prompt"])
 
 
-def install_or_update_document_issue_quarto_extension():
+def install_or_update_document_issue_quarto_extensions():
     FPTH_DOCUMENT_ISSUE_NOTE_INSTALL_PTH = (
         pathlib.Path.cwd() / "_extensions" / "document-issue-note"
     )

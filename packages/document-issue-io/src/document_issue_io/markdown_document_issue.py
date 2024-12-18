@@ -16,7 +16,7 @@ from document_issue_io.constants import (
 )
 from document_issue_io.utils import (
     change_dir,
-    install_or_update_document_issue_quarto_extension,
+    install_or_update_document_issue_quarto_extensions,
     FPTH_FOOTER_LOGO,
 )
 
@@ -180,7 +180,7 @@ def generate_document_issue_pdf(
     fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
     with change_dir(fpth_pdf.parent):
         shutil.copy(src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name)
-        install_or_update_document_issue_quarto_extension()
+        install_or_update_document_issue_quarto_extensions()
         if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
             is_title_page = True
             fpth_output = pathlib.Path("title-page.pdf")
