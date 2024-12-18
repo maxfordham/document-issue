@@ -137,7 +137,6 @@ class PaperSize(Enum):
 def run_quarto(
     fpth_md_output: pathlib.Path,
     fpth_pdf: pathlib.Path,
-    output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using a specified output format.
     The default output format is the document-issue-pdf quarto extension."""
@@ -152,8 +151,6 @@ def run_quarto(
         "quarto",
         "render",
         fpth_md_output.name,
-        "--to",
-        output_format.value,
         "-o",
         fpth_pdf.name,
     ]
@@ -212,7 +209,11 @@ def generate_document_issue_pdf(
         import yaml
 
         yaml.dump(
-            {"classoption": orientation.value, "papersize": paper_size.value},
+            {
+                "format": output_format.value,
+                "classoption": orientation.value,
+                "papersize": paper_size.value,
+            },
             open("_quarto.yaml", "w"),
         )
         if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
@@ -223,5 +224,4 @@ def generate_document_issue_pdf(
         run_quarto(
             fpth_md_output=fpth_md_output,
             fpth_pdf=fpth_pdf,
-            output_format=output_format,
         )
