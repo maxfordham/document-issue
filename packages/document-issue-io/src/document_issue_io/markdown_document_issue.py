@@ -2,6 +2,7 @@ import pathlib
 import re
 import shutil
 import subprocess
+import yaml
 import typing as ty
 from enum import Enum
 from jinja2 import Environment, FileSystemLoader
@@ -205,9 +206,7 @@ def generate_document_issue_pdf(
             raise ValueError(
                 "Other paper sizes and orientations are not supported at this time."
             )
-        # Create quarto yaml defining the orientation and paper size
-        import yaml
-
+        # Create quarto yaml defining the output format, orientation, and paper size
         yaml.dump(
             {
                 "format": output_format.value,
