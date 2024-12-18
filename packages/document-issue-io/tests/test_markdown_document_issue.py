@@ -5,6 +5,9 @@ from polyfactory.factories.pydantic_factory import ModelFactory
 from document_issue.document_issue import DocumentIssue, Issue
 from document_issue.issue import StatusRevisionEnum
 from document_issue_io.markdown_document_issue import (
+    Orientation,
+    PaperSize,
+    OutputFormat,
     MarkdownDocumentIssue,
     generate_document_issue_pdf,
 )
@@ -81,7 +84,7 @@ MD = """
 """
 
 
-class TestDocumentIssueMdToPdf:
+class TestDocumentIssueReport:
     """Test the function `generate_document_issue_pdf`."""
 
     def test_to_pdf(self):
@@ -105,6 +108,27 @@ class TestDocumentIssueMdToPdf:
         checked_props = check_quarto_doc_properties(fpth_md, fpth_pdf)
         assert all(item in ["title", "author"] for item in checked_props)  # , 'subject'
         # TODO: add "subject" as high-level discipline (e.g. mechanical, electrical etc.)
+
+    def test_to_pdf_a3_landscape(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_a3_landscape"
+        shutil.rmtree(FDIR_RENDER, ignore_errors=True)
+        FDIR_RENDER.mkdir(parents=True, exist_ok=True)
+        document_issue = create_test_document_issue()
+        document_issue.format_configuration.output_author = False
+        document_issue.format_configuration.output_checked_by = False
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        generate_document_issue_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
+            md_content="Test A3 Landscape Document Issue Note",
+            orientation=Orientation.LANDSCAPE,
+            paper_size=PaperSize.A3,
+        )
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
+        assert not (
+            fpth_pdf.with_suffix(".log")
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
 
     def test_to_pdf_with_markdown_content(self):
         FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_with_markdown_content"
@@ -225,6 +249,52 @@ class TestDocumentIssueMdToPdf:
         generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
+        )
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
+        assert not (
+            fpth_pdf.with_suffix(".log")
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
+
+
+class TestDocumentIssueNote:
+    def test_to_pdf_document_issue_note_a4_portrait(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_a4_portrait_note"
+        shutil.rmtree(FDIR_RENDER, ignore_errors=True)
+        FDIR_RENDER.mkdir(parents=True, exist_ok=True)
+        document_issue = create_test_document_issue()
+        document_issue.format_configuration.output_author = False
+        document_issue.format_configuration.output_checked_by = False
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        generate_document_issue_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
+            md_content="Test A4 Portrait Document Issue Note",
+            output_format=OutputFormat.DOCUMENT_ISSUE_NOTE,
+            orientation=Orientation.PORTRAIT,
+            paper_size=PaperSize.A4,
+        )
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
+        assert not (
+            fpth_pdf.with_suffix(".log")
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
+
+    def test_to_pdf_document_issue_note_a3_landscape(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf_a3_landscape_note"
+        shutil.rmtree(FDIR_RENDER, ignore_errors=True)
+        FDIR_RENDER.mkdir(parents=True, exist_ok=True)
+        document_issue = create_test_document_issue()
+        document_issue.format_configuration.output_author = False
+        document_issue.format_configuration.output_checked_by = False
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        generate_document_issue_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
+            md_content="Test A3 Landscape Document Issue Note",
+            output_format=OutputFormat.DOCUMENT_ISSUE_NOTE,
+            orientation=Orientation.LANDSCAPE,
+            paper_size=PaperSize.A3,
         )
         assert fpth_pdf.with_suffix(".md").is_file()
         assert fpth_pdf.is_file()

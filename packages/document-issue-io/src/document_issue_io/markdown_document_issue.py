@@ -153,7 +153,7 @@ def run_quarto(
         "render",
         fpth_md_output.name,
         "--to",
-        output_format,
+        output_format.value,
         "-o",
         fpth_pdf.name,
     ]
@@ -176,31 +176,52 @@ def generate_document_issue_pdf(
     orientation: Orientation = Orientation.PORTRAIT,
     paper_size: PaperSize = PaperSize.A4
 ):
+    """Generate a PDF document from a DocumentIssue object with any markdown content.
+    The output format can be a document issue report or note.
+    The orientation can be portrait or landscape.
+    The paper size can be A4 or A3."""
     fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
     with change_dir(fpth_pdf.parent):
         shutil.copy(src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name)
         install_or_update_document_issue_quarto_extension()
+        if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
+            is_title_page = True
+            fpth_output = pathlib.Path("title-page.pdf")
+        elif output_format == OutputFormat.DOCUMENT_ISSUE_NOTE:
+            is_title_page = False
+            fpth_output = pathlib.Path("title-block.pdf")
+        else:
+            raise ValueError("Other output formats are not supported at this time.")
         if orientation == Orientation.PORTRAIT and paper_size == PaperSize.A4:
             title_block_a4(
                 document_issue=document_issue,
-                fpth_output=pathlib.Path("title-page.pdf"),
-                is_titlepage=True,
+                fpth_output=fpth_output,
+                is_titlepage=is_title_page,
             )
         elif orientation == Orientation.LANDSCAPE and paper_size == PaperSize.A3:
             title_block_a3(
                 document_issue=document_issue,
-                fpth_output=pathlib.Path("title-page.pdf"),
-                is_titlepage=True,
+                fpth_output=fpth_output,
+                is_titlepage=is_title_page,
             )
         else:
             raise ValueError(
                 "Other paper sizes and orientations are not supported at this time."
             )
+        # Create quarto yaml defining the orientation and paper size
+        import yaml
+
+        yaml.dump(
+            {"classoption": orientation.value, "papersize": paper_size.value},
+            open("_quarto.yaml", "w"),
+        )
         if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
             markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
-            fpth_md_output.write_text(markdown)
+        elif output_format == OutputFormat.DOCUMENT_ISSUE_NOTE:
+            markdown = md_content
+        fpth_md_output.write_text(markdown)
         run_quarto(
             fpth_md_output=fpth_md_output,
             fpth_pdf=fpth_pdf,
-            output_format=output_format.value,
+            output_format=output_format,
         )

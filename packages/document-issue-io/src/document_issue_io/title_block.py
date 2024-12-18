@@ -155,12 +155,14 @@ def create_title_block_table(data: list, is_a3=False) -> Table:
     return table
 
 
-def set_background(canvas: canvas, doc: SimpleDocTemplate):
+def set_background(
+    canvas: canvas,
+    doc: SimpleDocTemplate,
+):
     """Create function that will set the Max Fordham background."""
     FPTH_MF_TITLE = DIR_MEDIA / "mf-title.png"
     image = PIL.Image.open(FPTH_MF_TITLE)
     mf_title_width, mf_title_height = image.size
-
     FPTH_MF_BACKGROUND = DIR_MEDIA / "mf-background.png"
     image = PIL.Image.open(FPTH_MF_BACKGROUND)
     mf_background_width, mf_background_height = image.size
@@ -168,14 +170,14 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
     canvas.saveState()
     canvas.drawImage(
         FPTH_MF_BACKGROUND,
-        x=170,
+        x=170 if doc.pagesize == A4 else A4[0] + 170,
         y=0,
         width=mf_background_width * a4_image_ratio,
         height=A4[1],
     )
     canvas.drawImage(
         FPTH_MF_TITLE,
-        x=535,
+        x=535 if doc.pagesize == A4 else A4[0] + 535,
         y=510,
         width=0.35 * mf_title_width,
         height=0.35 * mf_title_height,
