@@ -174,6 +174,15 @@ if __name__ == "__main__":
             r"J:\J7251\Project Management\Job Running\Issue Sheet\J7251 - DocumentNumberGenerator1 - V2.xlsm"
         )  # tina - done
 
+        fpth = pathlib.Path(
+            r"J:\J6771\Issue Sheet\6771 Issue Sheet_DocumentNumberGenerator.xlsm"
+        )  # cheryl - done
+
+
+        # --- LOCAL DEV ---
+        # fpth = pathlib.Path(__file__).parent.parent.parent / "xl" / "DocumentNumberGenerator.xlsm"
+        # ---
+
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()
     else:
