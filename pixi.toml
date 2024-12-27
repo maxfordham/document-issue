@@ -17,6 +17,7 @@ document-issue-io = { path = "packages/document-issue-io", extras = [
 document-issue = { path = "packages/document-issue", editable = true }
 document-issue-api = { path = "packages/document-issue-api", editable = true }
 document-issue-ui = { path = "packages/document-issue-ui", editable = true }
+pytest-examples = ">=0.0.15, <0.0.16"
 
 [tasks]
 tests = """
