@@ -1,0 +1,35 @@
+code,description
+AF-0,Animation File
+BQ-0,Bill of Quantities
+CA-0,Calculations
+CM-0,Combined model
+CO-0,Correspondence
+CP-0,Cost Plan
+CR-0,Clash Rendition/Document
+DB-0,Database
+DR-0,Drawing
+FM-0,Federated Model
+FN-0,File Note
+HS-0,Health and Safety
+IE-0,Information Exchange File
+IM-0,Images/Photos
+IS-0,Issue Sheet
+M2-0,2D model
+M3-0,3D model file
+MI-0,Minutes/Agenda/Actions
+MR-0,"Model Rendering/Other
+Models (e.g. Thermal Models)"
+MS-0,Method Statement
+PP-0,Presentation
+PR-0,Programme
+RD-0,Room Data Sheet
+RI-0,Request For Information (RFI)
+RP-0,Report
+RR-0,Risk Register
+SA-0,Schedule of Accommodation
+SH-0,Schedule
+SK-0,Sketch
+SN-0,Snagging List
+SP-0,Specification
+SU-0,Survey
+VS -0,Visualisation

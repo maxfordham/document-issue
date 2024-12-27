@@ -21,6 +21,9 @@
         },
         {
             "path": "../packages/document-issue-xl"
+        },
+        {
+            "path": "../packages/document-classification"
         }
     ],
     "settings": {

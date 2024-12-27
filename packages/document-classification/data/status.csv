@@ -1,0 +1,16 @@
+code,description
+S0,P - work in progress - Preliminary revision and version - Initial Status
+S1,P - shared (non-contractual) - Preliminary revision - Suitable for Coordination
+S2,P - shared (non-contractual) - Preliminary revision - Suitable for Information
+S3,P - shared (non-contractual) - Preliminary revision - Suitable for review and comment
+S4,P - shared (non-contractual) - Preliminary revision - Suitable for stage approval
+S5,P - shared (non-contractual) - Preliminary revision - Suitable for Review and Acceptance
+S6,P - shared (non-contractual) - Preliminary revision - Withdrawn
+S7,P - shared (non-contractual) - Preliminary revision - Suitable for PIM authorization
+S8,P - shared (non-contractual) - Preliminary revision - Suitable for AIM authorization
+A1,C - published (contractual) - Contractual revision - Issued for Tender (1st Stage)
+A2,C - published (contractual) - Contractual revision - Issued for Tender (2nd Stage)
+A3,C - published (contractual) - Contractual revision - Issued for Contract
+A4,"C - published (contractual) - Contractual revision - Issued for Contractor design, procurement & coordination"
+A5,"C - published (contractual) - Contractual revision - Issued for procurement, manufacture & installation"
+CR,C - published (for AIM acceptance) - Contractual revision - As constructed record document
