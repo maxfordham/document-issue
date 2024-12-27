@@ -1,20 +1,17 @@
 import typing as ty
 from tabulate import tabulate
 from pydantic import (
-    field_validator,
-    BaseModel,
-    Field,
     AfterValidator,
     BeforeValidator,
 )
 from typing_extensions import Annotated
 from document_issue.project import ProjectBase
 from document_issue.enums import RoleEnum
-from document_issue.basemodel import BaseModel, Field
+from document_issue.basemodel import Field
 from document_issue.issue import Issue
 from document_issue.role import DocumentRole
 from document_issue.document import Document
-
+from document_issue.codes import Project, Classification, InformationType, Originator, FunctionalBreakdown, Level, Volume
 # ------------------------------------------------------------------------------------------
 # NOTE: the DocumentIssue shown here is the ideal output presentation for a single document.
 #       it is not the closest representation of what is in the database. The data will need
@@ -162,10 +159,17 @@ class DocumentIssue(Document, ProjectBase):
     #     return v
 
 
-class Classification(BaseModel):
-    pass
-
 
 class DocumentIssueClassification(DocumentIssue):
     classification: Classification = Field(None)  # TODO: add classification
     # roles: ty.List[Role] #TODO add roles
+
+
+class DocumentIssueV2(DocumentIssue): # allow None now... but will make these required fields eventually
+    project: ty.Optional[Project] = None
+    originator: ty.Optional[Originator] = None
+    classification: ty.Optional[Classification] = None
+    information_type: ty.Optional[InformationType] = None
+    functional_breakdown: ty.Optional[FunctionalBreakdown] = None
+    level: ty.Optional[Level] = None
+    volume: ty.Optional[Volume] = None

@@ -1,9 +1,9 @@
-from document_issue.basemodel import BaseModel, Field, validator
+from document_issue.basemodel import BaseModel, Field
 from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 from document_issue.constants import COL_WIDTH
 import datetime
 import typing as ty
-from pydantic import field_validator, model_validator, ConfigDict, computed_field
+from pydantic import field_validator, model_validator
 
 
 description_author = "the person who authored the work."
