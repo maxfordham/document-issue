@@ -27,6 +27,7 @@ dependencies = [
     "pydantic",
     "jinja2",
     "reportlab",
+    "frictionless[json]>5"
     # document-issue # TODO: How do we get this to install?
 ]
 
