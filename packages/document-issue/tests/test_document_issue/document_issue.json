@@ -1,0 +1,66 @@
+{
+    "client_name": "Test Client",
+    "project_number": 5003,
+    "project_code": "J5003",
+    "project_name": "In House App Testing",
+    "project_address": null,
+    "name_nomenclature": "project-originator-volume-level-infotype-role-number",
+    "document_code": "06667-MXF-XX-XX-SH-M-20003",
+    "document_description": "Document Description",
+    "document_source": "WD",
+    "paper_size": "A4",
+    "scale": "nts",
+    "originator": "Max Fordham LLP",
+    "notes": [
+        "add notes here"
+    ],
+    "format_configuration": {
+        "date_string_format": "%d %^b %y",
+        "output_author": false,
+        "output_checked_by": false
+    },
+    "document_role": [
+        {
+            "initials": "DR",
+            "role_name": "Director in Charge"
+        }
+    ],
+    "issue_history": [
+        {
+            "revision_number": 1,
+            "date": "2021-01-01",
+            "status_revision": "S0 - work in progress - P - Preliminary revision and version - Initial Status",
+            "revision": "P01",
+            "status_code": "S0",
+            "status_description": "Initial Status",
+            "author": "EG",
+            "checked_by": "CK",
+            "issue_format": "Uploaded to the project common data environment",
+            "issue_notes": ""
+        },
+        {
+            "revision_number": 1,
+            "date": "2021-01-02",
+            "status_revision": "S2 - shared (non-contractual) - P - Preliminary revision - Suitable for Information",
+            "revision": "P01",
+            "status_code": "S2",
+            "status_description": "Suitable for Information",
+            "author": "EG",
+            "checked_by": "CK",
+            "issue_format": "Uploaded to the project common data environment",
+            "issue_notes": ""
+        },
+        {
+            "revision_number": 1,
+            "date": "2021-01-03",
+            "status_revision": "S3 - shared (non-contractual) - P - Preliminary revision - Suitable for Review and Comment",
+            "revision": "P01",
+            "status_code": "S3",
+            "status_description": "Suitable for Review and Comment",
+            "author": "EG",
+            "checked_by": "CK",
+            "issue_format": "Uploaded to the project common data environment",
+            "issue_notes": ""
+        }
+    ]
+}

@@ -1,4 +1,9 @@
 ---
+project: A Max Fordham Project & Co
+title: A description of a Max Fordham Project
+author: 
+  - Max Fordham LLP
+# ^ standard document properties. see: https://quarto.org/docs/reference/formats/pdf.html
 project_name: A Max Fordham Project \\& Co
 project_number : 4321
 director_in_charge: OH
@@ -6,10 +11,10 @@ document_description: A description of a Max Fordham Project
 document_code: 06667-MXF-XX-XX-SH-M-20003
 name_nomenclature: project-originator-volume-level-type-role-number
 current_issue:
-    date: 2020-01-02
-    revision: P01
-    status_code: S0
-    status_description: Initial Status
+  date: 2020-01-02
+  revision: P01
+  status_code: S0
+  status_description: Initial Status
 footer-logo: footer-logo.png
 title-page: title-page.pdf
 ---

@@ -1,20 +1,25 @@
 import pathlib
+import re
 import shutil
 import subprocess
+import yaml
 import typing as ty
+from enum import Enum
 from jinja2 import Environment, FileSystemLoader
 from document_issue.document_issue import DocumentIssue
-from document_issue_io.title_block import build_schedule_title_page_template_pdf
+from document_issue_io.title_block import (
+    title_block_a4,
+    title_block_a3,
+)
 from document_issue_io.constants import (
     DIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
 )
 from document_issue_io.utils import (
     change_dir,
-    install_or_update_document_issue_quarto_extension,
+    install_or_update_document_issue_quarto_extensions,
     FPTH_FOOTER_LOGO,
 )
-import re
 
 REGEX_SEMVER = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
@@ -94,7 +99,7 @@ class MarkdownDocumentIssue:
             md_issue_history=self.md_issue_history,
             md_roles=self.md_roles,
             md_notes=self.md_notes,
-        ) # TODO: add major discipline as "subject" document metadata property
+        )  # TODO: add major discipline as "subject" document metadata property
 
     def to_file(self, fpth: pathlib.Path):
         """Create markdown file from DocumentIssue object."""
@@ -115,10 +120,27 @@ def check_quarto_version() -> ty.Union[None, str]:
         return quarto_version
 
 
+class OutputFormat(Enum):
+    DOCUMENT_ISSUE_NOTE = "document-issue-note-pdf"
+    DOCUMENT_ISSUE_REPORT = "document-issue-report-pdf"
+
+
+class Orientation(Enum):
+    PORTRAIT = "portrait"
+    LANDSCAPE = "landscape"
+
+
+class PaperSize(Enum):
+    A4 = "a4"
+    A3 = "a3"
+
+
 def run_quarto(
-    fpth_md_output: pathlib.Path, fpth_pdf: pathlib.Path
+    fpth_md_output: pathlib.Path,
+    fpth_pdf: pathlib.Path,
 ) -> subprocess.CompletedProcess:
-    """Run quarto to convert markdown to pdf using document-issue-pdf quarto extension."""
+    """Run quarto to convert markdown to pdf using a specified output format.
+    The default output format is the document-issue-pdf quarto extension."""
     # TODO: make quarto and latex an optional dependency. check, and flag if not installed.
     check = check_quarto_version()
     if check is None:
@@ -130,8 +152,6 @@ def run_quarto(
         "quarto",
         "render",
         fpth_md_output.name,
-        "--to",
-        "document-issue-pdf",
         "-o",
         fpth_pdf.name,
     ]
@@ -146,19 +166,61 @@ def run_quarto(
 
 
 def generate_document_issue_pdf(
-    document_issue: DocumentIssue, fpth_pdf: pathlib.Path, *, md_content: str = ""
-) -> subprocess.CompletedProcess:
-    """Convert document issue to pdf using quarto.
-    Extra markdown content can be added to the document using `md_content`.
-    The files will be built in the parent directory of fpth_pdf."""
+    document_issue: DocumentIssue,
+    fpth_pdf: pathlib.Path,
+    *,
+    md_content: str = "",
+    output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
+    orientation: Orientation = Orientation.PORTRAIT,
+    paper_size: PaperSize = PaperSize.A4
+):
+    """Generate a PDF document from a DocumentIssue object with any markdown content.
+    The output format can be a document issue report or note.
+    The orientation can be portrait or landscape.
+    The paper size can be A4 or A3."""
     fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
     with change_dir(fpth_pdf.parent):
-        shutil.copy(
-            src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name
-        )  # Copy footer logo to markdown document issue directory
-        build_schedule_title_page_template_pdf(document_issue=document_issue)
-        install_or_update_document_issue_quarto_extension()
-        markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
+        shutil.copy(src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name)
+        install_or_update_document_issue_quarto_extensions()
+        if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
+            is_title_page = True
+            fpth_output = pathlib.Path("title-page.pdf")
+        elif output_format == OutputFormat.DOCUMENT_ISSUE_NOTE:
+            is_title_page = False
+            fpth_output = pathlib.Path("title-block.pdf")
+        else:
+            raise ValueError("Other output formats are not supported at this time.")
+        if orientation == Orientation.PORTRAIT and paper_size == PaperSize.A4:
+            title_block_a4(
+                document_issue=document_issue,
+                fpth_output=fpth_output,
+                is_titlepage=is_title_page,
+            )
+        elif orientation == Orientation.LANDSCAPE and paper_size == PaperSize.A3:
+            title_block_a3(
+                document_issue=document_issue,
+                fpth_output=fpth_output,
+                is_titlepage=is_title_page,
+            )
+        else:
+            raise ValueError(
+                "Other paper sizes and orientations are not supported at this time."
+            )
+        # Create quarto yaml defining the output format, orientation, and paper size
+        yaml.dump(
+            {
+                "format": output_format.value,
+                "classoption": orientation.value,
+                "papersize": paper_size.value,
+            },
+            open("_quarto.yaml", "w"),
+        )
+        if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
+            markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
+        elif output_format == OutputFormat.DOCUMENT_ISSUE_NOTE:
+            markdown = md_content
         fpth_md_output.write_text(markdown)
-        completed_process = run_quarto(fpth_md_output, fpth_pdf)
-    return completed_process
+        run_quarto(
+            fpth_md_output=fpth_md_output,
+            fpth_pdf=fpth_pdf,
+        )

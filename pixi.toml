@@ -1,0 +1,36 @@
+[project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+name = "document-issue"
+
+[dependencies]
+python = ">=3.8"
+rich = ">=13.9.3,<14"
+pytest = "*"
+pre-commit = ">=4.0.1,<5"
+ipykernel = ">=6.29.5,<7"
+
+[pypi-dependencies]
+document-issue-io = { path = "packages/document-issue-io", extras = [
+    "dev",
+], editable = true }
+document-issue = { path = "packages/document-issue", editable = true }
+document-issue-api = { path = "packages/document-issue-api", editable = true }
+document-issue-ui = { path = "packages/document-issue-ui", editable = true }
+
+[tasks]
+tests = """
+    cd packages/document-issue
+&&  pytest 
+&&  cd ../document-issue-quarto 
+&&  pytest 
+&&  cd ../document-issue-io 
+&&  pytest 
+&&  cd ../document-issue-api 
+&&  pytest
+"""
+test-document-issue = "cd packages/document-issue && pytest"
+test-document-issue-quarto = "cd packages/document-issue-quarto && pytest"
+test-document-issue-io = "cd packages/document-issue-io && pytest"
+test-document-issue-api = "cd packages/document-issue-api && pytest"
+update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"

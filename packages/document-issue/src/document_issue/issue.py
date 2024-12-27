@@ -67,7 +67,7 @@ class Issue(BaseModel):
         description=(
             "free field where the Engineer can briefly summarise changes/progress."
         ),
-        max_length=1e8,
+        max_length=10000,
         json_schema_extra=dict(column_width=300),
     )
 
