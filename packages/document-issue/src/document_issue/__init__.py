@@ -16,9 +16,17 @@ def demo_document_issue():
     document_issue = DocumentIssue(
         document_role=[DocumentRole(**{"role_name": RoleEnum.director, "name": "DR"})],
         issue_history=[issue],
+        notes=[
+                    "This is a note",
+                    "This is another note",
+                    (
+                        "This is a very long note which states something important about the"
+                        " document issue"
+                    ),
+                ],
     )
     document_issue.project_name = (
-        "A Max Fordham Project: Rotunda Refurbishment part 1 million"
+        "Rotunda Refurbishment"
     )
     document_issue.client_name = "Max Fordham LLP Partnership"
     document_issue.project_number = "J4321"

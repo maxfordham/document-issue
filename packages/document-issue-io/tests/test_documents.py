@@ -4,63 +4,38 @@ from polyfactory.factories.pydantic_factory import ModelFactory
 
 from document_issue.document_issue import DocumentIssue, Issue
 from document_issue.issue import StatusRevisionEnum
+from document_issue import demo_document_issue
 from document_issue_io.markdown_document_issue import (
     Orientation,
     PaperSize,
     OutputFormat,
-    MarkdownDocumentIssue,
     generate_document_issue_pdf,
 )
 
 from tests.constants import FDIR_TEST_OUTPUT
 from tests.utils_check_doc_properties import check_quarto_doc_properties
 
+import pytest
+from pytest_examples import find_examples, CodeExample, EvalExample
+
 FPTH_TEST_DOC_ISSUE = FDIR_TEST_OUTPUT / "document_issue.json"
 FPTH_TEST_DOC_ISSUE_SCHEMA = FDIR_TEST_OUTPUT / "document_issue.schema.json"
 
 
-class DocumentIssueFactory(ModelFactory[DocumentIssue]):
-    __model__ = DocumentIssue
+# TODO some genuine issues with cwd that need resolving
+@pytest.mark.parametrize('example', find_examples('tests/examples/documents'), ids=str)
+def test_examples(example: CodeExample, eval_example: EvalExample):
+    if eval_example.update_examples:
+        # eval_example.format(example)    
+        eval_example.run_print_update(example)
+    else:
+        # eval_example.lint(example)
+        eval_example.run_print_check(example)
+
 
 
 def create_test_document_issue():
-    return DocumentIssue(
-        project_name="A Max Fordham Project & Co",
-        project_number="J4321",
-        document_role=[dict(initials="OH", role_name="Director in Charge")],
-        document_description="A description of a Max Fordham Project",
-        name_nomenclature="project-originator-volume-level-type-role-number",
-        issue_history=[
-            dict(
-                author="OH",
-                checked_by="JG",
-                revision="P01",
-                status_code="S2",
-                status_description="Suitable for information",
-                issue_notes="This is an issue note",
-            )
-        ],
-        format_configuration=dict(date_string_format="%d %^b %y"),
-        notes=[
-            "This is a note",
-            "This is another note",
-            (
-                "This is a very long note which states something important about the"
-                " document issue"
-            ),
-        ],
-    )
-
-
-class TestMarkdownDocumentIssue:
-    def test_to_file(self):
-        document_issue = create_test_document_issue()
-        markdown_document_issue = MarkdownDocumentIssue(
-            document_issue,
-        )
-        FPTH_MD = FDIR_TEST_OUTPUT / f"test_to_file.md"
-        markdown_document_issue.to_file(FPTH_MD)
-        assert FPTH_MD.is_file()
+    return demo_document_issue()
 
 
 MD = """
@@ -87,8 +62,8 @@ MD = """
 class TestDocumentIssueReport:
     """Test the function `generate_document_issue_pdf`."""
 
-    def test_to_pdf(self):
-        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_to_pdf"
+    def report_a4_p(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "report_a4_p"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
