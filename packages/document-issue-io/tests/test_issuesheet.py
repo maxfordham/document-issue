@@ -1,17 +1,32 @@
-from document_issue_io.issuesheet import write_issuesheet_and_issuehistory
 import pathlib
+from document_issue_io.issuesheet import write_issuesheet_and_issuehistory
+from tests.constants import FDIR_TEST_OUTPUT
+import pytest
+from pytest_examples import find_examples, CodeExample, EvalExample
 
 FDIR_TESTS = pathlib.Path(__file__).parent
 FDIR_DATAPACKAGE = FDIR_TESTS / "datapackage"
 FDIR_DATAPACKAGE_CUSTOM = FDIR_TESTS / "datapackage-custom-nomenclature"
 FDIR_DATAPACKAGE_OLD = FDIR_TESTS / "datapackage-xl-v0_0_12"
-FDIR_TESTOUTPUT = FDIR_TESTS / "testoutput"
 
+
+@pytest.mark.parametrize('example', find_examples('tests/examples/issuesheet'), ids=str)
+def test_examples(example: CodeExample, eval_example: EvalExample):
+    if eval_example.update_examples:
+        eval_example.format(example)    
+        eval_example.run_print_update(example)
+    else:
+        # eval_example.lint(example)
+        eval_example.run_print_check(example)
+
+
+
+def delete_existing(fdir, glob_str):
+    [x.unlink(missing_ok=True) for x in list(fdir.glob(glob_str))]
+        
 
 def run_issue_sheet_tests(fdir_datapackage, glob_str):
-    fpths = list(FDIR_TESTOUTPUT.glob(glob_str))
-    for l in fpths:
-        l.unlink(missing_ok=True)
+    delete_existing(FDIR_TEST_OUTPUT, glob_str)
     fpth_issuesheet, fpths_issuehistory = write_issuesheet_and_issuehistory(
         fdir_datapackage
     )

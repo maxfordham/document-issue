@@ -1,6 +1,6 @@
 # TODO: setup auto-update pixi.lock https://pixi.sh/latest/advanced/updates_github_actions/#how-to-use
 
-name: Test and Lint
+name: Test, Lint and Build Docs
 
 on:
     push:
@@ -24,3 +24,9 @@ jobs:
           quarto install tinytex
         shell: pixi run bash -e {0}
       - run: pixi run tests
+      - run: pixi run build-docs
+      - name: Push docs to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs/_site

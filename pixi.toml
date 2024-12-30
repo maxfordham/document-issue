@@ -9,6 +9,8 @@ rich = ">=13.9.3,<14"
 pytest = "*"
 pre-commit = ">=4.0.1,<5"
 ipykernel = ">=6.29.5,<7"
+erdantic = "*"
+# eralchemy = "*"
 
 [pypi-dependencies]
 document-issue-io = { path = "packages/document-issue-io", extras = [
@@ -30,8 +32,11 @@ tests = """
 &&  cd ../document-issue-api 
 &&  pytest
 """
-test-document-issue = "cd packages/document-issue && pytest"
-test-document-issue-quarto = "cd packages/document-issue-quarto && pytest"
+test-document-issue = { cmd = "pytest", cwd = "packages/document-issue"}
+test-document-issue-quarto =  "cd packages/document-issue-quarto && pytest"
 test-document-issue-io = "cd packages/document-issue-io && pytest"
 test-document-issue-api = "cd packages/document-issue-api && pytest"
 update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"
+build-docs = { cmd = "quarto render .", cwd = "docs"} #, depends-on = ["test-document-issue-io"]
+preview-docs = { cmd = "quarto preview .", cwd = "docs"}
+update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io"} 
