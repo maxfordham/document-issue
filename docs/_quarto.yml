@@ -1,19 +1,21 @@
 project:
   type: website
-  pre-render: 
-    - ./_make_erd.sh
+  # pre-render: 
+    # - ./_make_erd.sh
 website:
   # title: "document-issue"
-  image: images/document-icon.png
+  image: images/logo.png
   site-url: https://github.com/maxfordham/document-issue
   repo-url: https://github.com/maxfordham/document-issue
-  favicon: "images/document-icon.png"
+  favicon: "images/logo.png"
   page-navigation: true
   navbar:
-    logo: "images/document-icon.png"
+    logo: "images/logo.png"
     left:
       - text: "document-issue"
         href: document-issue/index.html
+      - text: "example-documents"
+        href: example-documents.html
       - text: "document-issue-io"
         href: document-issue-io/index.html
       - text: "document-issue-api"
@@ -31,28 +33,41 @@ website:
   sidebar:
     - id: document-issue
       title: "document-issue"
-      logo: "images/document-icon.png"
+      logo: "images/logo.png"
       style: "docked"
       collapse-level: 2
       align: left
       contents:
         - document-issue/index.qmd
         - document-issue/documents-review.qmd
+        - multiproject-jobs.qmd
         - text: "Entity Relationship Diagram"
           href: document-issue/erd.qmd
 
     - id: document-issue-io
       title: "document-issue-io"
-      logo: "images/document-icon.png"
+      logo: "images/logo.png"
       style: "docked"
       collapse-level: 2
       align: left
       contents:
         - document-issue-io/index.qmd
 
+    - id: example-documents
+      title: "example-documents"
+      logo: "images/logo.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - example-documents.qmd
+        - text: examples
+          contents: example-documents/*
+
+
     - id: document-issue-api
       title: "document-issue-api"
-      logo: "images/document-icon.png"
+      logo: "images/logo.png"
       style: "docked"
       collapse-level: 2
       align: left

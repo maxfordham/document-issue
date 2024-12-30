@@ -1,0 +1,6 @@
+---
+title: "Example Documents"
+---
+
+The metadata saved in `document-issue` is used to make title blocks and other information on issued documents.
+See  
