@@ -22,21 +22,14 @@ document-issue-ui = { path = "packages/document-issue-ui", editable = true }
 pytest-examples = ">=0.0.15, <0.0.16"
 
 [tasks]
-tests = """
-    cd packages/document-issue
-&&  pytest 
-&&  cd ../document-issue-quarto 
-&&  pytest 
-&&  cd ../document-issue-io 
-&&  pytest 
-&&  cd ../document-issue-api 
-&&  pytest
-"""
+ 
 test-document-issue = { cmd = "pytest", cwd = "packages/document-issue"}
-test-document-issue-quarto =  "cd packages/document-issue-quarto && pytest"
-test-document-issue-io = "cd packages/document-issue-io && pytest"
-test-document-issue-api = "cd packages/document-issue-api && pytest"
+test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto"}
+test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io"}
+test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api"}
+update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io"}
 update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"
 build-docs = { cmd = "quarto render .", cwd = "docs"} #, depends-on = ["test-document-issue-io"]
 preview-docs = { cmd = "quarto preview .", cwd = "docs"}
-update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io"} 
+demo-ui = { cmd = "voila demo.ipynb", cwd = "packages/document-issue-ui"} 
+tests = { depends-on = ["test-document-issue", "test-document-issue-quarto", "test-document-issue-io", "test-document-issue-api"] }

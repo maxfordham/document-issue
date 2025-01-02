@@ -279,10 +279,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/12/77/36eb833476111af75ecc624d103662aba650b2b3c47abf4df5917697a5b1/uv-0.5.7-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/50/c1/2d27b0a15826c2b71dcf6e2f5402181ef85acf439617bb2f1453125ce1f3/uvicorn-0.32.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6e/78/36828a4d857b25896f9774c875714ba4e9b3bc8a92d2debe3f4df3a83d4f/validators-0.34.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/7a/fc/ebc74e04619f84200df9ab029be6aeeab6ae3b82ec3e97c177d83839383d/voila-0.5.8-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ab/df/4ee467ab39cc1de4b852c212c1ed3becfec2e486a51ac1ce0091f85f38d7/wcmatch-10.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/60/e8/c0e05e4684d13459f93d312077a9a2efbe04d59c393bc2b8802248c908d4/webcolors-24.11.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f4/24/2a3e3df732393fed8b3ebf2ec078f05546de641fe1b667ee316ec1dcf3b7/webencodings-0.5.1-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/cf/03/8faa5c9576299b2adf34dcccf278fc6bbbcda8a3efcc4d817369026be421/websockets-14.1-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/21/02/88b65cc394961a60c43c70517066b6b679738caf78506a5da7b88ffcb643/widgetsnbextension-4.0.13-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fa/18/89ac62eac46b69948bf35fcd90d37103f38722968e2981f752d69081ec4d/zstandard-0.23.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -789,11 +791,13 @@ packages:
   editable: true
 - pypi: packages/document-issue-ui
   name: document-issue-ui
-  version: 0.7.1.dev1+g7fd7a30
-  sha256: 0a97a7eae6b82158168d5d89942052322014b61e4ce9232a4852606348879dcf
+  version: 0.7.1.dev23+g9844fb1.d20250102
+  sha256: 274353774bd880d2b5cf13082e664354bcdfae4066f02bdb57f581dba22c8729
   requires_dist:
   - ipyautoui
+  - ipywidgets
   - jupytext
+  - voila
   requires_python: '>=3.8'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/erdantic-1.0.5-pyhd8ed1ab_0.conda
@@ -3921,6 +3925,45 @@ packages:
   - pkg:pypi/virtualenv?source=hash-mapping
   size: 3350255
   timestamp: 1732609542072
+- pypi: https://files.pythonhosted.org/packages/7a/fc/ebc74e04619f84200df9ab029be6aeeab6ae3b82ec3e97c177d83839383d/voila-0.5.8-py3-none-any.whl
+  name: voila
+  version: 0.5.8
+  sha256: 7cdb1f0629a2e9c11f0c07e7d386f3b7cc5441f584dc9b8030d08a82e5c09063
+  requires_dist:
+  - jupyter-client>=7.4.4,<9
+  - jupyter-core>=4.11.0
+  - jupyter-server>=1.18,<3
+  - jupyterlab-server>=2.3.0,<3
+  - nbclient>=0.4.0
+  - nbconvert>=6.4.5,<8
+  - traitlets>=5.0.3,<6
+  - websockets>=9.0
+  - black ; extra == 'dev'
+  - hatch ; extra == 'dev'
+  - jupyter-releaser ; extra == 'dev'
+  - pre-commit ; extra == 'dev'
+  - myst-parser ; extra == 'docs'
+  - pydata-sphinx-theme ; extra == 'docs'
+  - sphinx ; extra == 'docs'
+  - sphinx-autobuild ; extra == 'docs'
+  - sphinxcontrib-video ; extra == 'docs'
+  - ipykernel ; extra == 'test'
+  - ipywidgets ; extra == 'test'
+  - matplotlib ; extra == 'test'
+  - numpy ; extra == 'test'
+  - pandas ; extra == 'test'
+  - papermill ; extra == 'test'
+  - pytest ; extra == 'test'
+  - pytest-tornasync ; extra == 'test'
+  - ipykernel ; extra == 'test7'
+  - ipywidgets==7.8.2 ; extra == 'test7'
+  - matplotlib ; extra == 'test7'
+  - numpy ; extra == 'test7'
+  - pandas ; extra == 'test7'
+  - papermill ; extra == 'test7'
+  - pytest ; extra == 'test7'
+  - pytest-tornasync ; extra == 'test7'
+  requires_python: '>=3.8'
 - pypi: https://files.pythonhosted.org/packages/ab/df/4ee467ab39cc1de4b852c212c1ed3becfec2e486a51ac1ce0091f85f38d7/wcmatch-10.0-py3-none-any.whl
   name: wcmatch
   version: '10.0'
@@ -3960,6 +4003,11 @@ packages:
   - wsaccel ; extra == 'optional'
   - websockets ; extra == 'test'
   requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/cf/03/8faa5c9576299b2adf34dcccf278fc6bbbcda8a3efcc4d817369026be421/websockets-14.1-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+  name: websockets
+  version: '14.1'
+  sha256: 77569d19a13015e840b81550922056acabc25e3f52782625bc6843cfa034e1da
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl
   name: wheel
   version: 0.45.1
