@@ -3,8 +3,11 @@ title: "Example Documents"
 ---
 
 The metadata saved in `document-issue` is used to make title blocks and other information on issued documents.
-This section contains examples of:
+The `document-issue-io` section contains template examples of:
 
 - generic titleblocks
 - report format documents (A4 and A3)
 - issue sheet and issue history documents
+
+The `document-issue-quarto` section contains simple text to demonstrate how certain elements of [quarto-markdown](https://quarto.org/docs/authoring/markdown-basics.html) text
+will be formatted when rendered as pdf using the `document-issue-quarto` extension.

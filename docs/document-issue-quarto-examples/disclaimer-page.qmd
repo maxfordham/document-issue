@@ -1,0 +1,8 @@
+
+---
+title: "disclaimer-page"
+---
+
+```{=html}
+<embed src="disclaimer-page/document.pdf" width="600px" height="1000px"/>
+```

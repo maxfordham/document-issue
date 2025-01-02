@@ -1,6 +1,8 @@
 project:
   type: website
-  # pre-render: 
+  pre-render: 
+    - _get_document_issue_io_examples.sh
+    - _get_document_issue_quarto_examples.py
     # - ./_make_erd.sh
 website:
   # title: "document-issue"
@@ -61,8 +63,10 @@ website:
       align: left
       contents:
         - example-documents.qmd
-        - text: examples
+        - text: "document-issue-io"
           contents: example-documents/*
+        - text: "document-issue-quarto"
+          contents: document-issue-quarto-examples/*
 
 
     - id: document-issue-api
@@ -79,6 +83,8 @@ website:
 
 format:
   html:
-    theme: cosmo
     css: styles.css
     toc: true
+    theme:
+      light: flatly
+      dark: darkly

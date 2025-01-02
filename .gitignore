@@ -1,8 +1,9 @@
 packages/document-issue-quarto/examples/footer/document_files/*
 packages/document-issue-io/tests/test-outputs
 docs/example-documents
-
-
+docs/document-issue-quarto-examples/**/document.pdf
+packages/document-issue-quarto/**/document.pdf
+packages/document-issue-quarto/**/document_files/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
