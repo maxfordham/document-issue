@@ -8,6 +8,10 @@ from tests.utils_check_doc_properties import check_quarto_doc_properties
 FDIR_ROOT = pathlib.Path(__file__).parent.parent
 FDIR_TESTS = FDIR_ROOT / "tests" / "test-document-issue-report"
 
+# TODO: 
+# move examples to examples dir in root and setup to work with the documentation workflow.
+# perhaps you could ignore folders suffixed with `_` in the `test_build_examples` fn
+
 
 def test_install_extension():
     FDIR_TESTDATA = FDIR_TESTS / "a4-portrait"
