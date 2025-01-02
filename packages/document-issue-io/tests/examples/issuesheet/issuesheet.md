@@ -36,19 +36,15 @@ print([f.name for f in fpths_issuehistory], [f.exists() for f in fpths_issuehist
 :::
 
 ```{=html}
-<embed src="test-outputs/03870-MXF-XX-XX-IS-J-00132.pdf" width="600px" height="1000px" />
+<embed src="test-outputs/03870-MXF-XX-XX-IS-J-00132.pdf" width="600px" height="500px" />
 ```
-
-::: {.callout-note collapse="true" icon=false}
 
 ## Issue History
 
 ```{=html}
-<embed src="test-outputs/03870-MXF-XX-XX-IS-J-00001.pdf" width="600px" height="1000px" />
+<embed src="test-outputs/03870-MXF-XX-XX-IS-J-00001.pdf" width="600px" height="500px" />
 ```
 
 ```{=html}
-<embed src="test-outputs/03870-MXF-XX-XX-IS-J-00002.pdf" width="600px" height="1000px" />
+<embed src="test-outputs/03870-MXF-XX-XX-IS-J-00002.pdf" width="600px" height="500px" />
 ```
-
-:::
