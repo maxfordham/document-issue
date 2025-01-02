@@ -14,16 +14,9 @@ from sqlalchemy import (
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import relationship, configure_mappers, validates
-
-# from sqlalchemy.ext.declarative import (
-#     declarative_base,
-# )  # TODO: from sqlalchemy.orm import declarative_base
-
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
-
-
 
 
 # class FunctionalBreakdown(Base):
@@ -84,16 +77,18 @@ class BaseCode:
     code = Column(String)
     description = Column(String)
 
-class Nomenclature(Base):
 
+class Nomenclature(Base):
     # __versioned__ = {}
     __tablename__ = "nomemclature"
 
     id = Column(Integer, primary_key=True, index=True)
     definition = Column(JSON)
 
+
 # class Project(Base) # see below
 #    ...
+
 
 class Originator(BaseCode, Base):
     """Stores the originator of a document."""
@@ -103,6 +98,16 @@ class Originator(BaseCode, Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+class ProjectOriginator(Base):  # allows project to override the codes
+    __tablename__ = "project_originator"
+
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
+    originator_id = Column(Integer, ForeignKey("originator.id"), primary_key=True)
+    code = Column(String)
+
+    UniqueConstraint(project_id, originator_id)
+
+
 class Level(BaseCode, Base):
     """Stores the level of a document."""
 
@@ -111,8 +116,17 @@ class Level(BaseCode, Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+class ProjectLevel(Base):  # allows project to override the codes
+    __tablename__ = "project_level"
 
-class Classification(BaseCode, Base): # Discipline
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
+    level_id = Column(Integer, ForeignKey("level.id"), primary_key=True)
+    code = Column(String)
+
+    UniqueConstraint(project_id, level_id)
+
+
+class Classification(BaseCode, Base):  # Discipline
     """Stores the classification of a document."""
 
     # __versioned__ = {}
@@ -120,8 +134,16 @@ class Classification(BaseCode, Base): # Discipline
 
     id = Column(Integer, primary_key=True, index=True)
 
+class ProjectClassification(Base):  # allows project to override the codes
+    __tablename__ = "project_classification"
 
-class InformationType(BaseCode, Base): # Form
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
+    classification_id = Column(Integer, ForeignKey("classification.id"), primary_key=True)
+    code = Column(String)
+
+    UniqueConstraint(project_id, classification_id)
+
+class InformationType(BaseCode, Base):  # Form
     """Stores the information type of a document."""
 
     # __versioned__ = {}
@@ -129,15 +151,19 @@ class InformationType(BaseCode, Base): # Form
 
     id = Column(Integer, primary_key=True, index=True)
 
+class ProjectInformationType(Base):  # Form
+    """Stores the information type of a document."""
 
-class ProjectOriginator(BaseCode, Base):  # allows project to override the codes
-    __tablename__ = "project_originator"
+    # __versioned__ = {}
+    __tablename__ = "project_information_type"
+
+    id = Column(Integer, primary_key=True, index=True)
 
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    originator_id = Column(Integer, ForeignKey("originator.id"), primary_key=True)
+    information_type_id = Column(Integer, ForeignKey("information_type.id"), primary_key=True)
+    code = Column(String)
 
-    UniqueConstraint(project_id, originator_id)
-
+    UniqueConstraint(project_id, information_type_id)
 
 
 class DocumentCodeGenerator(Base):
