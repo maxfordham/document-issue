@@ -1,9 +1,9 @@
 project:
   type: website
   pre-render: 
-    - _get_document_issue_io_examples.sh
+    - ./_get_document_issue_io_examples.sh
     - _get_document_issue_quarto_examples.py
-    # - ./_make_erd.sh
+    - ./_make_erd.sh
 website:
   # title: "document-issue"
   image: images/logo.png
