@@ -1,0 +1,8 @@
+
+---
+title: "footer"
+---
+
+```{=html}
+<embed src="footer/document.pdf" width="600px" height="1000px"/>
+```

@@ -1,0 +1,115 @@
+code,description
+P-00,Combined Public Health
+P-10,Combined Drainage
+P-11,Rainwater Drainage
+P-12,Above Ground Waste Water Drainage
+P-13,Below Ground Gravity Drainage
+P-20,Piped Supply
+P-30,Gas Distribution and Supply
+P-40,Fire Extinguishing Systems
+P-42,Dry Riser
+P-41,Deluge
+P-43,Sprinkler
+P-44,Wet Riser
+P-50,Water Distribution and Supply
+P-51,Hot and Cold Water Supply
+P-52,Irrigation
+P-53,Water Reclamation
+P-54,Grey Water Reclamation
+P-55,Rainwater Reclamation
+P-60,Swimming Pool Water Treatment
+M-00,Combined Mechanical
+M-10,Space Heating and Cooling
+M-11,Cooling
+M-12,Chilled Water
+M-13,Refrigerant Systems
+M-14,Heating
+M-15,Low Temperature Hot Water Heating
+M-16,Medium Temperature Hot Water Heating
+M-17,Solar Heating
+M-20,Ventilation
+M-21,Smoke Extract and Control
+M-22,Vehicular Space Ventilation
+E-00,Combined Electrical and ELV
+E-10,Electricity Power Generation
+E-20,Earthing and Bonding
+E-21,High Voltage Distribution
+E-22,Low Voltage Distribution
+E-23,Small Power
+E-30,Lighting
+E-31,External Lighting
+E-32,General Space Lighting
+E-33,Central Battery Supplied Emergency Lighting
+E-40,Combined Extra Low Voltage (ELV) Systems
+E-50,Communication
+E-51,Data Distribution and Telecommunications
+E-52,Public Communication
+E-53,Radio and Television Distribution
+E-60,Security
+E-61,Access Control
+E-62,Surveillance System
+E-63,Intruder Detection and Alarm
+E-70,Call and Alarm
+E-71,Fire Detection and Alarm
+E-72,Lightning Protection
+E-80,"Metering, Monitoring and Management"
+E-90,Transport
+J-00,"Testing & Commissioning, A64, etc."
+J-01,Access and Maintenance
+J-10,"Earthworks, Remediation and Temporary Systems"
+J-11,Enablings Works
+J-20,Builders Work in Connection
+J-30,Multiple/Combined Services
+J-40,Services Distribution Products
+J-41,"Pipe, Tube and Fitting Products"
+J-42,Ductwork Products
+J-43,Low Voltage Cables
+J-44,Cable Management and Accessories
+J-45,Access and Inspection Chambers and Gullies
+J-50,Design Philosophy/Strategy Statement
+J-51,Energy Strategy
+J-52,Concept Design Submission
+J-53,Definition (Detailed) Design Submission
+J-54,Technical Design Submission
+J-55,Utilities and Services Survey Information
+J-56,"Planning preparation (reports, etc.)"
+J-57,Progress Reports
+J-58,Briefing/Information Required
+J-60,Site inspection report
+Y-10,Acoustic Strategy
+Y-11,In-Situ Acoustic Performance
+Y-12,Building Element Build-ups
+Y-13,Building Element Details
+Y-14,Acoustic Absorption
+Y-20,General Sustainability
+Y-21,BREEAM Pre-Assessment & Scoresheet
+Y-22,BREEAM Planning & Stage Report
+Y-23,Sustainability Strategy
+Y-24,BREEAM & Sustainability Guidance Documents
+Y-25,BREEAM Prelim and Employers Requirements Specifications
+Y-26,Life Cycle Carbon Report
+Y-27,Health & Wellbeing Pre-Assessment & Scoresheet
+Y-28,Health & Wellbeing Report
+Y-29,N/A
+Y-30,General Soft Landings
+Y-31,Soft Landings/Aftercare Report
+Y-32,Soft Landings Guidance Documents (File Note)
+Y-33,Prelim & Employers Requirements Specifications (Specifications)
+Y-34,Soft Landing Schedule
+Y-35,Building User Guide
+Y-36,Building Performance Requirements 
+Y-37,Energy Performance Schedule 
+Y-38,N/A
+Y-39,N/A
+Y-50,General Passivhaus
+Y-51,PHPP calculation
+Y-52,PHPP supporting information
+Y-53,Thermal bridging calculation report
+Y-54,Report (design stage / other)
+Y-55,Specification
+Y-56,Sketch/drawing mark-up
+Y-57,Passivhaus site inspection report
+Y-58,N/A
+Y-59,N/A
+Y-##,N/A
+Z-##,N/A

@@ -2,7 +2,7 @@ import stringcase
 import pathlib
 import json
 import subprocess
-from pydantic import ConfigDict, BaseModel, Field, validator
+from pydantic import ConfigDict, BaseModel, Field
 from document_issue.utils import get_stem
 
 

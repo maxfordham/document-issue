@@ -6,7 +6,7 @@
     "max_cols_in_part": 30,
     "office": "Cambridge",
     "open_on_save": false,
-    "outgoing_folder": "../testoutput",
+    "outgoing_folder": "../test-outputs",
     "selected_issues": [
         "20190501-S0",
         "20190508-S2"

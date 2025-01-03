@@ -2,11 +2,11 @@
 title: "Multi-Project / Multi-Building Jobs"
 subtitle: "Guidance Notes"
 toc: true
-format:
-  docx:
-    number-sections: true
-    highlight-style: github
-    reference-doc: templates/default_refdocx_light.docx
+# format:
+#   docx:
+#     number-sections: true
+#     highlight-style: github
+#     reference-doc: templates/default_refdocx_light.docx
 ---
 
 **Consultees**
@@ -15,6 +15,7 @@ format:
 - [x] Dan Kelly - *comments incorporated*
 - [x] Sam Harvey - *comments incorporated*
 - [x] Patience Straker - *comments incorporated*
+- [x] Luke Hadley - *comments incorporated*
 - [ ] Kathryn Donald - *discussed, awaiting comments*
 - [ ] Mark Palmer - *not yet discussed*
 

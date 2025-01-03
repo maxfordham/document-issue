@@ -21,15 +21,19 @@
         },
         {
             "path": "../packages/document-issue-xl"
+        },
+        {
+            "path": "../packages/document-classification"
         }
     ],
     "settings": {
         "[python]": {
-            "editor.defaultFormatter": "ms-python.black-formatter",
+            "editor.defaultFormatter": "GitHub.copilot",
             "editor.formatOnSave": true
         },
         "files.exclude": {
             "packages/": true,
-        }
+        },
+        "python.defaultInterpreterPath": "/home/jovyan/document-issue/.pixi/envs/default/bin/python"
     }
 }
