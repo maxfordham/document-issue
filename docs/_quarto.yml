@@ -18,12 +18,10 @@ website:
         href: document-issue/index.html
       - text: "example-documents"
         href: example-documents.html
-      - text: "document-issue-io"
-        href: document-issue-io/index.html
-      - text: "document-issue-api"
-        href: document-issue-api/index.html
 
     right:
+      - text: "developer"
+        href: INSTALLATION.html
       - text: "release notes"
         href: release-notes/index.html
       - text: "feedback"
@@ -43,17 +41,6 @@ website:
         - document-issue/index.qmd
         - document-issue/documents-review.qmd
         - multiproject-jobs.qmd
-        - text: "Entity Relationship Diagram"
-          href: document-issue/erd.qmd
-
-    - id: document-issue-io
-      title: "document-issue-io"
-      logo: "images/logo.png"
-      style: "docked"
-      collapse-level: 2
-      align: left
-      contents:
-        - document-issue-io/index.qmd
 
     - id: example-documents
       title: "example-documents"
@@ -69,16 +56,16 @@ website:
           contents: document-issue-quarto-examples/*
 
 
-    - id: document-issue-api
-      title: "document-issue-api"
+    - id: developer
+      title: "developer"
       logo: "images/logo.png"
       style: "docked"
       collapse-level: 2
       align: left
       contents:
+        - INSTALLATION.md
         - document-issue-api/index.qmd
-        - text: "Entity Relationship Diagram"
-          href: document-issue-api/erd.qmd
+        - document-issue-io/index.qmd
         
 
 format:

@@ -1,5 +1,0 @@
----
-title: "Entity Relationship Diagram - Document Issue Database"
----
-
-![](../images/erd-testdb.png){fig-alt="Document Issue database ERDs"}
