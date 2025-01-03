@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -100,16 +134,12 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../example-documents.html"> 
 <span class="menu-text">example-documents</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../document-issue-io/index.html"> 
-<span class="menu-text">document-issue-io</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../document-issue-api/index.html"> 
-<span class="menu-text">document-issue-api</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../INSTALLATION.html"> 
+<span class="menu-text">developer</span></a>
+  </li>  
   <li class="nav-item">
     <a class="nav-link" href="../release-notes/index.html"> 
 <span class="menu-text">release notes</span></a>
@@ -170,19 +200,20 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Multi-Project / Multi-Building Jobs</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../document-issue/erd.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Entity Relationship Diagram</span></a>
-  </div>
-</li>
     </ul>
     </div>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#entity-relationship-diagram-erd" id="toc-entity-relationship-diagram-erd" class="nav-link active" data-scroll-target="#entity-relationship-diagram-erd">Entity Relationship Diagram (ERD)</a></li>
+  <li><a href="#example-document-issue-data" id="toc-example-document-issue-data" class="nav-link" data-scroll-target="#example-document-issue-data">Example <code>document-issue</code> data</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -206,8 +237,44 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="entity-relationship-diagram-erd" class="level2">
+<h2 class="anchored" data-anchor-id="entity-relationship-diagram-erd">Entity Relationship Diagram (ERD)</h2>
+<p>The ERD diagram shows the data fields that are recorded for every document. This information is displayed on the issued document; some documents show all the information (e.g.&nbsp;specs) whilst other documents show only a subset (e.g.&nbsp;drawings).</p>
+<p><img src="../images/erd-DocumentIssue.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="example-document-issue-data" class="level2">
+<h2 class="anchored" data-anchor-id="example-document-issue-data">Example <code>document-issue</code> data</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">classification</span><span class="kw">:</span><span class="at"> Ac_05</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">doc_source</span><span class="kw">:</span><span class="at"> WD</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">document_description</span><span class="kw">:</span><span class="at"> Document Description</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">document_name</span><span class="kw">:</span><span class="at"> 06667-MXF-XX-XX-SH-M-20003</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">format_configuration</span><span class="kw">:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">date_string_format</span><span class="kw">:</span><span class="at"> </span><span class="st">'%d %^b %y'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">description_in_filename</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">include_author_and_checked_by</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">issue_history</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">author</span><span class="kw">:</span><span class="at"> EG</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">checked_by</span><span class="kw">:</span><span class="at"> CK</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">date</span><span class="kw">:</span><span class="at"> 2020-01-02</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">issue_format</span><span class="kw">:</span><span class="at"> cde</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">issue_notes</span><span class="kw">:</span><span class="at"> </span><span class="st">''</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revision</span><span class="kw">:</span><span class="at"> P01</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">status_code</span><span class="kw">:</span><span class="at"> S2</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">status_description</span><span class="kw">:</span><span class="at"> Suitable for information</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">name_nomenclature</span><span class="kw">:</span><span class="at"> project code-originator-volume-level-type-role-number</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span><span class="kw">:</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> add notes here</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">originator</span><span class="kw">:</span><span class="at"> Max Fordham LLP</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">project_name</span><span class="kw">:</span><span class="at"> In House App Testing</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">project_number</span><span class="kw">:</span><span class="at"> J5001</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JG</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">role</span><span class="kw">:</span><span class="at"> Project Engineer</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">scale</span><span class="kw">:</span><span class="at"> NTS</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">size</span><span class="kw">:</span><span class="at"> </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

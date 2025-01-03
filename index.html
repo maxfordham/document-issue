@@ -133,16 +133,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./example-documents.html"> 
 <span class="menu-text">example-documents</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./document-issue-io/index.html"> 
-<span class="menu-text">document-issue-io</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./document-issue-api/index.html"> 
-<span class="menu-text">document-issue-api</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./INSTALLATION.html"> 
+<span class="menu-text">developer</span></a>
+  </li>  
   <li class="nav-item">
     <a class="nav-link" href="./release-notes/index.html"> 
 <span class="menu-text">release notes</span></a>
@@ -177,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#repo-structure" id="toc-repo-structure" class="nav-link" data-scroll-target="#repo-structure">Repo-structure</a></li>
   <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
-  <li><a href="#development-install" id="toc-development-install" class="nav-link" data-scroll-target="#development-install">Development Install</a></li>
+  <li><a href="#developer-installation" id="toc-developer-installation" class="nav-link" data-scroll-target="#developer-installation">Developer Installation</a></li>
   <li><a href="#example-document-issue-data" id="toc-example-document-issue-data" class="nav-link" data-scroll-target="#example-document-issue-data">Example <code>document-issue</code> data</a></li>
   <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
   </ul></li>
@@ -231,52 +227,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre class="{Note}"><code>for now, `document-issue` intentionally avoids considering the datafields that
 are used to create the Document Number, this may follow up in the future.</code></pre>
 </section>
-<section id="development-install" class="level2">
-<h2 class="anchored" data-anchor-id="development-install">Development Install</h2>
-<pre class="{warning}"><code>`document-issue-xl` requires Windows to run. 
-For dev instructions see: `packages/document-issue-xl/README.md`</code></pre>
-<p>We use <a href="https://prefix.dev/">pixi</a> to manage the monorepo. Install <code>pixi</code> (on linux) with the following command:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://pixi.sh/install.sh <span class="kw">|</span> <span class="fu">bash</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If using VSCode, we recommend using the <a href="./.vscode/document-issue.code-workspace"><code>document-issue.code-workspace</code></a> file to open the project.</p>
-<p>To install the environment and packages for development, run the following commands from ROOT:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>cntl+shift+p - python select interpreter - set to pixi env. TODO: add pixi vscode plugin?</p>
-<p>Install latex engine:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> install tinytex <span class="co"># </span><span class="al">TODO</span><span class="co">: should this be within the env?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Install <code>libfontconfig</code> if required:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install libfontconfig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="developer-installation" class="level2">
+<h2 class="anchored" data-anchor-id="developer-installation">Developer Installation</h2>
+<p><a href="INSTALLATION.md">instructions -&gt;🤓💻</a></p>
 </section>
 <section id="example-document-issue-data" class="level2">
 <h2 class="anchored" data-anchor-id="example-document-issue-data">Example <code>document-issue</code> data</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">classification</span><span class="kw">:</span><span class="at"> Ac_05</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">doc_source</span><span class="kw">:</span><span class="at"> WD</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">document_description</span><span class="kw">:</span><span class="at"> Document Description</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">document_name</span><span class="kw">:</span><span class="at"> 06667-MXF-XX-XX-SH-M-20003</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">format_configuration</span><span class="kw">:</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">date_string_format</span><span class="kw">:</span><span class="at"> </span><span class="st">'%d %^b %y'</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">description_in_filename</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">include_author_and_checked_by</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">issue_history</span><span class="kw">:</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">author</span><span class="kw">:</span><span class="at"> EG</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">checked_by</span><span class="kw">:</span><span class="at"> CK</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">date</span><span class="kw">:</span><span class="at"> 2020-01-02</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">issue_format</span><span class="kw">:</span><span class="at"> cde</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">issue_notes</span><span class="kw">:</span><span class="at"> </span><span class="st">''</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revision</span><span class="kw">:</span><span class="at"> P01</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">status_code</span><span class="kw">:</span><span class="at"> S2</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">status_description</span><span class="kw">:</span><span class="at"> Suitable for information</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">name_nomenclature</span><span class="kw">:</span><span class="at"> project code-originator-volume-level-type-role-number</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span><span class="kw">:</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> add notes here</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">originator</span><span class="kw">:</span><span class="at"> Max Fordham LLP</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="fu">project_name</span><span class="kw">:</span><span class="at"> In House App Testing</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">project_number</span><span class="kw">:</span><span class="at"> J5001</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="fu">roles</span><span class="kw">:</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JG</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">role</span><span class="kw">:</span><span class="at"> Project Engineer</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="fu">scale</span><span class="kw">:</span><span class="at"> NTS</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="fu">size</span><span class="kw">:</span><span class="at"> </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">classification</span><span class="kw">:</span><span class="at"> Ac_05</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">doc_source</span><span class="kw">:</span><span class="at"> WD</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">document_description</span><span class="kw">:</span><span class="at"> Document Description</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">document_name</span><span class="kw">:</span><span class="at"> 06667-MXF-XX-XX-SH-M-20003</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">format_configuration</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">date_string_format</span><span class="kw">:</span><span class="at"> </span><span class="st">'%d %^b %y'</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">description_in_filename</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">include_author_and_checked_by</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">issue_history</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">author</span><span class="kw">:</span><span class="at"> EG</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">checked_by</span><span class="kw">:</span><span class="at"> CK</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">date</span><span class="kw">:</span><span class="at"> 2020-01-02</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">issue_format</span><span class="kw">:</span><span class="at"> cde</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">issue_notes</span><span class="kw">:</span><span class="at"> </span><span class="st">''</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revision</span><span class="kw">:</span><span class="at"> P01</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">status_code</span><span class="kw">:</span><span class="at"> S2</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">status_description</span><span class="kw">:</span><span class="at"> Suitable for information</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">name_nomenclature</span><span class="kw">:</span><span class="at"> project code-originator-volume-level-type-role-number</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span><span class="kw">:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> add notes here</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">originator</span><span class="kw">:</span><span class="at"> Max Fordham LLP</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">project_name</span><span class="kw">:</span><span class="at"> In House App Testing</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">project_number</span><span class="kw">:</span><span class="at"> J5001</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JG</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">role</span><span class="kw">:</span><span class="at"> Project Engineer</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="fu">scale</span><span class="kw">:</span><span class="at"> NTS</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="fu">size</span><span class="kw">:</span><span class="at"> </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="license" class="level2">
 <h2 class="anchored" data-anchor-id="license">License</h2>
