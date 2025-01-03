@@ -194,11 +194,15 @@
     ]
   },
   {
-    "objectID": "ui.html",
-    "href": "ui.html",
-    "title": "",
+    "objectID": "INSTALLATION.html",
+    "href": "INSTALLATION.html",
+    "title": "Development Installation",
     "section": "",
-    "text": "from document_issue import DocumentIssue\nfrom ipyautoui import AutoUi\n\nui = AutoUi(DocumentIssue)\nui"
+    "text": "Warning\n\n\n\ndocument-issue-xl requires Windows to run. For dev instructions see: packages/document-issue-xl/README.md\n\n\nWe use pixi to manage the monorepo. Install pixi (on linux) with the following command:\ncurl -fsSL https://pixi.sh/install.sh | bash\nIf using VSCode, we recommend using the document-issue.code-workspace file to open the project.\nTo install the environment and packages for development, run the following commands from ROOT:\npixi install\ncntl+shift+p - python select interpreter - set to pixi env. TODO: add pixi vscode plugin?\nInstall latex engine:\nquarto install tinytex # TODO: should this be within the env?\nInstall libfontconfig if required:\nsudo apt-get update\nsudo apt-get install libfontconfig",
+    "crumbs": [
+      "developer",
+      "Development Installation"
+    ]
   },
   {
     "objectID": "feedback.html",
@@ -206,6 +210,13 @@
     "title": "Feedback",
     "section": "",
     "text": "Give feedback as normal using the comments section of the Wiki page."
+  },
+  {
+    "objectID": "ui.html",
+    "href": "ui.html",
+    "title": "",
+    "section": "",
+    "text": "from document_issue import DocumentIssue\nfrom ipyautoui import AutoUi\n\nui = AutoUi(DocumentIssue)\nui"
   },
   {
     "objectID": "example-documents/issuesheet.html",

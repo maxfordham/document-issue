@@ -2,122 +2,126 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-api/index.html</loc>
-    <lastmod>2025-01-03T09:49:34.264Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.002Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue/documents-review.html</loc>
-    <lastmod>2025-01-03T09:49:34.264Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.002Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents.html</loc>
-    <lastmod>2025-01-03T09:49:34.264Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.002Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/tables.html</loc>
-    <lastmod>2025-01-03T09:53:16.459Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.492Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/product-output.html</loc>
-    <lastmod>2025-01-03T09:53:16.460Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.493Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/document-properties.html</loc>
-    <lastmod>2025-01-03T09:53:16.459Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.491Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/index.html</loc>
-    <lastmod>2025-01-03T09:49:34.273Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.011Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/title-page-a4-p.html</loc>
-    <lastmod>2025-01-03T09:49:34.307Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.045Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_a3_landscape_note/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:53:06.385Z</lastmod>
+    <lastmod>2025-01-03T10:00:16.569Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_loads_of_notes_and_issues/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:52:55.699Z</lastmod>
+    <lastmod>2025-01-03T10:00:06.060Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_a4_portrait_note/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:53:01.144Z</lastmod>
+    <lastmod>2025-01-03T10:00:11.436Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_with_author_and_checked_by/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:52:50.307Z</lastmod>
+    <lastmod>2025-01-03T10:00:00.750Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/title-page-a3-l.html</loc>
-    <lastmod>2025-01-03T09:49:34.307Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.045Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/title-block-a4-p-custom-nomenclature.html</loc>
-    <lastmod>2025-01-03T09:49:34.307Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.045Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/maxfordham/document-issue/ui.html</loc>
-    <lastmod>2025-01-03T09:49:34.274Z</lastmod>
+    <loc>https://github.com/maxfordham/document-issue/INSTALLATION.html</loc>
+    <lastmod>2025-01-03T10:00:28.186Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/feedback.html</loc>
-    <lastmod>2025-01-03T09:49:34.264Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.002Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/maxfordham/document-issue/ui.html</loc>
+    <lastmod>2025-01-03T09:56:38.012Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/issuesheet.html</loc>
-    <lastmod>2025-01-03T09:49:34.307Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.045Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/title-block-a3-l.html</loc>
-    <lastmod>2025-01-03T09:49:34.307Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.045Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_with_author/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:52:44.893Z</lastmod>
+    <lastmod>2025-01-03T09:59:55.417Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_a3_landscape/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:52:34.047Z</lastmod>
+    <lastmod>2025-01-03T09:59:44.779Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/test-outputs/test_to_pdf_with_markdown_content/06667-MXF-XX-XX-SH-M-20003.html</loc>
-    <lastmod>2025-01-03T09:52:39.458Z</lastmod>
+    <lastmod>2025-01-03T09:59:50.104Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/example-documents/title-block-a4-p.html</loc>
-    <lastmod>2025-01-03T09:49:34.307Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.045Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/multiproject-jobs.html</loc>
-    <lastmod>2025-01-03T09:49:34.273Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.011Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/schema.html</loc>
-    <lastmod>2025-01-03T09:49:34.273Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.011Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/footer.html</loc>
-    <lastmod>2025-01-03T09:53:16.459Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.492Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/table-of-contents.html</loc>
-    <lastmod>2025-01-03T09:53:16.460Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.492Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/disclaimer-page.html</loc>
-    <lastmod>2025-01-03T09:53:16.458Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.491Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue-quarto-examples/images.html</loc>
-    <lastmod>2025-01-03T09:53:16.458Z</lastmod>
+    <lastmod>2025-01-03T10:00:26.491Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/developer.html</loc>
-    <lastmod>2025-01-03T09:49:34.264Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.002Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/maxfordham/document-issue/document-issue/index.html</loc>
-    <lastmod>2025-01-03T09:49:34.264Z</lastmod>
+    <lastmod>2025-01-03T09:56:38.002Z</lastmod>
   </url>
 </urlset>
