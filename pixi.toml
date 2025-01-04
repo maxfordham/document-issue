@@ -26,7 +26,7 @@ pytest-examples = ">=0.0.15, <0.0.16"
 test-document-issue = { cmd = "pytest", cwd = "packages/document-issue"}
 test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto"}
 test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io"}
-test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api"}
+test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api", env = { SQLALCHEMY_WARN_20="1" }}
 update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io"}
 update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"
 build-docs = { cmd = "quarto render .", cwd = "docs"} #, depends-on = ["test-document-issue-io"]
