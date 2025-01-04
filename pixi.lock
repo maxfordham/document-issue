@@ -170,7 +170,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/cf/58/8acf1b3e91c58313ce5cb67df61001fc9dcd21be4fadb76c1a2d540e09ed/fqdn-1.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fb/e5/c7ff55b81286f24ddfaff45c9d46614c3e40c72a8ebd036c2cc18d902243/frictionless-5.18.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b6/48/583c032b79ae5b3daa02225a675aeb673e58d2cb698e78510feceb11958c/gast-0.4.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/37/fa/71599c3fd06336cdc3eac52e6871cfebab4d9d70674a9a9e7a482c318e99/greenlet-3.1.1-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/95/04/ff642e65ad6b90db43e668d70ffb6736436c7ce41fcc549f4e9472234127/h11-0.14.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/13/8d/6d965a22bc38cec091ba82131624bb5d75471094d7fe05e829536de3de2f/hatch-1.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/72/41/b3e29dc4fe623794070e5dfbb9915acb649ce05d6472f005470cbed9de83/hatchling-1.26.3-py3-none-any.whl
@@ -260,7 +259,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/a0/e9/e58082fbb8cecbb6fb4133033c40cc50c248b1a331582be3a0f39138d65b/simpleeval-1.0.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d1/c2/fe97d779f3ef3b15f05c94a2f1e3d21732574ed441687474db9d342a7315/soupsieve-2.6-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/ce/af/20290b55d469e873cba9d41c0206ab5461ff49d759989b3fe65010f9d265/sqlalchemy-1.4.54.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/7b/c5/07f18a897b997f6d6b234fab2bf31dccf66d5d16a79fe329aefc95cd7461/SQLAlchemy-2.0.36-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/96/00/2b325970b3060c7cecebab6d295afe763365822b1306a12eeab198f74323/starlette-0.41.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/1f/1241aa3d66e8dc1612427b17885f5fcd9c9ee3079fc0d28e9a3aeeb36fa3/stringcase-1.2.0.tar.gz
       - pypi: https://files.pythonhosted.org/packages/40/44/4a5f08c96eb108af5cb50b41f76142f0afa346dfa99d5296fe7202a11854/tabulate-0.9.0-py3-none-any.whl
@@ -752,8 +751,8 @@ packages:
   editable: true
 - pypi: packages/document-issue-api
   name: document-issue-api
-  version: 0.7.1.dev1+g7fd7a30
-  sha256: 591dbe7eda50ccdbfac3d8ca4f01cf2678ea629688f2aad80930b24f488f079d
+  version: 0.7.1.dev39+gde24bf5.d20250104
+  sha256: e275dc08247797a0525e2723e20ae54b6a402b569f2723fc3049367c3efe4911
   requires_dist:
   - fastapi
   - httpx
@@ -764,7 +763,7 @@ packages:
   - pydantic>2
   - python-dotenv
   - pyyaml
-  - sqlalchemy<2
+  - sqlalchemy>2
   - stringcase
   - tabulate
   - uvicorn
@@ -791,7 +790,7 @@ packages:
   editable: true
 - pypi: packages/document-issue-ui
   name: document-issue-ui
-  version: 0.7.1.dev23+g9844fb1.d20250102
+  version: 0.7.1.dev39+gde24bf5.d20250104
   sha256: 274353774bd880d2b5cf13082e664354bcdfae4066f02bdb57f581dba22c8729
   requires_dist:
   - ipyautoui
@@ -1128,16 +1127,6 @@ packages:
   purls: []
   size: 2303111
   timestamp: 1722673717117
-- pypi: https://files.pythonhosted.org/packages/37/fa/71599c3fd06336cdc3eac52e6871cfebab4d9d70674a9a9e7a482c318e99/greenlet-3.1.1-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
-  name: greenlet
-  version: 3.1.1
-  sha256: 0153404a4bb921f0ff1abeb5ce8a5131da56b953eda6e14b88dc6bbc04d2049e
-  requires_dist:
-  - sphinx ; extra == 'docs'
-  - furo ; extra == 'docs'
-  - objgraph ; extra == 'test'
-  - psutil ; extra == 'test'
-  requires_python: '>=3.7'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/gtk2-2.24.33-h8ee276e_7.conda
   sha256: e98bdabe621a3695b9e330670f4762adffb4a6a75898e05f539d863161c83188
   md5: 28a9681054948a7d7e96a7b8fe9b604e
@@ -3548,49 +3537,44 @@ packages:
   version: '2.6'
   sha256: e72c4ff06e4fb6e4b5a9f0f55fe6e81514581fca1515028625d0f299c602ccc9
   requires_python: '>=3.8'
-- pypi: https://files.pythonhosted.org/packages/ce/af/20290b55d469e873cba9d41c0206ab5461ff49d759989b3fe65010f9d265/sqlalchemy-1.4.54.tar.gz
+- pypi: https://files.pythonhosted.org/packages/7b/c5/07f18a897b997f6d6b234fab2bf31dccf66d5d16a79fe329aefc95cd7461/SQLAlchemy-2.0.36-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
   name: sqlalchemy
-  version: 1.4.54
-  sha256: 4470fbed088c35dc20b78a39aaf4ae54fe81790c783b3264872a0224f437c31a
+  version: 2.0.36
+  sha256: 9e46ed38affdfc95d2c958de328d037d87801cfcbea6d421000859e9789e61c2
   requires_dist:
+  - typing-extensions>=4.6.0
+  - greenlet!=0.4.17 ; (python_full_version < '3.13' and platform_machine == 'AMD64') or (python_full_version < '3.13' and platform_machine == 'WIN32') or (python_full_version < '3.13' and platform_machine == 'aarch64') or (python_full_version < '3.13' and platform_machine == 'amd64') or (python_full_version < '3.13' and platform_machine == 'ppc64le') or (python_full_version < '3.13' and platform_machine == 'win32') or (python_full_version < '3.13' and platform_machine == 'x86_64')
   - importlib-metadata ; python_full_version < '3.8'
-  - greenlet!=0.4.17 ; (python_full_version >= '3' and platform_machine == 'AMD64') or (python_full_version >= '3' and platform_machine == 'WIN32') or (python_full_version >= '3' and platform_machine == 'aarch64') or (python_full_version >= '3' and platform_machine == 'amd64') or (python_full_version >= '3' and platform_machine == 'ppc64le') or (python_full_version >= '3' and platform_machine == 'win32') or (python_full_version >= '3' and platform_machine == 'x86_64')
-  - greenlet!=0.4.17 ; python_full_version >= '3' and extra == 'asyncio'
-  - mypy>=0.910 ; python_full_version >= '3' and extra == 'mypy'
-  - sqlalchemy2-stubs ; extra == 'mypy'
+  - greenlet!=0.4.17 ; extra == 'aiomysql'
+  - aiomysql>=0.2.0 ; extra == 'aiomysql'
+  - greenlet!=0.4.17 ; extra == 'aioodbc'
+  - aioodbc ; extra == 'aioodbc'
+  - greenlet!=0.4.17 ; extra == 'aiosqlite'
+  - aiosqlite ; extra == 'aiosqlite'
+  - typing-extensions!=3.10.0.1 ; extra == 'aiosqlite'
+  - greenlet!=0.4.17 ; extra == 'asyncio'
+  - greenlet!=0.4.17 ; extra == 'asyncmy'
+  - asyncmy>=0.2.3,!=0.2.4,!=0.2.6 ; extra == 'asyncmy'
+  - mariadb>=1.0.1,!=1.1.2,!=1.1.5,!=1.1.10 ; extra == 'mariadb-connector'
   - pyodbc ; extra == 'mssql'
   - pymssql ; extra == 'mssql-pymssql'
   - pyodbc ; extra == 'mssql-pyodbc'
-  - mysqlclient>=1.4.0,<2 ; python_full_version < '3' and extra == 'mysql'
-  - mysqlclient>=1.4.0 ; python_full_version >= '3' and extra == 'mysql'
+  - mypy>=0.910 ; extra == 'mypy'
+  - mysqlclient>=1.4.0 ; extra == 'mysql'
   - mysql-connector-python ; extra == 'mysql-connector'
-  - mariadb>=1.0.1,!=1.1.2 ; python_full_version >= '3' and extra == 'mariadb-connector'
-  - cx-oracle>=7,<8 ; python_full_version < '3' and extra == 'oracle'
-  - cx-oracle>=7 ; python_full_version >= '3' and extra == 'oracle'
+  - cx-oracle>=8 ; extra == 'oracle'
+  - oracledb>=1.0.1 ; extra == 'oracle-oracledb'
   - psycopg2>=2.7 ; extra == 'postgresql'
-  - pg8000>=1.16.6,!=1.29.0 ; python_full_version >= '3' and extra == 'postgresql-pg8000'
-  - greenlet!=0.4.17 ; python_full_version >= '3' and extra == 'postgresql-asyncpg'
-  - asyncpg ; python_full_version >= '3' and extra == 'postgresql-asyncpg'
-  - pymysql ; python_full_version >= '3' and extra == 'pymysql'
-  - pymysql<1 ; python_full_version < '3' and extra == 'pymysql'
-  - greenlet!=0.4.17 ; python_full_version >= '3' and extra == 'aiomysql'
-  - aiomysql>=0.2.0 ; python_full_version >= '3' and extra == 'aiomysql'
-  - greenlet!=0.4.17 ; python_full_version >= '3' and extra == 'asyncmy'
-  - asyncmy>=0.2.3,!=0.2.4 ; python_full_version >= '3' and extra == 'asyncmy'
-  - greenlet!=0.4.17 ; python_full_version >= '3' and extra == 'aiosqlite'
-  - aiosqlite ; python_full_version >= '3' and extra == 'aiosqlite'
-  - typing-extensions!=3.10.0.1 ; extra == 'aiosqlite'
-  - sqlcipher3-binary ; python_full_version >= '3' and extra == 'sqlcipher'
-  - pymssql ; extra == 'mssql-pymssql'
-  - pyodbc ; extra == 'mssql-pyodbc'
-  - mysql-connector-python ; extra == 'mysql-connector'
-  - mariadb>=1.0.1,!=1.1.2 ; python_full_version >= '3' and extra == 'mariadb-connector'
-  - pg8000>=1.16.6,!=1.29.0 ; python_full_version >= '3' and extra == 'postgresql-pg8000'
-  - greenlet!=0.4.17 ; python_full_version >= '3' and extra == 'postgresql-asyncpg'
-  - asyncpg ; python_full_version >= '3' and extra == 'postgresql-asyncpg'
+  - greenlet!=0.4.17 ; extra == 'postgresql-asyncpg'
+  - asyncpg ; extra == 'postgresql-asyncpg'
+  - pg8000>=1.29.1 ; extra == 'postgresql-pg8000'
+  - psycopg>=3.0.7 ; extra == 'postgresql-psycopg'
   - psycopg2-binary ; extra == 'postgresql-psycopg2binary'
   - psycopg2cffi ; extra == 'postgresql-psycopg2cffi'
-  requires_python: '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*'
+  - psycopg[binary]>=3.0.7 ; extra == 'postgresql-psycopgbinary'
+  - pymysql ; extra == 'pymysql'
+  - sqlcipher3-binary ; extra == 'sqlcipher'
+  requires_python: '>=3.7'
 - conda: https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.3-pyhd8ed1ab_1.conda
   sha256: 570da295d421661af487f1595045760526964f41471021056e993e73089e9c41
   md5: b1b505328da7a6b246787df4b5a49fbc
