@@ -37,7 +37,7 @@ def get_document(db: Session, document_id: int) -> models.Document:
         models.Document: The requested document
     """
 
-    return db.query(models.Document).filter(models.Document.id == document_id).first()
+    return db.get(models.Document).filter(models.Document.id == document_id).first()
 
 
 def get_document_issue(db: Session, document_id: int) -> schemas.DocumentIssueGet:
@@ -103,9 +103,9 @@ def delete_document(db: Session, document_id: int) -> models.Document:
     Returns:
         models.Document: The deleted document
     """
-
+    from sqlalchemy.orm import Query
     db_document = (
-        db.query(models.Document).filter(models.Document.id == document_id).first()
+        db.query(models.Document).filter(Query.with_parent(models.Document.id == document_id)).first()
     )
     db.delete(db_document)
     db.commit()

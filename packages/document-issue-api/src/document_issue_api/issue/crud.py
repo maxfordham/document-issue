@@ -37,8 +37,7 @@ def get_issue(db: Session, issue_id: int) -> models.Issue:
     Returns:
         models.Issue: The getd issue
     """
-
-    db_issue = db.query(models.Issue).get(issue_id)
+    db_issue = db.get(models.Issue, issue_id)
     return db_issue
 
 
@@ -54,7 +53,7 @@ def patch_issue(db: Session, issue_id: int, issue: schemas.IssueBasePatch) -> mo
         models.Issue: The patched issue
     """
 
-    db_issue = db.query(models.Issue).get(issue_id)
+    db_issue = db.get(models.Issue, issue_id)
     issue_data = jsonable_encoder(db_issue)
     update_data = issue.model_dump(exclude_unset=True)
     for field in issue_data:
@@ -77,7 +76,7 @@ def delete_issue(db: Session, issue_id: int) -> models.Issue:
         models.Issue: The deleted issue
     """
 
-    db_issue = db.query(models.Issue).get(issue_id)
+    db_issue = db.get(models.Issue, issue_id)
     db.delete(db_issue)
     db.commit()
     return db_issue
