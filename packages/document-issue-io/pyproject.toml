@@ -40,7 +40,7 @@ quarto = ["quarto-cli"]
 
 [project.urls]
 Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"
-Issues = "https://github.com/maxfordham/document-issue-io/issues"
+Issues = "https://github.com/maxfordham/document-issue/issues"
 Source = "https://github.com/maxfordham/document-issue/packages/document-issue-io"
 
 [tool.hatch.version]
