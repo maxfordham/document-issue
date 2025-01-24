@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    tags:
+      - '*'
 
   schedule:
     - cron: '0 0 * * *'
@@ -13,52 +16,21 @@ env:
 
 jobs:
   build:
-
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            label: linux-64
-            prefix: /usr/share/miniconda3/envs/my-env
-
-          # Add macOS and Windows builds here if you need them
-          # - os: macos-latest
-          #   label: osx-64
-          #   prefix: /Users/runner/miniconda3/envs/my-env
-
-          # - os: windows-latest
-          #   label: win-64
-          #   prefix: C:\Miniconda3\envs\my-env
-
-    name: ${{ matrix.label }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest        
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Mambaforge
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +%Y-%m-%d)" >> "${GITHUB_OUTPUT}"
+      - uses: mamba-org/setup-micromamba@v1
         with:
-            miniforge-variant: Mambaforge
-            miniforge-version: latest
-            activate-environment: my-env
-            use-mamba: true
-
-      - name: Set cache date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-
-      - uses: actions/cache@v2
-        with:
-          path: ${{ matrix.prefix }}
-          key: ${{ matrix.label }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-        id: cache
-
-      - name: Update environment
-        run: mamba env update -n my-env -f environment.yml
-        if: steps.cache.outputs.cache-hit != 'true'
-
-      - name: Activate environment
-        shell: bash -l {0}
-        run: conda activate my-env
+          environment-file: environment.yml
+          environment-name: my-env
+          # persist on the same day.
+          cache-environment-key: environment-${{ hashFiles('**/pyproject.toml') }}-${{ steps.date.outputs.date }}
+          cache-downloads-key: downloads-${{ steps.date.outputs.date }}
+          init-shell: bash
 
       - name: Lint with flake8
         shell: bash -l {0}
