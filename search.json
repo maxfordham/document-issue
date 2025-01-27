@@ -1,5 +1,329 @@
 [
   {
+    "objectID": "ui.html",
+    "href": "ui.html",
+    "title": "",
+    "section": "",
+    "text": "from document_issue import DocumentIssue\nfrom ipyautoui import AutoUi\n\nui = AutoUi(DocumentIssue)\nui"
+  },
+  {
+    "objectID": "developer.html",
+    "href": "developer.html",
+    "title": "Developer",
+    "section": "",
+    "text": "Developer docs…"
+  },
+  {
+    "objectID": "document-issue/index.html",
+    "href": "document-issue/index.html",
+    "title": "document-issue",
+    "section": "",
+    "text": "The ERD diagram shows the data fields that are recorded for every document. This information is displayed on the issued document; some documents show all the information (e.g. specs) whilst other documents show only a subset (e.g. drawings).",
+    "crumbs": [
+      "document-issue"
+    ]
+  },
+  {
+    "objectID": "document-issue/index.html#entity-relationship-diagram-erd",
+    "href": "document-issue/index.html#entity-relationship-diagram-erd",
+    "title": "document-issue",
+    "section": "",
+    "text": "The ERD diagram shows the data fields that are recorded for every document. This information is displayed on the issued document; some documents show all the information (e.g. specs) whilst other documents show only a subset (e.g. drawings).",
+    "crumbs": [
+      "document-issue"
+    ]
+  },
+  {
+    "objectID": "document-issue/index.html#example-document-issue-data",
+    "href": "document-issue/index.html#example-document-issue-data",
+    "title": "document-issue",
+    "section": "Example document-issue data",
+    "text": "Example document-issue data\nclassification: Ac_05\ndoc_source: WD\ndocument_description: Document Description\ndocument_name: 06667-MXF-XX-XX-SH-M-20003\nformat_configuration:\n  date_string_format: '%d %^b %y'\n  description_in_filename: false\n  include_author_and_checked_by: false\nissue_history:\n- author: EG\n  checked_by: CK\n  date: 2020-01-02\n  issue_format: cde\n  issue_notes: ''\n  revision: P01\n  status_code: S2\n  status_description: Suitable for information\nname_nomenclature: project code-originator-volume-level-type-role-number\nnotes:\n- add notes here\noriginator: Max Fordham LLP\nproject_name: In House App Testing\nproject_number: J5001\nroles:\n- name: JG\n  role: Project Engineer\nscale: NTS\nsize:",
+    "crumbs": [
+      "document-issue"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "document-issue",
+    "section": "",
+    "text": "document-issue information defines the metadata required to accompany every issued document during the course of an AEC (Architecture, Engineering, Construction) project.\nGenerally speaking each document must contain the following information to situate it within a project:\n\na unique code, name, title and summary description\ncategorisation information that defines to what the document pertains\nwhen it was issued, at what version\nby who\nfor what purpose\n\nThe document-issue package formalises those information fields and defines a schema for storing them consistently. The structure is compliant with BS EN ISO 19650-2. The information fields defined here may not be required to be output in every document issued, but the aspiration is that no issued document will require any additional data-fields to those defined here. For internal use it is suggested that all the information fields are competed to ensure a consistent record of issued information is maintained.\nAs a suite of tools, the packages in the document-issue monorepo provide:\n\na schema and datastore of the document-issue meta-data that accompanies every document\na simple application interface for users to manage the issue history of documents on a project\na Revit toolbar to support Revit sync\nstandardised report format document templates for schedules and other report style documents\n\n\n\nThis project is structured as a monorepo. In the packages directory, each package is built and installable independently. Using the VS Code you can open the monorepo as a multi-package workspace defined in .vscode/document-issue.code-workspace.\n\n\n\n\ndocument-issue: schema definitions (as pydantic models) defining document-issue information fields.\n\nfuture Includes logic for building document codes from categorisation fields.\n\ndocument-issue-io: provides input/output functionality. Currently its main use is to define the markdown first couple of pages for report format documents.\ndocument-issue-quarto: defines the quarto/latex templates for creating branded report format documents. Used with document-issue-io.\nfuture document-issue-api: API and associated database that maintains a reference of documents issued across projects.\nfuture document-issue-ui: user application for Engineers and Project Administrators for creating document codes and recording issued documents.\ndocument-issue-xl: excel DNG and issue sheet generation\nfuture document-issue-pyrevit: pyRevit toolbar to create sheets and views by interacting with the document-issue-api.\n\nfor now, `document-issue` intentionally avoids considering the datafields that\nare used to create the Document Number, this may follow up in the future.\n\n\n\ninstructions -&gt;🤓💻\n\n\n\nclassification: Ac_05\ndoc_source: WD\ndocument_description: Document Description\ndocument_name: 06667-MXF-XX-XX-SH-M-20003\nformat_configuration:\n  date_string_format: '%d %^b %y'\n  description_in_filename: false\n  include_author_and_checked_by: false\nissue_history:\n- author: EG\n  checked_by: CK\n  date: 2020-01-02\n  issue_format: cde\n  issue_notes: ''\n  revision: P01\n  status_code: S2\n  status_description: Suitable for information\nname_nomenclature: project code-originator-volume-level-type-role-number\nnotes:\n- add notes here\noriginator: Max Fordham LLP\nproject_name: In House App Testing\nproject_number: J5001\nroles:\n- name: JG\n  role: Project Engineer\nscale: NTS\nsize: \n\n\n\nTBC"
+  },
+  {
+    "objectID": "index.html#repo-structure",
+    "href": "index.html#repo-structure",
+    "title": "document-issue",
+    "section": "",
+    "text": "This project is structured as a monorepo. In the packages directory, each package is built and installable independently. Using the VS Code you can open the monorepo as a multi-package workspace defined in .vscode/document-issue.code-workspace."
+  },
+  {
+    "objectID": "index.html#packages",
+    "href": "index.html#packages",
+    "title": "document-issue",
+    "section": "",
+    "text": "document-issue: schema definitions (as pydantic models) defining document-issue information fields.\n\nfuture Includes logic for building document codes from categorisation fields.\n\ndocument-issue-io: provides input/output functionality. Currently its main use is to define the markdown first couple of pages for report format documents.\ndocument-issue-quarto: defines the quarto/latex templates for creating branded report format documents. Used with document-issue-io.\nfuture document-issue-api: API and associated database that maintains a reference of documents issued across projects.\nfuture document-issue-ui: user application for Engineers and Project Administrators for creating document codes and recording issued documents.\ndocument-issue-xl: excel DNG and issue sheet generation\nfuture document-issue-pyrevit: pyRevit toolbar to create sheets and views by interacting with the document-issue-api.\n\nfor now, `document-issue` intentionally avoids considering the datafields that\nare used to create the Document Number, this may follow up in the future."
+  },
+  {
+    "objectID": "index.html#developer-installation",
+    "href": "index.html#developer-installation",
+    "title": "document-issue",
+    "section": "",
+    "text": "instructions -&gt;🤓💻"
+  },
+  {
+    "objectID": "index.html#example-document-issue-data",
+    "href": "index.html#example-document-issue-data",
+    "title": "document-issue",
+    "section": "",
+    "text": "classification: Ac_05\ndoc_source: WD\ndocument_description: Document Description\ndocument_name: 06667-MXF-XX-XX-SH-M-20003\nformat_configuration:\n  date_string_format: '%d %^b %y'\n  description_in_filename: false\n  include_author_and_checked_by: false\nissue_history:\n- author: EG\n  checked_by: CK\n  date: 2020-01-02\n  issue_format: cde\n  issue_notes: ''\n  revision: P01\n  status_code: S2\n  status_description: Suitable for information\nname_nomenclature: project code-originator-volume-level-type-role-number\nnotes:\n- add notes here\noriginator: Max Fordham LLP\nproject_name: In House App Testing\nproject_number: J5001\nroles:\n- name: JG\n  role: Project Engineer\nscale: NTS\nsize:"
+  },
+  {
+    "objectID": "index.html#license",
+    "href": "index.html#license",
+    "title": "document-issue",
+    "section": "",
+    "text": "TBC"
+  },
+  {
+    "objectID": "example-documents.html",
+    "href": "example-documents.html",
+    "title": "Example Documents",
+    "section": "",
+    "text": "The metadata saved in document-issue is used to make title blocks and other information on issued documents. The document-issue-io section contains template examples of:\n\ngeneric titleblocks\nreport format documents (A4 and A3)\nissue sheet and issue history documents\n\nThe document-issue-quarto section contains simple text to demonstrate how certain elements of quarto-markdown text will be formatted when rendered as pdf using the document-issue-quarto extension.",
+    "crumbs": [
+      "example-documents",
+      "Example Documents"
+    ]
+  },
+  {
+    "objectID": "multiproject-jobs.html",
+    "href": "multiproject-jobs.html",
+    "title": "Multi-Project / Multi-Building Jobs",
+    "section": "",
+    "text": "Consultees\nTypically, projects are simple such that 1no building corresponds to 1no appointment. Sometimes, however, we are appointed on larger multi-building projects, or single project jobs develop into multi-project jobs as the design progresses. This document outlines some common scenarios and the appropriate approach for each.\nDefinition of Terms",
+    "crumbs": [
+      "document-issue",
+      "Multi-Project / Multi-Building Jobs"
+    ]
+  },
+  {
+    "objectID": "multiproject-jobs.html#typical-single-building-projects",
+    "href": "multiproject-jobs.html#typical-single-building-projects",
+    "title": "Multi-Project / Multi-Building Jobs",
+    "section": "Typical Single Building Projects",
+    "text": "Typical Single Building Projects\n\nDesign Information: 1no single pack\nProject Team: 1no project team\nDocument Management: 1no project code and 1no volume code used for all information\nJob Folder/ WebApp/ Project Mail: 1no J:\\drive folder, 1no WebApp project and 1no Project Mail\nResourcing, Billing and Spend: Normal",
+    "crumbs": [
+      "document-issue",
+      "Multi-Project / Multi-Building Jobs"
+    ]
+  },
+  {
+    "objectID": "multiproject-jobs.html#multi-building-projects",
+    "href": "multiproject-jobs.html#multi-building-projects",
+    "title": "Multi-Project / Multi-Building Jobs",
+    "section": "Multi-building Projects",
+    "text": "Multi-building Projects\nThere is a single site with the same client and many buildings. The contractor is assumed to be the same and the project will likely be delivered in one go / sequentially.\n\nDesign Information: 1no single pack. Different buildings refer to equipment within common schedules and common specifications.\nProject Team: 1no project team\nDocument Management: 1no project code, multiple volume codes used to represent different buildings. 1no issue history.\nJob Folder/ WebApp/ Project Mail: 1no J:\\drive folder, 1no WebApp project and 1no Project Mail\nResourcing, Billing and Spend: Normal\n\nThis is typical or large Resi developments. e.g. PoWD, Fairfield Homes, …",
+    "crumbs": [
+      "document-issue",
+      "Multi-Project / Multi-Building Jobs"
+    ]
+  },
+  {
+    "objectID": "multiproject-jobs.html#multi-project-with-independent-resourcing-billing-and-spend",
+    "href": "multiproject-jobs.html#multi-project-with-independent-resourcing-billing-and-spend",
+    "title": "Multi-Project / Multi-Building Jobs",
+    "section": "Multi-project with independent Resourcing, Billing and Spend",
+    "text": "Multi-project with independent Resourcing, Billing and Spend\nThis should simply be run as 2no projects, despite the client being the same and potentially the Fee Bidding happening at the same time.\n\n\n\n\n\n\nTip\n\n\n\nThis requires that the Project Leader separates out the project before people start putting time down to it.\n\n\n\nHow do I know if I should split my Job?\nOften a job will split into multiple projects during the design phase. How do I know if I should split the job into multiple job numbers?\n\nIf the project has a different project team\n\nWebApp is used to record roles and responsibilities on a project.\nIf a new project with a different project team is emerging, it needs its own WebApp project (and job number) to record that.\nClearly defining a project team is increasingly important following the Building Safety Act.\n\nIf the Design Information is unique and has its own standalone Issue History.\n\nJob numbers are set up such that 1no job contains 1no set of design information (i.e. there is 1no specs folder, 1no schedules folder etc.)\nNesting within Job Numbers should be avoided, in this scenario create a new job.\n\nIf your billing is separated and you want to record the spend in isolation",
+    "crumbs": [
+      "document-issue",
+      "Multi-Project / Multi-Building Jobs"
+    ]
+  },
+  {
+    "objectID": "multiproject-jobs.html#multi-project-with-shared-resourcing-billing-and-spend",
+    "href": "multiproject-jobs.html#multi-project-with-shared-resourcing-billing-and-spend",
+    "title": "Multi-Project / Multi-Building Jobs",
+    "section": "Multi-project with shared Resourcing, Billing and Spend",
+    "text": "Multi-project with shared Resourcing, Billing and Spend\n\n\n\n\n\n\nWarning\n\n\n\nAVOID DOING THIS. Where possible, it is always better to run as 2no independent projects as described above. This can be done as a last resort, only if the Project Team has realised too late the projects are independent but have already started recording Time.\n\n\nThe client is the same and we have probably been asked to provide Fees at the same time. There should probably be multiple bid documents for each project, but there may not be. The projects will be procured independently, and may or may not have the same contractor and/or design team parties.\n\nDesign Information: multiple packs of design information. Each project has its own schedules and specification.\nProject Team: 2no project teams (though it may be the same team on both).\nDocument Management: 2no project codes. 2no issue historys.\nJob Folder/ WebApp/ Project Mail: 2no J:\\drive folders. 1no fee earning project, 1no zero fee project in WebApp. The 2nd WebApp project allows for a different project team to be assigned and supports creation of another job folder. The 2nd WebApp project must not have any work-types associated and will be explicitly given 0 Fee in Fee Manager. This way it is impossible to associate time to it in Timesheets and it will have no Fee associated to it, with all Fee managed through the primary job.\nResourcing, Billing and Spend: Resourcing / Timesheets / Billing via a single project.\n\n\nJustification\nWhilst this is not recommended and 2no independent projects is always preferred, sometimes splitting the Time Management and Billing is no longer an option (for example, if work has already been done and assigned to the old job number). In those scenario’s it is still beneficical to split the job for the following reasons:\n\nClearly defining responsibilities of a Project Team for a specific project\nAvoid “nesting” of Design Information within a job folder\nIt ensures that there is accurate mapping between our Design Information and our information in WebApp. Currently automation tools (pyRevit, Digital Schedules) use the WebApp data to retrieve the Project Name from the Project Number, ensuring that this information is consistent across the project. As our Digitalisation journey continues more information will be centrally stored in this way, improving project automation and ultimately reducing the administrative burden of delivering a project.\nAutodesk Construction Cloud is “project-centric”… more here…\nIt is acknowledged that multiple projects for the same Client are likely to have to common reference information (e.g. 2no buildings on a University Campus). In this Scenario it is up to the Project Teams to communicate and come up with a plan to manage this. It would likely require either choosing a single project as a common location to keep shared information and using shortcuts to link to it from the other project, or accepting that duplicate information will be required.",
+    "crumbs": [
+      "document-issue",
+      "Multi-Project / Multi-Building Jobs"
+    ]
+  },
+  {
+    "objectID": "example-documents/title-page-a3-l.html",
+    "href": "example-documents/title-page-a3-l.html",
+    "title": "title-page-a3-l",
+    "section": "",
+    "text": "TODO",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "title-page-a3-l"
+    ]
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_a4_portrait_note/06667-MXF-XX-XX-SH-M-20003.html",
+    "href": "example-documents/test-outputs/test_to_pdf_a4_portrait_note/06667-MXF-XX-XX-SH-M-20003.html",
+    "title": "",
+    "section": "",
+    "text": "Test A4 Portrait Document Issue Note"
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_loads_of_notes_and_issues/06667-MXF-XX-XX-SH-M-20003.html",
+    "href": "example-documents/test-outputs/test_to_pdf_loads_of_notes_and_issues/06667-MXF-XX-XX-SH-M-20003.html",
+    "title": "A description of a Max Fordham Project can split lines but no more than two",
+    "section": "",
+    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\nAuthor\nChecker\n\n\n\n\n02 JAN 24\nP01\nS8\nSuitable for AIM Authorization\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS1\nSuitable for Coordination\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS2\nSuitable for Information\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS3\nSuitable for Review and Comment\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS4\nSuitable for Stage Approval\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS5\nSuitable for Review and Acceptance\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS6\nWithdrawn\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS7\nSuitable for PIM Authorization\n\nOH\nJG\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n4\nThis is a note\n\n\n5\nThis is another note\n\n\n6\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n7\nThis is a note\n\n\n8\nThis is another note\n\n\n9\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n10\nThis is a note\n\n\n11\nThis is another note\n\n\n12\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n13\nThis is a note\n\n\n14\nThis is another note\n\n\n15\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue"
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_with_author_and_checked_by/06667-MXF-XX-XX-SH-M-20003.html",
+    "href": "example-documents/test-outputs/test_to_pdf_with_author_and_checked_by/06667-MXF-XX-XX-SH-M-20003.html",
+    "title": "A description of a Max Fordham Project can split lines but no more than two",
+    "section": "",
+    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\nAuthor\nChecker\n\n\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issue"
+  },
+  {
+    "objectID": "example-documents/title-page-a4-p.html",
+    "href": "example-documents/title-page-a4-p.html",
+    "title": "title-page-a4-p",
+    "section": "",
+    "text": "title-page-a4-p\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a4\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-page-a4-p.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\n\ntitle_block_a4(\n    document_issue=document_issue,\n    fpth_output=fpth,\n    is_titlepage=True,\n)\n\nprint(fpth.exists())\n#&gt; True",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "title-page-a4-p"
+    ]
+  },
+  {
+    "objectID": "example-documents/issuesheet.html",
+    "href": "example-documents/issuesheet.html",
+    "title": "issuesheet",
+    "section": "",
+    "text": "code\n\n\n\n\n\n# note. the tests are in the document-issue-io package\nimport pathlib\nfrom document_issue_io.issuesheet import write_issuesheet_and_issuehistory\n\n\ndef delete_existing(fdir, glob_str):\n    [x.unlink(missing_ok=True) for x in list(fdir.glob(glob_str))]\n\n\nfdir_output, fdir_datapackage = pathlib.Path(\"tests/test-outputs\"), pathlib.Path(\n    \"tests/datapackage\"\n)\n\nglob_str = \"03870-MXF*-IS-J-*.pdf\"\ndelete_existing(fdir_output, glob_str)\nfpth_issuesheet, fpths_issuehistory = write_issuesheet_and_issuehistory(\n    fdir_datapackage\n)\n\n\nprint(fpth_issuesheet.name, fpth_issuesheet.exists())\n#&gt; 03870-MXF-XX-XX-IS-J-00132.pdf True\nprint([f.name for f in fpths_issuehistory], [f.exists() for f in fpths_issuehistory])\n#&gt; ['03870-MXF-XX-XX-IS-J-00001.pdf', '03870-MXF-XX-XX-IS-J-00002.pdf'] [True, True]",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "issuesheet"
+    ]
+  },
+  {
+    "objectID": "example-documents/issuesheet.html#issue-history",
+    "href": "example-documents/issuesheet.html#issue-history",
+    "title": "issuesheet",
+    "section": "Issue History",
+    "text": "Issue History",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "issuesheet"
+    ]
+  },
+  {
+    "objectID": "example-documents/title-block-a3-l.html",
+    "href": "example-documents/title-block-a3-l.html",
+    "title": "title-block-a3-l",
+    "section": "",
+    "text": "code\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a3\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-block-a3-l.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\ntitle_block_a3(document_issue=document_issue, fpth_output=fpth)\n\nprint(fpth.exists())\n#&gt; True",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "title-block-a3-l"
+    ]
+  },
+  {
+    "objectID": "INSTALLATION.html",
+    "href": "INSTALLATION.html",
+    "title": "Development Installation",
+    "section": "",
+    "text": "Warning\n\n\n\ndocument-issue-xl requires Windows to run. For dev instructions see: packages/document-issue-xl/README.md\n\n\nWe use pixi to manage the monorepo. Install pixi (on linux) with the following command:\ncurl -fsSL https://pixi.sh/install.sh | bash\nIf using VSCode, we recommend using the document-issue.code-workspace file to open the project.\nTo install the environment and packages for development, run the following commands from ROOT:\npixi install\ncntl+shift+p - python select interpreter - set to pixi env. TODO: add pixi vscode plugin?\nInstall latex engine:\nquarto install tinytex # TODO: should this be within the env?\nInstall libfontconfig if required:\nsudo apt-get update\nsudo apt-get install libfontconfig",
+    "crumbs": [
+      "developer",
+      "Development Installation"
+    ]
+  },
+  {
+    "objectID": "example-documents/title-block-a4-p.html",
+    "href": "example-documents/title-block-a4-p.html",
+    "title": "title-block-a4-p",
+    "section": "",
+    "text": "title-block-a4-p\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a4\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-block-a4-p.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\ntitle_block_a4(document_issue=document_issue, fpth_output=fpth)\n\nprint(fpth.exists())\n#&gt; True",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "title-block-a4-p"
+    ]
+  },
+  {
+    "objectID": "example-documents/title-block-a4-p-custom-nomenclature.html",
+    "href": "example-documents/title-block-a4-p-custom-nomenclature.html",
+    "title": "title-block-a4-p-custom-nomenclature",
+    "section": "",
+    "text": "title-block-a4-p-custom-nomenclature\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a4\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-block-a4-p-custom-nomenclature.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\ndocument_issue.name_nomenclature = \"originator-project-volume-level-type-role-number\"\ntitle_block_a4(document_issue=document_issue, fpth_output=fpth)\n\nprint(fpth.exists())\n#&gt; True",
+    "crumbs": [
+      "example-documents",
+      "document-issue-io",
+      "title-block-a4-p-custom-nomenclature"
+    ]
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_a3_landscape/06667-MXF-XX-XX-SH-M-20003.html",
+    "href": "example-documents/test-outputs/test_to_pdf_a3_landscape/06667-MXF-XX-XX-SH-M-20003.html",
+    "title": "A description of a Max Fordham Project can split lines but no more than two",
+    "section": "",
+    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\n\n\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issue\n\n\n\nTest A3 Landscape Document Issue Note"
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_with_author/06667-MXF-XX-XX-SH-M-20003.html",
+    "href": "example-documents/test-outputs/test_to_pdf_with_author/06667-MXF-XX-XX-SH-M-20003.html",
+    "title": "A description of a Max Fordham Project can split lines but no more than two",
+    "section": "",
+    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\nAuthor\n\n\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issue"
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_a3_landscape_note/06667-MXF-XX-XX-SH-M-20003.html",
+    "href": "example-documents/test-outputs/test_to_pdf_a3_landscape_note/06667-MXF-XX-XX-SH-M-20003.html",
+    "title": "",
+    "section": "",
+    "text": "Test A3 Landscape Document Issue Note"
+  },
+  {
+    "objectID": "example-documents/test-outputs/test_to_pdf_with_markdown_content/06667-MXF-XX-XX-SH-M-20003.html#my-project",
+    "href": "example-documents/test-outputs/test_to_pdf_with_markdown_content/06667-MXF-XX-XX-SH-M-20003.html#my-project",
+    "title": "A description of a Max Fordham Project can split lines but no more than two",
+    "section": "My Project",
+    "text": "My Project\n\n\n\nTables\nAre\nCool\n\n\n\n\ncol 1 is\nleft-aligned\n1600\n\n\ncol 2 is\ncentered\n12\n\n\ncol 3 is\nright-aligned\n1"
+  },
+  {
+    "objectID": "feedback.html",
+    "href": "feedback.html",
+    "title": "Feedback",
+    "section": "",
+    "text": "Give feedback as normal using the comments section of the Wiki page."
+  },
+  {
+    "objectID": "schema.html",
+    "href": "schema.html",
+    "title": "Document Issue Schema",
+    "section": "",
+    "text": "*metadata to be accompanied by every formal document issue.\nNot all data fields are required for every document type, but no document will require additional data fields.*"
+  },
+  {
+    "objectID": "schema.html#properties",
+    "href": "schema.html#properties",
+    "title": "Document Issue Schema",
+    "section": "Properties",
+    "text": "Properties\n\nproject_name (string): should be the same as the WebApp. Default: In House App Testing.\nproject_number (string): unique number project code. Default: J5001.\nroles (array): defines who is fulfilling various roles and responsibilitieson the project. Some of these roles are required from a QA and quality assurance perspective. Default: [{'name': 'JG', 'role': 'Project Engineer'}].\n\nItems: Refer to #/definitions/Role.\n\ndocument_name (string): document code. Should be the filename when uploadedto a CDE. Structured to be machine-readable. Default: 06667-MXF-XX-XX-SH-M-20003.\ndocument_description (string): human readable description of the document. Default: Document Description.\nclassification (string): classification as per Uniclass2015. Default: Ac_05.\nname_nomenclature (string): denotes what each section of of the document code meanswhen split on ‘-’ character. Default: project-originator-volume-level-type-role-number.\nsize (string): paper size of the document. Default: A4.\nExamples:\n\"n/a\"\n\"A4\"\n\"A3\"\n\"A2\"\n\"A1\"\n\"A0\"\nscale (string): if drawing, give scale, else “not to scale” (NTS). Default: NTS.\nExamples:\n\"nts\"\n\"1:1\"\n\"1:2\"\n\"1:5\"\n\"1:10\"\n\"1:20\"\n\"1:25\"\n\"1:50\"\n\"1:100\"\n\"1:200\"\n\"1:250\"\n\"1:500\"\n\"1:1000\"\n\"1:1250\"\ndoc_source (string): software used to author the document. Default: WD.\nExamples:\n\"A\"\n\"R18\"\n\"R19\"\n\"R20\"\n\"R21\"\n\"R22\"\n\"R23\"\n\"PDF\"\n\"PSD\"\n\"PNG\"\n\"WD\"\n\"EXL\"\n\"AM\"\nissue_history (array): Default: [{'revision': 'P01', 'date': '2020-01-02', 'status_code': 'S2', 'status_description': 'Suitable for information', 'author': 'EG', 'checked_by': 'CK', 'issue_format': 'cde', 'issue_notes': ''}].\n\nItems: Refer to #/definitions/Issue.\n\nnotes (array): Default: ['add notes here'].\n\nItems (string)\n\noriginator (string): the company the info came from (fixed to be Max Fordham LLP). the name ‘originator’ comes from BS EN ISO 19650-2. Default: Max Fordham LLP.\nformat_configuration: Default: {'date_string_format': '%d %^b %y', 'include_author_and_checked_by': False}."
+  },
+  {
+    "objectID": "schema.html#definitions",
+    "href": "schema.html#definitions",
+    "title": "Document Issue Schema",
+    "section": "Definitions",
+    "text": "Definitions\n\nRole (object)\n\nname (string): initial of the person fulfilling the Role. Default: JG.\nrole (string): Default: Project Engineer.\nExamples:\n\"\"\n\"Director in Charge\"\n\"Client Relationship Management (CRM) Lead\"\n\"Management Lead\"\n\"Commercial Lead\"\n\"Design Strategy Lead\"\n\"Health and Safety Lead\"\n\"Project Coordinator\"\n\"Project Administrator\"\n\"Strategy Reviewer\"\n\"Technical Reviewer\"\n\"Project Engineer\"\n\"Lead Electrical Engineer\"\n\"Lead Mechanical Engineer\"\n\"Systems Engineer\"\n\"Site Engineer\"\n\"BIM Strategy Advisor\"\n\"Digital Design Engineer\"\n\"Responsible Building Performance Modeller\"\n\"Building Performance Modeller\"\n\"Lead Sustainability Consultant\"\n\"Sustainability Consultant\"\n\"Lead Acoustician\"\n\"Specialist Building Physics Engineer\"\n\"Specialist Lighting Designer\"\n\"Passivhaus Principal\"\n\"Passivhaus Project Designer\"\n\"Passivhaus Designer\"\n\nIssueFormatEnum (string): in what form was the issue delivered. Must be one of: ['cde', 'ea', 'el', 'p', 'r'].\nIssue (object): required information fields that define the metadata of a document issue.\n\nrevision (string): Default: P01.\ndate (string): Default: 2020-01-02.\nstatus_code (string): Default: S2.\nstatus_description (string): this is a BIM field that matches directly with status_code. Default: Suitable for information.\nauthor (string): the person who authored the work. Default: EG.\nchecked_by (string): the person who checked the work. . Default: CK.\nissue_format: Default: cde.\nissue_notes (string): free field where the Engineer can briefly summarise changes since previous issue. Default: ``.\n\nFormatConfiguration (object): configuration options that determine how the output is displayed.\n\ndate_string_format (string): date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime. Default: %d %^b %y.\ninclude_author_and_checked_by (boolean): Include the initials of the author and checker in the client facing output. Often avoided but some clients (e.g. Canary Wharf) require it. Default: False."
+  },
+  {
     "objectID": "document-issue/documents-review.html",
     "href": "document-issue/documents-review.html",
     "title": "Documents Issue Info Review (2023OCT)",
@@ -74,330 +398,6 @@
     "crumbs": [
       "document-issue",
       "Documents Issue Info Review (2023OCT)"
-    ]
-  },
-  {
-    "objectID": "example-documents.html",
-    "href": "example-documents.html",
-    "title": "Example Documents",
-    "section": "",
-    "text": "The metadata saved in document-issue is used to make title blocks and other information on issued documents. The document-issue-io section contains template examples of:\n\ngeneric titleblocks\nreport format documents (A4 and A3)\nissue sheet and issue history documents\n\nThe document-issue-quarto section contains simple text to demonstrate how certain elements of quarto-markdown text will be formatted when rendered as pdf using the document-issue-quarto extension.",
-    "crumbs": [
-      "example-documents",
-      "Example Documents"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "document-issue",
-    "section": "",
-    "text": "document-issue information defines the metadata required to accompany every issued document during the course of an AEC (Architecture, Engineering, Construction) project.\nGenerally speaking each document must contain the following information to situate it within a project:\n\na unique code, name, title and summary description\ncategorisation information that defines to what the document pertains\nwhen it was issued, at what version\nby who\nfor what purpose\n\nThe document-issue package formalises those information fields and defines a schema for storing them consistently. The structure is compliant with BS EN ISO 19650-2. The information fields defined here may not be required to be output in every document issued, but the aspiration is that no issued document will require any additional data-fields to those defined here. For internal use it is suggested that all the information fields are competed to ensure a consistent record of issued information is maintained.\nAs a suite of tools, the packages in the document-issue monorepo provide:\n\na schema and datastore of the document-issue meta-data that accompanies every document\na simple application interface for users to manage the issue history of documents on a project\na Revit toolbar to support Revit sync\nstandardised report format document templates for schedules and other report style documents\n\n\n\nThis project is structured as a monorepo. In the packages directory, each package is built and installable independently. Using the VS Code you can open the monorepo as a multi-package workspace defined in .vscode/document-issue.code-workspace.\n\n\n\n\ndocument-issue: schema definitions (as pydantic models) defining document-issue information fields.\n\nfuture Includes logic for building document codes from categorisation fields.\n\ndocument-issue-io: provides input/output functionality. Currently its main use is to define the markdown first couple of pages for report format documents.\ndocument-issue-quarto: defines the quarto/latex templates for creating branded report format documents. Used with document-issue-io.\nfuture document-issue-api: API and associated database that maintains a reference of documents issued across projects.\nfuture document-issue-ui: user application for Engineers and Project Administrators for creating document codes and recording issued documents.\ndocument-issue-xl: excel DNG and issue sheet generation\nfuture document-issue-pyrevit: pyRevit toolbar to create sheets and views by interacting with the document-issue-api.\n\nfor now, `document-issue` intentionally avoids considering the datafields that\nare used to create the Document Number, this may follow up in the future.\n\n\n\ninstructions -&gt;🤓💻\n\n\n\nclassification: Ac_05\ndoc_source: WD\ndocument_description: Document Description\ndocument_name: 06667-MXF-XX-XX-SH-M-20003\nformat_configuration:\n  date_string_format: '%d %^b %y'\n  description_in_filename: false\n  include_author_and_checked_by: false\nissue_history:\n- author: EG\n  checked_by: CK\n  date: 2020-01-02\n  issue_format: cde\n  issue_notes: ''\n  revision: P01\n  status_code: S2\n  status_description: Suitable for information\nname_nomenclature: project code-originator-volume-level-type-role-number\nnotes:\n- add notes here\noriginator: Max Fordham LLP\nproject_name: In House App Testing\nproject_number: J5001\nroles:\n- name: JG\n  role: Project Engineer\nscale: NTS\nsize: \n\n\n\nTBC"
-  },
-  {
-    "objectID": "index.html#repo-structure",
-    "href": "index.html#repo-structure",
-    "title": "document-issue",
-    "section": "",
-    "text": "This project is structured as a monorepo. In the packages directory, each package is built and installable independently. Using the VS Code you can open the monorepo as a multi-package workspace defined in .vscode/document-issue.code-workspace."
-  },
-  {
-    "objectID": "index.html#packages",
-    "href": "index.html#packages",
-    "title": "document-issue",
-    "section": "",
-    "text": "document-issue: schema definitions (as pydantic models) defining document-issue information fields.\n\nfuture Includes logic for building document codes from categorisation fields.\n\ndocument-issue-io: provides input/output functionality. Currently its main use is to define the markdown first couple of pages for report format documents.\ndocument-issue-quarto: defines the quarto/latex templates for creating branded report format documents. Used with document-issue-io.\nfuture document-issue-api: API and associated database that maintains a reference of documents issued across projects.\nfuture document-issue-ui: user application for Engineers and Project Administrators for creating document codes and recording issued documents.\ndocument-issue-xl: excel DNG and issue sheet generation\nfuture document-issue-pyrevit: pyRevit toolbar to create sheets and views by interacting with the document-issue-api.\n\nfor now, `document-issue` intentionally avoids considering the datafields that\nare used to create the Document Number, this may follow up in the future."
-  },
-  {
-    "objectID": "index.html#developer-installation",
-    "href": "index.html#developer-installation",
-    "title": "document-issue",
-    "section": "",
-    "text": "instructions -&gt;🤓💻"
-  },
-  {
-    "objectID": "index.html#example-document-issue-data",
-    "href": "index.html#example-document-issue-data",
-    "title": "document-issue",
-    "section": "",
-    "text": "classification: Ac_05\ndoc_source: WD\ndocument_description: Document Description\ndocument_name: 06667-MXF-XX-XX-SH-M-20003\nformat_configuration:\n  date_string_format: '%d %^b %y'\n  description_in_filename: false\n  include_author_and_checked_by: false\nissue_history:\n- author: EG\n  checked_by: CK\n  date: 2020-01-02\n  issue_format: cde\n  issue_notes: ''\n  revision: P01\n  status_code: S2\n  status_description: Suitable for information\nname_nomenclature: project code-originator-volume-level-type-role-number\nnotes:\n- add notes here\noriginator: Max Fordham LLP\nproject_name: In House App Testing\nproject_number: J5001\nroles:\n- name: JG\n  role: Project Engineer\nscale: NTS\nsize:"
-  },
-  {
-    "objectID": "index.html#license",
-    "href": "index.html#license",
-    "title": "document-issue",
-    "section": "",
-    "text": "TBC"
-  },
-  {
-    "objectID": "example-documents/title-page-a4-p.html",
-    "href": "example-documents/title-page-a4-p.html",
-    "title": "title-page-a4-p",
-    "section": "",
-    "text": "title-page-a4-p\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a4\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-page-a4-p.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\n\ntitle_block_a4(\n    document_issue=document_issue,\n    fpth_output=fpth,\n    is_titlepage=True,\n)\n\nprint(fpth.exists())\n#&gt; True",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "title-page-a4-p"
-    ]
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_a3_landscape_note/06667-MXF-XX-XX-SH-M-20003.html",
-    "href": "example-documents/test-outputs/test_to_pdf_a3_landscape_note/06667-MXF-XX-XX-SH-M-20003.html",
-    "title": "",
-    "section": "",
-    "text": "Test A3 Landscape Document Issue Note"
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_loads_of_notes_and_issues/06667-MXF-XX-XX-SH-M-20003.html",
-    "href": "example-documents/test-outputs/test_to_pdf_loads_of_notes_and_issues/06667-MXF-XX-XX-SH-M-20003.html",
-    "title": "A description of a Max Fordham Project can split lines but no more than two",
-    "section": "",
-    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\nAuthor\nChecker\n\n\n\n\n02 JAN 24\nP01\nS8\nSuitable for AIM Authorization\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS1\nSuitable for Coordination\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS2\nSuitable for Information\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS3\nSuitable for Review and Comment\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS4\nSuitable for Stage Approval\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS5\nSuitable for Review and Acceptance\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS6\nWithdrawn\n\nOH\nJG\n\n\n01 JAN 24\nP01\nS7\nSuitable for PIM Authorization\n\nOH\nJG\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n4\nThis is a note\n\n\n5\nThis is another note\n\n\n6\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n7\nThis is a note\n\n\n8\nThis is another note\n\n\n9\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n10\nThis is a note\n\n\n11\nThis is another note\n\n\n12\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue\n\n\n13\nThis is a note\n\n\n14\nThis is another note\n\n\n15\nThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issueThis is a very long note which states something important about the document issue"
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_a4_portrait_note/06667-MXF-XX-XX-SH-M-20003.html",
-    "href": "example-documents/test-outputs/test_to_pdf_a4_portrait_note/06667-MXF-XX-XX-SH-M-20003.html",
-    "title": "",
-    "section": "",
-    "text": "Test A4 Portrait Document Issue Note"
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_with_author_and_checked_by/06667-MXF-XX-XX-SH-M-20003.html",
-    "href": "example-documents/test-outputs/test_to_pdf_with_author_and_checked_by/06667-MXF-XX-XX-SH-M-20003.html",
-    "title": "A description of a Max Fordham Project can split lines but no more than two",
-    "section": "",
-    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\nAuthor\nChecker\n\n\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\nCK\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issue"
-  },
-  {
-    "objectID": "example-documents/title-page-a3-l.html",
-    "href": "example-documents/title-page-a3-l.html",
-    "title": "title-page-a3-l",
-    "section": "",
-    "text": "TODO",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "title-page-a3-l"
-    ]
-  },
-  {
-    "objectID": "example-documents/title-block-a4-p-custom-nomenclature.html",
-    "href": "example-documents/title-block-a4-p-custom-nomenclature.html",
-    "title": "title-block-a4-p-custom-nomenclature",
-    "section": "",
-    "text": "title-block-a4-p-custom-nomenclature\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a4\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-block-a4-p-custom-nomenclature.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\ndocument_issue.name_nomenclature = \"originator-project-volume-level-type-role-number\"\ntitle_block_a4(document_issue=document_issue, fpth_output=fpth)\n\nprint(fpth.exists())\n#&gt; True",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "title-block-a4-p-custom-nomenclature"
-    ]
-  },
-  {
-    "objectID": "INSTALLATION.html",
-    "href": "INSTALLATION.html",
-    "title": "Development Installation",
-    "section": "",
-    "text": "Warning\n\n\n\ndocument-issue-xl requires Windows to run. For dev instructions see: packages/document-issue-xl/README.md\n\n\nWe use pixi to manage the monorepo. Install pixi (on linux) with the following command:\ncurl -fsSL https://pixi.sh/install.sh | bash\nIf using VSCode, we recommend using the document-issue.code-workspace file to open the project.\nTo install the environment and packages for development, run the following commands from ROOT:\npixi install\ncntl+shift+p - python select interpreter - set to pixi env. TODO: add pixi vscode plugin?\nInstall latex engine:\nquarto install tinytex # TODO: should this be within the env?\nInstall libfontconfig if required:\nsudo apt-get update\nsudo apt-get install libfontconfig",
-    "crumbs": [
-      "developer",
-      "Development Installation"
-    ]
-  },
-  {
-    "objectID": "feedback.html",
-    "href": "feedback.html",
-    "title": "Feedback",
-    "section": "",
-    "text": "Give feedback as normal using the comments section of the Wiki page."
-  },
-  {
-    "objectID": "ui.html",
-    "href": "ui.html",
-    "title": "",
-    "section": "",
-    "text": "from document_issue import DocumentIssue\nfrom ipyautoui import AutoUi\n\nui = AutoUi(DocumentIssue)\nui"
-  },
-  {
-    "objectID": "example-documents/issuesheet.html",
-    "href": "example-documents/issuesheet.html",
-    "title": "issuesheet",
-    "section": "",
-    "text": "code\n\n\n\n\n\n# note. the tests are in the document-issue-io package\nimport pathlib\nfrom document_issue_io.issuesheet import write_issuesheet_and_issuehistory\n\n\ndef delete_existing(fdir, glob_str):\n    [x.unlink(missing_ok=True) for x in list(fdir.glob(glob_str))]\n\n\nfdir_output, fdir_datapackage = pathlib.Path(\"tests/test-outputs\"), pathlib.Path(\n    \"tests/datapackage\"\n)\n\nglob_str = \"03870-MXF*-IS-J-*.pdf\"\ndelete_existing(fdir_output, glob_str)\nfpth_issuesheet, fpths_issuehistory = write_issuesheet_and_issuehistory(\n    fdir_datapackage\n)\n\n\nprint(fpth_issuesheet.name, fpth_issuesheet.exists())\n#&gt; 03870-MXF-XX-XX-IS-J-00132.pdf True\nprint([f.name for f in fpths_issuehistory], [f.exists() for f in fpths_issuehistory])\n#&gt; ['03870-MXF-XX-XX-IS-J-00001.pdf', '03870-MXF-XX-XX-IS-J-00002.pdf'] [True, True]",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "issuesheet"
-    ]
-  },
-  {
-    "objectID": "example-documents/issuesheet.html#issue-history",
-    "href": "example-documents/issuesheet.html#issue-history",
-    "title": "issuesheet",
-    "section": "Issue History",
-    "text": "Issue History",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "issuesheet"
-    ]
-  },
-  {
-    "objectID": "example-documents/title-block-a3-l.html",
-    "href": "example-documents/title-block-a3-l.html",
-    "title": "title-block-a3-l",
-    "section": "",
-    "text": "code\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a3\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-block-a3-l.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\ntitle_block_a3(document_issue=document_issue, fpth_output=fpth)\n\nprint(fpth.exists())\n#&gt; True",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "title-block-a3-l"
-    ]
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_with_author/06667-MXF-XX-XX-SH-M-20003.html",
-    "href": "example-documents/test-outputs/test_to_pdf_with_author/06667-MXF-XX-XX-SH-M-20003.html",
-    "title": "A description of a Max Fordham Project can split lines but no more than two",
-    "section": "",
-    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\nAuthor\n\n\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\nEG\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issue"
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_a3_landscape/06667-MXF-XX-XX-SH-M-20003.html",
-    "href": "example-documents/test-outputs/test_to_pdf_a3_landscape/06667-MXF-XX-XX-SH-M-20003.html",
-    "title": "A description of a Max Fordham Project can split lines but no more than two",
-    "section": "",
-    "text": "Max Fordham LLP \n \nmaxfordham.com \nMax Fordham LLP is a Limited Liability \nPartnership. \n \nRegistered in England and Wales \nNumber OC300026. \n \nRegistered office: \n42–43 Gloucester Crescent \nLondon NW1 7PE \nThis report is for the private and \nconfidential use of the clients for \nwhom the report is undertaken and \nshould not be reproduced in whole or\nin part or relied upon by third parties\nfor any use whatsoever without the \nexpress written authority of Max \nFordham LLP \n \n© Max Fordham LLP \n\n\n \n\n\n\nContributions\n\n\n\n\n\n\n\nInitials\nRole\n\n\n\n\nOH\nDirector in Charge\n\n\n\n\n\n\n\n\nIssue History\n\n\n\n\n\n\n\n\n\n\nDate\nRev\nStatus\nDescription\nIssue Notes\n\n\n\n\n02 JAN 20\nC01\nA4\nIssued for Contractor design, procurement & coordination\n\n\n\n\n\n\nNotes\n\n\n\n\n\n\n\n1\nThis is a note\n\n\n2\nThis is another note\n\n\n3\nThis is a very long note which states something important about the document issue\n\n\n\nTest A3 Landscape Document Issue Note"
-  },
-  {
-    "objectID": "example-documents/test-outputs/test_to_pdf_with_markdown_content/06667-MXF-XX-XX-SH-M-20003.html#my-project",
-    "href": "example-documents/test-outputs/test_to_pdf_with_markdown_content/06667-MXF-XX-XX-SH-M-20003.html#my-project",
-    "title": "A description of a Max Fordham Project can split lines but no more than two",
-    "section": "My Project",
-    "text": "My Project\n\n\n\nTables\nAre\nCool\n\n\n\n\ncol 1 is\nleft-aligned\n1600\n\n\ncol 2 is\ncentered\n12\n\n\ncol 3 is\nright-aligned\n1"
-  },
-  {
-    "objectID": "example-documents/title-block-a4-p.html",
-    "href": "example-documents/title-block-a4-p.html",
-    "title": "title-block-a4-p",
-    "section": "",
-    "text": "title-block-a4-p\n\n\n\n\n\nimport pathlib\nfrom document_issue import demo_document_issue\nfrom document_issue_io.title_block import title_block_a4\n\nfdir = pathlib.Path(\"tests/test-outputs\")\nfpth = fdir / \"title-block-a4-p.pdf\"\nfpth.unlink(missing_ok=True)\ndocument_issue = demo_document_issue()\ntitle_block_a4(document_issue=document_issue, fpth_output=fpth)\n\nprint(fpth.exists())\n#&gt; True",
-    "crumbs": [
-      "example-documents",
-      "document-issue-io",
-      "title-block-a4-p"
-    ]
-  },
-  {
-    "objectID": "multiproject-jobs.html",
-    "href": "multiproject-jobs.html",
-    "title": "Multi-Project / Multi-Building Jobs",
-    "section": "",
-    "text": "Consultees\nTypically, projects are simple such that 1no building corresponds to 1no appointment. Sometimes, however, we are appointed on larger multi-building projects, or single project jobs develop into multi-project jobs as the design progresses. This document outlines some common scenarios and the appropriate approach for each.\nDefinition of Terms",
-    "crumbs": [
-      "document-issue",
-      "Multi-Project / Multi-Building Jobs"
-    ]
-  },
-  {
-    "objectID": "multiproject-jobs.html#typical-single-building-projects",
-    "href": "multiproject-jobs.html#typical-single-building-projects",
-    "title": "Multi-Project / Multi-Building Jobs",
-    "section": "Typical Single Building Projects",
-    "text": "Typical Single Building Projects\n\nDesign Information: 1no single pack\nProject Team: 1no project team\nDocument Management: 1no project code and 1no volume code used for all information\nJob Folder/ WebApp/ Project Mail: 1no J:\\drive folder, 1no WebApp project and 1no Project Mail\nResourcing, Billing and Spend: Normal",
-    "crumbs": [
-      "document-issue",
-      "Multi-Project / Multi-Building Jobs"
-    ]
-  },
-  {
-    "objectID": "multiproject-jobs.html#multi-building-projects",
-    "href": "multiproject-jobs.html#multi-building-projects",
-    "title": "Multi-Project / Multi-Building Jobs",
-    "section": "Multi-building Projects",
-    "text": "Multi-building Projects\nThere is a single site with the same client and many buildings. The contractor is assumed to be the same and the project will likely be delivered in one go / sequentially.\n\nDesign Information: 1no single pack. Different buildings refer to equipment within common schedules and common specifications.\nProject Team: 1no project team\nDocument Management: 1no project code, multiple volume codes used to represent different buildings. 1no issue history.\nJob Folder/ WebApp/ Project Mail: 1no J:\\drive folder, 1no WebApp project and 1no Project Mail\nResourcing, Billing and Spend: Normal\n\nThis is typical or large Resi developments. e.g. PoWD, Fairfield Homes, …",
-    "crumbs": [
-      "document-issue",
-      "Multi-Project / Multi-Building Jobs"
-    ]
-  },
-  {
-    "objectID": "multiproject-jobs.html#multi-project-with-independent-resourcing-billing-and-spend",
-    "href": "multiproject-jobs.html#multi-project-with-independent-resourcing-billing-and-spend",
-    "title": "Multi-Project / Multi-Building Jobs",
-    "section": "Multi-project with independent Resourcing, Billing and Spend",
-    "text": "Multi-project with independent Resourcing, Billing and Spend\nThis should simply be run as 2no projects, despite the client being the same and potentially the Fee Bidding happening at the same time.\n\n\n\n\n\n\nTip\n\n\n\nThis requires that the Project Leader separates out the project before people start putting time down to it.\n\n\n\nHow do I know if I should split my Job?\nOften a job will split into multiple projects during the design phase. How do I know if I should split the job into multiple job numbers?\n\nIf the project has a different project team\n\nWebApp is used to record roles and responsibilities on a project.\nIf a new project with a different project team is emerging, it needs its own WebApp project (and job number) to record that.\nClearly defining a project team is increasingly important following the Building Safety Act.\n\nIf the Design Information is unique and has its own standalone Issue History.\n\nJob numbers are set up such that 1no job contains 1no set of design information (i.e. there is 1no specs folder, 1no schedules folder etc.)\nNesting within Job Numbers should be avoided, in this scenario create a new job.\n\nIf your billing is separated and you want to record the spend in isolation",
-    "crumbs": [
-      "document-issue",
-      "Multi-Project / Multi-Building Jobs"
-    ]
-  },
-  {
-    "objectID": "multiproject-jobs.html#multi-project-with-shared-resourcing-billing-and-spend",
-    "href": "multiproject-jobs.html#multi-project-with-shared-resourcing-billing-and-spend",
-    "title": "Multi-Project / Multi-Building Jobs",
-    "section": "Multi-project with shared Resourcing, Billing and Spend",
-    "text": "Multi-project with shared Resourcing, Billing and Spend\n\n\n\n\n\n\nWarning\n\n\n\nAVOID DOING THIS. Where possible, it is always better to run as 2no independent projects as described above. This can be done as a last resort, only if the Project Team has realised too late the projects are independent but have already started recording Time.\n\n\nThe client is the same and we have probably been asked to provide Fees at the same time. There should probably be multiple bid documents for each project, but there may not be. The projects will be procured independently, and may or may not have the same contractor and/or design team parties.\n\nDesign Information: multiple packs of design information. Each project has its own schedules and specification.\nProject Team: 2no project teams (though it may be the same team on both).\nDocument Management: 2no project codes. 2no issue historys.\nJob Folder/ WebApp/ Project Mail: 2no J:\\drive folders. 1no fee earning project, 1no zero fee project in WebApp. The 2nd WebApp project allows for a different project team to be assigned and supports creation of another job folder. The 2nd WebApp project must not have any work-types associated and will be explicitly given 0 Fee in Fee Manager. This way it is impossible to associate time to it in Timesheets and it will have no Fee associated to it, with all Fee managed through the primary job.\nResourcing, Billing and Spend: Resourcing / Timesheets / Billing via a single project.\n\n\nJustification\nWhilst this is not recommended and 2no independent projects is always preferred, sometimes splitting the Time Management and Billing is no longer an option (for example, if work has already been done and assigned to the old job number). In those scenario’s it is still beneficical to split the job for the following reasons:\n\nClearly defining responsibilities of a Project Team for a specific project\nAvoid “nesting” of Design Information within a job folder\nIt ensures that there is accurate mapping between our Design Information and our information in WebApp. Currently automation tools (pyRevit, Digital Schedules) use the WebApp data to retrieve the Project Name from the Project Number, ensuring that this information is consistent across the project. As our Digitalisation journey continues more information will be centrally stored in this way, improving project automation and ultimately reducing the administrative burden of delivering a project.\nAutodesk Construction Cloud is “project-centric”… more here…\nIt is acknowledged that multiple projects for the same Client are likely to have to common reference information (e.g. 2no buildings on a University Campus). In this Scenario it is up to the Project Teams to communicate and come up with a plan to manage this. It would likely require either choosing a single project as a common location to keep shared information and using shortcuts to link to it from the other project, or accepting that duplicate information will be required.",
-    "crumbs": [
-      "document-issue",
-      "Multi-Project / Multi-Building Jobs"
-    ]
-  },
-  {
-    "objectID": "schema.html",
-    "href": "schema.html",
-    "title": "Document Issue Schema",
-    "section": "",
-    "text": "*metadata to be accompanied by every formal document issue.\nNot all data fields are required for every document type, but no document will require additional data fields.*"
-  },
-  {
-    "objectID": "schema.html#properties",
-    "href": "schema.html#properties",
-    "title": "Document Issue Schema",
-    "section": "Properties",
-    "text": "Properties\n\nproject_name (string): should be the same as the WebApp. Default: In House App Testing.\nproject_number (string): unique number project code. Default: J5001.\nroles (array): defines who is fulfilling various roles and responsibilitieson the project. Some of these roles are required from a QA and quality assurance perspective. Default: [{'name': 'JG', 'role': 'Project Engineer'}].\n\nItems: Refer to #/definitions/Role.\n\ndocument_name (string): document code. Should be the filename when uploadedto a CDE. Structured to be machine-readable. Default: 06667-MXF-XX-XX-SH-M-20003.\ndocument_description (string): human readable description of the document. Default: Document Description.\nclassification (string): classification as per Uniclass2015. Default: Ac_05.\nname_nomenclature (string): denotes what each section of of the document code meanswhen split on ‘-’ character. Default: project-originator-volume-level-type-role-number.\nsize (string): paper size of the document. Default: A4.\nExamples:\n\"n/a\"\n\"A4\"\n\"A3\"\n\"A2\"\n\"A1\"\n\"A0\"\nscale (string): if drawing, give scale, else “not to scale” (NTS). Default: NTS.\nExamples:\n\"nts\"\n\"1:1\"\n\"1:2\"\n\"1:5\"\n\"1:10\"\n\"1:20\"\n\"1:25\"\n\"1:50\"\n\"1:100\"\n\"1:200\"\n\"1:250\"\n\"1:500\"\n\"1:1000\"\n\"1:1250\"\ndoc_source (string): software used to author the document. Default: WD.\nExamples:\n\"A\"\n\"R18\"\n\"R19\"\n\"R20\"\n\"R21\"\n\"R22\"\n\"R23\"\n\"PDF\"\n\"PSD\"\n\"PNG\"\n\"WD\"\n\"EXL\"\n\"AM\"\nissue_history (array): Default: [{'revision': 'P01', 'date': '2020-01-02', 'status_code': 'S2', 'status_description': 'Suitable for information', 'author': 'EG', 'checked_by': 'CK', 'issue_format': 'cde', 'issue_notes': ''}].\n\nItems: Refer to #/definitions/Issue.\n\nnotes (array): Default: ['add notes here'].\n\nItems (string)\n\noriginator (string): the company the info came from (fixed to be Max Fordham LLP). the name ‘originator’ comes from BS EN ISO 19650-2. Default: Max Fordham LLP.\nformat_configuration: Default: {'date_string_format': '%d %^b %y', 'include_author_and_checked_by': False}."
-  },
-  {
-    "objectID": "schema.html#definitions",
-    "href": "schema.html#definitions",
-    "title": "Document Issue Schema",
-    "section": "Definitions",
-    "text": "Definitions\n\nRole (object)\n\nname (string): initial of the person fulfilling the Role. Default: JG.\nrole (string): Default: Project Engineer.\nExamples:\n\"\"\n\"Director in Charge\"\n\"Client Relationship Management (CRM) Lead\"\n\"Management Lead\"\n\"Commercial Lead\"\n\"Design Strategy Lead\"\n\"Health and Safety Lead\"\n\"Project Coordinator\"\n\"Project Administrator\"\n\"Strategy Reviewer\"\n\"Technical Reviewer\"\n\"Project Engineer\"\n\"Lead Electrical Engineer\"\n\"Lead Mechanical Engineer\"\n\"Systems Engineer\"\n\"Site Engineer\"\n\"BIM Strategy Advisor\"\n\"Digital Design Engineer\"\n\"Responsible Building Performance Modeller\"\n\"Building Performance Modeller\"\n\"Lead Sustainability Consultant\"\n\"Sustainability Consultant\"\n\"Lead Acoustician\"\n\"Specialist Building Physics Engineer\"\n\"Specialist Lighting Designer\"\n\"Passivhaus Principal\"\n\"Passivhaus Project Designer\"\n\"Passivhaus Designer\"\n\nIssueFormatEnum (string): in what form was the issue delivered. Must be one of: ['cde', 'ea', 'el', 'p', 'r'].\nIssue (object): required information fields that define the metadata of a document issue.\n\nrevision (string): Default: P01.\ndate (string): Default: 2020-01-02.\nstatus_code (string): Default: S2.\nstatus_description (string): this is a BIM field that matches directly with status_code. Default: Suitable for information.\nauthor (string): the person who authored the work. Default: EG.\nchecked_by (string): the person who checked the work. . Default: CK.\nissue_format: Default: cde.\nissue_notes (string): free field where the Engineer can briefly summarise changes since previous issue. Default: ``.\n\nFormatConfiguration (object): configuration options that determine how the output is displayed.\n\ndate_string_format (string): date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime. Default: %d %^b %y.\ninclude_author_and_checked_by (boolean): Include the initials of the author and checker in the client facing output. Often avoided but some clients (e.g. Canary Wharf) require it. Default: False."
-  },
-  {
-    "objectID": "developer.html",
-    "href": "developer.html",
-    "title": "Developer",
-    "section": "",
-    "text": "Developer docs…"
-  },
-  {
-    "objectID": "document-issue/index.html",
-    "href": "document-issue/index.html",
-    "title": "document-issue",
-    "section": "",
-    "text": "The ERD diagram shows the data fields that are recorded for every document. This information is displayed on the issued document; some documents show all the information (e.g. specs) whilst other documents show only a subset (e.g. drawings).",
-    "crumbs": [
-      "document-issue"
-    ]
-  },
-  {
-    "objectID": "document-issue/index.html#entity-relationship-diagram-erd",
-    "href": "document-issue/index.html#entity-relationship-diagram-erd",
-    "title": "document-issue",
-    "section": "",
-    "text": "The ERD diagram shows the data fields that are recorded for every document. This information is displayed on the issued document; some documents show all the information (e.g. specs) whilst other documents show only a subset (e.g. drawings).",
-    "crumbs": [
-      "document-issue"
-    ]
-  },
-  {
-    "objectID": "document-issue/index.html#example-document-issue-data",
-    "href": "document-issue/index.html#example-document-issue-data",
-    "title": "document-issue",
-    "section": "Example document-issue data",
-    "text": "Example document-issue data\nclassification: Ac_05\ndoc_source: WD\ndocument_description: Document Description\ndocument_name: 06667-MXF-XX-XX-SH-M-20003\nformat_configuration:\n  date_string_format: '%d %^b %y'\n  description_in_filename: false\n  include_author_and_checked_by: false\nissue_history:\n- author: EG\n  checked_by: CK\n  date: 2020-01-02\n  issue_format: cde\n  issue_notes: ''\n  revision: P01\n  status_code: S2\n  status_description: Suitable for information\nname_nomenclature: project code-originator-volume-level-type-role-number\nnotes:\n- add notes here\noriginator: Max Fordham LLP\nproject_name: In House App Testing\nproject_number: J5001\nroles:\n- name: JG\n  role: Project Engineer\nscale: NTS\nsize:",
-    "crumbs": [
-      "document-issue"
     ]
   }
 ]
