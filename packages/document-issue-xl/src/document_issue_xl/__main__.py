@@ -166,8 +166,22 @@ if __name__ == "__main__":
         fpth = pathlib.Path(
             r"J:\J6378\Project Management\Job Running\6378 MWP DNG.xlsm"
         )  # holly - done
+        fpth = pathlib.Path(
+            r"J:\J7045\ISSUE SHEET\J7045 Ruskin -new issue sheet 20241202-JGedit.xlsm"
+        )  # emma - done
 
-        
+        fpth = pathlib.Path(
+            r"J:\J7251\Project Management\Job Running\Issue Sheet\J7251 - DocumentNumberGenerator1 - V2.xlsm"
+        )  # tina - done
+
+        fpth = pathlib.Path(
+            r"J:\J6771\Issue Sheet\6771 Issue Sheet_DocumentNumberGenerator.xlsm"
+        )  # cheryl - done
+
+
+        # --- LOCAL DEV ---
+        # fpth = pathlib.Path(__file__).parent.parent.parent / "xl" / "DocumentNumberGenerator.xlsm"
+        # ---
 
         xw.Book(str(fpth)).set_mock_caller()
         RESULTS = cmd()

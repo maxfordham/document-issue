@@ -44,47 +44,14 @@ This project is structured as a monorepo. In the `packages` directory, each pack
 - `document-issue-xl`: excel DNG and issue sheet generation
 - ***future*** *`document-issue-pyrevit`: pyRevit toolbar to create sheets and views by interacting with the `document-issue-api`.*
 
-
 ```{Note}
 for now, `document-issue` intentionally avoids considering the datafields that
 are used to create the Document Number, this may follow up in the future.
 ```
 
-## License
+## Developer Installation
 
-`document-issue` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
-
-
-## Development Install
-
-```{warning}
-`document-issue-xl` requires Windows to run. 
-For dev instructions see: `packages/document-issue-xl/README.md`
-```
-
-If using VSCode, we recommend using the [`document-issue.code-workspace`](./.vscode/document-issue.code-workspace) file to open the project.
-
-To install the environment and packages for development, run the following commands:
-
-```console
-# run line by line
-
-mamba env create -f environment.yml
-mamba activate document-issue-dev
-mamba install xlwings #  left out of standard install due to Win dependency
-# ^ base install of dev env (python, pytest, black etc.)
-
-pip install -e packages/document-issue-ui
-# ^ remove ui install from env file as the env file is used for CI 
-#   and we don't need the ui deps for CI tests. 
-
-quarto install tinytex
-# ^ installs latex engine...
-
-# if required... 
-sudo apt-get update
-sudo apt-get install libfontconfig
-```
+[instructions ->🤓💻](INSTALLATION.md)
 
 ## Example `document-issue` data
 
@@ -118,3 +85,9 @@ roles:
 scale: NTS
 size: 
 ```
+
+## License
+
+TBC
+
+<!-- `document-issue` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license. -->

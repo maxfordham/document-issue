@@ -1,0 +1,78 @@
+project:
+  type: website
+  pre-render: 
+    - ./_get_document_issue_io_examples.sh
+    - _get_document_issue_quarto_examples.py
+    - ./_make_erd.sh
+    - ./_get_installation_instructions.sh
+website:
+  # title: "document-issue"
+  image: images/logo.png
+  site-url: https://github.com/maxfordham/document-issue
+  repo-url: https://github.com/maxfordham/document-issue
+  favicon: "images/logo.png"
+  page-navigation: true
+  navbar:
+    logo: "images/logo.png"
+    left:
+      - text: "document-issue"
+        href: document-issue/index.html
+      - text: "example-documents"
+        href: example-documents.html
+
+    right:
+      - text: "developer"
+        href: INSTALLATION.html
+      - text: "release notes"
+        href: release-notes/index.html
+      - text: "feedback"
+        href: feedback.html
+      - icon: github
+        href: https://github.com/maxfordham/document-issue
+        aria-label: GitHub
+
+  sidebar:
+    - id: document-issue
+      title: "document-issue"
+      logo: "images/logo.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - document-issue/index.qmd
+        - document-issue/documents-review.qmd
+        - multiproject-jobs.qmd
+
+    - id: example-documents
+      title: "example-documents"
+      logo: "images/logo.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - example-documents.qmd
+        - text: "document-issue-io"
+          contents: example-documents/*
+        - text: "document-issue-quarto"
+          contents: document-issue-quarto-examples/*
+
+
+    - id: developer
+      title: "developer"
+      logo: "images/logo.png"
+      style: "docked"
+      collapse-level: 2
+      align: left
+      contents:
+        - INSTALLATION.md
+        - document-issue-api/index.qmd
+        - document-issue-io/index.qmd
+        
+
+format:
+  html:
+    css: styles.css
+    toc: true
+    theme:
+      light: flatly
+      dark: darkly

@@ -1,0 +1,6 @@
+code,description
+cde,Uploaded to the project common data environment
+e-a,Sent as Email attachment
+e-l,Sent as Email with a link to file download
+p(#),"Paper copy, full size (number of copies)"
+r(#),"Paper copy, reduced to A3 (number of copies)"

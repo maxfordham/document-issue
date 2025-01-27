@@ -1,9 +1,11 @@
 from typing_extensions import Annotated
-from pydantic import BaseModel
 import typing as ty
-from pydantic.functional_validators import AfterValidator, field_validator
+import enum
 import re
 import logging
+from typing import List, TypeVar
+from pydantic_core import PydanticCustomError
+from pydantic import BaseModel, Field, AfterValidator
 
 logger = logging.getLogger(__name__)
 
@@ -20,15 +22,7 @@ UniclassClassificationCode = Annotated[
     str,
     AfterValidator(lambda s: re.match(DRWG_CLASSIFICATION_CODE_REGEX, s)) is not None,
 ]
-
-from typing import Annotated, Hashable, List, TypeVar
-from typing import Optional
-from pydantic_core import PydanticCustomError
-from pydantic import AfterValidator, Field, ValidationError
-from pydantic.type_adapter import TypeAdapter
-import enum
-
-T = TypeVar("T", bound=Hashable)
+T = TypeVar("T", bound=ty.Hashable)
 
 # class DocumentCodesRegex(BaseModel):
 #     project: str = DRWG_CLASSIFICATION_CODE_REGEX
@@ -60,15 +54,6 @@ UniqueList = Annotated[
 ]
 
 
-# from document_issue.project import Project
-
-
-# class ProjectInfo(Project):
-#     client_name: str  # TODO: retrieve this from roles table
-#     project_leader: str  # TODO: retrieve this from roles table
-#     naming_convention: str  # TODO: retrieve this from lookup table
-
-
 class DocumentCodeParts(enum.Enum):
     project: str = "project"
     originator: str = "originator"
@@ -94,7 +79,7 @@ class DocumentCodesMap(BaseModel):  # MapDocumentCodeDescription
     # drwg_type: dict[int, str]  # info_sub_type
     volume: dict[str, str]
     level: dict[str, str]
-    type_sequences: Optional[dict[str, dict[str, str]]] = None  # info_type_sequences
+    type_sequences: ty.Optional[dict[str, dict[str, str]]] = None  # info_type_sequences
 
     nested_codes: dict[DocumentCodeParts, list[str]] = {
         "classification": ["role", "subrole"],
@@ -124,7 +109,7 @@ class DocumentMetadataMap(BaseModel):
     # info_sub_type: dict[str, str]
 
 
-class LookupData(DocumentCodesMap, DocumentMetadataMap):
+class LookupData(DocumentCodesMap, DocumentMetadataMap):  # Map
     pass
 
 

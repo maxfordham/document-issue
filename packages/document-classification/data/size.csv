@@ -1,0 +1,7 @@
+code,description
+n/a,"Not a drawing, 3D model for example"
+A4,"Sketched only, not normally used for drawings"
+A3,"Sketch drawings, small schematics, details"
+A2,"Not a common paper size, avoid"
+A1,"Layouts, often at 1:100 scale"
+A0,"Layouts, common to use at 1:50 scale to avoid an excessive number of drawing tiles"

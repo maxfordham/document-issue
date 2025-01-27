@@ -37,8 +37,7 @@ def get_role(db: Session, role_id: int) -> models.Role:
     Returns:
         models.Role: The getd role
     """
-
-    db_ = db.query(models.Role).get(role_id)
+    db_ = db.get(models.Role, role_id)
     return db_
 
 
@@ -70,7 +69,7 @@ def patch_role(db: Session, role_id: int, role: schemas.RolePatch) -> models.Rol
         models.Role: The patched role
     """
 
-    db_ = db.query(models.Role).get(role_id)
+    db_ = db.get(models.Role, role_id)
     role_data = jsonable_encoder(db_)
     update_data = role.model_dump(exclude_unset=True)
     for field in role_data:
@@ -92,7 +91,7 @@ def delete_role(db: Session, role_id: int) -> models.Role:
         models.Role: The deleted role
     """
 
-    db_ = db.query(models.Role).get(role_id)
+    db_ = db.get(models.Role, role_id)
     db.delete(db_)
     db.commit()
     return db_

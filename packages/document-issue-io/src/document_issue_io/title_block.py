@@ -163,12 +163,14 @@ def create_title_block_table(data: list, is_a3=False) -> Table:
     return table
 
 
-def set_background(canvas: canvas, doc: SimpleDocTemplate):
+def set_background(
+    canvas: canvas,
+    doc: SimpleDocTemplate,
+):
     """Create function that will set the Max Fordham background."""
     FPTH_MF_TITLE = DIR_MEDIA / "mf-title.png"
     image = PIL.Image.open(FPTH_MF_TITLE)
     mf_title_width, mf_title_height = image.size
-
     FPTH_MF_BACKGROUND = DIR_MEDIA / "mf-background.png"
     image = PIL.Image.open(FPTH_MF_BACKGROUND)
     mf_background_width, mf_background_height = image.size
@@ -176,14 +178,14 @@ def set_background(canvas: canvas, doc: SimpleDocTemplate):
     canvas.saveState()
     canvas.drawImage(
         FPTH_MF_BACKGROUND,
-        x=170,
+        x=170 if doc.pagesize == A4 else A4[0] + 170,
         y=0,
         width=mf_background_width * a4_image_ratio,
         height=A4[1],
     )
     canvas.drawImage(
         FPTH_MF_TITLE,
-        x=535,
+        x=535 if doc.pagesize == A4 else A4[0] + 535,
         y=510,
         width=0.35 * mf_title_width,
         height=0.35 * mf_title_height,
@@ -217,7 +219,7 @@ def title_block_table(
 
 def title_block_a4(
     document_issue: DocumentIssue,
-    fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
+    fpth_output: pathlib.Path = pathlib.Path("title-block.pdf"),
     is_titlepage: bool = False,
 ):
     tblock_table = title_block_table(document_issue=document_issue, is_a3=False)
@@ -255,13 +257,3 @@ def title_block_a3(
         doc.build(elements, onFirstPage=set_background)
     else:
         doc.build(elements)
-
-
-def build_schedule_title_page_template_pdf(
-    document_issue: DocumentIssue,
-    fpth_output: pathlib.Path = pathlib.Path("title-page.pdf"),
-):
-    """Build a PDF with a title block and the Max Fordham background."""
-    title_block_a4(
-        document_issue=document_issue, fpth_output=fpth_output, is_titlepage=True
-    )

@@ -1,4 +1,4 @@
-from document_issue.document_issue import DocumentIssue, Issue
+from document_issue.document_issue import DocumentIssue, Issue, DocumentIssueV2
 from document_issue.issue import StatusRevisionEnum
 import pathlib
 

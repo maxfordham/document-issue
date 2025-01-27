@@ -39,8 +39,8 @@ description_name_nomenclature = "denotes what each section of of the document co
 
 Note = Annotated[
     str,
-    Len(max_length=1e8),
-    WithJsonSchema({"type": "string", "maxLength": 1e8, "layout": {"width": "100%"}}),
+    Len(max_length=10000),
+    WithJsonSchema({"type": "string", "maxLength": 10000, "layout": {"width": "100%"}}),
 ]
 
 
