@@ -63,8 +63,8 @@ MD = """
 class TestDocumentIssueReport:
     """Test the function `generate_document_issue_pdf`."""
 
-    def report_a4_p(self):
-        FDIR_RENDER = FDIR_TEST_OUTPUT / "report_a4_p"
+    def test_report_a4_p(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_report_a4_p"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
         FDIR_RENDER.mkdir(parents=True, exist_ok=True)
         document_issue = create_test_document_issue()
@@ -74,6 +74,29 @@ class TestDocumentIssueReport:
         generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
+        )
+        assert fpth_pdf.with_suffix(".md").is_file()
+        assert fpth_pdf.is_file()
+        assert not (
+            fpth_pdf.with_suffix(".log")
+        ).is_file()  # log file should be deleted if Quarto PDF compilation is successful
+        fpth_md = fpth_pdf.with_suffix(".md")
+        checked_props = check_quarto_doc_properties(fpth_md, fpth_pdf)
+        assert all(item in ["title", "author"] for item in checked_props)  # , 'subject'
+        # TODO: add "subject" as high-level discipline (e.g. mechanical, electrical etc.)
+    
+    def test_report_a4_p_draft(self):
+        FDIR_RENDER = FDIR_TEST_OUTPUT / "test_report_a4_p_draft"
+        shutil.rmtree(FDIR_RENDER, ignore_errors=True)
+        FDIR_RENDER.mkdir(parents=True, exist_ok=True)
+        document_issue = create_test_document_issue()
+        document_issue.format_configuration.output_author = False
+        document_issue.format_configuration.output_checked_by = False
+        fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
+        generate_document_issue_pdf(
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
+            draft=True
         )
         assert fpth_pdf.with_suffix(".md").is_file()
         assert fpth_pdf.is_file()

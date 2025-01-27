@@ -38,6 +38,21 @@ def test_build_schedule_a4_portrait():
         not FPTH_LOG.exists()
     )  # log file should be deleted if Quarto PDF compilation is successful
 
+def test_build_schedule_a4_portrait_draft():
+    FDIR_TESTDATA = FDIR_TESTS / "a4-portrait-draft"
+    FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
+    FPTH_OUTPUT.unlink(missing_ok=True)
+    os.chdir(FDIR_TESTDATA)
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+    )
+    assert FPTH_OUTPUT.exists()
+    FPTH_LOG = FDIR_TESTDATA / "document.log"
+    assert (
+        not FPTH_LOG.exists()
+    )  # log file should be deleted if Quarto PDF compilation is successful
+
 
 def test_build_schedule_a3_landscape():
     FDIR_TESTDATA = FDIR_TESTS / "a3-landscape"

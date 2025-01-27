@@ -47,7 +47,9 @@ class MarkdownDocumentIssue:
     def __init__(
         self,
         document_issue: DocumentIssue,
+        draft: bool = False,
     ):
+        self.draft = draft
         self.document_issue = document_issue
         self.file_loader = FileSystemLoader(DIR_TEMPLATES)
         self.env = Environment(loader=self.file_loader)
@@ -99,6 +101,7 @@ class MarkdownDocumentIssue:
             md_issue_history=self.md_issue_history,
             md_roles=self.md_roles,
             md_notes=self.md_notes,
+            draft="true" if self.draft else "false",
         )  # TODO: add major discipline as "subject" document metadata property
 
     def to_file(self, fpth: pathlib.Path):
@@ -172,7 +175,8 @@ def generate_document_issue_pdf(
     md_content: str = "",
     output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
     orientation: Orientation = Orientation.PORTRAIT,
-    paper_size: PaperSize = PaperSize.A4
+    paper_size: PaperSize = PaperSize.A4,
+    draft: bool = False,
 ):
     """Generate a PDF document from a DocumentIssue object with any markdown content.
     The output format can be a document issue report or note.
@@ -216,7 +220,7 @@ def generate_document_issue_pdf(
             open("_quarto.yaml", "w"),
         )
         if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
-            markdown = MarkdownDocumentIssue(document_issue).md_docissue + md_content
+            markdown = MarkdownDocumentIssue(document_issue, draft).md_docissue + md_content
         elif output_format == OutputFormat.DOCUMENT_ISSUE_NOTE:
             markdown = md_content
         fpth_md_output.write_text(markdown)
