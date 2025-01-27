@@ -334,7 +334,11 @@ endobj
 endobj
 14 0 obj
 <<
+<<<<<<< HEAD:packages/document-issue-io/tests/testoutput/title-block-name-nomenclature.pdf
+/Author (\(anonymous\)) /CreationDate (D:20250124123116+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20250124123116+00'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+=======
 /Author (\(anonymous\)) /CreationDate (D:20241216174257+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20241216174257+00'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+>>>>>>> main:packages/document-issue-quarto/wip/book/title-block.pdf
   /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
 >>
 endobj
@@ -345,10 +349,17 @@ endobj
 endobj
 16 0 obj
 <<
+<<<<<<< HEAD:packages/document-issue-io/tests/testoutput/title-block-name-nomenclature.pdf
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 839
+>>
+stream
+GasbZ968i1&:j6K'mo5ABd3_+pQe"k9W"49M%76D#q,:7_F5kes*Y^Z&Qpiu_[$QlQX)e@*Dms3kg1+T^ul-g<tm'8C^Drf!m#i+[qtbb7^ng;J:O=G:6AsW4jI4U+iI"r%H1dfV$&?qdE8g^"[sA%&2K<c@<AI4KnQ<8L$9On?_']KHAi&?IY]+A4[18=)8la^'[NtYC)/T!;P$BU(oKd+.%h.]K"-aVj[k[i'-?6(<R1$:iT>?E.%u`ki3EQ<YRe7T+d-YlS?8&]M*aSQ)t=uT'kHK^dWg?4Fb.#"7\!ASXWLFo%[56S?R^oI&ZpdcFG6aG\ruIN36blb1k+J(J$p"=EGSksV`m.)b`fA+\E/2?Z'S8!JR9?eTAX&@^+DA#Me0*_Wd?Lp=g4TXaL=34F/;a7WTr3K,=?nrj`0i$WRH#drWIldFHB/Ra/Bu=IIG"gT\qDDlakM@=0:[/mkG>!1_T8>IR9`WOXJG#Z:2gaRiG-6H]]W9P^'>lkFjko43_p*5p8nEF^f7O>PjW;c:25%kYG/oGJOePAj*"EK\B9_/M@2f"1LqVC;gQ4Pp'!f[N>MX<RE<Oe:Mnc(R)(<\Jro@LBGmkjo6!M-J"WnOu_[0B8>WRh::Ohn5:Yr50":9fC]2;Y&,%9MSMNtiBaL/d=VhZ"`(CaLX39G>)aW3GSW0Np#!.p.Tr6BgGcZ[9D])[$-\^>TqcG["?pm;XNU8![@OhNNj(O;F%."O,7dQcA#G)1MIM6`]=>_,Z.O10f4GX;7L8N[^c`+Br/BFhZeA<ks$$&5Ab6A[5`#)CpqbWWeF5/Ja]Lq@VTDC%DJ1a$#749Y.0~>endstream
+=======
 /Filter [ /ASCII85Decode /FlateDecode ] /Length 729
 >>
 stream
 GasbZ9lldX&;KZOMEQ+1FFke^$%2*+Rs(67;KM=B)`blIO:0]Xs*[u>(D'6bBL#,#YBKkX&Z.gt;0uZ7!$>)U9digBkn5BT3MbQkEuOrdkeWI&i!b$RMV+p)3N0/T,W^tigt@Hd_=A@!VHF/2=9B?jA?h4Z^JGJ&Q5#':.aNYlY`M\!k&'a8*(DY+M)G#3BHBli?-`()*+s=A76DoS8PUSn4O,7J=X*%P,i`t@Uk:%2pqr/D.%q3AjO+ZLY]mUgTon\Mgh^`=;N(6#UanuS%@jS%S@(#PN-MI2D'Wd3Ma[><bOo=KWiCbX22f&u["YY8k@q@jd.g&Fe!:JgaClYN_N=`U\9SSqfj@#$q6-lQa#tGf"!=oid=/XLJ=JNYmKCS"B86iX-"N>T^OiMQJ>[2gpimcNa.Cgr=#A3N19`n#VTmh3!t1[#bBi:]IaDFR(Y20q6\"%R.]/#WbdgH/KXt$*PuH[Si"^^CMRLUW0XWam"HJCb#RjsE?Qh64'E<Uce[D!Kg'u*/6seBQJp)s<5CV!:>6T<'\n\;[gOnW'^[M_T>s&p'L8j0?Vq60`iPSjde/J5Xho6(?]f)FBa6A9u,j$RJEBI/QPR!8:V^-]5+89[24rn&V6:Ztg=%/bAH@U>e81A%Zpb82qI5X1DVY=[801H5(Y-@;k@(t.Jn6-hTs83KtnE9`,TEKi/KDkMu0tqSW8@fSbRjMdo-efd=%rBAR$i~>endstream
+>>>>>>> main:packages/document-issue-quarto/wip/book/title-block.pdf
 endobj
 xref
 0 17
@@ -372,7 +383,11 @@ xref
 trailer
 <<
 /ID 
+<<<<<<< HEAD:packages/document-issue-io/tests/testoutput/title-block-name-nomenclature.pdf
+[<2499929b784709af17526f4441057f11><2499929b784709af17526f4441057f11>]
+=======
 [<c47f1dffc0ecef4b93aeb8fd94afc44f><c47f1dffc0ecef4b93aeb8fd94afc44f>]
+>>>>>>> main:packages/document-issue-quarto/wip/book/title-block.pdf
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 14 0 R
@@ -380,5 +395,9 @@ trailer
 /Size 17
 >>
 startxref
+<<<<<<< HEAD:packages/document-issue-io/tests/testoutput/title-block-name-nomenclature.pdf
+60191
+=======
 60081
+>>>>>>> main:packages/document-issue-quarto/wip/book/title-block.pdf
 %%EOF

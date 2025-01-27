@@ -65,6 +65,14 @@ def construct_title_block_data(
     """Using the document issue, layout the data in preparation to be styled
     correctly by ReportLab."""
 
+    def rename_name_nomenclature(name_nomenclature: str) -> str:
+        name_nomenclature = name_nomenclature.replace("-", " - ")
+        if "project" in name_nomenclature:
+            name_nomenclature = name_nomenclature.replace("project", "project code")
+        if "originator" in name_nomenclature:
+            name_nomenclature = name_nomenclature.replace("originator", "orig.")
+        return name_nomenclature
+
     image = get_title_block_image(
         fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width
     )
@@ -72,7 +80,7 @@ def construct_title_block_data(
     document_description = "\n".join(
         wrap(document_issue.document_description, width=70 if is_a3 else 40)
     )
-    name_nomenclature = document_issue.name_nomenclature.replace("-", " - ")
+    name_nomenclature = rename_name_nomenclature(document_issue.name_nomenclature)
     document_code = document_issue.document_code.replace("-", " - ")
     status_description = document_issue.current_issue.status_description.replace(
         "Suitable for ", ""
@@ -96,7 +104,7 @@ def construct_title_block_data(
     )
 
     data = [
-        [image, "project", "", "", "client", "document description"],
+        [image, "project name", "", "", "client", "document description"],
         [
             "",
             project_name,
@@ -116,8 +124,8 @@ def construct_title_block_data(
         ],
         [
             "",
-            "project number",
-            "director",
+            "job no.",
+            "project leader",
             "issue date",
             "",
             name_nomenclature,
