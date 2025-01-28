@@ -1,0 +1,114 @@
+% FOR ALIGNING IN MARKDOWN
+\usepackage{ragged2e}
+
+% SET FONT TO CARLITO
+% REF https://ctan.org/tex-archive/fonts/carlito?lang=en
+\usepackage[sfdefault,lf]{carlito}
+
+\usepackage{geometry}
+
+% SET PAGE MARGINS
+\geometry{
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=50mm
+}
+
+\usepackage{tikz}
+\usepackage{atbegshi}
+\usepackage{ifthen}
+
+% Define the watermark text and settings
+\newcommand\WatermarkText{DRAFT}
+\newcommand\WatermarkScale{15}
+\newcommand\WatermarkColor{gray}
+\newcommand\WatermarkOpacity{0.15}
+\newcommand\WatermarkAngle{45}
+
+% Add watermark to every page if draft is true
+% And I don't know why but there has to be whitespace either side of the meta variable :/
+\ifstrequal{ {{< meta draft >}} }{ true }
+{
+    \AtBeginShipoutNext{\AtBeginShipoutAddToBox{
+    \begin{tikzpicture}[remember picture,overlay]
+        \node at (current page.center) [rotate=\WatermarkAngle, scale=\WatermarkScale, color=\WatermarkColor, opacity=\WatermarkOpacity] {\WatermarkText};
+    \end{tikzpicture}%
+    }}
+
+    \AtBeginShipout{\AtBeginShipoutAddToBox{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \node at (current page.center) [rotate=\WatermarkAngle, scale=\WatermarkScale, color=\WatermarkColor, opacity=\WatermarkOpacity] {\WatermarkText};
+    \end{tikzpicture}%
+    }}
+}{}
+
+% REMOVE FIGURE AND TABLE LABELS
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}
+\captionsetup[longtable]{labelformat=empty}
+
+% ADDS A LINE BETWEEN TABLES
+% REF: https://tex.stackexchange.com/a/596005
+\usepackage{ctable} % for \specialrule command
+\newcommand{\projectNumberCode}{CODE }
+\newcommand{\projectName}{Project Name }
+\newcommand{\coreSystemName}{Core Name }
+\newcommand{\bt}[1]{\fcolorbox{gray}{lightgray}{#1}}
+\defaultfontfeatures{Extension = .otf}
+\usepackage{fontawesome}
+\usepackage{tocloft}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{glossaries}
+\setglossarystyle{altlistgroup}
+\usepackage{xparse}
+\usepackage{lscape}
+\makenoidxglossaries
+\usepackage{etoolbox}
+\usepackage{xstring}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\renewcommand{\arraystretch}{1.2}
+\makeatletter
+\patchcmd{\LT@array}{\@mkpream{#2}}{\StrGobbleLeft{#2}{2}[\pream]\StrGobbleRight{\pream}{2}[\pream]\StrSubstitute{\pream}{l}{|l}[\pream]\@mkpream{@{}\pream|@{}}}{}{}
+\apptocmd{\LT@tabularcr}{\specialrule{0.05em}{0em}{0em}}{}{}
+\makeatother
+
+% ADD PAGE NUMBER AND HEADER NAME TO FOOTER
+\usepackage{scrlayer-scrpage}
+\renewcommand{\chapterpagestyle}{scrheadings} % Change style of chapter pages
+\usepackage{titleref}
+\usepackage{lastpage}
+\usepackage{stackengine}
+\usepackage{tikz}
+\makeatletter
+% \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}} % Create call \thetitle which will get the title defined in the preamble
+% \def\subtitle#1{\gdef\@subtitle{#1}\gdef\thesubtitle{#1}} % Create call \thesubtitle which will get the subtitle defined in the preamble
+\newcommand*{\currentname}{\TR@currentTitle} % Create call \currentname which will get the current section name
+\makeatother
+\def\stackalignment{l}
+\cofoot{\thepage\ / \pageref*{LastPage}}
+\setlength{\footskip}{45mm} % Adjust the page number position
+
+% TITLEBLOCK
+\usepackage{wallpaper}
+\CenterWallPaper{}{title-block.pdf}
+
+% STYLE FRONTMATTER
+\usepackage{anyfontsize}
+% Renew maketitle command
+\makeatletter
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}\egroup}
+\makeatother
+
+% DEFINE \toc COMMAND
+% Make hyperlinks in table of contents black (default is blue)
+\makeatletter
+\newcommand{\toc}[1][Table of Contents] % Default name is "Table of Contents"
+    {\renewcommand{\contentsname}{#1}
+    \hypersetup{linkcolor=black}
+    \tableofcontents
+    \hypersetup{linkcolor=blue}}
+\makeatother
