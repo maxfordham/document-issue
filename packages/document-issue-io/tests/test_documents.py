@@ -96,7 +96,7 @@ class TestDocumentIssueReport:
         generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
-            draft=True
+            is_draft=True
         )
         assert fpth_pdf.with_suffix(".md").is_file()
         assert fpth_pdf.is_file()

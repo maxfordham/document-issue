@@ -5,7 +5,7 @@ footer-logo: logo.png
 title-page: title-page.pdf
 classoption: portrait
 papersize: a4
-draft: true
+is_draft: true
 ---
 
 :::: {layout="[ 26.5, -2.5, 71 ]"}
