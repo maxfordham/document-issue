@@ -77,9 +77,13 @@ def construct_title_block_data(
         fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width
     )
     issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
-    document_description = "\n".join(
-        wrap(document_issue.document_description, width=70 if is_a3 else 40)
-    )
+    # Check for \n override in document description
+    if "\n" in document_issue.document_description:
+        document_description = document_issue.document_description
+    else:
+        document_description = "\n".join(
+            wrap(document_issue.document_description, width=70 if is_a3 else 40)
+        )
     name_nomenclature = rename_name_nomenclature(document_issue.name_nomenclature)
     document_code = document_issue.document_code.replace("-", " - ")
     status_description = document_issue.current_issue.status_description.replace(

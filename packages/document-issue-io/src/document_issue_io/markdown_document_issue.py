@@ -27,7 +27,7 @@ REGEX_SEMVER = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]
 def escape_latex_special_chars(text):
     """Used to escape the special characters in the text for LaTeX.
     Mainly to deal with any text passed to the preamble of the LaTeX document."""
-    some_special_chars = {
+    escape_dict = {
         "&": r"\\&",
         "%": r"\\%",
         "$": r"\\$",
@@ -36,8 +36,11 @@ def escape_latex_special_chars(text):
         "{": r"\\{",
         "}": r"\\}",
     }
-    for char, escape in some_special_chars.items():
+    for char, escape in escape_dict.items():
         text = text.replace(char, escape)
+
+    # Replace \n that is not preceded by a backslash
+    text = re.sub(r'(?<!\\)\n', r'\\\\newline{}', text)
     return text
 
 
@@ -83,7 +86,7 @@ class MarkdownDocumentIssue:
     def md_docissue(self):
         template = self.env.get_template(NAME_MD_DOCISSUE_TEMPLATE)
         return template.render(
-            title=self.document_issue.document_description,
+            title=self.document_issue.document_description.replace("\n", " "),  # TODO: What is title for?
             project=self.document_issue.project_name,
             originator=self.document_issue.originator,
             project_name=escape_latex_special_chars(self.document_issue.project_name),
