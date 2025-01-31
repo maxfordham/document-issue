@@ -37,7 +37,7 @@
 
 % Add watermark to every page if draft is true
 % And I don't know why but there has to be whitespace either side of the meta variable :/
-\ifstrequal{ {{< meta draft >}} }{ true }
+\ifstrequal{ {{< meta is_draft >}} }{ true }
 {
     \AtBeginShipoutNext{\AtBeginShipoutAddToBox{
     \begin{tikzpicture}[remember picture,overlay]
