@@ -15,6 +15,43 @@
   bottom=40mm
 }
 
+% SET CAPTION LABELS TO EMPTY
+% i.e. remove "(a)", "(b)", etc from captions
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[figure]{labelformat=empty}
+\captionsetup[subfigure]{labelformat=empty}
+
+
+% FOR WATERMARK
+\usepackage{tikz}
+\usepackage{atbegshi}
+\usepackage{ifthen}
+
+% Define the watermark text and settings
+\newcommand\WatermarkText{DRAFT}
+\newcommand\WatermarkScale{15}
+\newcommand\WatermarkColor{gray}
+\newcommand\WatermarkOpacity{0.15}
+\newcommand\WatermarkAngle{45}
+
+% Add watermark to every page if draft is true
+% And I don't know why but there has to be whitespace either side of the meta variable :/
+\ifstrequal{ {{< meta draft >}} }{ true }
+{
+    \AtBeginShipoutNext{\AtBeginShipoutAddToBox{
+    \begin{tikzpicture}[remember picture,overlay]
+        \node at (current page.center) [rotate=\WatermarkAngle, scale=\WatermarkScale, color=\WatermarkColor, opacity=\WatermarkOpacity] {\WatermarkText};
+    \end{tikzpicture}%
+    }}
+
+    \AtBeginShipout{\AtBeginShipoutAddToBox{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \node at (current page.center) [rotate=\WatermarkAngle, scale=\WatermarkScale, color=\WatermarkColor, opacity=\WatermarkOpacity] {\WatermarkText};
+    \end{tikzpicture}%
+    }}
+}{}
+
 % REMOVE FIGURE AND TABLE LABELS
 \usepackage{caption}
 \captionsetup[figure]{labelformat=empty}

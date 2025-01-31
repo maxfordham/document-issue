@@ -15,6 +15,15 @@
   bottom=50mm
 }
 
+% SET CAPTION LABELS TO EMPTY
+% i.e. remove "(a)", "(b)", etc from captions
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[figure]{labelformat=empty}
+\captionsetup[subfigure]{labelformat=empty}
+
+
+% FOR WATERMARK
 \usepackage{tikz}
 \usepackage{atbegshi}
 \usepackage{ifthen}
@@ -26,9 +35,9 @@
 \newcommand\WatermarkOpacity{0.15}
 \newcommand\WatermarkAngle{45}
 
-% Add watermark to every page if draft is true
+% Add watermark to every page if is_draft is true
 % And I don't know why but there has to be whitespace either side of the meta variable :/
-\ifstrequal{ {{< meta draft >}} }{ true }
+\ifstrequal{ {{< meta is_draft >}} }{ true }
 {
     \AtBeginShipoutNext{\AtBeginShipoutAddToBox{
     \begin{tikzpicture}[remember picture,overlay]
