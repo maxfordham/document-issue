@@ -2,7 +2,7 @@ project:
   type: website
   pre-render: 
     - ./_get_document_issue_io_examples.sh
-    - ./_get_document_issue_quarto_examples.py
+    - ./_get_document_issue_quarto_examples.sh
     - ./_make_erd.sh
     - ./_get_installation_instructions.sh
 website:
