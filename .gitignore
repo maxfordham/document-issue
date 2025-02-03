@@ -1,5 +1,6 @@
 packages/document-issue-quarto/examples/footer/document_files/*
 packages/document-issue-io/tests/test-outputs
+packages/document-issue-quarto/tests/test-outputs
 docs/example-documents
 docs/INSTALLATION.md
 docs/document-issue-quarto-examples/**/document.pdf
