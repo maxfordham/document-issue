@@ -11,7 +11,7 @@ requires-python = ">=3.8"
 license = "MIT"
 keywords = []
 authors = [{ name = "J Gunstone", email = "j.gunstone@maxfordham.com" }]
-classifiers = [
+classifiers = [ # https://pypi.org/classifiers/
     "Development Status :: 4 - Beta",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.8",
@@ -31,12 +31,14 @@ dependencies = [
     "pypdf",
     "frictionless>5",
     "frictionless[json]",
+    "quarto",
+    # "r-tinytex", # NOTE. not available on pip... https://prefix.dev/channels/conda-forge/packages/r-tinytex
     # document-issue # TODO: How do we get this to install?
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "polyfactory", "hatch", "quarto-cli"]
-quarto = ["quarto-cli"]
+dev = ["pytest", "polyfactory", "hatch", "quarto"]
+quarto = ["quarto"] # TODO: delele this...
 
 [project.urls]
 Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"
