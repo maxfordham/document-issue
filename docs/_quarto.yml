@@ -64,7 +64,7 @@ website:
       collapse-level: 2
       align: left
       contents:
-        - INSTALLATION.md
+        - CONTRIBUTING.md
         - document-issue-api/index.qmd
         - document-issue-io/index.qmd
         

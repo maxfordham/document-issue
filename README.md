@@ -51,7 +51,7 @@ are used to create the Document Number, this may follow up in the future.
 
 ## Developer Installation
 
-[instructions ->🤓💻](INSTALLATION.md)
+[instructions ->🤓💻](CONTRIBUTING.md)
 
 ## Example `document-issue` data
 
