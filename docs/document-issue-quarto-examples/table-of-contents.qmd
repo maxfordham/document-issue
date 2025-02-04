@@ -1,8 +1,0 @@
-
----
-title: "table-of-contents"
----
-
-```{=html}
-<embed src="table-of-contents/document.pdf" width="600px" height="1000px"/>
-```

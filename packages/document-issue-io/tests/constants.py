@@ -2,6 +2,7 @@ import pathlib
 
 FDIR_TESTS = pathlib.Path(__file__).parent
 FDIR_TEST_OUTPUT = FDIR_TESTS / "test-outputs"
+FDIR_TEST_OUTPUT.mkdir(exist_ok=True)
 FPTH_TITLE_BLOCK_PDF = FDIR_TEST_OUTPUT / "title-block.pdf"
 FPTH_TITLE_BLOCK_PDF_NOMENCLATURE = (
     FDIR_TEST_OUTPUT / "title-block-name-nomenclature.pdf"

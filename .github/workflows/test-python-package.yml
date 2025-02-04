@@ -22,7 +22,7 @@ jobs:
             cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - run: | 
           quarto install tinytex
-        shell: pixi run bash -e {0}
+        shell: pixi run bash -e {0} # https://pixi.sh/latest/advanced/github_actions/#custom-shell-wrapper
       - run: pixi run tests
       - run: pixi run build-docs
       - name: Push docs to gh-pages

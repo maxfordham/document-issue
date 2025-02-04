@@ -2,7 +2,7 @@ project:
   type: website
   pre-render: 
     - ./_get_document_issue_io_examples.sh
-    - _get_document_issue_quarto_examples.py
+    - ./_get_document_issue_quarto_examples.py
     - ./_make_erd.sh
     - ./_get_installation_instructions.sh
 website:
@@ -22,7 +22,7 @@ website:
 
     right:
       - text: "developer"
-        href: INSTALLATION.html
+        href: CONTRIBUTING.html
       - text: "release notes"
         href: release-notes/index.html
       - text: "feedback"
@@ -64,7 +64,7 @@ website:
       collapse-level: 2
       align: left
       contents:
-        - INSTALLATION.md
+        - CONTRIBUTING.md
         - document-issue-api/index.qmd
         - document-issue-io/index.qmd
         

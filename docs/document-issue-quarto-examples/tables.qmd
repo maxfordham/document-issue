@@ -1,8 +1,0 @@
-
----
-title: "tables"
----
-
-```{=html}
-<embed src="tables/document.pdf" width="600px" height="1000px"/>
-```

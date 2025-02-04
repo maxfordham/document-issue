@@ -28,7 +28,7 @@ dependencies = [
     "Jinja2",
     "stringcase",
     "tabulate",
-    "pandoc",
+    "PyYAML",
 ]
 dynamic = ["version"]
 
@@ -40,24 +40,6 @@ Source = "https://github.com/unknown/document-issue"
 [tool.hatch.version]
 source = "vcs"
 raw-options = { root = "../.." }
-
-[tool.hatch.envs.default]
-dependencies = ["pytest", "pytest-cov"]
-[tool.hatch.envs.default.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/document_issue --cov=tests {args}"
-no-cov = "cov --no-cov {args}"
-
-[[tool.hatch.envs.test.matrix]]
-python = ["37", "38", "39", "310", "311"]
-
-[tool.coverage.run]
-branch = true
-parallel = true
-omit = ["src/document_issue/__about__.py"]
-
-[tool.coverage.report]
-exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
-
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
 pythonpath = "tests"
