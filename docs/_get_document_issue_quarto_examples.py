@@ -13,6 +13,7 @@ title: "{name}"
 
 fdir_src = pathlib.Path(__file__).parent.parent / "packages" / "document-issue-quarto" / "tests" / "test-outputs"
 fdir_dst = pathlib.Path(__file__).parent / "document-issue-quarto-examples"
+shutil.rmtree(fdir_dst)
 fpths = fdir_src.glob("**/document.pdf")
 for x in fpths:
     name = x.parents._tail[-2]

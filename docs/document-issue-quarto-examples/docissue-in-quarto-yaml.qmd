@@ -1,8 +1,0 @@
-
----
-title: "docissue-in-quarto-yaml"
----
-
-```{=html}
-<embed src="docissue-in-quarto-yaml/document.pdf" width="600px" height="1000px"/>
-```

@@ -1,8 +1,0 @@
-
----
-title: "a3-landscape"
----
-
-```{=html}
-<embed src="a3-landscape/document.pdf" width="600px" height="1000px"/>
-```
