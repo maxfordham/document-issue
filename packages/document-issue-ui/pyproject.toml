@@ -33,35 +33,3 @@ Source = "https://github.com/unknown/document-issue-ui"
 [tool.hatch.version]
 source = "vcs"
 raw-options = { root = "../.." }
-
-[tool.hatch.envs.default]
-dependencies = ["coverage[toml]>=6.5", "pytest"]
-[tool.hatch.envs.default.scripts]
-test = "pytest {args:tests}"
-test-cov = "coverage run -m pytest {args:tests}"
-cov-report = ["- coverage combine", "coverage report"]
-cov = ["test-cov", "cov-report"]
-
-[[tool.hatch.envs.all.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.types]
-dependencies = ["mypy>=1.0.0"]
-[tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/document_issue_ui tests}"
-
-[tool.coverage.run]
-source_pkgs = ["document_issue_ui", "tests"]
-branch = true
-parallel = true
-omit = ["src/document_issue_ui/__about__.py"]
-
-[tool.coverage.paths]
-document_issue_ui = [
-  "src/document_issue_ui",
-  "*/document-issue-ui/src/document_issue_ui",
-]
-tests = ["tests", "*/document-issue-ui/tests"]
-
-[tool.coverage.report]
-exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
