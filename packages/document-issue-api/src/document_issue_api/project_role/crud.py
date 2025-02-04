@@ -1,15 +1,16 @@
 import logging
-from sqlalchemy.orm import Session
-import document_issue_api.project_role.schemas as schemas
-import document_issue_api.models as models
 import typing as ty
-from fastapi.encoders import jsonable_encoder
+
+from sqlalchemy.orm import Session
+
+from document_issue_api import models
+from document_issue_api.project_role import schemas
 
 logger = logging.getLogger(__name__)
 
 
 def post_project_role(
-    db: Session, project_id: int, role_id: int, person_id: ty.Optional[int] = None
+    db: Session, project_id: int, role_id: int, person_id: ty.Optional[int] = None,
 ) -> models.ProjectRole:
     """Create a new project role.
 
@@ -20,6 +21,7 @@ def post_project_role(
 
     Returns:
         models.ProjectRole: The posted project role
+
     """
     if person_id is not None:
         db_ = models.ProjectRole(project_id=project_id, role_id=role_id, person_id=person_id)
@@ -41,6 +43,7 @@ def get_project_role(db: Session, project_id: int, role_id: ty.Optional[int] = N
 
     Returns:
         models.ProjectRole: The project role
+
     """
     db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id)
     if role_id is not None:
@@ -59,6 +62,7 @@ def get_project_roles(db: Session, project_id: int) -> schemas.ProjectRolesGet:
 
     Returns:
         models.ProjectRole: The project role
+
     """
     db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id).all()
     project_roles = [schemas.PersonRole.model_validate(_, from_attributes=True) for _ in db_]
@@ -77,6 +81,7 @@ def delete_project_role(db: Session, project_id: int, role_id: int) -> schemas.P
 
     Returns:
         models.ProjectRole: The deleted project role
+
     """
     db_ = (
         db.query(models.ProjectRole)

@@ -1,17 +1,14 @@
-from fastapi import Depends, HTTPException
-from fastapi import FastAPI
 import logging
-from sqlalchemy.orm import Session
+
 from fastapi import FastAPI
 
-
+import document_issue_api.document.main as document_main
+import document_issue_api.document_role.main as document_role_main
 import document_issue_api.issue.main as issue_main
-import document_issue_api.role.main as role_main
+import document_issue_api.person.main as person_main
 import document_issue_api.project.main as project_main
 import document_issue_api.project_role.main as project_role_main
-import document_issue_api.document_role.main as document_role_main
-import document_issue_api.document.main as document_main
-import document_issue_api.person.main as person_main
+import document_issue_api.role.main as role_main
 
 logger = logging.getLogger(__name__)
 

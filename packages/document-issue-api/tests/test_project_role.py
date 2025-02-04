@@ -1,5 +1,5 @@
 import pytest
-from setup_test_client import client, post_project, post_role, post_person
+from setup_test_client import client, post_person, post_project, post_role
 
 
 def post_project_role():

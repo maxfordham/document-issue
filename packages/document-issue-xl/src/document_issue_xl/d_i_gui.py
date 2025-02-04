@@ -1,73 +1,66 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 14 13:37:03 2019
+"""Created on Tue May 14 13:37:03 2019
 
 @author: o.beckett, j.gunstone
 """
 
-import time
-import pathlib
 import glob
+import json
+import logging
 import os
-import xlwings as xw
-from d_i_read_excel import read_excel
-
+import pathlib
+import subprocess
+import time
 import tkinter
+import webbrowser
 from tkinter import (
-    END,
-    RIGHT,
-    LEFT,
-    EXTENDED,
-    Scrollbar,
-    VERTICAL,
-    Y,
-    X,
     BOTH,
-    Text,
+    END,
+    EXTENDED,
+    LEFT,
+    RIGHT,
+    VERTICAL,
     Entry,
+    Scrollbar,
+    Text,
+    X,
+    Y,
 )
+
+import pandas as pd
+from constants import CONFIG_DIR, DEFAULT_COLS, MAX_COLS_IN_PART, TITLETEXT
+from d_i_read_excel import read_excel
 from d_i_ui import (
-    warning_messagebox,
-    info_messagebox,
-    getsavefilename,
-    getfoldername,
     MFButton,
-    MFLabelFrame,
+    MFCheckButton,
+    MFHeader,
     MFLabel,
     MFLabelBlack,
-    getfilename,
-    MFHeader,
+    MFLabelFrame,
     MFOptionMenu,
-    MFCheckButton,
     MFTk,
+    getfoldername,
+    info_messagebox,
+    warning_messagebox,
 )
-
-from document_issue_io.issuesheet import write_issuesheet_and_issuehistory
-import json
-import pandas as pd
-from pydantic import BaseModel
-import webbrowser
-import subprocess
-import logging
-from constants import MAX_COLS_IN_PART, CONFIG_DIR, DEFAULT_COLS, TITLETEXT
 from document_issue_io.constants import OFFICES
+from document_issue_io.issuesheet import write_issuesheet_and_issuehistory
+from pydantic import BaseModel
 
 DIR_TESTOUTPUTS = pathlib.Path(
-    r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\outputs"
+    r"C:\engDev\git_mf\document-issue\packages\issue-sheet\tests\outputs",
 )
 
 logger = logging.getLogger(__name__)
 
 
 def config_filename(job_number):
-    """return the filename of the config files."""
+    """Return the filename of the config files."""
     # username = os.environ['username']
     return CONFIG_DIR + "\\" + str(job_number) + ".json"
 
 
 def save_config(config):
-    """save the config (which is a dict) to a file"""
-
+    """Save the config (which is a dict) to a file"""
     fpth = pathlib.Path(CONFIG_DIR) / config["job_number"] / "config.json"
     fpth.write_text(json.dumps(config, sort_keys=True, indent=4))
 
@@ -87,7 +80,7 @@ def save_config(config):
 
 
 def run():
-    """go go go!!!!"""
+    """Go go go!!!!"""
     main_window = DialogWindow(None)
     main_window.mainloop()
     return True
@@ -98,12 +91,12 @@ def gotohelp():
 
 
 def show_file(filename):
-    """open a file in default program"""
+    """Open a file in default program"""
     subprocess.Popen(filename, shell=True)
 
 
 def dump(di: dict):
-    """dump the data to the console"""
+    """Dump the data to the console"""
     fdir = pathlib.Path(r"dump")
     fdir.mkdir(exist_ok=True)
     li = []
@@ -132,8 +125,7 @@ def cols_to_plot(
     selected_issues=[],
     li_issues=[],
 ):
-    """get the columns to include in the pdf from the listbox"""
-
+    """Get the columns to include in the pdf from the listbox"""
     if part > 0:
         startindex = (part - 1) * max_cols_in_part
         endindex = part * max_cols_in_part
@@ -151,7 +143,8 @@ def cols_to_plot(
 ### THE INTERFACE fpor the wizard###
 class DialogWindow(MFTk):
     """This is the window that will appear on top of excel to control saving
-    of the pdf document"""
+    of the pdf document
+    """
 
     def __init__(self, parent):
         MFTk.__init__(self, parent)
@@ -205,9 +198,9 @@ class DialogWindow(MFTk):
         except:
             if "code" in key.lower() or "number" in key.lower():
                 return self.get_project_info("Job Number")
-            elif "part" in key.lower():
+            if "part" in key.lower():
                 return None
-            elif "naming" in key.lower():
+            if "naming" in key.lower():
                 return "project code - orig - volume - level - role - number"
             warning_messagebox(
                 message="Could not find value: "
@@ -218,7 +211,7 @@ class DialogWindow(MFTk):
             return "-"
 
     def initialise(self):
-        """create the interface"""
+        """Create the interface"""
         ### Banner ###
         MFHeader(self, text="Document Issue").pack(fill=BOTH)
         MFLabelBlack(self, text=TITLETEXT).pack(fill=BOTH)
@@ -249,7 +242,7 @@ class DialogWindow(MFTk):
         MFLabel(groupoptions, text="Dates to issue:").pack(side=LEFT)
         scrollbar = Scrollbar(groupoptions, orient=VERTICAL)
         self.listbox = tkinter.Listbox(
-            master=groupoptions, selectmode=EXTENDED, yscrollcommand=scrollbar.set
+            master=groupoptions, selectmode=EXTENDED, yscrollcommand=scrollbar.set,
         )
         scrollbar.config(command=self.listbox.yview)
         scrollbar.pack(side=RIGHT, fill=Y)
@@ -264,7 +257,7 @@ class DialogWindow(MFTk):
         self.folder_text = Text(groupfolder, height=1, width=40)
         self.folder_text.pack(side=tkinter.LEFT)
         MFButton(
-            master=groupfolder, text="...", command=self.get_outgoingfolder, width=3
+            master=groupfolder, text="...", command=self.get_outgoingfolder, width=3,
         ).pack(side=LEFT)
 
         ### Save/Quit ###
@@ -287,13 +280,13 @@ class DialogWindow(MFTk):
             width=40,
         ).pack(side=tkinter.BOTTOM)
         MFButton(master=frame1, text="Save", command=self.save, width=10).pack(
-            side=LEFT
+            side=LEFT,
         )
         MFButton(master=frame1, text="Quit", command=self._quit, width=10).pack(
-            side=LEFT
+            side=LEFT,
         )
         MFButton(
-            master=frame1, text="Check Docs", command=self.compare_docs, width=10
+            master=frame1, text="Check Docs", command=self.compare_docs, width=10,
         ).pack(side=LEFT)
         ### Errors ###
         MFLabelFrame(self, text="Errors", padx=15, pady=15).pack()
@@ -304,7 +297,7 @@ class DialogWindow(MFTk):
 
     def update_config(self):
         # try:
-        """save the user configs to Y:"""
+        """Save the user configs to Y:"""
         self.config["job_number"] = self.get_project_info("number")
         self.config["selected_issues"] = [
             self.li_issues[l] for l in self.listbox.curselection()
@@ -319,12 +312,12 @@ class DialogWindow(MFTk):
         if os.environ["username"] not in self.config["users"]:
             self.config["users"].append(os.environ["username"])
         self.config["timestamps"].append(
-            time.strftime("%b %d %Y %H:%M:%S", time.localtime())
+            time.strftime("%b %d %Y %H:%M:%S", time.localtime()),
         )
         save_config(self.config)
 
     def get_outgoingfolder(self):
-        """user select the outgoing folder"""
+        """User select the outgoing folder"""
         try:
             jn = str(self.get_project_info("Job Number"))
             if jn[0].lower() == "j":
@@ -339,18 +332,18 @@ class DialogWindow(MFTk):
         self.folder_text.insert(END, self.outgoingfolder)
 
     def file_in_data(self, basename):
-        """check if document is included in issue sheet"""
+        """Check if document is included in issue sheet"""
         return basename in list(self.data["Document Number"])
 
     def data_in_folder(self, data, filelist):
-        """check all files in data are in filelist"""
+        """Check all files in data are in filelist"""
         flist = []
         for file in filelist:
             flist.append(os.path.basename(file).split(".")[0])
         return data in flist
 
     def compare_docs(self):
-        """check that all the files that are in the issue sheet are in the outgoing folder"""
+        """Check that all the files that are in the issue sheet are in the outgoing folder"""
         if not self.outgoingfolder:
             info_messagebox(message="No Outgoing folder selected")
             return False
@@ -378,7 +371,7 @@ class DialogWindow(MFTk):
             warning_messagebox("No Specific Issue selected", "Input error")
         mask = self.data[last_col].str.len() >= 1
         for doc in list(self.data.loc[mask, cols]["Document Number"]):
-            if not doc in ok_docs:
+            if doc not in ok_docs:
                 if self.data_in_folder(doc, filelist):
                     ok_docs.append(doc)
                 else:
@@ -386,12 +379,12 @@ class DialogWindow(MFTk):
 
         numfiles = len(ok_docs) + len(missing_from_issue) + len(missing_from_outgoing)
         self.compare_docs_message(
-            ok_docs, missing_from_issue, missing_from_outgoing, numfiles
+            ok_docs, missing_from_issue, missing_from_outgoing, numfiles,
         )
         return True
 
     def compare_docs_message(
-        self, ok_docs, missing_from_issue, missing_from_outgoing, numfiles
+        self, ok_docs, missing_from_issue, missing_from_outgoing, numfiles,
     ):
         msg = str(len(ok_docs)) + "/" + str(numfiles) + ": OK\n"
         msg += (
@@ -425,14 +418,14 @@ class DialogWindow(MFTk):
         return cw
 
     def save(self):
-        """create and save the pdf file"""
+        """Create and save the pdf file"""
         self.get_data()
         self.update_config()
         if self.check_on_save.get():
             if not self.compare_docs():
                 return False
         fpth_issuesheet, fpths_issuehistory = write_issuesheet_and_issuehistory(
-            self.fdir_package
+            self.fdir_package,
         )
         filescreated = [str(f) for f in [fpth_issuesheet] + fpths_issuehistory]
         info_messagebox(message="Documents saved:\n" + "\n".join(filescreated))

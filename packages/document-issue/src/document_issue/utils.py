@@ -1,8 +1,9 @@
-import pathlib
-import os
-import sys
 import json
+import os
+import pathlib
 import re
+import sys
+
 import yaml
 
 
@@ -11,17 +12,16 @@ def get_stem(path: pathlib.Path):
 
 
 def get_ext(fpth):
-    """get file extension including compound json files"""
+    """Get file extension including compound json files"""
     return "".join(pathlib.Path(fpth).suffixes)
 
 
 def read_json(fpth, encoding="utf8"):
-    """
-    read info in a .json file
+    """Read info in a .json file
     """
 
     def read(fpth):
-        with open(fpth, "r", encoding=encoding) as f:
+        with open(fpth, encoding=encoding) as f:
             json_file = json.load(f)
         return json_file
 
@@ -35,17 +35,17 @@ def fpth_chg_extension(fpth, new_ext="docx"):
 
 
 def get_home():
-    """generate the home dir.
+    """Generate the home dir.
 
     Returns:
         fdir [str]: if windows: os.environ['userprofile'], if linux: os.environ['home']
+
     """
     if sys.platform == "linux":
         return os.environ["HOME"]
-    elif sys.platform == "windows":
+    if sys.platform == "windows":
         return os.environ["userprofile"]
-    else:
-        return None
+    return None
 
 
 # directories -------------------------------------------------
@@ -69,8 +69,7 @@ def flatten_list(list_of_lists: list) -> list:
 
 
 def jobno_fromdir(fdir):
-    """
-    returns the job number from a given file directory
+    """Returns the job number from a given file directory
 
     Args:
         fdir (filepath): file-directory
@@ -78,6 +77,7 @@ def jobno_fromdir(fdir):
         job associated to file-directory
     Code:
         re.findall("[J][0-9][0-9][0-9][0-9]", txt)
+
     """
     matches = re.findall("[J][0-9][0-9][0-9][0-9]", fdir)
     if len(matches) == 0:
@@ -88,8 +88,9 @@ def jobno_fromdir(fdir):
 
 
 def find_fdir_keys(di):
-    """searches dict for key that contains string 'fdir'. ignores J:\\
-    can handle lists for fdir* values"""
+    """Searches dict for key that contains string 'fdir'. ignores J:\\
+    can handle lists for fdir* values
+    """
     li = list(di.keys())
     li = flatten_list([di[l] for l in li if l[0:4] == "fdir"])
     li = [l for l in li if l != "J:\\"]
@@ -114,7 +115,7 @@ def make_disclaimer_spacer(fdir):
 
 # ------------------------------
 def str_presenter(dumper, data):
-    """configures yaml for dumping multiline strings
+    """Configures yaml for dumping multiline strings
     Ref: https://stackoverflow.com/questions/8640959/how-can-i-control-what-scalar-form-pyyaml-uses-for-my-data
     """
     if len(data.splitlines()) > 1:  # check for multiline string

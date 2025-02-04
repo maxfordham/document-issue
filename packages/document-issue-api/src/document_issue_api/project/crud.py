@@ -1,9 +1,11 @@
 import logging
-from sqlalchemy.orm import Session
-import document_issue_api.project.schemas as schemas
-import document_issue_api.models as models
 import typing as ty
+
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.orm import Session
+
+from document_issue_api import models
+from document_issue_api.project import schemas
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +19,8 @@ def post_project(db: Session, project: schemas.ProjectPost) -> models.Project:
 
     Returns:
         models.Project: The postd project
-    """
 
+    """
     db_ = models.Project(**project.model_dump())
     db.add(db_)
     db.commit()
@@ -35,14 +37,14 @@ def get_project(db: Session, project_id: int) -> models.Project:
 
     Returns:
         models.Project: The project
-    """
 
+    """
     db_ = db.query(models.Project).filter(models.Project.id == project_id).first()
     return db_
 
 
 def get_projects(
-    db: Session, limit: int = 100, skip: int = 0
+    db: Session, limit: int = 100, skip: int = 0,
 ) -> ty.List[models.Project]:
     """Get all projects.
 
@@ -53,8 +55,8 @@ def get_projects(
 
     Returns:
         ty.List[models.Project]: The list of projects
-    """
 
+    """
     db_ = db.query(models.Project).offset(skip).limit(limit).all()
     return db_
 
@@ -68,8 +70,8 @@ def delete_project(db: Session, project_id: int) -> models.Project:
 
     Returns:
         models.Project: The deleted project
-    """
 
+    """
     db_ = db.query(models.Project).filter(models.Project.id == project_id).first()
     db.delete(db_)
     db.commit()
@@ -77,7 +79,7 @@ def delete_project(db: Session, project_id: int) -> models.Project:
 
 
 def patch_project(
-    db: Session, project_id: int, project: schemas.ProjectPatch
+    db: Session, project_id: int, project: schemas.ProjectPatch,
 ) -> models.Project:
     """Patch a project by ID.
 
@@ -87,8 +89,8 @@ def patch_project(
 
     Returns:
         models.Project: The patched project
-    """
 
+    """
     db_ = db.query(models.Project).filter(models.Project.id == project_id).first()
     update_data = project.model_dump(exclude_unset=True)
     for field in jsonable_encoder(db_):

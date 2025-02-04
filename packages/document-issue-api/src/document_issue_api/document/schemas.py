@@ -1,7 +1,6 @@
 from document_issue.document import DocumentBase  # , Document, Project, Role
 from document_issue.document_issue import DocumentIssue
 from document_issue.project import ProjectBase
-from document_issue.project_role import ProjectRoles
 
 
 class DocumentBasePost(DocumentBase):
@@ -13,7 +12,6 @@ class DocumentBasePost(DocumentBase):
 class DocumentBasePatch(DocumentBase):
     """Issue post schema."""
 
-    pass
 
 
 class DocumentBaseGet(DocumentBasePost):
@@ -26,4 +24,3 @@ class DocumentBaseGet(DocumentBasePost):
 class DocumentIssueGet(DocumentIssue):
     """Issue post schema."""
 
-    pass

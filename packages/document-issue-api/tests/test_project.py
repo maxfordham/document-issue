@@ -34,7 +34,7 @@ def test_get_project(post_project_then_delete):
 
 def test_get_projects(post_project_then_delete):
     _ = post_project_then_delete
-    response = client.get(f"/project/")
+    response = client.get("/project/")
     assert response.status_code == 200
     r = response.json()
     assert isinstance(r, list)

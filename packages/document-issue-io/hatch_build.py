@@ -1,7 +1,7 @@
 import os
 import pathlib
-import subprocess
 import shutil
+import subprocess
 from contextlib import contextmanager
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
@@ -25,7 +25,8 @@ def change_dir(directory):
 class CustomBuildHook(BuildHookInterface):
     def initialize(self, version, build_data):
         """Build the document-issue-quarto package and move the tarball to the
-        document-issue-io package into the templates directory."""
+        document-issue-io package into the templates directory.
+        """
         tar_name = "document-issue-quarto.tar.gz"
         with change_dir(FDIR_DOCUMENT_ISSUE_QUARTO):
             subprocess.run(
@@ -34,6 +35,6 @@ class CustomBuildHook(BuildHookInterface):
                     "cvzf",
                     tar_name,
                     "_extensions",
-                ]
+                ], check=False,
             )
             shutil.move(tar_name, DIR_TEMPLATES / tar_name)

@@ -2,7 +2,11 @@ import os
 import shutil
 import subprocess
 
-from tests.constants import FDIR_ROOT, FDIR_TEST_OUTPUT, FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE, FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT, FDIR_EXAMPLES_DOC_ISSUE_REPORT, FDIR_EXAMPLES_DOC_ISSUE_NOTE
+from tests.constants import (
+    FDIR_EXAMPLES_DOC_ISSUE_NOTE,
+    FDIR_ROOT,
+    FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE,
+)
 
 
 def test_install_extension():
@@ -14,7 +18,7 @@ def test_install_extension():
     if FDIR_EXTENSION_INSTALL_PTH.exists():
         shutil.rmtree(FDIR_EXTENSION_INSTALL_PTH)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     assert FDIR_EXTENSION_INSTALL_PTH.exists()
 
 
@@ -26,9 +30,9 @@ def test_build_schedule_a4_portrait():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-note-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-note-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -45,9 +49,9 @@ def test_build_schedule_a3_landscape():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-note-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-note-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"

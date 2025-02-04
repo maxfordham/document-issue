@@ -1,6 +1,7 @@
 import pathlib
-from reportlab.lib import colors
 from importlib.resources import files
+
+from reportlab.lib import colors
 
 # ^ REF: https://setuptools.pypa.io/en/latest/userguide/datafiles.html#accessing-data-files-at-runtime
 
@@ -25,7 +26,7 @@ FONTS = {
 
 
 MAP_TITLEBLOCK_IMAGES = {
-    l.lower(): DIR_MEDIA.joinpath(("titleblock_" + l.lower() + ".png")) for l in OFFICES
+    l.lower(): DIR_MEDIA.joinpath("titleblock_" + l.lower() + ".png") for l in OFFICES
 }
 
 
@@ -141,25 +142,23 @@ def address_from_loc_compact(loc):
     loc_lower = loc.lower()
     if loc_lower == "cambridge":
         return CAMBRIDGE_ADDRESS_COMPACT
-    elif loc_lower == "edinburgh":
+    if loc_lower == "edinburgh":
         return EDINBURGH_ADDRESS_COMPACT
-    elif loc_lower == "bristol":
+    if loc_lower == "bristol":
         return BRISTOL_ADDRESS_COMPACT
-    elif loc_lower == "manchester":
+    if loc_lower == "manchester":
         return MANCHESTER_ADDRESS_COMPACT
-    else:
-        return LONDON_ADDRESS_COMPACT
+    return LONDON_ADDRESS_COMPACT
 
 
 def address_from_loc(loc):
     loc_lower = loc.lower()
     if loc_lower == "cambridge":
         return CAMBRIDGE_ADDRESS
-    elif loc_lower == "edinburgh":
+    if loc_lower == "edinburgh":
         return EDINBURGH_ADDRESS
-    elif loc_lower == "bristol":
+    if loc_lower == "bristol":
         return BRISTOL_ADDRESS
-    elif loc_lower == "manchester":
+    if loc_lower == "manchester":
         return MANCHESTER_ADDRESS
-    else:
-        return LONDON_ADDRESS
+    return LONDON_ADDRESS

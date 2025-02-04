@@ -1,8 +1,9 @@
 import os
 import shutil
 import subprocess
+
+from tests.constants import FDIR_EXAMPLES_DOC_ISSUE_REPORT, FDIR_TEST_OUTPUT
 from tests.utils_check_doc_properties import check_quarto_doc_properties
-from tests.constants import FDIR_TEST_OUTPUT, FDIR_EXAMPLES_DOC_ISSUE_REPORT
 
 
 def test_quarto_doc_properties():
@@ -13,8 +14,8 @@ def test_quarto_doc_properties():
     FPTH_INPUT = FDIR_TESTDATA / "document.qmd"
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
-    os.chdir(FDIR_TESTDATA) 
-    subprocess.run(["quarto", "render", "document.qmd"])
+    os.chdir(FDIR_TESTDATA)
+    subprocess.run(["quarto", "render", "document.qmd"], check=False)
     assert FPTH_OUTPUT.is_file()
     check_quarto_doc_properties(FPTH_INPUT, FPTH_OUTPUT)
 

@@ -1,8 +1,10 @@
+import typing as ty
+
+from pydantic import AliasChoices
+
 from document_issue.basemodel import BaseModel, Field
 from document_issue.enums import RoleEnum
 from document_issue.person import _Initials
-from pydantic import AliasChoices
-import typing as ty
 
 
 # TODO:
@@ -11,7 +13,7 @@ import typing as ty
 # table
 class Role(BaseModel):
     role_name: ty.Union[str, RoleEnum] = Field(
-        title="Role", description="name of the role"
+        title="Role", description="name of the role",
     )
     role_description: str = Field(
         "",
@@ -23,5 +25,5 @@ class Role(BaseModel):
 
 class DocumentRole(_Initials):
     role_name: RoleEnum = Field(
-        validation_alias=AliasChoices("role", "role_name"), title="Role"
+        validation_alias=AliasChoices("role", "role_name"), title="Role",
     )  # NOTE: alias for backwards compatibility with xl DNG

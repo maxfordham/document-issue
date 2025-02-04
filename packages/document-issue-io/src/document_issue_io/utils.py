@@ -3,7 +3,7 @@ import pathlib
 import subprocess
 from contextlib import contextmanager
 
-from document_issue_io.constants import DIR_TEMPLATES, DIR_MEDIA
+from document_issue_io.constants import DIR_MEDIA, DIR_TEMPLATES
 
 FPTH_INSTALL_TAR = DIR_TEMPLATES / "document-issue-quarto.tar.gz"
 FPTH_FOOTER_LOGO = DIR_MEDIA / "footer-logo.png"
@@ -20,11 +20,11 @@ def change_dir(directory):
 
 
 def install_document_issue_quarto_extension():
-    subprocess.run(["quarto", "add", str(FPTH_INSTALL_TAR), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FPTH_INSTALL_TAR), "--no-prompt"], check=False)
 
 
 def update_document_issue_quarto_extension():
-    subprocess.run(["quarto", "update", str(FPTH_INSTALL_TAR), "--no-prompt"])
+    subprocess.run(["quarto", "update", str(FPTH_INSTALL_TAR), "--no-prompt"], check=False)
 
 
 def install_or_update_document_issue_quarto_extensions():

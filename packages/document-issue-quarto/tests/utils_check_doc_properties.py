@@ -1,10 +1,11 @@
 
 import pathlib
-from pypdf import PdfReader
+
 import yaml
+from pypdf import PdfReader
 
 DOCUMENT_PROPERTIES = [
-        "title", 
+        "title",
         # "project", # TODO: not coming through -> make issue on quarto describing this...
         # "subtitle", # TODO: not coming through -> make issue on quarto describing this...
         "author",
@@ -26,7 +27,7 @@ def check_quarto_doc_properties(fpth_in: pathlib.Path, fpth_out: pathlib.Path):
     meta_out = reader.metadata
 
     li_get = DOCUMENT_PROPERTIES
-    
+
     for k, v in meta_in.items():
         if k in li_get:
             assert getattr(meta_out, k) == v

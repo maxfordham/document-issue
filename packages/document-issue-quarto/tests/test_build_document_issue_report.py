@@ -1,12 +1,14 @@
 import os
 import shutil
 import subprocess
-import pytest
 
-from tests.utils_check_doc_properties import check_quarto_doc_properties
-from tests.constants import FDIR_ROOT, FDIR_TEST_OUTPUT, FDIR_EXAMPLES_DOC_ISSUE_REPORT, FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT
+from tests.constants import (
+    FDIR_EXAMPLES_DOC_ISSUE_REPORT,
+    FDIR_ROOT,
+    FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT,
+)
 
-# TODO: 
+# TODO:
 # move examples to examples dir in root and setup to work with the documentation workflow.
 # perhaps you could ignore folders suffixed with `_` in the `test_build_examples` fn
 
@@ -20,7 +22,7 @@ def test_install_extension():
     if FDIR_EXTENSION_INSTALL_PTH.exists():
         shutil.rmtree(FDIR_EXTENSION_INSTALL_PTH)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     assert FDIR_EXTENSION_INSTALL_PTH.exists()
 
 
@@ -32,9 +34,9 @@ def test_build_schedule_a4_portrait():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -50,9 +52,9 @@ def test_build_schedule_a4_portrait_draft():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -69,9 +71,9 @@ def test_build_schedule_a3_landscape():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -88,9 +90,9 @@ def test_build_schedule_disclaimer_page():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -107,9 +109,9 @@ def test_build_schedule_document_properties():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -126,9 +128,9 @@ def test_build_schedule_footer():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -145,9 +147,9 @@ def test_build_schedule_images():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -164,9 +166,9 @@ def test_build_schedule_product_output():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -183,9 +185,9 @@ def test_build_schedule_resource_path():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf", "--resource-path=./media"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf", "--resource-path=./media"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -201,9 +203,9 @@ def test_build_schedule_table_of_contents():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -220,9 +222,9 @@ def test_build_schedule_tables():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
@@ -240,9 +242,9 @@ def test_build_docissue_in_quarto_yaml():
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
     FPTH_OUTPUT.unlink(missing_ok=True)
     os.chdir(FDIR_TESTDATA)
-    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"])
+    subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md"]
+        ["quarto", "render", "document.md"], check=False,
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"

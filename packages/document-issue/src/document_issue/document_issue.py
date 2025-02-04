@@ -1,17 +1,28 @@
 import typing as ty
-from tabulate import tabulate
+from typing import Annotated
+
 from pydantic import (
     AfterValidator,
     BeforeValidator,
 )
-from typing_extensions import Annotated
-from document_issue.project import ProjectBase
-from document_issue.enums import RoleEnum
+from tabulate import tabulate
+
 from document_issue.basemodel import Field
-from document_issue.issue import Issue
-from document_issue.role import DocumentRole
+from document_issue.codes import (
+    Classification,
+    FunctionalBreakdown,
+    InformationType,
+    Level,
+    Originator,
+    Project,
+    Volume,
+)
 from document_issue.document import Document
-from document_issue.codes import Project, Classification, InformationType, Originator, FunctionalBreakdown, Level, Volume
+from document_issue.enums import RoleEnum
+from document_issue.issue import Issue
+from document_issue.project import ProjectBase
+from document_issue.role import DocumentRole
+
 # ------------------------------------------------------------------------------------------
 # NOTE: the DocumentIssue shown here is the ideal output presentation for a single document.
 #       it is not the closest representation of what is in the database. The data will need
@@ -21,7 +32,7 @@ from document_issue.codes import Project, Classification, InformationType, Origi
 
 def document_role_before(v: ty.List) -> ty.List:
     if len(v) == 0:
-        v = [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})]
+        v = [DocumentRole(role=RoleEnum.director, initials="DR")]
     else:
         pass
     return v
@@ -31,7 +42,7 @@ def document_role_after(v: ty.List[DocumentRole]) -> ty.List[DocumentRole]:
     if len(v) > 0:
         if v[0].role_name != RoleEnum.director:
             if v[0].role_name != "Director in Charge":
-                v = [DocumentRole(**{"role": RoleEnum.director, "initials": "DR"})] + v
+                v = [DocumentRole(role=RoleEnum.director, initials="DR")] + v
     else:
         pass
     return v
@@ -78,17 +89,17 @@ class DocumentIssue(Document, ProjectBase):
         for issue in sorted(self.issue_history, key=lambda d: d.date, reverse=True):
             di_issue = issue.model_dump()
             di_issue["date"] = di_issue["date"].strftime(
-                self.format_configuration.date_string_format
+                self.format_configuration.date_string_format,
             )
             di_issue_with_title = {}
             for header in headers:
-                if header in map_title_to_field.keys():
+                if header in map_title_to_field:
                     di_issue_with_title[f"**{header}**"] = di_issue[
                         map_title_to_field[header]
                     ]
                 else:
                     raise ValueError(
-                        f"Header '{header}' not defined as a title in Issue schema."
+                        f"Header '{header}' not defined as a title in Issue schema.",
                     )
             li_issue_history.append(di_issue_with_title)
 
@@ -107,14 +118,14 @@ class DocumentIssue(Document, ProjectBase):
             di_document_role = document_role.model_dump(mode="json")
             di_document_role_with_title = {}
             for header in headers:
-                if header in map_title_to_field.keys():
+                if header in map_title_to_field:
                     di_document_role_with_title[f"**{header}**"] = di_document_role[
                         map_title_to_field[header]
                     ]
                 else:
                     raise ValueError(
                         f"Header '{header}' not defined as a title in DocumentRole"
-                        " schema."
+                        " schema.",
                     )
             li_document_roles.append(di_document_role_with_title)
         return tabulate(
@@ -135,8 +146,7 @@ class DocumentIssue(Document, ProjectBase):
     def current_issue(self) -> ty.Union[Issue, None]:
         if len(self.issue_history) > 0:
             return sorted(self.issue_history, key=lambda d: d.date, reverse=True)[0]
-        else:
-            return None
+        return None
 
     @property
     def current_issue_long_date(self):

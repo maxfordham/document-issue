@@ -1,20 +1,21 @@
 from document_issue.document import Document
-from document_issue.issue import Issue
 from document_issue.document_issue import DocumentIssue
+from document_issue.issue import Issue
+
 __all__ = [
     "Document",
+    "DocumentIssue",
     "Issue",
-    "DocumentIssue"
 ]
 
 
 def demo_document_issue():
-    from document_issue.enums import StatusRevisionEnum, RoleEnum
+    from document_issue.enums import RoleEnum, StatusRevisionEnum
     from document_issue.role import DocumentRole
-    
+
     issue = Issue(status_revision=StatusRevisionEnum.A4_C)
     document_issue = DocumentIssue(
-        document_role=[DocumentRole(**{"role_name": RoleEnum.director, "name": "DR"})],
+        document_role=[DocumentRole(role_name=RoleEnum.director, name="DR")],
         issue_history=[issue],
         notes=[
                     "This is a note",

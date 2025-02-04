@@ -1,4 +1,4 @@
-from document_issue.project import Project, ProjectBase
+from document_issue.project import ProjectBase
 
 
 class ProjectPost(ProjectBase):
@@ -14,4 +14,3 @@ class ProjectGet(ProjectPost):
 class ProjectPatch(ProjectPost):
     """Project patch schema."""
 
-    pass

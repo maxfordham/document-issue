@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 import typing as ty
+
+from pydantic import BaseModel
 
 
 class CodeDefinitions(BaseModel):

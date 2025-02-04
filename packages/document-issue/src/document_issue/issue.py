@@ -1,10 +1,11 @@
-from document_issue.basemodel import BaseModel, Field
-from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
-from document_issue.constants import COL_WIDTH
 import datetime
 import typing as ty
+
 from pydantic import field_validator, model_validator
 
+from document_issue.basemodel import BaseModel, Field
+from document_issue.constants import COL_WIDTH
+from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 
 description_author = "the person who authored the work."
 description_checked_by = "the person who checked the work."
@@ -90,8 +91,7 @@ class Issue(BaseModel):
     def _issue_format(cls, v):
         if v in list(IssueFormatEnum.__members__.keys()):
             return getattr(IssueFormatEnum, v)
-        else:
-            return v
+        return v
 
     @model_validator(mode="after")
     def update_status_revision_fields(self) -> "Issue":

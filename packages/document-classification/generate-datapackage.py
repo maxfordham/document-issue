@@ -1,10 +1,8 @@
-from document_issue.meta import LookupData
-import pathlib
 import json
-import pandas as pd 
+import pathlib
 
-from frictionless import describe
-
+import pandas as pd
+from document_issue.meta import LookupData
 
 
 def dict_to_df(di):

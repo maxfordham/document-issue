@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Nov 17 14:00:22 2018
+"""Created on Sat Nov 17 14:00:22 2018
 
 @author: j.gunstone
 
@@ -14,12 +12,25 @@ Created on Sat Nov 17 14:00:22 2018
 """
 
 import tkinter
-from tkinter import filedialog, Tk, messagebox, scrolledtext, INSERT, StringVar
-from tkinter import OptionMenu, Button, mainloop, Label, LEFT, Entry, W
-from PIL.ImageTk import PhotoImage
-from PIL import Image, ImageTk
-from document_issue_io.constants import FPTH_ICON
+from tkinter import (
+    INSERT,
+    LEFT,
+    Button,
+    Entry,
+    Label,
+    OptionMenu,
+    StringVar,
+    Tk,
+    W,
+    filedialog,
+    mainloop,
+    messagebox,
+    scrolledtext,
+)
 
+from document_issue_io.constants import FPTH_ICON
+from PIL import Image, ImageTk
+from PIL.ImageTk import PhotoImage
 
 MFFONTLARGE = ("Calibri", 32)  # Large Calibri Font
 MFFONTSMALL = ("Calibri", 12)  # Small Calibru Font
@@ -91,14 +102,14 @@ class MFOptionMenu(tkinter.OptionMenu):
 
 
 def start_hidden_root():
-    """starts the Tk session with hiding the main window"""
+    """Starts the Tk session with hiding the main window"""
     root = Tk()
     root.iconbitmap(default=FPTH_ICON)
     root.withdraw()
 
 
 def start_root(title="MF"):
-    """starts the Tk session without hiding the main window"""
+    """Starts the Tk session without hiding the main window"""
     root = Tk()
     root.title(title)
     root.iconbitmap(default=FPTH_ICON)
@@ -106,7 +117,7 @@ def start_root(title="MF"):
 
 
 def show_editable_text(text):
-    """shows lots of text as scrollable text - useful for copying and pasting"""
+    """Shows lots of text as scrollable text - useful for copying and pasting"""
     window = start_root(title="Ctrl+C to Copy; Ctrl+V to Paste")
     edit_area = scrolledtext.ScrolledText(master=window, width=50, height=10)
     edit_area.insert(INSERT, text)
@@ -115,44 +126,44 @@ def show_editable_text(text):
 
 
 def getfilename(filetypes=(("All", "*.*"))):
-    """get filename from explorer and return"""
+    """Get filename from explorer and return"""
     start_hidden_root()
     infile = filedialog.askopenfilename(multiple=False)
     return infile
 
 
 def getsavefilename(extension=None, initialfile=""):
-    """get filename from explorer and return"""
+    """Get filename from explorer and return"""
     start_hidden_root()
     infile = filedialog.asksaveasfilename(
-        defaultextension=extension, initialfile=initialfile
+        defaultextension=extension, initialfile=initialfile,
     )
     return infile
 
 
 def getfoldername(initialdir=None):
-    """get folder name from explorer and return"""
+    """Get folder name from explorer and return"""
     start_hidden_root()
     infile = filedialog.askdirectory(initialdir=initialdir)
     return infile
 
 
 def info_messagebox(message="Done", title="Done"):
-    """show info OK type box"""
+    """Show info OK type box"""
     start_hidden_root()
     messagebox.showinfo(title, message)
 
 
 def warning_messagebox(message="Warning", title="Warning"):
-    """display warning"""
+    """Display warning"""
     start_hidden_root()
     messagebox.showwarning(title, message)
 
 
 def yesno_messagebox(
-    message="Yes or No", title="Option", yesaction=None, noaction=None
+    message="Yes or No", title="Option", yesaction=None, noaction=None,
 ):
-    """display yes no question"""
+    """Display yes no question"""
     start_hidden_root()
     if messagebox.askyesno(title, message):
         yesaction()
@@ -161,9 +172,9 @@ def yesno_messagebox(
 
 
 def okcancel_messagebox(
-    message="OK or Cancel", title="Option", okaction=None, cancelaction=None
+    message="OK or Cancel", title="Option", okaction=None, cancelaction=None,
 ):
-    """display OK cancel question"""
+    """Display OK cancel question"""
     start_hidden_root()
     if messagebox.askokcancel(title, message):
         okaction()
@@ -172,8 +183,7 @@ def okcancel_messagebox(
 
 
 def tkinter_choice(choices, default_val):
-    """
-    define list of possible choices and a default value and
+    """Define list of possible choices and a default value and
     this function create a dropdown list of the user defined
     options with a default_val pre-selected.
 
@@ -186,7 +196,7 @@ def tkinter_choice(choices, default_val):
     """
 
     def ok():
-        """function when ok is clicked"""
+        """Function when ok is clicked"""
         global choice
         choice = var.get()
         print("choice is:", choice)
@@ -209,14 +219,14 @@ def tkinter_choice(choices, default_val):
 
 # from tkinter import *
 def tkinter_label(explanation, gif_pth=None):
-    """
-    flash a label box that tells the user some information. press
+    """Flash a label box that tells the user some information. press
     ok to close.
 
     Args:
         explanatation (str): message to teh user
         gif_pth (dir): show image in message box
             (only GIF and PPM/PGM file types available)
+
     Returns:
         message box with "explanation" and "gif_pth".
 
@@ -225,12 +235,12 @@ def tkinter_label(explanation, gif_pth=None):
     root = start_root()
     if gif_pth != None:
         logo = PhotoImage(
-            file=gif_pth
+            file=gif_pth,
         )  # https://www.python-course.eu/tkinter_labels.php
         w1 = Label(root, image=logo).pack(side="right")
     else:
         # w1 = Label(root).pack(side="right")
-        print("")
+        print()
     explanation = explanation
     w2 = Label(root, justify=LEFT, padx=10, text=explanation).pack(side="left")
 
@@ -242,8 +252,7 @@ def tkinter_label(explanation, gif_pth=None):
 # from tkinter import *
 # from tkinter import filedialog
 def tkinter_filedialog():
-    """
-    prompts user to select folder
+    """Prompts user to select folder
     """
     return getfoldername()
 
@@ -258,8 +267,7 @@ def tkinter_filedialog():
 
 
 def tkinter_show_img(imageFile):
-    """
-    # use a Tkinter label as a panel/frame with a background image
+    """# use a Tkinter label as a panel/frame with a background image
     # note that Tkinter only reads gif and ppm images
     # use the Python Image Library (PIL) for other image formats
     # free from [url]http://www.pythonware.com/products/pil/index.htm[/url]
@@ -274,7 +282,6 @@ def tkinter_show_img(imageFile):
         tkinter_show_img(imageFile)
 
     """
-
     # root = Tk()
     # root.title('background image')
     root = start_root(title="background image")
@@ -311,8 +318,7 @@ def tkinter_show_img(imageFile):
 
 # from tkinter import *
 def tkinter_user_input(title, options):
-    """
-    user input menu. creates dict of user responses from
+    """User input menu. creates dict of user responses from
     list of questions.
 
     Args:
@@ -329,6 +335,7 @@ def tkinter_user_input(title, options):
             list of duplicate floors (list, e.g. ['02','03'])"
         options=["reference floor","list of duplicate floors"]
         tkinter_user_input(title,options)
+
     """
 
     def show_entry_fields():
@@ -353,19 +360,19 @@ def tkinter_user_input(title, options):
     Label(master, text=title).grid(row=0, sticky=W)
 
     vals = []
-    for n in range(0, len(options)):
+    for n in range(len(options)):
         Label(master, text=options[n]).grid(row=n + 1, sticky=W)
         vals.append("vals" + str(n))
     n = 0
-    for n in range(0, len(vals)):
+    for n in range(len(vals)):
         vals[n] = Entry(master)
         vals[n].grid(row=n + 1, column=1)
 
     Button(master, text="ignore and continue", command=ignore).grid(
-        row=3, column=0, sticky=W, pady=4
+        row=3, column=0, sticky=W, pady=4,
     )
     Button(master, text="save my inputs", command=show_entry_fields).grid(
-        row=3, column=1, sticky=W, pady=4
+        row=3, column=1, sticky=W, pady=4,
     )
     # Button(master, image=icon)
     mainloop()

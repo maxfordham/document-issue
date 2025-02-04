@@ -1,20 +1,14 @@
 from sqlalchemy import (
+    JSON,
     Boolean,
     Column,
+    Date,
     ForeignKey,
     Integer,
     String,
-    DateTime,
-    Date,
-    Float,
     UniqueConstraint,
-    Enum,
-    JSON,
 )
-
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import relationship, configure_mappers, validates
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 

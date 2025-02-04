@@ -1,14 +1,15 @@
-import PIL
 import pathlib
 from textwrap import wrap
-from reportlab.lib import colors
-from reportlab.lib.units import mm, inch
-from reportlab.lib.pagesizes import A4, A3, landscape
-from reportlab.platypus import Table, Image, TableStyle, SimpleDocTemplate, TopPadder
-from reportlab.pdfgen import canvas
 
+import PIL
 from document_issue.document_issue import DocumentIssue
-from .constants import MAP_TITLEBLOCK_IMAGES, FPTH_MF_CIRCLE_IMG, DIR_MEDIA
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A3, A4, landscape
+from reportlab.lib.units import inch, mm
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Image, SimpleDocTemplate, Table, TableStyle, TopPadder
+
+from .constants import DIR_MEDIA, FPTH_MF_CIRCLE_IMG, MAP_TITLEBLOCK_IMAGES
 from .styles import register_fonts
 
 register_fonts()
@@ -45,10 +46,9 @@ def create_styling(number_of_cols: int) -> list:
 
 
 def get_title_block_image(
-    fpth_img: pathlib.Path, scale_height=28, scale_width=28
+    fpth_img: pathlib.Path, scale_height=28, scale_width=28,
 ) -> Image:
     """Get the image that will be used within the title block."""
-
     image = Image(fpth_img)
     image.drawHeight = scale_height * mm * image.drawHeight / image.drawWidth
     image.drawWidth = scale_width * mm
@@ -63,7 +63,8 @@ def construct_title_block_data(
     is_a3=False,
 ) -> list[list]:
     """Using the document issue, layout the data in preparation to be styled
-    correctly by ReportLab."""
+    correctly by ReportLab.
+    """
 
     def rename_name_nomenclature(name_nomenclature: str) -> str:
         name_nomenclature = name_nomenclature.replace("-", " - ")
@@ -74,7 +75,7 @@ def construct_title_block_data(
         return name_nomenclature
 
     image = get_title_block_image(
-        fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width
+        fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width,
     )
     issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
     # Check for \n override in document description
@@ -82,16 +83,16 @@ def construct_title_block_data(
         document_description = document_issue.document_description
     else:
         document_description = "\n".join(
-            wrap(document_issue.document_description, width=70 if is_a3 else 40)
+            wrap(document_issue.document_description, width=70 if is_a3 else 40),
         )
     name_nomenclature = rename_name_nomenclature(document_issue.name_nomenclature)
     document_code = document_issue.document_code.replace("-", " - ")
     status_description = document_issue.current_issue.status_description.replace(
-        "Suitable for ", ""
+        "Suitable for ", "",
     ).replace("Issued for ", "")
     # ^ TODO: Need to deal with length of status codes more robustly
     project_name = "\n".join(
-        wrap(document_issue.project_name, width=40 if is_a3 else 47)
+        wrap(document_issue.project_name, width=40 if is_a3 else 47),
     )
     (
         project_number,

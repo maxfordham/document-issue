@@ -1,12 +1,12 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import logging
-import document_issue_api.person.schemas as schemas
-import document_issue_api.person.crud as crud
 
 from document_issue_api.database import (
     get_db,
 )  # TODO: remove this dependency / make configurable
+from document_issue_api.person import crud, schemas
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -43,10 +43,9 @@ def get_person(person_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Failed to get Role.\n{err}")
     if db_ is None:
         raise HTTPException(
-            status_code=204, detail=f"Person id ={person_id} does not exist."
+            status_code=204, detail=f"Person id ={person_id} does not exist.",
         )
-    else:
-        return db_
+    return db_
 
 
 @router.get(
@@ -70,7 +69,7 @@ def get_people(db: Session = Depends(get_db), limit: int = 100, skip: int = 0):
     summary="Patch Person.",
 )
 def patch_person(
-    person_id: int, person: schemas.PersonPatch, db: Session = Depends(get_db)
+    person_id: int, person: schemas.PersonPatch, db: Session = Depends(get_db),
 ):
     try:
         db_ = crud.patch_person(db=db, person_id=person_id, person=person)

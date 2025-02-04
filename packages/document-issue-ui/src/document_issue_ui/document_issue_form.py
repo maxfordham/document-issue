@@ -1,20 +1,20 @@
-import yaml
-import ipywidgets as w
-import traitlets as tr
 import typing as ty
 from datetime import date, datetime
-from typing import Union, Type
-from pydantic import BaseModel, Field, RootModel, ConfigDict, field_validator
-from IPython.display import clear_output
+from typing import Type, Union
+
+import ipywidgets as w
+import traitlets as tr
+import yaml
+from document_issue.document_issue import DocumentIssue, Issue
+from ipyautoui.autodisplay_renderers import preview_yaml_string
 
 # +
 from ipyautoui.autoobject import AutoObjectForm
-from ipyautoui.autodisplay_renderers import preview_yaml_string
-from ipyautoui.autoui import WrapSaveButtonBar, AutoUiFileMethods
+from ipyautoui.autoui import AutoUiFileMethods, WrapSaveButtonBar
+from ipyautoui.custom.buttonbars import CrudOptions, CrudView
 from ipyautoui.custom.editgrid import EditGrid, UiDelete
-from ipyautoui.custom.buttonbars import CrudView, CrudOptions
-
-from document_issue.document_issue import DocumentIssue, Issue
+from IPython.display import clear_output
+from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
 
 # -
 
@@ -32,14 +32,13 @@ class IssueDelete(UiDelete):
                 k: {k_: v_ for k_, v_ in v.items() if k_ in self.columns}
                 for k, v in self.value.items()
             }
-        else:
-            return self.value
+        return self.value
 
     def _update_display(self):
         with self.out_delete:
             clear_output()
             display(
-                preview_yaml_string(yaml.dump(self.value_summary))
+                preview_yaml_string(yaml.dump(self.value_summary)),
             )  # TODO: Move to ipyautoui https://github.com/maxfordham/ipyautoui/issues/324
 
 
@@ -105,7 +104,7 @@ class IssueGrid(EditGrid):
             raise ValueError("Missing 'Date' from data.")
         column_index = list(self.grid.data.columns).index("Date") + 1
         self.grid.transform(
-            [{"type": "sort", "columnIndex": column_index, "desc": True}]
+            [{"type": "sort", "columnIndex": column_index, "desc": True}],
         )
 
     def _show_save_message(self, onchange):
@@ -122,7 +121,7 @@ class DocumentIssueUi(DocumentIssue):
         alias="issue",
         description="list of issues",
         json_schema_extra=dict(
-            autoui="document_issue_ui.document_issue_form.IssueGrid"
+            autoui="document_issue_ui.document_issue_form.IssueGrid",
         ),  # HOTFIX: # https://github.com/maxfordham/ipyautoui/issues/309
     )
 
@@ -180,7 +179,7 @@ class DocumentIssueForm(
 
 
 def get_document_issue_form(
-    map_projects: dict, project_number: int = 5001, **kwargs
+    map_projects: dict, project_number: int = 5001, **kwargs,
 ) -> DocumentIssueForm:
     ui = DocumentIssueForm.from_pydantic_model(
         DocumentIssueUi,
@@ -201,8 +200,9 @@ def get_document_issue_form(
 
 
 if __name__ == "__main__":
-    from IPython.display import display
     import pathlib
+
+    from IPython.display import display
 
     project_numbers = {"J5003 - Default Project": 5003, "J5001 - Test Project": 5001}
     map_projects = {v: k.split(" - ")[1] for k, v in project_numbers.items()}
