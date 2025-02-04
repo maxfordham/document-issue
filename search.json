@@ -408,13 +408,21 @@
     "href": "CONTRIBUTING.html",
     "title": "Development Installation",
     "section": "",
-    "text": "Warning\n\n\n\ndocument-issue-xl requires Windows to run. All other packages should work on both windows and linux but have only been tested on linux. For dev instructions see: packages/document-issue-xl/README.md\nWe use pixi to manage the monorepo. If using VSCode, use the document-issue.code-workspace file to open the project. pyproject.toml files within each package allow then to be installed without the other packages.\nTo setup your dev environment run the following line-by-line in the repo ROOT:"
+    "text": "Warning\n\n\n\ndocument-issue-xl requires Windows to run. All other packages should work on both windows and linux but have only been tested on linux. For dev instructions see: packages/document-issue-xl/README.md\nWe use pixi to manage the monorepo. If using VSCode, use the document-issue.code-workspace file to open the project. pyproject.toml files within each package allow then to be installed without the other packages.\nTo setup your dev environment run the following line-by-line in the repo ROOT:",
+    "crumbs": [
+      "developer",
+      "Development Installation"
+    ]
   },
   {
     "objectID": "CONTRIBUTING.html#github-actions",
     "href": "CONTRIBUTING.html#github-actions",
     "title": "Development Installation",
     "section": "Github Actions",
-    "text": "Github Actions\nDocs are built and tests run on merge to main branch - see workflows for details."
+    "text": "Github Actions\nDocs are built and tests run on merge to main branch - see workflows for details.",
+    "crumbs": [
+      "developer",
+      "Development Installation"
+    ]
   }
 ]
