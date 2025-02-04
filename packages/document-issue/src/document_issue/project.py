@@ -12,7 +12,7 @@ from pydantic import (
 )
 from typing_extensions import Self
 
-from document_issue.basemodel import BaseModel, Field
+from document_issue.basemodel import BaseModel
 from document_issue.constants import DEFAULT_PROJECT_NUMBER
 
 

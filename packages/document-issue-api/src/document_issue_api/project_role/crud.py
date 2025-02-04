@@ -1,6 +1,7 @@
 import logging
 import typing as ty
 
+from document_issue.project_role import PersonRole
 from sqlalchemy.orm import Session
 
 from document_issue_api import models
@@ -65,7 +66,7 @@ def get_project_roles(db: Session, project_id: int) -> schemas.ProjectRolesGet:
 
     """
     db_ = db.query(models.ProjectRole).filter(models.ProjectRole.project_id == project_id).all()
-    project_roles = [schemas.PersonRole.model_validate(_, from_attributes=True) for _ in db_]
+    project_roles = [PersonRole.model_validate(_, from_attributes=True) for _ in db_]
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
 
     return schemas.ProjectRolesGet(project=project, project_roles=project_roles)

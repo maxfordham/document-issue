@@ -1,8 +1,8 @@
 import typing as ty
 
-from pydantic import AliasChoices
+from pydantic import AliasChoices, Field
 
-from document_issue.basemodel import BaseModel, Field
+from document_issue.basemodel import BaseModel
 from document_issue.enums import RoleEnum
 from document_issue.person import _Initials
 

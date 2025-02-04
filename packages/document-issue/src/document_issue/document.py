@@ -5,7 +5,7 @@ from annotated_types import Len
 from pydantic import AliasChoices, Field, WithJsonSchema, field_validator
 from typing_extensions import Literal
 
-from document_issue.basemodel import BaseModel, Field
+from document_issue.basemodel import BaseModel
 from document_issue.enums import DocSource, PaperSizeEnum, ScalesEnum
 
 

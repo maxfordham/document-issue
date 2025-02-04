@@ -1,6 +1,7 @@
 import typing as ty
+from pydantic import Field
 
-from document_issue.basemodel import BaseModel, Field
+from document_issue.basemodel import BaseModel
 from document_issue.person import Person
 from document_issue.project import ProjectBase
 from document_issue.role import Role

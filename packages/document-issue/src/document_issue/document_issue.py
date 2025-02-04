@@ -4,10 +4,10 @@ from typing import Annotated
 from pydantic import (
     AfterValidator,
     BeforeValidator,
+    Field,
 )
 from tabulate import tabulate
 
-from document_issue.basemodel import Field
 from document_issue.codes import (
     Classification,
     FunctionalBreakdown,

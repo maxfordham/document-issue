@@ -1,9 +1,9 @@
 import datetime
 import typing as ty
 
-from pydantic import field_validator, model_validator
+from pydantic import Field, field_validator, model_validator
 
-from document_issue.basemodel import BaseModel, Field
+from document_issue.basemodel import BaseModel
 from document_issue.constants import COL_WIDTH
 from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 
