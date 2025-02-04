@@ -12,8 +12,8 @@ from tests.constants import FDIR_ROOT, FDIR_TEST_OUTPUT, FDIR_EXAMPLES_DOC_ISSUE
 
 
 def test_install_extension():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a4-portrait"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a4-portrait"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a4-portrait-report"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a4-portrait-report"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FDIR_EXTENSION_INSTALL_PTH = FDIR_TESTDATA / "_extensions" / "document-issue-report"
@@ -25,8 +25,8 @@ def test_install_extension():
 
 
 def test_build_schedule_a4_portrait():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a4-portrait"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a4-portrait"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a4-portrait-report"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a4-portrait-report"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
@@ -43,8 +43,8 @@ def test_build_schedule_a4_portrait():
     )  # log file should be deleted if Quarto PDF compilation is successful
 
 def test_build_schedule_a4_portrait_draft():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a4-portrait-draft"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a4-portrait-draft"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a4-portrait-draft-report"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a4-portrait-draft-report"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
@@ -62,8 +62,8 @@ def test_build_schedule_a4_portrait_draft():
 
 
 def test_build_schedule_a3_landscape():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a3-landscape"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a3-landscape"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_REPORT / "a3-landscape-report"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_REPORT / "a3-landscape-report"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"

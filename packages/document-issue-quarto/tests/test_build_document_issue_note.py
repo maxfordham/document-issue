@@ -6,8 +6,8 @@ from tests.constants import FDIR_ROOT, FDIR_TEST_OUTPUT, FDIR_TEST_OUTPUT_DOC_IS
 
 
 def test_install_extension():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_NOTE / "a4-portrait"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE / "a4-portrait"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_NOTE / "a4-portrait-note"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE / "a4-portrait-note"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FDIR_EXTENSION_INSTALL_PTH = FDIR_TESTDATA / "_extensions" / "document-issue-note"
@@ -19,8 +19,8 @@ def test_install_extension():
 
 
 def test_build_schedule_a4_portrait():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_NOTE / "a4-portrait"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE / "a4-portrait"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_NOTE / "a4-portrait-note"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE / "a4-portrait-note"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
@@ -38,8 +38,8 @@ def test_build_schedule_a4_portrait():
 
 
 def test_build_schedule_a3_landscape():
-    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_NOTE / "a3-landscape"
-    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE / "a3-landscape"
+    FDIR_EXAMPLE_DATA = FDIR_EXAMPLES_DOC_ISSUE_NOTE / "a3-landscape-note"
+    FDIR_TESTDATA = FDIR_TEST_OUTPUT_DOC_ISSUE_NOTE / "a3-landscape-note"
     FDIR_TESTDATA.mkdir(exist_ok=True)
     shutil.copytree(FDIR_EXAMPLE_DATA , FDIR_TESTDATA, dirs_exist_ok=True)
     FPTH_OUTPUT = FDIR_TESTDATA / "document.pdf"
