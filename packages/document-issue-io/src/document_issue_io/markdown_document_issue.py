@@ -179,6 +179,7 @@ def generate_document_issue_pdf(
     output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
     orientation: Orientation = Orientation.PORTRAIT,
     paper_size: PaperSize = PaperSize.A4,
+    resource_path: ty.Optional[pathlib.Path] = None,
     is_draft: bool = False,
 ):
     """Generate a PDF document from a DocumentIssue object with any markdown content.
@@ -196,7 +197,8 @@ def generate_document_issue_pdf(
             is_title_page = False
             fpth_output = pathlib.Path("title-block.pdf")
         else:
-            raise ValueError("Other output formats are not supported at this time.")
+            msg = "Other output formats are not supported at this time."
+            raise ValueError(msg)
         if orientation == Orientation.PORTRAIT and paper_size == PaperSize.A4:
             title_block_a4(
                 document_issue=document_issue,
@@ -210,18 +212,19 @@ def generate_document_issue_pdf(
                 is_titlepage=is_title_page,
             )
         else:
+            msg = "Other paper sizes and orientations are not supported at this time."
             raise ValueError(
-                "Other paper sizes and orientations are not supported at this time."
+                msg,
             )
         # Create quarto yaml defining the output format, orientation, and paper size
-        yaml.dump(
-            {
-                "format": output_format.value,
-                "classoption": orientation.value,
-                "papersize": paper_size.value,
-            },
-            open("_quarto.yaml", "w"),
-        )
+        quarto_config = {
+            "format": output_format.value,
+            "classoption": orientation.value,
+            "papersize": paper_size.value,
+        }
+        if resource_path is not None:
+            quarto_config["resource-path"] = resource_path
+        yaml.dump(quarto_config, open("_quarto.yaml", "w"))
         if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
             markdown = MarkdownDocumentIssue(document_issue, is_draft).md_docissue + md_content
         elif output_format == OutputFormat.DOCUMENT_ISSUE_NOTE:
