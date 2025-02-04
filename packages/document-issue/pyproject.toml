@@ -28,7 +28,6 @@ dependencies = [
     "Jinja2",
     "stringcase",
     "tabulate",
-    "pandoc",
 ]
 dynamic = ["version"]
 

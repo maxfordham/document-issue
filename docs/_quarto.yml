@@ -22,7 +22,7 @@ website:
 
     right:
       - text: "developer"
-        href: INSTALLATION.html
+        href: CONTRIBUTING.html
       - text: "release notes"
         href: release-notes/index.html
       - text: "feedback"
