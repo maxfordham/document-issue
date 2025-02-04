@@ -38,7 +38,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest", "polyfactory", "hatch", "quarto"]
-quarto = ["quarto"] # TODO: delele this...
 
 [project.urls]
 Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"
