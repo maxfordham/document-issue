@@ -28,6 +28,7 @@ dependencies = [
     "Jinja2",
     "stringcase",
     "tabulate",
+    "PyYAML",
 ]
 dynamic = ["version"]
 

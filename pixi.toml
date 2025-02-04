@@ -23,24 +23,38 @@ document-issue-api = { path = "packages/document-issue-api", editable = true }
 document-issue-ui = { path = "packages/document-issue-ui", editable = true }
 pytest-examples = ">=0.0.15, <0.0.16"
 
-[feature.document-issue.pypi-dependencies]
-document-issue = { path = "packages/document-issue", editable = true }
+
+[feature.document-issue.dependencies]
+python = ">=3.8"
 pytest = "*"
 
+[feature.document-issue.pypi-dependencies]
+document-issue = { path = "packages/document-issue", editable = true }
+
 [environments]
-document-issue = {features = ["document-issue"], no-default-feature = true}
+document-issue = { features = ["document-issue"], no-default-feature = true }
 
 [feature.document-issue.tasks]
-test-document-issue = { cmd = "pytest", cwd = "packages/document-issue"}
+test-document-issue = { cmd = "pytest", cwd = "packages/document-issue" }
 
 [tasks]
-test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto"}
-test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io"}
-test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api", env = { SQLALCHEMY_WARN_20="1" }}
-update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io"}
+test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto" }
+test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io" }
+test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api", env = { SQLALCHEMY_WARN_20 = "1" } }
+update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io" }
 update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"
-build-docs = { cmd = "quarto render .", cwd = "docs"} #, depends-on = ["test-document-issue-io"]
-preview-docs = { cmd = "quarto preview .", cwd = "docs"}
-demo-ui = { cmd = "voila demo.ipynb", cwd = "packages/document-issue-ui"} 
-demo-api = { depends-on = ["test-document-issue", "test-document-issue-quarto", "test-document-issue-io", "test-document-issue-api"] }
-tests = { depends-on = ["test-document-issue", "test-document-issue-quarto", "test-document-issue-io", "test-document-issue-api"] }
+build-docs = { cmd = "quarto render .", cwd = "docs" } #, depends-on = ["test-document-issue-io"]
+preview-docs = { cmd = "quarto preview .", cwd = "docs" }
+demo-ui = { cmd = "voila demo.ipynb", cwd = "packages/document-issue-ui" }
+demo-api = { depends-on = [
+    "test-document-issue",
+    "test-document-issue-quarto",
+    "test-document-issue-io",
+    "test-document-issue-api",
+] }
+tests = { depends-on = [
+    "test-document-issue",
+    "test-document-issue-quarto",
+    "test-document-issue-io",
+    "test-document-issue-api",
+] }
