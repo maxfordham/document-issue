@@ -1,0 +1,8 @@
+
+---
+title: "a4-portrait"
+---
+
+```{=html}
+<embed src="a4-portrait/document.pdf" width="600px" height="1000px"/>
+```

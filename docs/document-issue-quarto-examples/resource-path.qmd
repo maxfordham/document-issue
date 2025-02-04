@@ -1,0 +1,8 @@
+
+---
+title: "resource-path"
+---
+
+```{=html}
+<embed src="resource-path/document.pdf" width="600px" height="1000px"/>
+```
