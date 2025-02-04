@@ -12,6 +12,8 @@ ipykernel = ">=6.29.5,<7"
 erdantic = "*"
 r-tinytex = "*"
 pandas = "*"
+quarto = "<1.7"
+ruff = "*"
 # eralchemy = "*" # TODO: figure out why this isn't working...
 
 [pypi-dependencies]

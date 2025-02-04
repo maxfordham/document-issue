@@ -31,13 +31,13 @@ dependencies = [
     "pypdf",
     "frictionless>5",
     "frictionless[json]",
-    "quarto",
+    # "quarto-cli",  # NOTE. installed in pixi.toml
     # "r-tinytex", # NOTE. not available on pip... https://prefix.dev/channels/conda-forge/packages/r-tinytex
     # document-issue # TODO: How do we get this to install?
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "polyfactory", "hatch", "quarto"]
+dev = ["pytest", "polyfactory", "hatch"]
 
 [project.urls]
 Documentation = "https://github.com/maxfordham/document-issue/packages/document-issue-io#readme"
