@@ -1,26 +1,23 @@
 # mapping tables
-from typing import Any, List
-from typing_extensions import Annotated
-from pydantic import BaseModel
-import typing as ty
-from pydantic.functional_validators import AfterValidator
+import json
+import os
 import re
+from typing import Any
+
+import pandas as pd
 import stringcase
 import xlwings as xw
-import pandas as pd
+from constants import CONFIG_DIR, DEFAULT_CONFIG
+from d_i_ui import warning_messagebox
 from document_issue.meta import (
-    LookupData,
     DocumentCodeParts,
     DocumentMetadataMap,
+    LookupData,
 )
-import os
-import json
-from d_i_ui import warning_messagebox
-from constants import DEFAULT_CONFIG, MAX_COLS_IN_PART, CONFIG_DIR
 
 
 def index_of_value(value, sheet):
-    """look for a value in the spreadsheet"""
+    """Look for a value in the spreadsheet"""
     for i, line in enumerate(xw.sheets[sheet].range((1, 1), (200, 200)).value):
         try:
             return (i + 1, line.index(value) + 1)
@@ -30,12 +27,7 @@ def index_of_value(value, sheet):
 
 
 def get_table_data(name: str) -> dict:
-    data = (
-        xw.sheets[name]
-        .range(index_of_value(f"{name}_code", name))
-        .options(pd.DataFrame, expand="table")
-        .value
-    )
+    data = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand="table").value
     des = f"{name}_des"
     # backwards compatibility
 
@@ -62,9 +54,7 @@ def get_table_data(name: str) -> dict:
 def get_lookup_data() -> LookupData:  # get_lookup_data
     names = [k for k in list(DocumentCodeParts.__members__.keys()) if k != "sequence"]
     names = names + [
-        stringcase.camelcase(f)
-        for f in DocumentMetadataMap.model_fields.keys()
-        if f not in ["classification_uniclass"]
+        stringcase.camelcase(f) for f in DocumentMetadataMap.model_fields.keys() if f not in ["classification_uniclass"]
     ]
     sheet_names = [s.name for s in xw.sheets]
     names = [n for n in names if n in sheet_names]
@@ -76,39 +66,26 @@ def get_lookup_data() -> LookupData:  # get_lookup_data
 
     # classification_uniclass
     name = "classification"
-    df = (
-        xw.sheets[name]
-        .range(index_of_value(f"{name}_code", name))
-        .options(pd.DataFrame, expand="table")
-        .value
-    )
-    data[f"classification_uniclass"] = df[f"uniclass_classification"].to_dict()
+    df = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand="table").value
+    data["classification_uniclass"] = df["uniclass_classification"].to_dict()
 
     # sequence
     name = "sequence"
     type_sequences = (
-        xw.sheets[name]
-        .range(index_of_value(f"{name}_code", name))
-        .options(pd.DataFrame, expand="table")
-        .value
+        xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand="table").value
     )
     type_sequences = type_sequences.to_dict()
-    type_sequences = {
-        k: {_k: _v for _k, _v in v.items() if _v is not None}
-        for k, v in type_sequences.items()
-    }
+    type_sequences = {k: {_k: _v for _k, _v in v.items() if _v is not None} for k, v in type_sequences.items()}
     data["type_sequences"] = type_sequences
 
     # BUGFIX: ignore null classification fields
-    data["classification"] = {
-        k: v for k, v in data["classification"].items() if v is not None
-    }
+    data["classification"] = {k: v for k, v in data["classification"].items() if v is not None}
 
     return LookupData(**data | type_sequences)
 
 
 def project_info():
-    """gets the project info from the first sheet"""
+    """Gets the project info from the first sheet"""
     return (
         xw.sheets["readme"]
         .range(index_of_value("Job Number", "readme"))
@@ -118,7 +95,7 @@ def project_info():
 
 
 def get_issues(data):
-    """work out which columns are dates"""
+    """Work out which columns are dates"""
     match_str = r"^20(\d{2}\d{2}\d{2})-.*$"  # string match date format 20YYMMDD-...
     # ^ Test here: https://regex101.com/r/qH0sU7/1
     return [c for c in data.columns if re.match(match_str, c) is not None]
@@ -132,17 +109,17 @@ def verify_config(config):
 
 
 def config_filename(job_number):
-    """return the filename of the config files."""
+    """Return the filename of the config files."""
     # username = os.environ['username']
     return CONFIG_DIR + "\\" + str(job_number) + ".json"
 
 
 def user_config(job_number):
-    """loads the user configuration"""
+    """Loads the user configuration"""
     file = config_filename(job_number)
     try:
         if os.path.isfile(file):
-            with open(file, "r") as handle:
+            with open(file) as handle:
                 # config = pickle.load(handle)
                 config = json.load(handle)
         else:
@@ -158,7 +135,7 @@ def user_config(job_number):
 
 
 def get_pandas_data():
-    """extract data from spreadsheet and convert it to a pandas dataframe"""
+    """Extract data from spreadsheet and convert it to a pandas dataframe"""
     if index_of_value("Document Number", "1. Document Numbering"):
         res = (
             xw.sheets["1. Document Numbering"]
@@ -166,36 +143,28 @@ def get_pandas_data():
             .options(pd.Series, expand="table")
             .value
         )
-        res = (
-            res.reset_index(drop=False)
-            .set_index("Document Number")
-            .rename(columns={"Sort By Uniclass": "uniclass"})
-        )
-        if (
-            "Document Number" not in res.columns
-        ):  # backwards compatability for spreadsheet upgrade.
+        res = res.reset_index(drop=False).set_index("Document Number").rename(columns={"Sort By Uniclass": "uniclass"})
+        if "Document Number" not in res.columns:  # backwards compatability for spreadsheet upgrade.
             res.index.names = ["Document Number Index"]
             res["Document Number"] = res.index
 
         if type(res) is pd.core.frame.Series:
             raise ValueError(
-                "At least two documents required.\nOnly need one? Just add a dummy one"
+                "At least two documents required.\nOnly need one? Just add a dummy one",
             )
         if "Document Number" not in res.columns:
             res["Document Number"] = res.index
         res = res[res["Document Number"] != -2146826246]
-        cols_to_remove = list(set(res.columns).intersection(map(str, range(0, 999))))
+        cols_to_remove = list(set(res.columns).intersection(map(str, range(999))))
         cols_to_remove += [
-            x
-            for x in res.columns
-            if "Column" in x or "blank" in x or "→" in x or "?" in x or "Add to " in x
+            x for x in res.columns if "Column" in x or "blank" in x or "→" in x or "?" in x or "Add to " in x
         ]
         res = res.sort_values("Document Number")
         res = res.dropna(subset=["Document Number"])
         pd.options.display.float_format = "{:,.0f}".format
         return res.drop(cols_to_remove, axis=1)  # remove column that are empty.
     raise Exception(
-        "Cannot Revision Information - Something has gone wrong contact support."
+        "Cannot Revision Information - Something has gone wrong contact support.",
     )
 
 
@@ -209,7 +178,7 @@ def get_distribution_data(li_issues=None):
         )
         if type(res) is pd.core.frame.Series:
             raise ValueError(
-                "Atleast two people in distribution required.\nOnly need one? Just add a dummy one"
+                "Atleast two people in distribution required.\nOnly need one? Just add a dummy one",
             )
         res["Name"] = res.index  # TODO: this is bad
         res = res.fillna("")
@@ -225,7 +194,7 @@ def get_distribution_data(li_issues=None):
 
         return res
     raise Exception(
-        'Cannot Find Distribution Table - ensure First Column is titled "Name"'
+        'Cannot Find Distribution Table - ensure First Column is titled "Name"',
     )
 
 
@@ -236,21 +205,18 @@ def read_excel(dump_package=True) -> Any:
     config = user_config(projectinfo.get("Job Number"))  # define this in the UI
     data = get_pandas_data()
     li_issues = get_issues(data)
-    doc_descriptions = data[
-        [c for c in data.columns if c not in li_issues + ["Current Rev"]]
-    ].T.to_dict()
+    doc_descriptions = data[[c for c in data.columns if c not in li_issues + ["Current Rev"]]].T.to_dict()
     doc_issues = data[li_issues].T.to_dict()
 
     def getlastrev(di, map_status_rev=map_status_rev):
         if set(di.values()) == {None}:
             return None
-        else:
-            li = []
-            di = {k: v for k, v in di.items() if v is not None}
-            for k, v in di.items():
-                rev = map_status_rev[k.split("-")[1]]
-                li.append(f"{k}-{rev}{v}")
-            return li[-1]
+        li = []
+        di = {k: v for k, v in di.items() if v is not None}
+        for k, v in di.items():
+            rev = map_status_rev[k.split("-")[1]]
+            li.append(f"{k}-{rev}{v}")
+        return li[-1]
 
     cols = data.columns.to_list()
     df_document = data[cols[0 : cols.index("Current Rev")]]
@@ -263,7 +229,9 @@ def read_excel(dump_package=True) -> Any:
 
     doc_distribution = get_distribution_data(li_issues=li_issues)
     df_distribution = doc_distribution.melt(
-        id_vars=["Name"], var_name="date_status", value_name="issue_format"
+        id_vars=["Name"],
+        var_name="date_status",
+        value_name="issue_format",
     ).rename(columns={"Name": "recipient"})
 
     df_issue = data[li_issues]
@@ -293,7 +261,7 @@ def read_excel(dump_package=True) -> Any:
             df_distribution,
             df_issue,
             df_document.reset_index().rename(
-                columns={"Document Number Index": "document_code"}
+                columns={"Document Number Index": "document_code"},
             ),
             fdir=fdir_package,
         )
@@ -311,10 +279,10 @@ def read_excel(dump_package=True) -> Any:
     )
 
 
+import pathlib
 from contextlib import contextmanager
 from pathlib import Path
-import os
-import pathlib
+
 from frictionless import Package, Resource
 from frictionless.resources import JsonResource
 
@@ -328,8 +296,8 @@ def set_directory(path: Path):
 
     Yields:
         None
-    """
 
+    """
     origin = Path().absolute()
     origin.mkdir(exist_ok=True)
     try:
@@ -374,7 +342,6 @@ def dng_to_package(
     df_document,
     fdir: Path = pathlib.Path("test"),
 ):
-
     with set_directory(fdir):
         f_lkup, f_config, f_project, f_dist, f_issue, f_docs = (
             pathlib.Path("lookup.json"),

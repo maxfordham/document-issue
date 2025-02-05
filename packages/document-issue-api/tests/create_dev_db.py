@@ -1,13 +1,14 @@
 import pathlib
 import shutil
+
 import pytest
 from setup_test_client import (
     client,
+    post_document,
     post_issue,
     post_person,
     post_project,
     post_role,
-    post_document,
 )
 
 

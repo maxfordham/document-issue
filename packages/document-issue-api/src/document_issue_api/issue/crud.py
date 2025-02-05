@@ -1,9 +1,10 @@
 import logging
-from sqlalchemy.orm import Session
-import document_issue_api.issue.schemas as schemas
-import document_issue_api.models as models
-import typing as ty
+
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.orm import Session
+
+from document_issue_api import models
+from document_issue_api.issue import schemas
 
 logger = logging.getLogger(__name__)
 
@@ -18,9 +19,9 @@ def post_issue(db: Session, document_id: int, issue: schemas.IssueBasePost) -> m
 
     Returns:
         models.Issue: The postd issue
-    """
 
-    db_issue = models.Issue(**issue.model_dump(exclude="issue_id") | {"document_id": int(document_id)})  #
+    """
+    db_issue = models.Issue(**issue.model_dump(exclude="issue_id") | {"document_id": int(document_id)})
     db.add(db_issue)
     db.commit()
     db.refresh(db_issue)
@@ -36,6 +37,7 @@ def get_issue(db: Session, issue_id: int) -> models.Issue:
 
     Returns:
         models.Issue: The getd issue
+
     """
     db_issue = db.get(models.Issue, issue_id)
     return db_issue
@@ -51,8 +53,8 @@ def patch_issue(db: Session, issue_id: int, issue: schemas.IssueBasePatch) -> mo
 
     Returns:
         models.Issue: The patched issue
-    """
 
+    """
     db_issue = db.get(models.Issue, issue_id)
     issue_data = jsonable_encoder(db_issue)
     update_data = issue.model_dump(exclude_unset=True)
@@ -74,8 +76,8 @@ def delete_issue(db: Session, issue_id: int) -> models.Issue:
 
     Returns:
         models.Issue: The deleted issue
-    """
 
+    """
     db_issue = db.get(models.Issue, issue_id)
     db.delete(db_issue)
     db.commit()

@@ -1,5 +1,5 @@
 import pytest
-from setup_test_client import client, post_role, delete_role
+from setup_test_client import client, delete_role, post_role
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def test_get_role(post_role_then_delete):
 
 def test_get_roles(post_role_then_delete):
     response = post_role_then_delete
-    response = client.get(f"/roles/")
+    response = client.get("/roles/")
     assert response.status_code == 200
     assert response.json()[0]["role_name"] == "test_role"
 

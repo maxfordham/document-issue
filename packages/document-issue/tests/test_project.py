@@ -1,4 +1,3 @@
-from document_issue.project import ProjectBase
 from obj_funcs import create_project
 
 

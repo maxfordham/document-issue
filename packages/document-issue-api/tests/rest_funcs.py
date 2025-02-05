@@ -1,12 +1,10 @@
-from setup_test_client import client
-from fastapi.encoders import jsonable_encoder
-
 from document_issue.issue import Issue
 from document_issue.person import Person
-from document_issue.role import Role
 from document_issue.project import ProjectBase
-
+from document_issue.role import Role
 from document_issue_api.document.schemas import DocumentBasePost
+from fastapi.encoders import jsonable_encoder
+from setup_test_client import client
 
 
 def post_project():
@@ -17,12 +15,12 @@ def post_project():
 
 def post_issue(issue: Issue = Issue(), document_id: int = 1):
     _ = jsonable_encoder(issue)
-    return client.post(f"/issue/{str(document_id)}", json=_)
+    return client.post(f"/issue/{document_id!s}", json=_)
 
 
 def post_document(document: DocumentBasePost = DocumentBasePost(project_id=1)):
     _ = jsonable_encoder(document)
-    return client.post(f"/document/", json=_)
+    return client.post("/document/", json=_)
 
 
 def post_person(initials="JG"):

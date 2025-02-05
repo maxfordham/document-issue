@@ -6,15 +6,12 @@ MAX_COLS_IN_PART = 30
 def get_config_dir(try_debug=True):
     if (
         pathlib.Path(
-            r"C:\engDev\git_mf\document-issue\packages\document-issue-xl\tests\config"
+            r"C:\engDev\git_mf\document-issue\packages\document-issue-xl\tests\config",
         ).exists()
         and try_debug
     ):
-        return (
-            r"C:\engDev\git_mf\document-issue\packages\document-issue-xl\tests\config"
-        )
-    else:
-        return r"J:\J4321\Data\document_issue\config"
+        return r"C:\engDev\git_mf\document-issue\packages\document-issue-xl\tests\config"
+    return r"J:\J4321\Data\document_issue\config"
 
 
 CONFIG_DIR = get_config_dir()

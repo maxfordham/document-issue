@@ -1,13 +1,12 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import logging
-import document_issue_api.document_role.schemas as schemas
-import document_issue_api.document_role.crud as crud
-import typing as ty
 
 from document_issue_api.database import (
     get_db,
 )  # TODO: remove this dependency / make configurable
+from document_issue_api.document_role import crud, schemas
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -32,7 +31,8 @@ def post_document_role(
         db.rollback()
         logger.exception(err)
         raise HTTPException(
-            status_code=404, detail=f"Failed to add Document Role.\n{err}"
+            status_code=404,
+            detail=f"Failed to add Document Role.\n{err}",
         )
 
 
@@ -50,7 +50,8 @@ def get_document_roles(document_id: int, db: Session = Depends(get_db)):
         db.rollback()
         logger.exception(err)
         raise HTTPException(
-            status_code=404, detail=f"Failed to get Document Roles.\n{err}"
+            status_code=404,
+            detail=f"Failed to get Document Roles.\n{err}",
         )
 
 
@@ -69,5 +70,6 @@ def delete_document_role(document_id: int, role_id: int, db: Session = Depends(g
         db.rollback()
         logger.exception(err)
         raise HTTPException(
-            status_code=404, detail=f"Failed to delete Document Role.\n{err}"
+            status_code=404,
+            detail=f"Failed to delete Document Role.\n{err}",
         )

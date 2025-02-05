@@ -1,17 +1,15 @@
-from typing_extensions import Annotated
-import typing as ty
 import enum
-import re
 import logging
-from typing import List, TypeVar
+import re
+import typing as ty
+from typing import Annotated, List, TypeVar
+
+from pydantic import AfterValidator, BaseModel, Field
 from pydantic_core import PydanticCustomError
-from pydantic import BaseModel, Field, AfterValidator
 
 logger = logging.getLogger(__name__)
 
-DRWG_CLASSIFICATION_CODE_REGEX = (
-    r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
-)
+DRWG_CLASSIFICATION_CODE_REGEX = r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
 UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$"  # TODO
 
 DrwgClassificationCode = Annotated[
@@ -71,7 +69,7 @@ class DocumentCodesMap(BaseModel):  # MapDocumentCodeDescription
     # originator: dict[str, str]
     originator: dict[
         str,  # ty.Literal["MXF"], # NOTE: relaxed MXF req. due to legacy data: 6372
-        ty.Union[ty.Literal["Max Fordham LLP"], ty.Literal["Max Fordham"]],
+        ty.Literal["Max Fordham LLP", "Max Fordham"],
     ]
     # role: dict[str, str]
     classification: dict[str, str]
@@ -103,7 +101,8 @@ class DocumentMetadataMap(BaseModel):
     issue_format: dict[str, str]
     doc_source: dict[str, str]
     classification_uniclass: dict[
-        str, UniclassClassificationCode
+        str,
+        UniclassClassificationCode,
     ]  # DrwgClassificationCode
     # role: dict[DrwgClassificationCode, str]
     # info_sub_type: dict[str, str]

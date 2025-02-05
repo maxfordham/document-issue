@@ -2,31 +2,34 @@ import pathlib
 import re
 import shutil
 import subprocess
-import yaml
 import typing as ty
 from enum import Enum
-from jinja2 import Environment, FileSystemLoader
+
+import yaml
 from document_issue.document_issue import DocumentIssue
-from document_issue_io.title_block import (
-    title_block_a4,
-    title_block_a3,
-)
+from jinja2 import Environment, FileSystemLoader
+
 from document_issue_io.constants import (
     DIR_TEMPLATES,
     NAME_MD_DOCISSUE_TEMPLATE,
 )
+from document_issue_io.title_block import (
+    title_block_a3,
+    title_block_a4,
+)
 from document_issue_io.utils import (
+    FPTH_FOOTER_LOGO,
     change_dir,
     install_or_update_document_issue_quarto_extensions,
-    FPTH_FOOTER_LOGO,
 )
 
-REGEX_SEMVER = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+REGEX_SEMVER = r"^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
 
 def escape_latex_special_chars(text):
     """Used to escape the special characters in the text for LaTeX.
-    Mainly to deal with any text passed to the preamble of the LaTeX document."""
+    Mainly to deal with any text passed to the preamble of the LaTeX document.
+    """
     escape_dict = {
         "&": r"\\&",
         "%": r"\\%",
@@ -40,7 +43,7 @@ def escape_latex_special_chars(text):
         text = text.replace(char, escape)
 
     # Replace \n that is not preceded by a backslash
-    text = re.sub(r'(?<!\\)\n', r'\\\\newline{}', text)
+    text = re.sub(r"(?<!\\)\n", r"\\\\newline{}", text)
     return text
 
 
@@ -68,11 +71,7 @@ class MarkdownDocumentIssue:
 
     @property
     def md_issue_history(self):
-        return (
-            self.document_issue.issue_history_table
-            + "\n\n"
-            + self.md_issue_history_col_widths
-        )
+        return self.document_issue.issue_history_table + "\n\n" + self.md_issue_history_col_widths
 
     @property
     def md_roles(self):
@@ -93,7 +92,7 @@ class MarkdownDocumentIssue:
             project_number=self.document_issue.project_number,
             director_in_charge=self.document_issue.director_in_charge,
             document_description=escape_latex_special_chars(
-                self.document_issue.document_description
+                self.document_issue.document_description,
             ),
             document_code=self.document_issue.document_code,
             name_nomenclature=self.document_issue.name_nomenclature,
@@ -116,14 +115,13 @@ class MarkdownDocumentIssue:
 
 def check_quarto_version() -> ty.Union[None, str]:
     """Check if quarto version is at least 0.5.0."""
-    completed_process = subprocess.run(["quarto", "--version"], capture_output=True)
+    completed_process = subprocess.run(["quarto", "--version"], capture_output=True, check=False)
     if completed_process.returncode != 0:
         return False, ""
     quarto_version = completed_process.stdout.decode("utf-8")
     if not re.match(REGEX_SEMVER, quarto_version):
         return None
-    else:
-        return quarto_version
+    return quarto_version
 
 
 class OutputFormat(Enum):
@@ -146,7 +144,8 @@ def run_quarto(
     fpth_pdf: pathlib.Path,
 ) -> subprocess.CompletedProcess:
     """Run quarto to convert markdown to pdf using a specified output format.
-    The default output format is the document-issue-pdf quarto extension."""
+    The default output format is the document-issue-pdf quarto extension.
+    """
     # TODO: make quarto and latex an optional dependency. check, and flag if not installed.
     check = check_quarto_version()
     if check is None:
@@ -163,7 +162,7 @@ def run_quarto(
     ]
     if fpth_md_output.suffix == ".ipynb":
         cmd += ["--execute", "true"]
-    return subprocess.run(cmd)
+    return subprocess.run(cmd, check=False)
 
 
 # generate_document_issue_docx(document_issue, fpth_docx, *, md_content="")
@@ -184,7 +183,8 @@ def generate_document_issue_pdf(
     """Generate a PDF document from a DocumentIssue object with any markdown content.
     The output format can be a document issue report or note.
     The orientation can be portrait or landscape.
-    The paper size can be A4 or A3."""
+    The paper size can be A4 or A3.
+    """
     fpth_md_output = fpth_pdf.parent / (fpth_pdf.stem + ".md")
     with change_dir(fpth_pdf.parent):
         shutil.copy(src=FPTH_FOOTER_LOGO, dst=FPTH_FOOTER_LOGO.name)
@@ -211,7 +211,7 @@ def generate_document_issue_pdf(
             )
         else:
             raise ValueError(
-                "Other paper sizes and orientations are not supported at this time."
+                "Other paper sizes and orientations are not supported at this time.",
             )
         # Create quarto yaml defining the output format, orientation, and paper size
         yaml.dump(

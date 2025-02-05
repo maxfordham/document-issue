@@ -1,47 +1,44 @@
-import pandas as pd
-import pathlib
-import math as math
 import logging
-
-from frictionless import Package
+import math as math
+import pathlib
+from datetime import datetime
 from textwrap import wrap
 
-from document_issue.document_issue import Issue, DocumentIssue
+import pandas as pd
+from document_issue.document_issue import DocumentIssue, Issue
 from document_issue.enums import StatusRevisionEnum
-from datetime import datetime
-from .styles import (
-    DEFAULTTABLESTYLE,
-    register_fonts,
-)
-from .utils import change_dir
-from .constants import (
-    address_from_loc,
-    address_from_loc_compact,
-    DEFAULT_TITLES,
-    DEFAULT_COLS,
-    MAX_COLS_IN_PART,
-)
 from document_issue.meta import LookupData
-from .title_block import title_block_table
-from .styles import (
-    CURRENT_COLOUR,
-    NUM_HEADER_ROWS,
-    HIGHLIGHT_COLOUR,
-    THICKLINE,
-    colors,
-    PARASTYLE,
-)
+from frictionless import Package
+from reportlab.lib.pagesizes import A3, landscape
 from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.units import inch, mm
 from reportlab.platypus import (
-    Table,
-    SimpleDocTemplate,
-    TableStyle,
     Paragraph,
     Preformatted,
+    SimpleDocTemplate,
+    Table,
+    TableStyle,
 )
-from reportlab.lib.pagesizes import A3, landscape
-from reportlab.lib.units import inch, mm
 
+from .constants import (
+    DEFAULT_COLS,
+    DEFAULT_TITLES,
+    MAX_COLS_IN_PART,
+    address_from_loc,
+    address_from_loc_compact,
+)
+from .styles import (
+    CURRENT_COLOUR,
+    DEFAULTTABLESTYLE,
+    HIGHLIGHT_COLOUR,
+    NUM_HEADER_ROWS,
+    PARASTYLE,
+    THICKLINE,
+    colors,
+    register_fonts,
+)
+from .title_block import title_block_table
+from .utils import change_dir
 
 register_fonts()
 
@@ -62,8 +59,7 @@ def cols_to_plot_history(li_issues, part, max_cols_in_part):
         startindex = (part - 1) * max_cols_in_part
         endindex = part * max_cols_in_part
         return li_issues[startindex:endindex]
-    else:
-        return li_issues
+    return li_issues
 
 
 def datatable_distribution(
@@ -77,7 +73,9 @@ def datatable_distribution(
 ):
     df_distribution = pd.DataFrame(distribution)
     df_distribution_pivot = df_distribution.pivot(
-        index="recipient", columns="date_status", values="issue_format"
+        index="recipient",
+        columns="date_status",
+        values="issue_format",
     )
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
 
@@ -100,7 +98,7 @@ def datatable_distribution(
                 "SPAN",
                 (0, 5 + len(data_list) + i),
                 (len(DEFAULT_COLS) - 1, 5 + len(data_list) + i),
-            )
+            ),
         )
     li = []
     for k, v in doc_dist.items():
@@ -111,10 +109,11 @@ def datatable_distribution(
 
 
 def datatable_issue(lookup, config, issue, document, history=False, part=-1):
-
     df_issue = pd.DataFrame(issue)
     df_issue_pivot = df_issue.pivot(
-        index="document_code", columns="date_status", values="revision_number"
+        index="document_code",
+        columns="date_status",
+        values="revision_number",
     )
     df_document = pd.DataFrame(document)
     docs = list(df_issue.document_code.unique())
@@ -123,15 +122,9 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
         rev = df_issue.set_index("document_code").loc[d]
         if isinstance(rev, pd.Series):
             return rev.revision_number
-        elif isinstance(rev, pd.DataFrame):
-            return (
-                df_issue.set_index("document_code")
-                .loc[d]
-                .sort_values("date_status")
-                .revision_number.to_list()[-1]
-            )
-        else:
-            return ValueError("No revision number found")
+        if isinstance(rev, pd.DataFrame):
+            return df_issue.set_index("document_code").loc[d].sort_values("date_status").revision_number.to_list()[-1]
+        return ValueError("No revision number found")
 
     def prep_isssue_col(ser: pd.Series):
         ser = ser.fillna(0)
@@ -146,7 +139,6 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     current_revs = {d: get_current_revs(df_issue, d) for d in docs}
     df_document["Current Rev"] = df_document.document_code.map(current_revs)
     df_document["Current Rev"] = prep_isssue_col(df_document["Current Rev"])
-    #
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
     if history:
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
@@ -156,7 +148,8 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     last_col = cols[-1]
 
     df_out = pd.concat(
-        [df_document.set_index("document_code"), df_issue_pivot], axis=1
+        [df_document.set_index("document_code"), df_issue_pivot],
+        axis=1,
     ).reset_index()
 
     df_out = df_out.rename(columns={"document_code": "Document Number"})
@@ -168,7 +161,7 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
             df_out[c] = prep_isssue_col(df_out[c])
         except:
             logger.error(
-                "Error converting Current Rev to string... assuming its already a string..."
+                "Error converting Current Rev to string... assuming its already a string...",
             )
     data_list = []  # this is a list of rows in the table. #list for styling output.
     sid_style = []
@@ -183,13 +176,13 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
             uniclass = ""
 
         df = df_out[df_out["System Identifier Description"] == sid].sort_values(
-            "Document Number"
+            "Document Number",
         )
         if len(df) > 0:
-            data_list += [[p_nospace("{0}    {1}".format(sid, uniclass), [])]]
+            data_list += [[p_nospace(f"{sid}    {uniclass}", [])]]
             sid_style += sid_line_style(4 + len(data_list))
             data_list += format_data_rows(
-                df[cols].values.tolist()
+                df[cols].values.tolist(),
             )  # This is where they get added.
             data_list += [[""] * len(cols)]
 
@@ -200,7 +193,9 @@ def tablestyle(history, sid_style, data_list, headings):
     if history:
         _tablestyle = (
             highlight_last_format(
-                headings + data_list, startrow=5, rev_position=len(DEFAULT_COLS) - 1
+                headings + data_list,
+                startrow=5,
+                rev_position=len(DEFAULT_COLS) - 1,
             )
             + sid_style
         )
@@ -210,7 +205,7 @@ def tablestyle(history, sid_style, data_list, headings):
 
 
 def create_issue_headings(cols_to_plot):
-    """format the thing that goes at the top"""
+    """Format the thing that goes at the top"""
     headings = [
         [""] * len(cols_to_plot) + [""],
         [""] * len(cols_to_plot),
@@ -235,7 +230,7 @@ def create_issue_headings(cols_to_plot):
 
 
 def new_document(projectname, office):
-    """creates a new Max Fordham document"""
+    """Creates a new Max Fordham document"""
     document = MFDoc()
     document.title = projectname
     document.address = address_from_loc(office)
@@ -245,7 +240,7 @@ def new_document(projectname, office):
 
 
 def document_number(selected_issue_index, history, part):
-    """number has the form VWXYZ"""
+    """Number has the form VWXYZ"""
     VW = "00"  # by definition
     if history:
         if part < 1:
@@ -267,21 +262,17 @@ def create_docissue(
     history: bool = False,
     selected_issue_index=None,
 ) -> DocumentIssue:
-
     def update_name(n):
         if n == "orig":
             return "originator"
-        elif n == "project code":
+        if n == "project code":
             return "project"
-        elif n == "type":
+        if n == "type":
             return "infotype"
-        else:
-            return n
+        return n
 
     if "Naming Convention" in projectinfo:
-        naming = [
-            l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")
-        ]
+        naming = [l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")]
         naming = [update_name(n) for n in naming]
         name_nomenclature = "-".join(naming)
     else:
@@ -290,13 +281,11 @@ def create_docissue(
     projectinfo["issue_history"] = [issue]
     projectinfo["status_description"] = "Suitable for information"
     projectinfo["roles"] = [
-        dict(role="Director in Charge", name=projectinfo.get("Project Leader"))
+        dict(role="Director in Charge", name=projectinfo.get("Project Leader")),
     ]
     di = {k: v for k, v in projectinfo.items() if v is not None}
     docissue = DocumentIssue(**di)
-    docissue.issue_history[0].revision = (
-        "-"  # hard-code revision to "-" to avoid having to keep track of it.
-    )
+    docissue.issue_history[0].revision = "-"  # hard-code revision to "-" to avoid having to keep track of it.
 
     # ---------------------------
 
@@ -314,10 +303,10 @@ def create_docissue(
 
     name["number"] = document_number(selected_issue_index, history, part)
     if history:
-        name["number"] = "0000{}".format(part)
+        name["number"] = f"0000{part}"
         docissue.document_description = f"Issue History: Part {part} of {num_parts}"
     else:
-        docissue.document_description = f"Issue Sheet"
+        docissue.document_description = "Issue Sheet"
 
     document_code = "-".join(list(name.values()))
     docissue.document_code = document_code
@@ -342,7 +331,7 @@ class MFDoc:
         self.margin, self.bottom_margin = inch, 2.25 * inch
 
     def go(self, elements, docissue):
-        """create the report!"""
+        """Create the report!"""
         if not self.filename:
             return False
         self.docissue = docissue
@@ -389,7 +378,7 @@ class MFDoc:
 
 
 def p_nospace(txt, elements, style=PARASTYLE):
-    """used for sid header"""
+    """Used for sid header"""
     style = ParagraphStyle(
         name="Normal",
         fontName="Calibri-Bold",
@@ -443,7 +432,7 @@ def table(
 
 
 def highlight_last_format(data, startrow=0, rev_position=4):
-    """highlight the last cell in a row ignores blank cells"""
+    """Highlight the last cell in a row ignores blank cells"""
     formatting = [] + DEFAULTTABLESTYLE(defaultcols=rev_position)
     maxj = -1
     for i, line in enumerate(data):
@@ -453,9 +442,7 @@ def highlight_last_format(data, startrow=0, rev_position=4):
                     if line[rev_position] == line[0]:  # distribution list
                         if val:
                             maxj = j
-                    elif (
-                        val and val == line[rev_position]
-                    ):  # line[2] is the current rev
+                    elif val and val == line[rev_position]:  # line[2] is the current rev
                         maxj = j
                 except:
                     print("line doesn't have a current rev: ", line)
@@ -471,17 +458,19 @@ def issue_sheet(
     headings=[[""] * 4] * 4,
     tablestyle=DEFAULTTABLESTYLE(),
     col_widths=[100, 40, 9],
-    fdir=pathlib.Path("."),
+    fdir=pathlib.Path(),
 ):
-    """populate and draw the issue sheet"""
-
+    """Populate and draw the issue sheet"""
     data2 = headings + data
     document.set_page_size(landscape(A3))
 
     ###CONTENT###
     Elements = []  ###List of everything in order.
     Elements = table(
-        data2, Elements, tablestyle=tablestyle, col_widths=[i * mm for i in col_widths]
+        data2,
+        Elements,
+        tablestyle=tablestyle,
+        col_widths=[i * mm for i in col_widths],
     )  # Highlight everything that equals Basement can replace with more sophisticated conditions.
     with change_dir(fdir):
         document.go(Elements, docissue)
@@ -511,7 +500,12 @@ def issuesheet_part(
     )
 
     data_list, sid_style = datatable_issue(
-        lookup, config, issue, document, history=history, part=part
+        lookup,
+        config,
+        issue,
+        document,
+        history=history,
+        part=part,
     )
 
     data_list, sid_style = datatable_distribution(
@@ -523,9 +517,7 @@ def issuesheet_part(
         history=history,
         part=part,
     )
-    status_revision = (
-        StatusRevisionEnum.S2_P
-    )  # status hard-coded to S2_P for information
+    status_revision = StatusRevisionEnum.S2_P  # status hard-coded to S2_P for information
     if history:
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
         date, status = li_issues[-1].split("-")
@@ -565,7 +557,13 @@ def issuesheet_part(
 
 
 def write_issuesheet(
-    config, issue, document, distribution, projectinfo, lookup, fdir_package
+    config,
+    issue,
+    document,
+    distribution,
+    projectinfo,
+    lookup,
+    fdir_package,
 ):
     fdir = pathlib.Path(config["outgoing_folder"])
     if not fdir.is_absolute():
@@ -575,12 +573,26 @@ def write_issuesheet(
     part = -1
 
     return issuesheet_part(
-        fdir, history, part, config, issue, document, distribution, projectinfo, lookup
+        fdir,
+        history,
+        part,
+        config,
+        issue,
+        document,
+        distribution,
+        projectinfo,
+        lookup,
     )
 
 
 def write_issuehistory(
-    config, issue, document, distribution, projectinfo, lookup, fdir_package
+    config,
+    issue,
+    document,
+    distribution,
+    projectinfo,
+    lookup,
+    fdir_package,
 ):
     fdir = pathlib.Path(config["outgoing_folder"])
     if not fdir.is_absolute():
@@ -605,7 +617,7 @@ def write_issuehistory(
                     projectinfo,
                     lookup,
                     num_parts=num_parts,
-                )
+                ),
             )
     else:
         part = 1
@@ -620,7 +632,7 @@ def write_issuehistory(
                 distribution,
                 projectinfo,
                 lookup,
-            )
+            ),
         )
     return fpths
 
@@ -645,9 +657,21 @@ def load_datapackage(fdir):
 def write_issuesheet_and_issuehistory(fdir):
     config, issue, document, distribution, projectinfo, lookup = load_datapackage(fdir)
     fpth_issuesheet = write_issuesheet(
-        config, issue, document, distribution, projectinfo, lookup, fdir_package=fdir
+        config,
+        issue,
+        document,
+        distribution,
+        projectinfo,
+        lookup,
+        fdir_package=fdir,
     )
     fpths_issuehistory = write_issuehistory(
-        config, issue, document, distribution, projectinfo, lookup, fdir_package=fdir
+        config,
+        issue,
+        document,
+        distribution,
+        projectinfo,
+        lookup,
+        fdir_package=fdir,
     )
     return fpth_issuesheet, fpths_issuehistory

@@ -18,11 +18,10 @@ fpths = fdir_src.glob("**/document.pdf")
 for x in fpths:
     name = x.parents._tail[-2]
     text = PAGE.format(name=name, html="{=html}")
-    file = (fdir_dst / "{name}.qmd".format(name=name)).write_text(text)
+    file = (fdir_dst / f"{name}.qmd").write_text(text)
     fdir = fdir_dst / name
     fdir.mkdir(exist_ok=True)
     shutil.copyfile(x, (fdir / "document.pdf"))
-
 
 
 print("retrieved examples from document-issue-quarto")
