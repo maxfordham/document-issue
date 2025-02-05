@@ -180,8 +180,7 @@ def test_build_schedule_resource_path():
     os.chdir(FDIR_TESTDATA)
     subprocess.run(["quarto", "add", str(FDIR_ROOT), "--no-prompt"], check=False)
     subprocess.run(
-        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf", "--resource-path=./media"],
-        check=False,
+        ["quarto", "render", "document.md", "--to", "document-issue-report-pdf"]
     )
     assert FPTH_OUTPUT.exists()
     FPTH_LOG = FDIR_TESTDATA / "document.log"
