@@ -22,7 +22,6 @@ def test_examples(example: CodeExample, eval_example: EvalExample):
         eval_example.run_print_check(example)
 
 
-
 def delete_existing(fdir, glob_str):
     [x.unlink(missing_ok=True) for x in list(fdir.glob(glob_str))]
 
@@ -40,7 +39,8 @@ def run_issue_sheet_tests(fdir_datapackage, glob_str):
 
 def test_write_issuesheet_and_issuehistory():
     fpth_issuesheet, fpths_issuehistory = run_issue_sheet_tests(
-        FDIR_DATAPACKAGE, "03870-MXF*-IS-J-*.pdf",
+        FDIR_DATAPACKAGE,
+        "03870-MXF*-IS-J-*.pdf",
     )
 
 
@@ -48,7 +48,8 @@ def test_write_issuesheet_and_issuehistory_with_custom_nomenclature():
     # the naming nomenclature in `projectinfo.json` is:
     # "originator - project - volume - level - infotype - role - number"
     fpth_issuesheet, fpths_issuehistory = run_issue_sheet_tests(
-        FDIR_DATAPACKAGE_CUSTOM, "MXF-03870*-IS-J-*.pdf",
+        FDIR_DATAPACKAGE_CUSTOM,
+        "MXF-03870*-IS-J-*.pdf",
     )
     assert fpth_issuesheet.stem[0:3] == "MXF"
     print("done")
@@ -58,5 +59,6 @@ def test_write_issuesheet_and_issuehistory_with_old_dng_data():
     # the naming nomenclature in `projectinfo.json` is:
     # "originator - project - volume - level - infotype - role - number"
     fpth_issuesheet, fpths_issuehistory = run_issue_sheet_tests(
-        FDIR_DATAPACKAGE_OLD, "04321-MXF*-IS-J-*.pdf",
+        FDIR_DATAPACKAGE_OLD,
+        "04321-MXF*-IS-J-*.pdf",
     )

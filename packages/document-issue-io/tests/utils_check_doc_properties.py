@@ -1,24 +1,22 @@
-
 import pathlib
 
 import yaml
 from pypdf import PdfReader
 
 DOCUMENT_PROPERTIES = [
-        "title",
-        # "project", # TODO: make issue on quarto describing this...
-        # "subtitle", # TODO: make issue on quarto describing this...
-        "author",
-        # "subject", # TODO: add to templater.jinja with high-level discipline when available (e.g. mechanical, electrical etc.)
-        # "keywords"
-    ]
+    "title",
+    # "project", # TODO: make issue on quarto describing this...
+    # "subtitle", # TODO: make issue on quarto describing this...
+    "author",
+    # "subject", # TODO: add to templater.jinja with high-level discipline when available (e.g. mechanical, electrical etc.)
+    # "keywords"
+]
 
 
 def get_md_metadata(fpth: pathlib.Path):
     lines = fpth.read_text().split("\n")
     x, y = [n for n, x in enumerate(lines) if x == "---"]
-    return yaml.safe_load("\n".join(lines[x+1:y-1]))
-
+    return yaml.safe_load("\n".join(lines[x + 1 : y - 1]))
 
 
 def check_quarto_doc_properties(fpth_in: pathlib.Path, fpth_out: pathlib.Path):

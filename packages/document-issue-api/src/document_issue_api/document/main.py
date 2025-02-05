@@ -82,7 +82,9 @@ def get_documents(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
     summary="Patch Document.",
 )
 def patch_document(
-    document_id: int, document: schemas.DocumentBasePatch, db: Session = Depends(get_db),
+    document_id: int,
+    document: schemas.DocumentBasePatch,
+    db: Session = Depends(get_db),
 ):
     try:
         db_ = crud.patch_document(db=db, document_id=document_id, document=document)
@@ -108,5 +110,6 @@ def delete_document(document_id: int, db: Session = Depends(get_db)):
         db.rollback()
         logger.exception(err)
         raise HTTPException(
-            status_code=404, detail=f"Failed to delete Document.\n{err}",
+            status_code=404,
+            detail=f"Failed to delete Document.\n{err}",
         )

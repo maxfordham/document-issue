@@ -17,8 +17,7 @@ def get_ext(fpth):
 
 
 def read_json(fpth, encoding="utf8"):
-    """Read info in a .json file
-    """
+    """Read info in a .json file"""
 
     def read(fpth):
         with open(fpth, encoding=encoding) as f:

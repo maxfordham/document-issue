@@ -13,7 +13,6 @@ class DocumentBasePatch(DocumentBase):
     """Issue post schema."""
 
 
-
 class DocumentBaseGet(DocumentBasePost):
     """Issue get schema."""
 
@@ -23,4 +22,3 @@ class DocumentBaseGet(DocumentBasePost):
 
 class DocumentIssueGet(DocumentIssue):
     """Issue post schema."""
-

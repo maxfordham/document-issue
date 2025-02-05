@@ -24,5 +24,4 @@ for x in fpths:
     shutil.copyfile(x, (fdir / "document.pdf"))
 
 
-
 print("retrieved examples from document-issue-quarto")

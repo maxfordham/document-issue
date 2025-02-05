@@ -136,7 +136,8 @@ def getsavefilename(extension=None, initialfile=""):
     """Get filename from explorer and return"""
     start_hidden_root()
     infile = filedialog.asksaveasfilename(
-        defaultextension=extension, initialfile=initialfile,
+        defaultextension=extension,
+        initialfile=initialfile,
     )
     return infile
 
@@ -161,7 +162,10 @@ def warning_messagebox(message="Warning", title="Warning"):
 
 
 def yesno_messagebox(
-    message="Yes or No", title="Option", yesaction=None, noaction=None,
+    message="Yes or No",
+    title="Option",
+    yesaction=None,
+    noaction=None,
 ):
     """Display yes no question"""
     start_hidden_root()
@@ -172,7 +176,10 @@ def yesno_messagebox(
 
 
 def okcancel_messagebox(
-    message="OK or Cancel", title="Option", okaction=None, cancelaction=None,
+    message="OK or Cancel",
+    title="Option",
+    okaction=None,
+    cancelaction=None,
 ):
     """Display OK cancel question"""
     start_hidden_root()
@@ -252,8 +259,7 @@ def tkinter_label(explanation, gif_pth=None):
 # from tkinter import *
 # from tkinter import filedialog
 def tkinter_filedialog():
-    """Prompts user to select folder
-    """
+    """Prompts user to select folder"""
     return getfoldername()
 
     # root = Tk()
@@ -369,10 +375,16 @@ def tkinter_user_input(title, options):
         vals[n].grid(row=n + 1, column=1)
 
     Button(master, text="ignore and continue", command=ignore).grid(
-        row=3, column=0, sticky=W, pady=4,
+        row=3,
+        column=0,
+        sticky=W,
+        pady=4,
     )
     Button(master, text="save my inputs", command=show_entry_fields).grid(
-        row=3, column=1, sticky=W, pady=4,
+        row=3,
+        column=1,
+        sticky=W,
+        pady=4,
     )
     # Button(master, image=icon)
     mainloop()

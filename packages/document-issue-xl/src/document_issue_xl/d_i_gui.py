@@ -242,7 +242,9 @@ class DialogWindow(MFTk):
         MFLabel(groupoptions, text="Dates to issue:").pack(side=LEFT)
         scrollbar = Scrollbar(groupoptions, orient=VERTICAL)
         self.listbox = tkinter.Listbox(
-            master=groupoptions, selectmode=EXTENDED, yscrollcommand=scrollbar.set,
+            master=groupoptions,
+            selectmode=EXTENDED,
+            yscrollcommand=scrollbar.set,
         )
         scrollbar.config(command=self.listbox.yview)
         scrollbar.pack(side=RIGHT, fill=Y)
@@ -257,7 +259,10 @@ class DialogWindow(MFTk):
         self.folder_text = Text(groupfolder, height=1, width=40)
         self.folder_text.pack(side=tkinter.LEFT)
         MFButton(
-            master=groupfolder, text="...", command=self.get_outgoingfolder, width=3,
+            master=groupfolder,
+            text="...",
+            command=self.get_outgoingfolder,
+            width=3,
         ).pack(side=LEFT)
 
         ### Save/Quit ###
@@ -286,7 +291,10 @@ class DialogWindow(MFTk):
             side=LEFT,
         )
         MFButton(
-            master=frame1, text="Check Docs", command=self.compare_docs, width=10,
+            master=frame1,
+            text="Check Docs",
+            command=self.compare_docs,
+            width=10,
         ).pack(side=LEFT)
         ### Errors ###
         MFLabelFrame(self, text="Errors", padx=15, pady=15).pack()
@@ -299,9 +307,7 @@ class DialogWindow(MFTk):
         # try:
         """Save the user configs to Y:"""
         self.config["job_number"] = self.get_project_info("number")
-        self.config["selected_issues"] = [
-            self.li_issues[l] for l in self.listbox.curselection()
-        ]
+        self.config["selected_issues"] = [self.li_issues[l] for l in self.listbox.curselection()]
         self.config["outgoing_folder"] = self.outgoingfolder
         self.config["office"] = self.office.get()
         self.config["open_on_save"] = self.open_on_save.get()
@@ -379,27 +385,24 @@ class DialogWindow(MFTk):
 
         numfiles = len(ok_docs) + len(missing_from_issue) + len(missing_from_outgoing)
         self.compare_docs_message(
-            ok_docs, missing_from_issue, missing_from_outgoing, numfiles,
+            ok_docs,
+            missing_from_issue,
+            missing_from_outgoing,
+            numfiles,
         )
         return True
 
     def compare_docs_message(
-        self, ok_docs, missing_from_issue, missing_from_outgoing, numfiles,
+        self,
+        ok_docs,
+        missing_from_issue,
+        missing_from_outgoing,
+        numfiles,
     ):
         msg = str(len(ok_docs)) + "/" + str(numfiles) + ": OK\n"
-        msg += (
-            str(len(missing_from_issue))
-            + "/"
-            + str(numfiles)
-            + ": Missing from issue sheet:\n\t"
-        )
+        msg += str(len(missing_from_issue)) + "/" + str(numfiles) + ": Missing from issue sheet:\n\t"
         msg += "\n\t".join(missing_from_issue) + "\n"
-        msg += (
-            str(len(missing_from_outgoing))
-            + "/"
-            + str(numfiles)
-            + ": Missing from outgoing folder:\n\t"
-        )
+        msg += str(len(missing_from_outgoing)) + "/" + str(numfiles) + ": Missing from outgoing folder:\n\t"
         msg += "\n\t".join([str(m) for m in missing_from_outgoing])
         msg += "\n\nN.B. this check does not consider file extensions."
         warning_messagebox(message=msg, title="Document Check Results")

@@ -15,7 +15,6 @@ gettime = lambda: datetime.now().strftime("%H-%M-%S")
 getname = lambda: f"df_{gettime()}.csv"
 
 if __name__ == "__main__":
-
     print(sys.argv)
     argv = sys.argv[1:]
     fpath = None
@@ -27,22 +26,14 @@ if __name__ == "__main__":
 
     if __debug__:
         print("Debug ON")
-        fpth = (
-            pathlib.Path(__file__).parent.parent.parent
-            / "xl"
-            / "DocumentNumberGenerator-v0_0_12.xlsm"
-        )
+        fpth = pathlib.Path(__file__).parent.parent.parent / "xl" / "DocumentNumberGenerator-v0_0_12.xlsm"
         fpth = pathlib.Path(
             r"J:\J7004\Issue Sheet\Stage 4 - Construction\J7004_DocumentNumberGenerator_Construction.xlsm",
         )
         fpth = pathlib.Path(
             r"J:\J7081\Project Management\Job Running\J7081 Document Number Generator.xlsm",
         )
-        fpth = (
-            pathlib.Path(__file__).parent.parent.parent
-            / "xl"
-            / "DocumentNumberGenerator-v0_0_7.xlsm"
-        )
+        fpth = pathlib.Path(__file__).parent.parent.parent / "xl" / "DocumentNumberGenerator-v0_0_7.xlsm"
         fpth = pathlib.Path(
             r"J:\J7561\Project Management\Job Running\J7561_DocumentNumberGenerator.xlsm",
         )  # done
@@ -67,11 +58,7 @@ if __name__ == "__main__":
         fpth = pathlib.Path(
             r"J:\J6793\Issue Sheet\J6793 UOONHB Issue Sheet_Drawing Number Generator.xlsm",
         )  # cheryl - done
-        fpth = (
-            pathlib.Path(__file__).parent.parent.parent
-            / "xl"
-            / "DocumentNumberGenerator.xlsm"
-        )
+        fpth = pathlib.Path(__file__).parent.parent.parent / "xl" / "DocumentNumberGenerator.xlsm"
         fpth = pathlib.Path(
             r"J:\J6848\Project Management\Job Running\J6848 - Wembley Link Document Number Generator.xlsm",
         )  # cheryl - done
@@ -175,7 +162,6 @@ if __name__ == "__main__":
         fpth = pathlib.Path(
             r"J:\J6771\Issue Sheet\6771 Issue Sheet_DocumentNumberGenerator.xlsm",
         )  # cheryl - done
-
 
         # --- LOCAL DEV ---
         # fpth = pathlib.Path(__file__).parent.parent.parent / "xl" / "DocumentNumberGenerator.xlsm"

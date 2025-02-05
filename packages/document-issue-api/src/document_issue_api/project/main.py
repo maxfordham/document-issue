@@ -41,7 +41,8 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
         db_ = crud.get_project(db=db, project_id=project_id)
         if db_ is None:
             raise HTTPException(
-                status_code=204, detail=f"Project id ={project_id} does not exist.",
+                status_code=204,
+                detail=f"Project id ={project_id} does not exist.",
             )
         return db_
     except Exception as err:
@@ -85,7 +86,9 @@ def delete_project(project_id: int, db: Session = Depends(get_db)):
     summary="Patch Project.",
 )
 def patch_project(
-    project_id: int, project: schemas.ProjectPatch, db: Session = Depends(get_db),
+    project_id: int,
+    project: schemas.ProjectPatch,
+    db: Session = Depends(get_db),
 ):
     try:
         db_ = crud.patch_project(db=db, project_id=project_id, project=project)

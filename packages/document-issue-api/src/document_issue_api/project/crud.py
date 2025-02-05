@@ -44,7 +44,9 @@ def get_project(db: Session, project_id: int) -> models.Project:
 
 
 def get_projects(
-    db: Session, limit: int = 100, skip: int = 0,
+    db: Session,
+    limit: int = 100,
+    skip: int = 0,
 ) -> ty.List[models.Project]:
     """Get all projects.
 
@@ -79,7 +81,9 @@ def delete_project(db: Session, project_id: int) -> models.Project:
 
 
 def patch_project(
-    db: Session, project_id: int, project: schemas.ProjectPatch,
+    db: Session,
+    project_id: int,
+    project: schemas.ProjectPatch,
 ) -> models.Project:
     """Patch a project by ID.
 

@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
     summary="Post an Issue onto a Document.",
 )
 def post_issue(
-    issue: schemas.IssueBasePost, document_id, db: Session = Depends(get_db),
+    issue: schemas.IssueBasePost,
+    document_id,
+    db: Session = Depends(get_db),
 ):
     try:
         db_ = crud.post_issue(db, document_id, issue)

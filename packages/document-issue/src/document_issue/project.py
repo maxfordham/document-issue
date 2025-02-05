@@ -1,5 +1,4 @@
-"""define base characteristics of a Project
-"""
+"""define base characteristics of a Project"""
 
 import logging
 import typing as ty

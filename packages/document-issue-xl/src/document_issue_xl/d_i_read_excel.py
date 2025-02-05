@@ -27,12 +27,7 @@ def index_of_value(value, sheet):
 
 
 def get_table_data(name: str) -> dict:
-    data = (
-        xw.sheets[name]
-        .range(index_of_value(f"{name}_code", name))
-        .options(pd.DataFrame, expand="table")
-        .value
-    )
+    data = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand="table").value
     des = f"{name}_des"
     # backwards compatibility
 
@@ -59,9 +54,7 @@ def get_table_data(name: str) -> dict:
 def get_lookup_data() -> LookupData:  # get_lookup_data
     names = [k for k in list(DocumentCodeParts.__members__.keys()) if k != "sequence"]
     names = names + [
-        stringcase.camelcase(f)
-        for f in DocumentMetadataMap.model_fields.keys()
-        if f not in ["classification_uniclass"]
+        stringcase.camelcase(f) for f in DocumentMetadataMap.model_fields.keys() if f not in ["classification_uniclass"]
     ]
     sheet_names = [s.name for s in xw.sheets]
     names = [n for n in names if n in sheet_names]
@@ -73,33 +66,20 @@ def get_lookup_data() -> LookupData:  # get_lookup_data
 
     # classification_uniclass
     name = "classification"
-    df = (
-        xw.sheets[name]
-        .range(index_of_value(f"{name}_code", name))
-        .options(pd.DataFrame, expand="table")
-        .value
-    )
+    df = xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand="table").value
     data["classification_uniclass"] = df["uniclass_classification"].to_dict()
 
     # sequence
     name = "sequence"
     type_sequences = (
-        xw.sheets[name]
-        .range(index_of_value(f"{name}_code", name))
-        .options(pd.DataFrame, expand="table")
-        .value
+        xw.sheets[name].range(index_of_value(f"{name}_code", name)).options(pd.DataFrame, expand="table").value
     )
     type_sequences = type_sequences.to_dict()
-    type_sequences = {
-        k: {_k: _v for _k, _v in v.items() if _v is not None}
-        for k, v in type_sequences.items()
-    }
+    type_sequences = {k: {_k: _v for _k, _v in v.items() if _v is not None} for k, v in type_sequences.items()}
     data["type_sequences"] = type_sequences
 
     # BUGFIX: ignore null classification fields
-    data["classification"] = {
-        k: v for k, v in data["classification"].items() if v is not None
-    }
+    data["classification"] = {k: v for k, v in data["classification"].items() if v is not None}
 
     return LookupData(**data | type_sequences)
 
@@ -163,14 +143,8 @@ def get_pandas_data():
             .options(pd.Series, expand="table")
             .value
         )
-        res = (
-            res.reset_index(drop=False)
-            .set_index("Document Number")
-            .rename(columns={"Sort By Uniclass": "uniclass"})
-        )
-        if (
-            "Document Number" not in res.columns
-        ):  # backwards compatability for spreadsheet upgrade.
+        res = res.reset_index(drop=False).set_index("Document Number").rename(columns={"Sort By Uniclass": "uniclass"})
+        if "Document Number" not in res.columns:  # backwards compatability for spreadsheet upgrade.
             res.index.names = ["Document Number Index"]
             res["Document Number"] = res.index
 
@@ -183,9 +157,7 @@ def get_pandas_data():
         res = res[res["Document Number"] != -2146826246]
         cols_to_remove = list(set(res.columns).intersection(map(str, range(999))))
         cols_to_remove += [
-            x
-            for x in res.columns
-            if "Column" in x or "blank" in x or "→" in x or "?" in x or "Add to " in x
+            x for x in res.columns if "Column" in x or "blank" in x or "→" in x or "?" in x or "Add to " in x
         ]
         res = res.sort_values("Document Number")
         res = res.dropna(subset=["Document Number"])
@@ -233,9 +205,7 @@ def read_excel(dump_package=True) -> Any:
     config = user_config(projectinfo.get("Job Number"))  # define this in the UI
     data = get_pandas_data()
     li_issues = get_issues(data)
-    doc_descriptions = data[
-        [c for c in data.columns if c not in li_issues + ["Current Rev"]]
-    ].T.to_dict()
+    doc_descriptions = data[[c for c in data.columns if c not in li_issues + ["Current Rev"]]].T.to_dict()
     doc_issues = data[li_issues].T.to_dict()
 
     def getlastrev(di, map_status_rev=map_status_rev):
@@ -259,7 +229,9 @@ def read_excel(dump_package=True) -> Any:
 
     doc_distribution = get_distribution_data(li_issues=li_issues)
     df_distribution = doc_distribution.melt(
-        id_vars=["Name"], var_name="date_status", value_name="issue_format",
+        id_vars=["Name"],
+        var_name="date_status",
+        value_name="issue_format",
     ).rename(columns={"Name": "recipient"})
 
     df_issue = data[li_issues]
@@ -370,7 +342,6 @@ def dng_to_package(
     df_document,
     fdir: Path = pathlib.Path("test"),
 ):
-
     with set_directory(fdir):
         f_lkup, f_config, f_project, f_dist, f_issue, f_docs = (
             pathlib.Path("lookup.json"),

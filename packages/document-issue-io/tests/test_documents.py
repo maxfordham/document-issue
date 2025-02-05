@@ -32,7 +32,6 @@ def test_examples(example: CodeExample, eval_example: EvalExample):
         eval_example.run_print_check(example)
 
 
-
 def create_test_document_issue():
     return demo_document_issue()
 
@@ -136,7 +135,9 @@ class TestDocumentIssueReport:
         document_issue.format_configuration.output_checked_by = False
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
         generate_document_issue_pdf(
-            document_issue=document_issue, fpth_pdf=fpth_pdf, md_content=MD,
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
+            md_content=MD,
         )
         assert fpth_pdf.is_file()
         # Check that the markdown file created contains the correct content

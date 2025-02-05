@@ -14,16 +14,12 @@ class FormatConfiguration(BaseModel):
 
     date_string_format: str = Field(
         "%d %^b %y",
-        description=(
-            "date display format. refer to:"
-            " https://www.programiz.com/python-programming/datetime/strptime"
-        ),
+        description=("date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime"),
     )
     output_author: bool = Field(
         False,
         description=(
-            "Include the initials of the author in the client facing output."
-            " Often avoided but some clients require it."
+            "Include the initials of the author in the client facing output. Often avoided but some clients require it."
         ),
     )
     output_checked_by: bool = Field(
@@ -35,7 +31,9 @@ class FormatConfiguration(BaseModel):
     )
 
 
-description_document_code = "document code. Should be the filename when uploaded to a CDE. Structured to be machine-readable."
+description_document_code = (
+    "document code. Should be the filename when uploaded to a CDE. Structured to be machine-readable."
+)
 description_name_nomenclature = "denotes what each section of of the document code means when split on '-' character."
 
 Note = Annotated[
@@ -46,11 +44,9 @@ Note = Annotated[
 
 
 class DocumentBase(BaseModel):
-    name_nomenclature: str = (
-        Field(  # TODO: Add validation to ensure only certain words (shown in default) are used
-            "project-originator-volume-level-infotype-role-number",  # TODO: infotype --> type
-            description=description_name_nomenclature,
-        )
+    name_nomenclature: str = Field(  # TODO: Add validation to ensure only certain words (shown in default) are used
+        "project-originator-volume-level-infotype-role-number",  # TODO: infotype --> type
+        description=description_name_nomenclature,
     )
     document_code: str = Field(
         "06667-MXF-XX-XX-SH-M-20003",
@@ -58,7 +54,8 @@ class DocumentBase(BaseModel):
         alias="document_name",
     )
     document_description: str = Field(
-        "Document Description", description="human readable description of the document",
+        "Document Description",
+        description="human readable description of the document",
     )
     document_source: str = Field(
         "WD",
@@ -68,7 +65,9 @@ class DocumentBase(BaseModel):
     )
     # document_filetype: str = Field() # include this?
     paper_size: ty.Union[str, PaperSizeEnum] = Field(
-        "A4", description="paper size of the document", alias="size",
+        "A4",
+        description="paper size of the document",
+        alias="size",
     )
     scale: ty.Union[str, ScalesEnum] = Field(
         "nts",
@@ -84,7 +83,8 @@ class DocumentBase(BaseModel):
         json_schema_extra=dict(type="string", disabled=True),
     )  # TODO: remove. should be picked up in classification data.
     notes: ty.List[Note] = Field(
-        ["add notes here"], description="Engineering Notes to accompany the Document.",
+        ["add notes here"],
+        description="Engineering Notes to accompany the Document.",
     )
 
     @field_validator("name_nomenclature")

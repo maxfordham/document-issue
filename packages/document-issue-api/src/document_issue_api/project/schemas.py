@@ -13,4 +13,3 @@ class ProjectGet(ProjectPost):
 
 class ProjectPatch(ProjectPost):
     """Project patch schema."""
-

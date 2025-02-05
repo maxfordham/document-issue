@@ -94,9 +94,7 @@ class DocumentIssue(Document, ProjectBase):
             di_issue_with_title = {}
             for header in headers:
                 if header in map_title_to_field:
-                    di_issue_with_title[f"**{header}**"] = di_issue[
-                        map_title_to_field[header]
-                    ]
+                    di_issue_with_title[f"**{header}**"] = di_issue[map_title_to_field[header]]
                 else:
                     raise ValueError(
                         f"Header '{header}' not defined as a title in Issue schema.",
@@ -119,13 +117,10 @@ class DocumentIssue(Document, ProjectBase):
             di_document_role_with_title = {}
             for header in headers:
                 if header in map_title_to_field:
-                    di_document_role_with_title[f"**{header}**"] = di_document_role[
-                        map_title_to_field[header]
-                    ]
+                    di_document_role_with_title[f"**{header}**"] = di_document_role[map_title_to_field[header]]
                 else:
                     raise ValueError(
-                        f"Header '{header}' not defined as a title in DocumentRole"
-                        " schema.",
+                        f"Header '{header}' not defined as a title in DocumentRole schema.",
                     )
             li_document_roles.append(di_document_role_with_title)
         return tabulate(
@@ -155,10 +150,7 @@ class DocumentIssue(Document, ProjectBase):
     @property
     def director_in_charge(self):
         for role in self.document_role:
-            if (
-                role.role_name == RoleEnum.director
-                or role.role_name == RoleEnum.director.value
-            ):
+            if role.role_name == RoleEnum.director or role.role_name == RoleEnum.director.value:
                 return role.initials
 
     # TODO: add this validation after ensuring that a director is shown on all existing schedules
@@ -169,13 +161,12 @@ class DocumentIssue(Document, ProjectBase):
     #     return v
 
 
-
 class DocumentIssueClassification(DocumentIssue):
     classification: Classification = Field(None)  # TODO: add classification
     # roles: ty.List[Role] #TODO add roles
 
 
-class DocumentIssueV2(DocumentIssue): # allow None now... but will make these required fields eventually
+class DocumentIssueV2(DocumentIssue):  # allow None now... but will make these required fields eventually
     project: ty.Optional[Project] = None
     originator: ty.Optional[Originator] = None
     classification: ty.Optional[Classification] = None

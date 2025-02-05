@@ -73,7 +73,9 @@ def datatable_distribution(
 ):
     df_distribution = pd.DataFrame(distribution)
     df_distribution_pivot = df_distribution.pivot(
-        index="recipient", columns="date_status", values="issue_format",
+        index="recipient",
+        columns="date_status",
+        values="issue_format",
     )
     li_issues = sorted(list(set([i["date_status"] for i in issue])))
 
@@ -107,10 +109,11 @@ def datatable_distribution(
 
 
 def datatable_issue(lookup, config, issue, document, history=False, part=-1):
-
     df_issue = pd.DataFrame(issue)
     df_issue_pivot = df_issue.pivot(
-        index="document_code", columns="date_status", values="revision_number",
+        index="document_code",
+        columns="date_status",
+        values="revision_number",
     )
     df_document = pd.DataFrame(document)
     docs = list(df_issue.document_code.unique())
@@ -120,12 +123,7 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
         if isinstance(rev, pd.Series):
             return rev.revision_number
         if isinstance(rev, pd.DataFrame):
-            return (
-                df_issue.set_index("document_code")
-                .loc[d]
-                .sort_values("date_status")
-                .revision_number.to_list()[-1]
-            )
+            return df_issue.set_index("document_code").loc[d].sort_values("date_status").revision_number.to_list()[-1]
         return ValueError("No revision number found")
 
     def prep_isssue_col(ser: pd.Series):
@@ -150,7 +148,8 @@ def datatable_issue(lookup, config, issue, document, history=False, part=-1):
     last_col = cols[-1]
 
     df_out = pd.concat(
-        [df_document.set_index("document_code"), df_issue_pivot], axis=1,
+        [df_document.set_index("document_code"), df_issue_pivot],
+        axis=1,
     ).reset_index()
 
     df_out = df_out.rename(columns={"document_code": "Document Number"})
@@ -194,7 +193,9 @@ def tablestyle(history, sid_style, data_list, headings):
     if history:
         _tablestyle = (
             highlight_last_format(
-                headings + data_list, startrow=5, rev_position=len(DEFAULT_COLS) - 1,
+                headings + data_list,
+                startrow=5,
+                rev_position=len(DEFAULT_COLS) - 1,
             )
             + sid_style
         )
@@ -261,7 +262,6 @@ def create_docissue(
     history: bool = False,
     selected_issue_index=None,
 ) -> DocumentIssue:
-
     def update_name(n):
         if n == "orig":
             return "originator"
@@ -272,9 +272,7 @@ def create_docissue(
         return n
 
     if "Naming Convention" in projectinfo:
-        naming = [
-            l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")
-        ]
+        naming = [l.rstrip().lstrip() for l in projectinfo["Naming Convention"].split("-")]
         naming = [update_name(n) for n in naming]
         name_nomenclature = "-".join(naming)
     else:
@@ -287,9 +285,7 @@ def create_docissue(
     ]
     di = {k: v for k, v in projectinfo.items() if v is not None}
     docissue = DocumentIssue(**di)
-    docissue.issue_history[0].revision = (
-        "-"  # hard-code revision to "-" to avoid having to keep track of it.
-    )
+    docissue.issue_history[0].revision = "-"  # hard-code revision to "-" to avoid having to keep track of it.
 
     # ---------------------------
 
@@ -446,9 +442,7 @@ def highlight_last_format(data, startrow=0, rev_position=4):
                     if line[rev_position] == line[0]:  # distribution list
                         if val:
                             maxj = j
-                    elif (
-                        val and val == line[rev_position]
-                    ):  # line[2] is the current rev
+                    elif val and val == line[rev_position]:  # line[2] is the current rev
                         maxj = j
                 except:
                     print("line doesn't have a current rev: ", line)
@@ -473,7 +467,10 @@ def issue_sheet(
     ###CONTENT###
     Elements = []  ###List of everything in order.
     Elements = table(
-        data2, Elements, tablestyle=tablestyle, col_widths=[i * mm for i in col_widths],
+        data2,
+        Elements,
+        tablestyle=tablestyle,
+        col_widths=[i * mm for i in col_widths],
     )  # Highlight everything that equals Basement can replace with more sophisticated conditions.
     with change_dir(fdir):
         document.go(Elements, docissue)
@@ -503,7 +500,12 @@ def issuesheet_part(
     )
 
     data_list, sid_style = datatable_issue(
-        lookup, config, issue, document, history=history, part=part,
+        lookup,
+        config,
+        issue,
+        document,
+        history=history,
+        part=part,
     )
 
     data_list, sid_style = datatable_distribution(
@@ -515,9 +517,7 @@ def issuesheet_part(
         history=history,
         part=part,
     )
-    status_revision = (
-        StatusRevisionEnum.S2_P
-    )  # status hard-coded to S2_P for information
+    status_revision = StatusRevisionEnum.S2_P  # status hard-coded to S2_P for information
     if history:
         cols_issue = cols_to_plot_history(li_issues, part, MAX_COLS_IN_PART)
         date, status = li_issues[-1].split("-")
@@ -557,7 +557,13 @@ def issuesheet_part(
 
 
 def write_issuesheet(
-    config, issue, document, distribution, projectinfo, lookup, fdir_package,
+    config,
+    issue,
+    document,
+    distribution,
+    projectinfo,
+    lookup,
+    fdir_package,
 ):
     fdir = pathlib.Path(config["outgoing_folder"])
     if not fdir.is_absolute():
@@ -567,12 +573,26 @@ def write_issuesheet(
     part = -1
 
     return issuesheet_part(
-        fdir, history, part, config, issue, document, distribution, projectinfo, lookup,
+        fdir,
+        history,
+        part,
+        config,
+        issue,
+        document,
+        distribution,
+        projectinfo,
+        lookup,
     )
 
 
 def write_issuehistory(
-    config, issue, document, distribution, projectinfo, lookup, fdir_package,
+    config,
+    issue,
+    document,
+    distribution,
+    projectinfo,
+    lookup,
+    fdir_package,
 ):
     fdir = pathlib.Path(config["outgoing_folder"])
     if not fdir.is_absolute():
@@ -637,9 +657,21 @@ def load_datapackage(fdir):
 def write_issuesheet_and_issuehistory(fdir):
     config, issue, document, distribution, projectinfo, lookup = load_datapackage(fdir)
     fpth_issuesheet = write_issuesheet(
-        config, issue, document, distribution, projectinfo, lookup, fdir_package=fdir,
+        config,
+        issue,
+        document,
+        distribution,
+        projectinfo,
+        lookup,
+        fdir_package=fdir,
     )
     fpths_issuehistory = write_issuehistory(
-        config, issue, document, distribution, projectinfo, lookup, fdir_package=fdir,
+        config,
+        issue,
+        document,
+        distribution,
+        projectinfo,
+        lookup,
+        fdir_package=fdir,
     )
     return fpth_issuesheet, fpths_issuehistory

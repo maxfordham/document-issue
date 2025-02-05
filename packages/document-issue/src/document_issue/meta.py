@@ -9,9 +9,7 @@ from pydantic_core import PydanticCustomError
 
 logger = logging.getLogger(__name__)
 
-DRWG_CLASSIFICATION_CODE_REGEX = (
-    r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
-)
+DRWG_CLASSIFICATION_CODE_REGEX = r"^[A-Z]{1}-[0-9]{2}$"  # TODO: make configurable on a project basis
 UNICLASS_CLASSIFICATION_CODE_REGEX = r"^.*$"  # TODO
 
 DrwgClassificationCode = Annotated[
@@ -103,7 +101,8 @@ class DocumentMetadataMap(BaseModel):
     issue_format: dict[str, str]
     doc_source: dict[str, str]
     classification_uniclass: dict[
-        str, UniclassClassificationCode,
+        str,
+        UniclassClassificationCode,
     ]  # DrwgClassificationCode
     # role: dict[DrwgClassificationCode, str]
     # info_sub_type: dict[str, str]

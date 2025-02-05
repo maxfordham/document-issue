@@ -1,4 +1,3 @@
-
 # A very simple setup script to create a single executable
 #
 # hello.py is a very simple 'Hello, world' type script which also displays the

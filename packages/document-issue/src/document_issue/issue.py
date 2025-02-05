@@ -65,9 +65,7 @@ class Issue(BaseModel):
     issue_notes: str = Field(  # TODO: issue_note ?
         "",
         title="Issue Notes",
-        description=(
-            "free field where the Engineer can briefly summarise changes/progress."
-        ),
+        description=("free field where the Engineer can briefly summarise changes/progress."),
         max_length=10000,
         json_schema_extra=dict(column_width=300),
     )
@@ -95,9 +93,7 @@ class Issue(BaseModel):
 
     @model_validator(mode="after")
     def update_status_revision_fields(self) -> "Issue":
-        status_revision = (
-            lambda sr: sr.value if isinstance(sr, StatusRevisionEnum) else sr
-        )(self.status_revision)
+        status_revision = (lambda sr: sr.value if isinstance(sr, StatusRevisionEnum) else sr)(self.status_revision)
         (
             self.status_code,
             status_description,

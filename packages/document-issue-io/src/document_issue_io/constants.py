@@ -25,9 +25,7 @@ FONTS = {
 }
 
 
-MAP_TITLEBLOCK_IMAGES = {
-    l.lower(): DIR_MEDIA.joinpath("titleblock_" + l.lower() + ".png") for l in OFFICES
-}
+MAP_TITLEBLOCK_IMAGES = {l.lower(): DIR_MEDIA.joinpath("titleblock_" + l.lower() + ".png") for l in OFFICES}
 
 
 LONDON_ADDRESS = [

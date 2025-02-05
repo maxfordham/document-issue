@@ -7,9 +7,7 @@ from contextlib import contextmanager
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
 FDIR_DOCUMENT_ISSUE_QUARTO = pathlib.Path(__file__).parents[1] / "document-issue-quarto"
-DIR_TEMPLATES = (
-    pathlib.Path(__file__).parent / "src" / "document_issue_io" / "templates"
-)
+DIR_TEMPLATES = pathlib.Path(__file__).parent / "src" / "document_issue_io" / "templates"
 
 
 @contextmanager
@@ -35,6 +33,7 @@ class CustomBuildHook(BuildHookInterface):
                     "cvzf",
                     tar_name,
                     "_extensions",
-                ], check=False,
+                ],
+                check=False,
             )
             shutil.move(tar_name, DIR_TEMPLATES / tar_name)

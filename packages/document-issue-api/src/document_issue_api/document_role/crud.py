@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 def post_document_role(
-    db: Session, role_id: int, document_id: int,
+    db: Session,
+    role_id: int,
+    document_id: int,
 ) -> schemas.ProjectRoleGet:
     """Create a new project role.
 
@@ -31,7 +33,8 @@ def post_document_role(
 
 
 def get_document_roles(
-    db: Session, document_id: int,
+    db: Session,
+    document_id: int,
 ) -> ty.List[schemas.ProjectRoleGet]:
     """Get all project roles.
 
@@ -43,16 +46,14 @@ def get_document_roles(
         models.DocumentRole: The project role
 
     """
-    db_ = (
-        db.query(models.DocumentRole)
-        .filter(models.DocumentRole.document_id == document_id)
-        .all()
-    )
+    db_ = db.query(models.DocumentRole).filter(models.DocumentRole.document_id == document_id).all()
     return [schemas.ProjectRoleGet.model_validate(_.role.project_role[0]) for _ in db_]
 
 
 def delete_document_role(
-    db: Session, role_id: int, document_id: int,
+    db: Session,
+    role_id: int,
+    document_id: int,
 ) -> schemas.ProjectRoleGet:
     """Delete a project role.
 

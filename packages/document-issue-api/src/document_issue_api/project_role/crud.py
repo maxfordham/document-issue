@@ -11,7 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 def post_project_role(
-    db: Session, project_id: int, role_id: int, person_id: ty.Optional[int] = None,
+    db: Session,
+    project_id: int,
+    role_id: int,
+    person_id: ty.Optional[int] = None,
 ) -> models.ProjectRole:
     """Create a new project role.
 

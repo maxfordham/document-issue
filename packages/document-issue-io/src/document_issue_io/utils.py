@@ -28,16 +28,9 @@ def update_document_issue_quarto_extension():
 
 
 def install_or_update_document_issue_quarto_extensions():
-    FPTH_DOCUMENT_ISSUE_NOTE_INSTALL_PTH = (
-        pathlib.Path.cwd() / "_extensions" / "document-issue-note"
-    )
-    FPTH_DOCUMENT_ISSUE_REPORT_INSTALL_PTH = (
-        pathlib.Path.cwd() / "_extensions" / "document-issue-report"
-    )
-    if (
-        not FPTH_DOCUMENT_ISSUE_NOTE_INSTALL_PTH.exists()
-        or not FPTH_DOCUMENT_ISSUE_REPORT_INSTALL_PTH.exists()
-    ):
+    FPTH_DOCUMENT_ISSUE_NOTE_INSTALL_PTH = pathlib.Path.cwd() / "_extensions" / "document-issue-note"
+    FPTH_DOCUMENT_ISSUE_REPORT_INSTALL_PTH = pathlib.Path.cwd() / "_extensions" / "document-issue-report"
+    if not FPTH_DOCUMENT_ISSUE_NOTE_INSTALL_PTH.exists() or not FPTH_DOCUMENT_ISSUE_REPORT_INSTALL_PTH.exists():
         install_document_issue_quarto_extension()
     else:
         update_document_issue_quarto_extension()

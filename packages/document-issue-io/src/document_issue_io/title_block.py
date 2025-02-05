@@ -46,7 +46,9 @@ def create_styling(number_of_cols: int) -> list:
 
 
 def get_title_block_image(
-    fpth_img: pathlib.Path, scale_height=28, scale_width=28,
+    fpth_img: pathlib.Path,
+    scale_height=28,
+    scale_width=28,
 ) -> Image:
     """Get the image that will be used within the title block."""
     image = Image(fpth_img)
@@ -75,7 +77,9 @@ def construct_title_block_data(
         return name_nomenclature
 
     image = get_title_block_image(
-        fpth_img=fpth_img, scale_height=scale_height, scale_width=scale_width,
+        fpth_img=fpth_img,
+        scale_height=scale_height,
+        scale_width=scale_width,
     )
     issue_date = document_issue.current_issue.date.strftime("%d/%m/%Y")
     # Check for \n override in document description
@@ -88,7 +92,8 @@ def construct_title_block_data(
     name_nomenclature = rename_name_nomenclature(document_issue.name_nomenclature)
     document_code = document_issue.document_code.replace("-", " - ")
     status_description = document_issue.current_issue.status_description.replace(
-        "Suitable for ", "",
+        "Suitable for ",
+        "",
     ).replace("Issued for ", "")
     # ^ TODO: Need to deal with length of status codes more robustly
     project_name = "\n".join(

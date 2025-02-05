@@ -71,11 +71,7 @@ class MarkdownDocumentIssue:
 
     @property
     def md_issue_history(self):
-        return (
-            self.document_issue.issue_history_table
-            + "\n\n"
-            + self.md_issue_history_col_widths
-        )
+        return self.document_issue.issue_history_table + "\n\n" + self.md_issue_history_col_widths
 
     @property
     def md_roles(self):

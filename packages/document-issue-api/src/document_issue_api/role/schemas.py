@@ -15,4 +15,3 @@ class RoleGet(RolePost):
 
 class RolePatch(RolePost):
     """Role patch schema."""
-

@@ -52,7 +52,9 @@ def get_document_issue(db: Session, document_id: int) -> schemas.DocumentIssueGe
 
 
 def get_documents(
-    db: Session, skip: int = 0, limit: int = 100,
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
 ) -> ty.List[models.Document]:
     """Get documents.
 
@@ -69,7 +71,9 @@ def get_documents(
 
 
 def patch_document(
-    db: Session, document_id: int, document: schemas.DocumentBase,
+    db: Session,
+    document_id: int,
+    document: schemas.DocumentBase,
 ) -> models.Document:
     """Patch a document.
 
@@ -82,9 +86,7 @@ def patch_document(
         models.Document: The patched document
 
     """
-    db_document = (
-        db.query(models.Document).filter(models.Document.id == document_id).first()
-    )
+    db_document = db.query(models.Document).filter(models.Document.id == document_id).first()
     update_data = document.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_document, key, value)
@@ -106,9 +108,8 @@ def delete_document(db: Session, document_id: int) -> models.Document:
 
     """
     from sqlalchemy.orm import Query
-    db_document = (
-        db.query(models.Document).filter(Query.with_parent(models.Document.id == document_id)).first()
-    )
+
+    db_document = db.query(models.Document).filter(Query.with_parent(models.Document.id == document_id)).first()
     db.delete(db_document)
     db.commit()
     return db_document

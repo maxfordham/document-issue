@@ -5,10 +5,8 @@ class IssueBasePost(Issue):
     """Issue post schema."""
 
 
-
 class IssueBasePatch(Issue):
     """Issue patch schema."""
-
 
 
 class IssueBaseGet(Issue):

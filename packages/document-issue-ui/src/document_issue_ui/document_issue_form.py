@@ -28,10 +28,7 @@ class IssueDelete(UiDelete):
     @property
     def value_summary(self):
         if self.columns:
-            return {
-                k: {k_: v_ for k_, v_ in v.items() if k_ in self.columns}
-                for k, v in self.value.items()
-            }
+            return {k: {k_: v_ for k_, v_ in v.items() if k_ in self.columns} for k, v in self.value.items()}
         return self.value
 
     def _update_display(self):
@@ -108,9 +105,7 @@ class IssueGrid(EditGrid):
         )
 
     def _show_save_message(self, onchange):
-        self.buttonbar_grid.message.value = (
-            f'<i>changes saved: {datetime.now().strftime("%H:%M:%S")}</i>'
-        )
+        self.buttonbar_grid.message.value = f"<i>changes saved: {datetime.now().strftime('%H:%M:%S')}</i>"
 
 
 class DocumentIssueUi(DocumentIssue):
@@ -166,9 +161,7 @@ class DocumentIssueForm(
     def _post_init(self, **kwargs):
         self.di_widgets["project_number"].disabled = True
         self.di_widgets["project_name"].disabled = True
-        self.order = [
-            _ for _ in list(self.di_widgets.keys()) if _ != "format_configuration"
-        ]
+        self.order = [_ for _ in list(self.di_widgets.keys()) if _ != "format_configuration"]
         self._project_number("change")
         self.savebuttonbar.unsaved_changes = False
 
@@ -179,7 +172,9 @@ class DocumentIssueForm(
 
 
 def get_document_issue_form(
-    map_projects: dict, project_number: int = 5001, **kwargs,
+    map_projects: dict,
+    project_number: int = 5001,
+    **kwargs,
 ) -> DocumentIssueForm:
     ui = DocumentIssueForm.from_pydantic_model(
         DocumentIssueUi,
@@ -191,9 +186,7 @@ def get_document_issue_form(
         display_bn_shownull=False,
         **kwargs,
     )
-    ui.di_boxes["issue_history"].widget.grid.layout.width = (
-        "1250px"  # HOTFIX: Stops grid being squashed
-    )
+    ui.di_boxes["issue_history"].widget.grid.layout.width = "1250px"  # HOTFIX: Stops grid being squashed
     ui.di_boxes["notes"].widget.layout.width = "100%"
     ui.di_boxes["document_role"].widget.layout.width = "100%"
     return ui
@@ -214,7 +207,3 @@ if __name__ == "__main__":
     )
     display(ui)
 # -
-
-
-
-
