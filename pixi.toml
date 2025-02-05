@@ -60,4 +60,5 @@ tests = { depends-on = [
     "test-document-issue-io",
     "test-document-issue-api",
 ] }
-format = "ruff check --fix"
+lint = "ruff check --fix"
+format = "ruff format"
