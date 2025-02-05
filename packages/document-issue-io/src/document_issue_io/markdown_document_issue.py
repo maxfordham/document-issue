@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pathlib
 import re
 import shutil
@@ -178,7 +180,7 @@ def generate_document_issue_pdf(
     output_format: OutputFormat = OutputFormat.DOCUMENT_ISSUE_REPORT,
     orientation: Orientation = Orientation.PORTRAIT,
     paper_size: PaperSize = PaperSize.A4,
-    resource_path: ty.Optional[pathlib.Path] = None,
+    resource_path: list[pathlib.Path] | None = None,
     is_draft: bool = False,
 ):
     """Generate a PDF document from a DocumentIssue object with any markdown content.
@@ -223,7 +225,7 @@ def generate_document_issue_pdf(
             "papersize": paper_size.value,
         }
         if resource_path is not None:
-            quarto_config["resource-path"] = resource_path
+            quarto_config["resource-path"] = [str(p) for p in resource_path]
         yaml.dump(quarto_config, open("_quarto.yaml", "w"))
         if output_format == OutputFormat.DOCUMENT_ISSUE_REPORT:
             markdown = MarkdownDocumentIssue(document_issue, is_draft).md_docissue + md_content
