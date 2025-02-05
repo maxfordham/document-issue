@@ -1,20 +1,14 @@
 from sqlalchemy import (
+    JSON,
     Boolean,
     Column,
+    Date,
     ForeignKey,
     Integer,
     String,
-    DateTime,
-    Date,
-    Float,
     UniqueConstraint,
-    Enum,
-    JSON,
 )
-
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import relationship, configure_mappers, validates
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
@@ -98,6 +92,7 @@ class Originator(BaseCode, Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+
 class ProjectOriginator(Base):  # allows project to override the codes
     __tablename__ = "project_originator"
 
@@ -115,6 +110,7 @@ class Level(BaseCode, Base):
     __tablename__ = "level"
 
     id = Column(Integer, primary_key=True, index=True)
+
 
 class ProjectLevel(Base):  # allows project to override the codes
     __tablename__ = "project_level"
@@ -134,6 +130,7 @@ class Classification(BaseCode, Base):  # Discipline
 
     id = Column(Integer, primary_key=True, index=True)
 
+
 class ProjectClassification(Base):  # allows project to override the codes
     __tablename__ = "project_classification"
 
@@ -143,6 +140,7 @@ class ProjectClassification(Base):  # allows project to override the codes
 
     UniqueConstraint(project_id, classification_id)
 
+
 class InformationType(BaseCode, Base):  # Form
     """Stores the information type of a document."""
 
@@ -150,6 +148,7 @@ class InformationType(BaseCode, Base):  # Form
     __tablename__ = "information_type"
 
     id = Column(Integer, primary_key=True, index=True)
+
 
 class ProjectInformationType(Base):  # Form
     """Stores the information type of a document."""

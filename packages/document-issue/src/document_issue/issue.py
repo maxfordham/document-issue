@@ -1,10 +1,11 @@
-from document_issue.basemodel import BaseModel, Field
-from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
-from document_issue.constants import COL_WIDTH
 import datetime
 import typing as ty
-from pydantic import field_validator, model_validator
 
+from pydantic import Field, field_validator, model_validator
+
+from document_issue.basemodel import BaseModel
+from document_issue.constants import COL_WIDTH
+from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 
 description_author = "the person who authored the work."
 description_checked_by = "the person who checked the work."
@@ -64,9 +65,7 @@ class Issue(BaseModel):
     issue_notes: str = Field(  # TODO: issue_note ?
         "",
         title="Issue Notes",
-        description=(
-            "free field where the Engineer can briefly summarise changes/progress."
-        ),
+        description=("free field where the Engineer can briefly summarise changes/progress."),
         max_length=10000,
         json_schema_extra=dict(column_width=300),
     )
@@ -90,14 +89,11 @@ class Issue(BaseModel):
     def _issue_format(cls, v):
         if v in list(IssueFormatEnum.__members__.keys()):
             return getattr(IssueFormatEnum, v)
-        else:
-            return v
+        return v
 
     @model_validator(mode="after")
     def update_status_revision_fields(self) -> "Issue":
-        status_revision = (
-            lambda sr: sr.value if isinstance(sr, StatusRevisionEnum) else sr
-        )(self.status_revision)
+        status_revision = (lambda sr: sr.value if isinstance(sr, StatusRevisionEnum) else sr)(self.status_revision)
         (
             self.status_code,
             status_description,

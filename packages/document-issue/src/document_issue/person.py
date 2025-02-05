@@ -1,8 +1,9 @@
-from pydantic import Field
-from document_issue.basemodel import BaseModel
-from typing_extensions import Annotated
-from pydantic import BaseModel, AliasChoices
+from typing import Annotated
+
+from pydantic import AliasChoices, BaseModel, Field
 from pydantic.functional_validators import BeforeValidator
+
+from document_issue.basemodel import BaseModel
 
 
 def reduce_chars(v: str) -> str:

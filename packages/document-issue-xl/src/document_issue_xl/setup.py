@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # A very simple setup script to create a single executable
 #
 # hello.py is a very simple 'Hello, world' type script which also displays the
@@ -10,8 +8,10 @@
 # If everything works well you should find a subdirectory in the build
 # subdirectory that contains the files needed to run the script without Python
 
-import sys, os
-from cx_Freeze import setup, Executable
+import os
+import sys
+
+from cx_Freeze import Executable, setup
 
 base = None
 if sys.platform == "win32":

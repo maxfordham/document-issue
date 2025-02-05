@@ -1,8 +1,8 @@
 import pathlib
-import sys
-import xlwings as xw
 import shutil
+import sys
 
+import xlwings as xw
 
 FDIR_MODULE = pathlib.Path(__file__).parent.parent / "src" / "issue_sheet"
 sys.path.append(str(FDIR_MODULE))
@@ -11,8 +11,8 @@ FDIR_TEST_OUTPUTS = pathlib.Path(__file__).parent / "outputs"
 FPTH_DNG = pathlib.Path(__file__).parent.parent / "xl" / "DocumentNumberGenerator.xlsm"
 xw.Book(str(FPTH_DNG)).set_mock_caller()
 
-from d_i_read_excel import read_excel
 from constants import CONFIG_DIR
+from d_i_read_excel import read_excel
 
 PROJECT_NUMBER = "J3870"
 FDIR_DATA_PACKAGE = pathlib.Path(CONFIG_DIR) / PROJECT_NUMBER

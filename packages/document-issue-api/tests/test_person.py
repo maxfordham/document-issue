@@ -28,7 +28,7 @@ def test_get_person(post_person_then_delete):
 
 def test_get_people(post_person_then_delete):
     response = post_person_then_delete
-    response = client.get(f"/person/")
+    response = client.get("/person/")
     assert response.status_code == 200
     assert isinstance(response.json()[0]["initials"], str)
 

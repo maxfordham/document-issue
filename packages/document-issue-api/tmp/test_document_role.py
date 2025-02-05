@@ -1,6 +1,3 @@
-from setup_test_client import client, post_project_role_with_person_and_document_role
-
-
 # @pytest.mark.usefixtures("clear_data_func")
 # class TestDocumentRole:
 #     def test_post_document_role(self):

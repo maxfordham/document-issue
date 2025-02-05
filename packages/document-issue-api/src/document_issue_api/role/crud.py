@@ -1,9 +1,11 @@
 import logging
-from sqlalchemy.orm import Session
-import document_issue_api.role.schemas as schemas
-import document_issue_api.models as models
 import typing as ty
+
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.orm import Session
+
+from document_issue_api import models
+from document_issue_api.role import schemas
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +20,8 @@ def post_role(db: Session, role: schemas.RolePost) -> models.Role:
 
     Returns:
         models.Role: The postd role
-    """
 
+    """
     db_ = models.Role(**role.model_dump())
     db.add(db_)
     db.commit()
@@ -36,6 +38,7 @@ def get_role(db: Session, role_id: int) -> models.Role:
 
     Returns:
         models.Role: The getd role
+
     """
     db_ = db.get(models.Role, role_id)
     return db_
@@ -51,8 +54,8 @@ def get_roles(db: Session, skip: int = 0, limit: int = 100) -> ty.List[models.Ro
 
     Returns:
         ty.List[models.Role]: The getd roles
-    """
 
+    """
     db_ = db.query(models.Role).offset(skip).limit(limit).all()
     return db_
 
@@ -67,8 +70,8 @@ def patch_role(db: Session, role_id: int, role: schemas.RolePatch) -> models.Rol
 
     Returns:
         models.Role: The patched role
-    """
 
+    """
     db_ = db.get(models.Role, role_id)
     role_data = jsonable_encoder(db_)
     update_data = role.model_dump(exclude_unset=True)
@@ -89,8 +92,8 @@ def delete_role(db: Session, role_id: int) -> models.Role:
 
     Returns:
         models.Role: The deleted role
-    """
 
+    """
     db_ = db.get(models.Role, role_id)
     db.delete(db_)
     db.commit()

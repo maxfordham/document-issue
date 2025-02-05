@@ -1,22 +1,20 @@
-import shutil
 import datetime
-from polyfactory.factories.pydantic_factory import ModelFactory
+import shutil
 
-from document_issue.document_issue import DocumentIssue, Issue
-from document_issue.issue import StatusRevisionEnum
+import pytest
 from document_issue import demo_document_issue
+from document_issue.document_issue import Issue
+from document_issue.issue import StatusRevisionEnum
 from document_issue_io.markdown_document_issue import (
     Orientation,
-    PaperSize,
     OutputFormat,
+    PaperSize,
     generate_document_issue_pdf,
 )
+from pytest_examples import CodeExample, EvalExample, find_examples
 
 from tests.constants import FDIR_TEST_OUTPUT
 from tests.utils_check_doc_properties import check_quarto_doc_properties
-
-import pytest
-from pytest_examples import find_examples, CodeExample, EvalExample
 
 FPTH_TEST_DOC_ISSUE = FDIR_TEST_OUTPUT / "document_issue.json"
 FPTH_TEST_DOC_ISSUE_SCHEMA = FDIR_TEST_OUTPUT / "document_issue.schema.json"
@@ -24,15 +22,14 @@ FPTH_TEST_DOC_ISSUE_SCHEMA = FDIR_TEST_OUTPUT / "document_issue.schema.json"
 
 # TODO some genuine issues with cwd that need resolving
 @pytest.mark.skip(reason="Skipping this test temporarily")
-@pytest.mark.parametrize('example', find_examples('tests/examples/documents'), ids=str)
+@pytest.mark.parametrize("example", find_examples("tests/examples/documents"), ids=str)
 def test_examples(example: CodeExample, eval_example: EvalExample):
     if eval_example.update_examples:
-        # eval_example.format(example)    
+        # eval_example.format(example)
         eval_example.run_print_update(example)
     else:
         # eval_example.lint(example)
         eval_example.run_print_check(example)
-
 
 
 def create_test_document_issue():
@@ -84,7 +81,7 @@ class TestDocumentIssueReport:
         checked_props = check_quarto_doc_properties(fpth_md, fpth_pdf)
         assert all(item in ["title", "author"] for item in checked_props)  # , 'subject'
         # TODO: add "subject" as high-level discipline (e.g. mechanical, electrical etc.)
-    
+
     def test_report_a4_p_draft(self):
         FDIR_RENDER = FDIR_TEST_OUTPUT / "test_report_a4_p_draft"
         shutil.rmtree(FDIR_RENDER, ignore_errors=True)
@@ -96,7 +93,7 @@ class TestDocumentIssueReport:
         generate_document_issue_pdf(
             document_issue=document_issue,
             fpth_pdf=fpth_pdf,
-            is_draft=True
+            is_draft=True,
         )
         assert fpth_pdf.with_suffix(".md").is_file()
         assert fpth_pdf.is_file()
@@ -138,7 +135,9 @@ class TestDocumentIssueReport:
         document_issue.format_configuration.output_checked_by = False
         fpth_pdf = FDIR_RENDER / f"{document_issue.document_code}.pdf"
         generate_document_issue_pdf(
-            document_issue=document_issue, fpth_pdf=fpth_pdf, md_content=MD
+            document_issue=document_issue,
+            fpth_pdf=fpth_pdf,
+            md_content=MD,
         )
         assert fpth_pdf.is_file()
         # Check that the markdown file created contains the correct content

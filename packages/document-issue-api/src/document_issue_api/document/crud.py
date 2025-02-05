@@ -1,9 +1,10 @@
 import logging
-from sqlalchemy.orm import Session
-import document_issue_api.document.schemas as schemas
-import document_issue_api.models as models
 import typing as ty
-from fastapi.encoders import jsonable_encoder
+
+from sqlalchemy.orm import Session
+
+from document_issue_api import models
+from document_issue_api.document import schemas
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,8 @@ def post_document(db: Session, document: schemas.DocumentBasePost) -> models.Doc
 
     Returns:
         models.Document: The posted document
-    """
 
+    """
     db_document = models.Document(**document.model_dump())
     db.add(db_document)
     db.commit()
@@ -35,15 +36,15 @@ def get_document(db: Session, document_id: int) -> models.Document:
 
     Returns:
         models.Document: The requested document
-    """
 
+    """
     return db.get(models.Document).filter(models.Document.id == document_id).first()
 
 
 def get_document_issue(db: Session, document_id: int) -> schemas.DocumentIssueGet:
     db_ = get_document(db=db, document_id=document_id)
     roles = schemas.ProjectRoles.model_validate(
-        [_.role.project_role[0] for _ in db_.document_role]
+        [_.role.project_role[0] for _ in db_.document_role],
     )
     d_i = schemas.DocumentIssueGet.model_validate(db_)
     d_i.document_role = roles
@@ -51,7 +52,9 @@ def get_document_issue(db: Session, document_id: int) -> schemas.DocumentIssueGe
 
 
 def get_documents(
-    db: Session, skip: int = 0, limit: int = 100
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
 ) -> ty.List[models.Document]:
     """Get documents.
 
@@ -62,13 +65,15 @@ def get_documents(
 
     Returns:
         ty.List[models.Document]: The requested documents
-    """
 
+    """
     return db.query(models.Document).offset(skip).limit(limit).all()
 
 
 def patch_document(
-    db: Session, document_id: int, document: schemas.DocumentBase
+    db: Session,
+    document_id: int,
+    document: schemas.DocumentBase,
 ) -> models.Document:
     """Patch a document.
 
@@ -79,11 +84,9 @@ def patch_document(
 
     Returns:
         models.Document: The patched document
-    """
 
-    db_document = (
-        db.query(models.Document).filter(models.Document.id == document_id).first()
-    )
+    """
+    db_document = db.query(models.Document).filter(models.Document.id == document_id).first()
     update_data = document.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_document, key, value)
@@ -102,11 +105,11 @@ def delete_document(db: Session, document_id: int) -> models.Document:
 
     Returns:
         models.Document: The deleted document
+
     """
     from sqlalchemy.orm import Query
-    db_document = (
-        db.query(models.Document).filter(Query.with_parent(models.Document.id == document_id)).first()
-    )
+
+    db_document = db.query(models.Document).filter(Query.with_parent(models.Document.id == document_id)).first()
     db.delete(db_document)
     db.commit()
     return db_document

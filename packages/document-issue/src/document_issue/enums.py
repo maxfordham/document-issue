@@ -1,5 +1,5 @@
-from enum import Enum
 import csv
+from enum import Enum
 
 
 class RoleEnum(Enum):
@@ -105,7 +105,7 @@ A2,published (contractual),C,Contractual revision,Issued for Tender (2nd Stage)
 A3,published (contractual),C,Contractual revision,Issued for Contract
 A4,published (contractual),C,Contractual revision,"Issued for Contractor design, procurement & coordination"
 A5,published (contractual),C,Contractual revision,"Issued for procurement, manufacture & installation"
-CR,published (for AIM acceptance),C,Contractual revision,As constructed record document""".splitlines()
+CR,published (for AIM acceptance),C,Contractual revision,As constructed record document""".splitlines(),
     )
 }
 
