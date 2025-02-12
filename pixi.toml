@@ -62,3 +62,10 @@ tests = { depends-on = [
 ] }
 lint = "ruff check --fix"
 format = "ruff format"
+mk-jdrive = { cmd = "mkdir -p /home/jovyan/jobs"}
+chmod-scripts = { cmd = "chmod +x *.sh", cwd = "SECRETS"}
+mnt-jdrive = { cmd = "./mnt-jdrive.sh", depends-on = ["mk-jdrive"], cwd = "SECRETS"}
+get-data = {cmd = "./get-data.sh", cwd = "SECRETS"}
+push-data = {cmd = "./push-data.sh", cwd = "SECRETS"}
+pull-data = {cmd = "./pull-data.sh", cwd = "SECRETS"}
+find-files = { cmd = "python find_files.py", cwd = "packages/document-issue-data/scripts"} 
