@@ -24,6 +24,9 @@
         },
         {
             "path": "../packages/document-classification"
+        },
+        {
+            "path": "../packages/document-issue-data"
         }
     ],
     "settings": {

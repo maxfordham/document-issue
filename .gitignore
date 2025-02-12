@@ -7,6 +7,8 @@ docs/document-issue-quarto-examples/**/document.pdf
 packages/document-issue-quarto/**/document.pdf
 packages/document-issue-quarto/**/document.html
 packages/document-issue-quarto/**/document_files/**
+packages/document-issue-data/scripts/data-raw/*
+packages/document-issue-data/scripts/data-processed/*
 
 docs/references/BS EN ISO 19650.pdf
 
@@ -16,7 +18,7 @@ _version.py
 /.quarto/
 
 .pixi/
-
+SECRETS/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
