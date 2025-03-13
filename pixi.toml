@@ -33,11 +33,19 @@ pytest = "*"
 [feature.document-issue.pypi-dependencies]
 document-issue = { path = "packages/document-issue", editable = true }
 
-[environments]
-document-issue = { features = ["document-issue"], no-default-feature = true }
-
 [feature.document-issue.tasks]
 test-document-issue = { cmd = "pytest", cwd = "packages/document-issue" }
+
+[environments]
+document-issue = { features = ["document-issue"], no-default-feature = true }
+dashboard = ["dashboard"]
+
+[feature.dashboard.dependencies]
+nodejs = "*"
+
+[feature.dashboard.tasks]
+dashboard-install = { cmd = "npm install", cwd = "packages/document-issue-data/dashboard" }
+dashboard-preview = { cmd = "npm run dev", cwd = "packages/document-issue-data/dashboard" }
 
 [tasks]
 test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto" }
@@ -61,11 +69,14 @@ tests = { depends-on = [
     "test-document-issue-api",
 ] }
 lint = "ruff check --fix"
-format = "ruff format"
+format = "ruff format"  
 mk-jdrive = { cmd = "mkdir -p /home/jovyan/jobs"}
 chmod-scripts = { cmd = "chmod +x *.sh", cwd = "SECRETS"}
 mnt-jdrive = { cmd = "./mnt-jdrive.sh", depends-on = ["mk-jdrive"], cwd = "SECRETS"}
 get-data = {cmd = "./get-data.sh", cwd = "SECRETS"}
 push-data = {cmd = "./push-data.sh", cwd = "SECRETS"}
 pull-data = {cmd = "./pull-data.sh", cwd = "SECRETS"}
+cp-to-dashboard ={ cmd = "./cp-to-dashboard.sh", cwd = "SECRETS"} 
 find-files = { cmd = "python find_files.py", cwd = "packages/document-issue-data/scripts"} 
+
+

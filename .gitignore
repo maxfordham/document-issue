@@ -9,6 +9,8 @@ packages/document-issue-quarto/**/document.html
 packages/document-issue-quarto/**/document_files/**
 packages/document-issue-data/scripts/data-raw/*
 packages/document-issue-data/scripts/data-processed/*
+packages/document-issue-data/scripts/data-processed-1/*
+packages/document-issue-data/dashboard/src/data/latest*
 
 docs/references/BS EN ISO 19650.pdf
 
