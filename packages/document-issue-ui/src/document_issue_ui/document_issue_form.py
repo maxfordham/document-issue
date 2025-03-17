@@ -109,9 +109,9 @@ class IssueGrid(EditGrid):
 
 
 class DocumentIssueUi(DocumentIssue):
-    """Metadata classifying a document and its status within a project"""
+    """Metadata classifying a document and its status within a project."""
 
-    issue_history: ty.List[Issue] = Field(
+    issue_history: list[Issue] = Field(
         [],
         alias="issue",
         description="list of issues",

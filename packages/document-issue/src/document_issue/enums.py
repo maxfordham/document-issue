@@ -78,7 +78,7 @@ class DocSource(Enum):
 
 
 class IssueFormatEnum(Enum):
-    """maps IssueFormat codes to string description"""
+    """maps IssueFormat codes to string description."""
 
     cde = "Uploaded to the project common data environment"
     ea = "Sent as Email attachment"
@@ -89,8 +89,8 @@ class IssueFormatEnum(Enum):
 
 # status_code,status_description,revision_code,revision_description,description
 MAP_STATUS = {
-    f"{l[0]}_{l[2]}": " - ".join(l)
-    for l in csv.reader(
+    f"{x[0]}_{x[2]}": " - ".join(x)
+    for x in csv.reader(
         """S0,work in progress,P,Preliminary revision and version,Initial Status
 S1,shared (non-contractual),P,Preliminary revision,Suitable for Coordination
 S2,shared (non-contractual),P,Preliminary revision,Suitable for Information
@@ -108,5 +108,8 @@ A5,published (contractual),C,Contractual revision,"Issued for procurement, manuf
 CR,published (for AIM acceptance),C,Contractual revision,As constructed record document""".splitlines(),
     )
 }
+
+from project_configuration import get_status_revision
+MAP_STATUS = get_status_revision().map_status
 
 StatusRevisionEnum = Enum("StatusRevisionEnum", MAP_STATUS)
