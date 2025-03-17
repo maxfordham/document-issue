@@ -29,17 +29,19 @@ dependencies = [
     "stringcase",
     "tabulate",
     "PyYAML",
+    
 ]
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/unknown/document-issue#readme"
-Issues = "https://github.com/unknown/document-issue/issues"
-Source = "https://github.com/unknown/document-issue"
+Documentation = "https://github.com/maxfordham/document-issue#readme"
+Issues = "https://github.com/maxfordham/document-issue/issues"
+Source = "https://github.com/maxfordham/document-issue"
 
 [tool.hatch.version]
 source = "vcs"
 raw-options = { root = "../.." }
+
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
 pythonpath = "tests"
