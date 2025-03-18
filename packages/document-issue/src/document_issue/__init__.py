@@ -1,3 +1,8 @@
+"""package defining data models for information fields required when issuing documents in accordance with BS EN 19650."""
+
+import sys
+from types import ModuleType
+
 from document_issue.document import Document
 from document_issue.document_issue import DocumentIssue
 from document_issue.issue import Issue
@@ -9,7 +14,23 @@ __all__ = [
 ]
 
 
-def demo_document_issue():
+def _require(name: str) -> ModuleType:
+    """Reload module."""
+    from importlib import import_module, reload
+
+    if name in sys.modules:
+        return reload(sys.modules[name])
+    return import_module(name)
+
+
+def reload_document_issue() -> None:
+    """Reload modules."""
+    li = [x for x in sys.modules if "document_issue." in x]
+    for x in li:
+        _require(x)
+
+def demo_document_issue() -> DocumentIssue:
+    """Get dummy data."""
     from document_issue.enums import RoleEnum, StatusRevisionEnum
     from document_issue.role import DocumentRole
 

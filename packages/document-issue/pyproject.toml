@@ -29,7 +29,7 @@ dependencies = [
     "stringcase",
     "tabulate",
     "PyYAML",
-    
+    # "bep @ ../packages/bep"
 ]
 dynamic = ["version"]
 
