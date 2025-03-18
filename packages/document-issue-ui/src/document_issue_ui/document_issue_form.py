@@ -1,22 +1,19 @@
-import typing as ty
+from __future__ import annotations
+
 from datetime import date, datetime
-from typing import Type, Union
 
 import ipywidgets as w
 import traitlets as tr
 import yaml
 from document_issue.document_issue import DocumentIssue, Issue
 from ipyautoui.autodisplay_renderers import preview_yaml_string
-
-# +
 from ipyautoui.autoobject import AutoObjectForm
 from ipyautoui.autoui import AutoUiFileMethods, WrapSaveButtonBar
 from ipyautoui.custom.buttonbars import CrudOptions, CrudView
 from ipyautoui.custom.editgrid import EditGrid, UiDelete
 from IPython.display import clear_output
+from jsonref import replace_refs
 from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
-
-# -
 
 HEADER_BACKGROUND_COLOUR = "rgb(207, 212, 252, 1)"
 
@@ -71,17 +68,33 @@ BUTTONBAR_CONFIG_TYPES = CrudView(
 class IssueHistory(RootModel):
     root: list[Issue]
 
-
 class IssueForm(AutoObjectForm):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+
+        schema = Issue.model_json_schema()
+        schema = replace_refs(schema, merge_props=True)
+        schema = {k: v for k, v in schema.items() if k != "$defs"}
+        if "value" in kwargs and kwargs["value"] is not None:
+            schema["value"] = kwargs["value"]
+        schema = {**schema, **kwargs}
+        super().__init__(**schema)
         self.model = Issue
+        self.schema = schema
+        self._init_validation_error()
         self._set_validate_value(self.value)
-        display_bn_shownull = False
+        self.display_bn_shownull = False
+
+
+if __name__ == "__main__":
+    from IPython.display import display
+    issue = IssueForm()
+    display(issue)
+
+# +
 
 
 class IssueGrid(EditGrid):
-    def __init__(self, schema: Union[dict, Type[BaseModel]] = None, **kwargs):
+    def __init__(self, schema: dict | type[BaseModel] | None = None, **kwargs):
         kwargs["schema"] = IssueHistory
         kwargs["ui_add"] = IssueForm
         kwargs["ui_edit"] = IssueForm
@@ -108,6 +121,9 @@ class IssueGrid(EditGrid):
         self.buttonbar_grid.message.value = f"<i>changes saved: {datetime.now().strftime('%H:%M:%S')}</i>"
 
 
+
+
+# +
 class DocumentIssueUi(DocumentIssue):
     """Metadata classifying a document and its status within a project."""
 
@@ -170,6 +186,13 @@ class DocumentIssueForm(
         self.di_widgets["project_number"].value = self.project_number
         self.di_widgets["project_name"].value = self.project_name
 
+    def update_issue_model(self):
+        from document_issue import reload_document_issue
+        reload_document_issue()
+        from document_issue.issue import Issue
+        self.di_widgets["issue_history"].ui_edit.update_model(Issue)
+        self.di_widgets["issue_history"].ui_add.update_model(Issue)
+
 
 def get_document_issue_form(
     map_projects: dict,
@@ -207,3 +230,7 @@ if __name__ == "__main__":
     )
     display(ui)
 # -
+
+
+
+

@@ -23,7 +23,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["ipywidgets", "ipyautoui", "jupytext", "voila"]
+dependencies = ["ipywidgets", "ipyautoui>=0.7.24", "jupytext", "voila"]
 
 [project.urls]
 Documentation = "https://github.com/unknown/document-issue-ui#readme"
