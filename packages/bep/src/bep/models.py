@@ -1,7 +1,9 @@
-from pydantic import BaseModel, RootModel, computed_field
-from enum import Enum
-import pathlib
+"""Models for the BEP package."""
 import csv
+import pathlib
+from enum import Enum
+
+from pydantic import BaseModel, RootModel, computed_field
 
 
 class RevisionTypeEnum(Enum):
@@ -48,7 +50,7 @@ class StatusRevisionTable(RootModel):
         return {x: y for z in self.root for x, y in z.map_status.items()}
 
 def read_csv_records(fpth: pathlib.Path, model: type[BaseModel]) -> RootModel:
-    """reads and validates a pydantic model."""
+    """Read and validate a pydantic model."""
     li = [StatusRevision(**x) for x in list(csv.DictReader(fpth.read_text().replace("\ufeff", "").splitlines()))]
     return model(li)
 

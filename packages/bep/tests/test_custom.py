@@ -11,6 +11,6 @@ os.environ["PROJECT_CONFIGURATION_STATUS_REVISION"] = str(fpth_status_revision)
 
 def test_custom():
     
-    import project_configuration
-    project_configuration.STATUS_REVISION
-    project_configuration.SETTINGS.STATUS_REVISION == fpth_status_revision
+    import bep
+    STATUS_REVISION = bep.get_status_revision()
+    STATUS_REVISION == fpth_status_revision
