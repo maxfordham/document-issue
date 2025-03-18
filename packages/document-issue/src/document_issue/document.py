@@ -1,4 +1,6 @@
-import typing as ty
+"""Models for document."""
+from __future__ import annotations
+
 from typing import Annotated
 
 from annotated_types import Len
@@ -10,7 +12,7 @@ from document_issue.enums import DocSource, PaperSizeEnum, ScalesEnum
 
 
 class FormatConfiguration(BaseModel):
-    """configuration options that determine how the output is displayed"""
+    """configuration options that determine how the output is displayed."""
 
     date_string_format: str = Field(
         "%d %^b %y",
@@ -44,6 +46,8 @@ Note = Annotated[
 
 
 class DocumentBase(BaseModel):
+    """Required information fields that define the metadata of a document."""
+
     name_nomenclature: str = Field(  # TODO: Add validation to ensure only certain words (shown in default) are used
         "project-originator-volume-level-infotype-role-number",  # TODO: infotype --> type
         description=description_name_nomenclature,
@@ -63,13 +67,12 @@ class DocumentBase(BaseModel):
         examples=DocSource._member_names_,
         alias="doc_source",
     )
-    # document_filetype: str = Field() # include this?
-    paper_size: ty.Union[str, PaperSizeEnum] = Field(
+    paper_size: str | PaperSizeEnum = Field(
         "A4",
         description="paper size of the document",
         alias="size",
     )
-    scale: ty.Union[str, ScalesEnum] = Field(
+    scale: str | ScalesEnum = Field(
         "nts",
         description='if drawing, give scale, else "not to scale" (NTS)',
     )
@@ -80,31 +83,36 @@ class DocumentBase(BaseModel):
             "the company the info came from (fixed to be Max Fordham LLP). the name"
             " 'originator' comes from BS EN ISO 19650-2"
         ),
-        json_schema_extra=dict(type="string", disabled=True),
+        json_schema_extra={"type": "string", "disabled": True},
     )  # TODO: remove. should be picked up in classification data.
-    notes: ty.List[Note] = Field(
+    notes: list[Note] = Field(
         ["add notes here"],
         description="Engineering Notes to accompany the Document.",
     )
 
     @field_validator("name_nomenclature")
     @classmethod
-    def validate_name_nomenclature(cls, v):
-        """Fix the author to always be Max Fordham LLP"""
+    def validate_name_nomenclature(cls, v: str)-> str:
+        """Fix the author to always be Max Fordham LLP."""
         li_name = v.split("-")
         li_nomenclature = v.split("-")
         len_name = len(li_name)
         len_nomenclature = len(li_nomenclature)
         if len_name != len_nomenclature:
-            raise ValueError(
+            msg = (
                 f"""
             number of sections in document_code == {len_name}
             number of sections in name_nomenclature == {len_nomenclature}
-            they must match!""",
+            they must match!"""
+            )
+            raise ValueError(
+                msg,
             )
         li_nomenclature = [s.strip() for s in li_nomenclature]
         return "-".join(li_nomenclature)
 
 
 class Document(DocumentBase):
+    """Document model."""
+
     format_configuration: FormatConfiguration = FormatConfiguration()
