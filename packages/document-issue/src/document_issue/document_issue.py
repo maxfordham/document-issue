@@ -30,7 +30,7 @@ from document_issue.role import DocumentRole
 # ------------------------------------------------------------------------------------------
 
 
-def document_role_before(v: ty.List) -> ty.List:
+def _document_role_before(v: list) -> list:
     if len(v) == 0:
         v = [DocumentRole(role=RoleEnum.director, initials="DR")]
     else:
@@ -38,23 +38,22 @@ def document_role_before(v: ty.List) -> ty.List:
     return v
 
 
-def document_role_after(v: ty.List[DocumentRole]) -> ty.List[DocumentRole]:
+def _document_role_after(v: list[DocumentRole]) -> list[DocumentRole]:
     if len(v) > 0:
-        if v[0].role_name != RoleEnum.director:
-            if v[0].role_name != "Director in Charge":
-                v = [DocumentRole(role=RoleEnum.director, initials="DR")] + v
+        if v[0].role_name != RoleEnum.director and v[0].role_name != "Director in Charge":
+            v = [DocumentRole(role=RoleEnum.director, initials="DR"), *v]
     else:
         pass
     return v
 
 
 class DocumentIssue(Document, ProjectBase):
-    """metadata classifying a document and it's status within a project"""
+    """metadata classifying a document and it's status within a project."""
 
     document_role: Annotated[
-        ty.List[DocumentRole],
-        BeforeValidator(document_role_before),
-        AfterValidator(document_role_after),
+        list[DocumentRole],
+        BeforeValidator(_document_role_before),
+        AfterValidator(_document_role_after),
     ] = Field(
         [],
         alias="roles",  # TODO: make validation alias
@@ -62,11 +61,11 @@ class DocumentIssue(Document, ProjectBase):
         description="indicates people responsible for this document",
         validate_default=True,
     )
-    issue_history: ty.List[Issue] = Field(
+    issue_history: list[Issue] = Field(
         [],
         alias="issue",  # TODO: make validation alias
         description="list of issues",
-        json_schema_extra=dict(format="dataframe"),
+        json_schema_extra={"format": "dataframe"},
     )
 
     @property
@@ -163,7 +162,7 @@ class DocumentIssue(Document, ProjectBase):
 
 class DocumentIssueClassification(DocumentIssue):
     classification: Classification = Field(None)  # TODO: add classification
-    # roles: ty.List[Role] #TODO add roles
+    # roles: list[Role] #TODO add roles
 
 
 class DocumentIssueV2(DocumentIssue):  # allow None now... but will make these required fields eventually

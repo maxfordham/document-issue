@@ -27,6 +27,9 @@
         },
         {
             "path": "../packages/document-issue-data"
+        },
+        {
+            "path": "../packages/bep"
         }
     ],
     "settings": {

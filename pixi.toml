@@ -23,8 +23,9 @@ document-issue-io = { path = "packages/document-issue-io", extras = [
 document-issue = { path = "packages/document-issue", editable = true }
 document-issue-api = { path = "packages/document-issue-api", editable = true }
 document-issue-ui = { path = "packages/document-issue-ui", editable = true }
+bep = { path = "packages/bep", editable = true }
 pytest-examples = ">=0.0.15, <0.0.16"
-
+# ipyautoui = { path = "../../ipyautoui", editable = true } # DEV ONLY
 
 [feature.document-issue.dependencies]
 python = ">=3.8"
@@ -32,6 +33,7 @@ pytest = "*"
 
 [feature.document-issue.pypi-dependencies]
 document-issue = { path = "packages/document-issue", editable = true }
+bep = { path = "packages/bep", editable = true }
 
 [feature.document-issue.tasks]
 test-document-issue = { cmd = "pytest", cwd = "packages/document-issue" }
@@ -51,11 +53,13 @@ dashboard-preview = { cmd = "npm run dev", cwd = "packages/document-issue-data/d
 test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto" }
 test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io" }
 test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api", env = { SQLALCHEMY_WARN_20 = "1" } }
+test-bep = { cmd = "pytest", cwd = "packages/bep"}
 update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io" }
 update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"
 build-docs = { cmd = "quarto render .", cwd = "docs" } #, depends-on = ["test-document-issue-io"]
 preview-docs = { cmd = "quarto preview .", cwd = "docs" }
 demo-ui = { cmd = "voila demo.ipynb", cwd = "packages/document-issue-ui" }
+jlab-ui = { cmd = "jupyter lab demo.ipynb", cwd = "packages/document-issue-ui" }
 demo-api = { depends-on = [
     "test-document-issue",
     "test-document-issue-quarto",
