@@ -1,0 +1,11 @@
+code,description
+XX,Level Not Applicable
+ZZ,Multiple Levels
+B2,Basement Level -2
+B1,Basement Level -1
+00,Level 00
+M0,Mezzanine above level 00
+01,Level 01
+M1,Mezzanine above level 01
+02,Level 02
+RF,Roof Level
