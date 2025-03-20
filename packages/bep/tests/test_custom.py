@@ -4,7 +4,7 @@ import pathlib
 fdir = pathlib.Path(__file__).parent
 fpth_status_revision = fdir.joinpath("data/status_revision.csv")
 
-os.environ["PROJECT_CONFIGURATION_STATUS_REVISION"] = str(fpth_status_revision)
+os.environ["BEP_STATUS_REVISION"] = str(fpth_status_revision)
 
 def test_custom():
 

@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     STATUS_REVISION: HttpUrl | pathlib.Path | ImportString | None = None
 
-    model_config = SettingsConfigDict(env_prefix="PROJECT_CONFIGURATION_")
+    model_config = SettingsConfigDict(env_prefix="BEP_")
 
 SETTINGS = Settings()
 
