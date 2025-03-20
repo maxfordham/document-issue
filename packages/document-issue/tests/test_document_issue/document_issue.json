@@ -7,7 +7,7 @@
     "name_nomenclature": "project-originator-volume-level-infotype-role-number",
     "document_code": "06667-MXF-XX-XX-SH-M-20003",
     "document_description": "Document Description",
-    "document_source": "WD",
+    "document_source": "DS",
     "paper_size": "A4",
     "scale": "nts",
     "originator": "Max Fordham LLP",
@@ -29,7 +29,7 @@
         {
             "revision_number": 1,
             "date": "2021-01-01",
-            "status_revision": "S0 - work in progress - P - Preliminary revision and version - Initial Status",
+            "status_revision": "S0 - work in progress - P - Preliminary revision - Initial Status",
             "revision": "P01",
             "status_code": "S0",
             "status_description": "Initial Status",
