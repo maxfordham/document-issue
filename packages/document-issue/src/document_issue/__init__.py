@@ -36,7 +36,7 @@ def demo_document_issue() -> DocumentIssue:
 
     issue = Issue(status_revision=StatusRevisionEnum.A4_C)
     document_issue = DocumentIssue(
-        document_role=[DocumentRole(role_name=RoleEnum.director, name="DR")],
+        document_role=[DocumentRole(role_name=RoleEnum.director_in_charge, name="DR")],
         issue_history=[issue],
         notes=[
             "This is a note",

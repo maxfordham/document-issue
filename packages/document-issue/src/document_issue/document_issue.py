@@ -32,7 +32,7 @@ from document_issue.role import DocumentRole
 
 def _document_role_before(v: list) -> list:
     if len(v) == 0:
-        v = [DocumentRole(role=RoleEnum.director, initials="DR")]
+        v = [DocumentRole(role=RoleEnum.director_in_charge, initials="DR")]
     else:
         pass
     return v
@@ -40,8 +40,8 @@ def _document_role_before(v: list) -> list:
 
 def _document_role_after(v: list[DocumentRole]) -> list[DocumentRole]:
     if len(v) > 0:
-        if v[0].role_name != RoleEnum.director and v[0].role_name != "Director in Charge":
-            v = [DocumentRole(role=RoleEnum.director, initials="DR"), *v]
+        if v[0].role_name != RoleEnum.director_in_charge and v[0].role_name != "Director in Charge":
+            v = [DocumentRole(role=RoleEnum.director_in_charge, initials="DR"), *v]
     else:
         pass
     return v
@@ -149,7 +149,7 @@ class DocumentIssue(Document, ProjectBase):
     @property
     def director_in_charge(self):
         for role in self.document_role:
-            if role.role_name == RoleEnum.director or role.role_name == RoleEnum.director.value:
+            if role.role_name == RoleEnum.director_in_charge or role.role_name == RoleEnum.director_in_charge.value:
                 return role.initials
 
     # TODO: add this validation after ensuring that a director is shown on all existing schedules

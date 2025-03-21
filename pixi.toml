@@ -14,6 +14,7 @@ r-tinytex = "*"
 pandas = "*"
 quarto = "<1.7"
 ruff = "*"
+# mysql-connector-python = "*" # NOTE: conda version older so not using...
 # eralchemy = "*" # TODO: figure out why this isn't working...
 
 [pypi-dependencies]
@@ -25,6 +26,7 @@ document-issue-api = { path = "packages/document-issue-api", editable = true }
 document-issue-ui = { path = "packages/document-issue-ui", editable = true }
 bep = { path = "packages/bep", editable = true }
 pytest-examples = ">=0.0.15, <0.0.16"
+mysql-connector-python = "*" # TODO: add mfdb
 # ipyautoui = { path = "../../ipyautoui", editable = true } # DEV ONLY
 
 [feature.document-issue.dependencies]
@@ -82,5 +84,5 @@ push-data = {cmd = "./push-data.sh", cwd = "SECRETS"}
 pull-data = {cmd = "./pull-data.sh", cwd = "SECRETS"}
 cp-to-dashboard ={ cmd = "./cp-to-dashboard.sh", cwd = "SECRETS"} 
 find-files = { cmd = "python find_files.py", cwd = "packages/document-issue-data/scripts"} 
-
+get-project-roles = { cmd = "python get-project-roles.py", cwd = "packages/bep/scripts"} 
 

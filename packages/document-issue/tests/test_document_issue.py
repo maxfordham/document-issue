@@ -50,7 +50,7 @@ def test_current_issue():
 def test_custom_bep():
     """Test that the custom project configuration is loaded."""
     import os
-    os.environ["PROJECT_CONFIGURATION_STATUS_REVISION"] = "/home/jovyan/repos/document-issue/packages/bep/tests/data/status_revision.csv"
+    os.environ["BEP_STATUS_REVISION"] = "/home/jovyan/repos/document-issue/packages/bep/tests/data/status_revision.csv"
     reload_document_issue()
     try:
         docissue = DocumentIssue(issue_history=[Issue(status_code="A")])

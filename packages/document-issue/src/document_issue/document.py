@@ -19,13 +19,13 @@ class FormatConfiguration(BaseModel):
         description=("date display format. refer to: https://www.programiz.com/python-programming/datetime/strptime"),
     )
     output_author: bool = Field(
-        False,
+        False,  # noqa: FBT003
         description=(
             "Include the initials of the author in the client facing output. Often avoided but some clients require it."
         ),
     )
     output_checked_by: bool = Field(
-        False,
+        False,  # noqa: FBT003
         description=(
             "Include the initials of the checker in the client facing output."
             " Often avoided but some clients require it."
@@ -62,7 +62,7 @@ class DocumentBase(BaseModel):
         description="human readable description of the document",
     )
     document_source: str = Field(
-        "WD",
+        "DS",
         description="software used to author the document",
         examples=DocSource._member_names_,
         alias="doc_source",

@@ -2,38 +2,13 @@
 import csv
 from enum import Enum
 
-from bep import get_status_revision
+from bep import get_status_revision, get_project_roles
 
+MAP_STATUS = get_status_revision().map_status
+StatusRevisionEnum = Enum("StatusRevisionEnum", MAP_STATUS)
 
-class RoleEnum(Enum):
-    director = "Director in Charge"
-    lead_crm = "Client Relationship Management (CRM) Lead"
-    lead_management = "Management Lead"
-    lead_commercial = "Commercial Lead"
-    lead_design = "Design Strategy Lead"
-    lead_mechanical = "Lead Mechanical Engineer"
-    lead_electrical = "Lead Electrical Engineer"
-    lead_h_and_s = "Health and Safety Lead"
-    lead_sustainability = "Lead Sustainability Consultant"
-    lead_bpm = "Lead Building Performance Modeller"
-    lead_acoustics = "Lead Acoustician"
-    lead_passivhaus = "Lead Passivhaus"
-    project_engineer = "Project Engineer"
-    proj_coordinator = "Project Coordinator"
-    proj_admin = "Project Administrator"
-    rev_strategy = "Strategy Reviewer"
-    rev_technical = "Technical Reviewer"
-    eng_bpm = "Building Performance Modeller"
-    eng_systems = "Systems Engineer"
-    eng_site = "Site Engineer"
-    eng_digital = "Digital Design Engineer"
-    eng_acoustics = "Acoustician"
-    eng_passivhaus = "Passivhaus Engineer"
-    con_sustainability = "Sustainability Consultant"
-    con_bim = "BIM Strategy Advisor"
-
-
-# TODO: map role descriptions ?
+MAP_PROJECT_ROLES = get_project_roles().map_project_roles
+RoleEnum = Enum("RoleEnum", MAP_PROJECT_ROLES)
 
 
 class PaperSizeEnum(Enum):
@@ -91,6 +66,3 @@ class IssueFormatEnum(Enum):
 
 
 
-MAP_STATUS = get_status_revision().map_status
-
-StatusRevisionEnum = Enum("StatusRevisionEnum", MAP_STATUS)

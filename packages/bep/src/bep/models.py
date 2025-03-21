@@ -1,4 +1,6 @@
 """Models for the BEP package."""
+
+from __future__ import annotations
 import csv
 import pathlib
 from enum import Enum
@@ -49,10 +51,34 @@ class StatusRevisionTable(RootModel):
     def map_status(self) -> dict:  # noqa: D102
         return {x: y for z in self.root for x, y in z.map_status.items()}
 
-def read_csv_records(fpth: pathlib.Path, model: type[BaseModel]) -> RootModel:
-    """Read and validate a pydantic model."""
-    li = [StatusRevision(**x) for x in list(csv.DictReader(fpth.read_text().replace("\ufeff", "").splitlines()))]
-    return model(li)
+
+def read_csv_records(fpth: pathlib.Path | str, model: type[RootModel]) -> RootModel:
+    """Read and validate a pydantic model from filepath or from csv string."""
+    s = fpth.read_text().replace("\ufeff", "") if isinstance(fpth, pathlib.Path) else fpth
+    return model(list(csv.DictReader(s.splitlines())))
+
+
+class ProjectRole(BaseModel):
+    """Project Role model."""
+
+    role_name: str
+    role_title: str
+    role_category: str
+
+
+class ProjectRoleTable(RootModel):
+    root: list[ProjectRole]
+
+    @computed_field
+    @property
+    def map_project_roles(self) -> dict:  # noqa: D102
+        return {x.role_name: x.role_title for x in self.root}
+
+
+def _test_get_project_roles_table():
+    """Test project roles."""
+
+    return [{"role_name": "director_in_change", "role_title": "Director in Charge", "role_category": "Director"}]
 
 
 # class Classification(BaseModel):

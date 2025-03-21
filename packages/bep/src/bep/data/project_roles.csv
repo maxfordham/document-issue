@@ -1,0 +1,42 @@
+role_name,role_title,role_category
+director_in_charge,Director in Charge,Director
+project_leader,Project Leader,Project Lead
+client_relationship_leader,Client Relationship Leader,Project Lead
+commercial_leader,Commercial Leader,Project Lead
+health_and_safety_lead,Health and Safety Lead,Project Lead
+project_administrator,Project Administrator,Project Support
+project_coordinator,Project Coordinator,Project Support
+project_engineer,Project Engineer,MEP
+project_mechanical_engineer,Project Mechanical Engineer,MEP
+site_engineer,Site Engineer,MEP
+final_mechanical_reviewer,Final Mechanical Reviewer,MEP
+bim_strategy_advisor,BIM Strategy Advisor,MEP
+engineer,Engineer,MEP
+digital_design_engineer,Digital Design Engineer,MEP
+sector_strategy_reviewer,Sector Strategy Reviewer,MEP
+electrical_sponsor,Electrical Sponsor,MEP
+mechanical_sponsor,Mechanical Sponsor,MEP
+final_electrical_reviewer,Final Electrical Reviewer,MEP
+project_electrical_engineer,Project Electrical Engineer,MEP
+mep_strategy_leader,MEP Strategy Leader,MEP
+building_performance_modeller_sponsor,Building Performance Modeller Sponsor,Building Performance Modelling
+project_building_performance_modeller,Project Building Performance Modeller,Building Performance Modelling
+building_performance_modeller,Building Performance Modeller,Building Performance Modelling
+final_model_reviewer,Final Model Reviewer,Building Performance Modelling
+final_sustainability_reviewer,Final Sustainability Reviewer,Sustainability
+sustainability_sponsor,Sustainability Sponsor,Sustainability
+project_sustainability_consultant,Project Sustainability Consultant,Sustainability
+sustainability_consultant,Sustainability Consultant,Sustainability
+sustainability_strategy_leader,Sustainability Strategy Leader,Sustainability
+project_acoustician,Project Acoustician,Acoustics
+acoustic_sponsor,Acoustic Sponsor,Acoustics
+final_acoustics_reviewer,Final Acoustics Reviewer,Acoustics
+acoustician,Acoustician,Acoustics
+project_light_and_air_specialist,Project Light and Air Specialist,Light and Air
+light_and_air_specialist,Light and Air Specialist,Light and Air
+final_light_and_air_reviewer,Final Light and Air Reviewer,Light and Air
+light_and_air_sponsor,Light and Air Sponsor,Light and Air
+passivhaus_designer,Passivhaus Designer,Passivhaus
+project_passivhaus_designer,Project Passivhaus Designer,Passivhaus
+final_passivhaus_reviewer,Final Passivhaus Reviewer,Passivhaus
+passivhaus_sponsor,Passivhaus Sponsor,Passivhaus
