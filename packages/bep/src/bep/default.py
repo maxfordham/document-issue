@@ -1,7 +1,7 @@
-from importlib.resources import files
-import mysql.connector
-from .models import ProjectRoleTable, StatusRevisionTable, read_csv_records
 import logging
+from importlib.resources import files
+
+from .models import ProjectRoleTable, StatusRevisionTable, read_csv_records
 
 logger = logging.getLogger(__name__)
 
