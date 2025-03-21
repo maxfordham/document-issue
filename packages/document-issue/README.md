@@ -18,7 +18,7 @@
 pip install document-issue
 ```
 
-## Development Install 
+## Development Install
 
 ```console
 mamba create -n document-issue-dev python pytest black

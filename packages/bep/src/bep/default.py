@@ -1,7 +1,9 @@
 from importlib.resources import files
 import mysql.connector
 from .models import ProjectRoleTable, StatusRevisionTable, read_csv_records
-# from mfdb import get_project_roles #  TODO
+import logging
+
+logger = logging.getLogger(__name__)
 
 DIR_DEFAULT = files("bep.data")
 PTH_STATUS_REVISION_TABLE = DIR_DEFAULT.joinpath("status_revision.csv")
@@ -13,10 +15,6 @@ def get_default_status_revision_table() -> StatusRevisionTable:
     return read_csv_records(PTH_STATUS_REVISION_TABLE, StatusRevisionTable)
 
 
-def get_default_project_roles():
+def get_default_project_roles()->ProjectRoleTable:
     """Get the default project roles. Try to read from database, if not available, read from csv."""
-    try:
-        pass
-        # return ProjectRoleTable(get_project_roles())  #  TODO
-    except mysql.connector.errors.DatabaseError:
-        return read_csv_records(PTH_PROJECT_ROLES, ProjectRoleTable)
+    return read_csv_records(PTH_PROJECT_ROLES, ProjectRoleTable)

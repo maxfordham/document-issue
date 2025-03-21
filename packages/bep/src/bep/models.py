@@ -1,4 +1,5 @@
 """Models for the BEP package."""
+
 from __future__ import annotations
 import csv
 import pathlib
@@ -64,6 +65,7 @@ class ProjectRole(BaseModel):
     role_title: str
     role_category: str
 
+
 class ProjectRoleTable(RootModel):
     root: list[ProjectRole]
 
@@ -71,6 +73,13 @@ class ProjectRoleTable(RootModel):
     @property
     def map_project_roles(self) -> dict:  # noqa: D102
         return {x.role_name: x.role_title for x in self.root}
+
+
+def _test_get_project_roles_table():
+    """Test project roles."""
+
+    return [{"role_name": "director_in_change", "role_title": "Director in Charge", "role_category": "Director"}]
+
 
 # class Classification(BaseModel):
 #     pass

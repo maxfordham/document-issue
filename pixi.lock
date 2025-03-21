@@ -1019,7 +1019,7 @@ packages:
 - pypi: packages/bep
   name: bep
   version: 0.1.0
-  sha256: 6923f9a98479fd2fbaba2a9dea831e06410689cf422fba50a0461077b47daefe
+  sha256: a8f96c7b807e8064e3ec93021b9eae98e45832e9b6819b74dbf3c162d098edce
   requires_dist:
   - pydantic
   - pydantic-settings>=2.8.1,<3

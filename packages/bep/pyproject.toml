@@ -1,6 +1,6 @@
 [project]
 authors = [{name = "jgunstone", email = "j.gunstone@maxfordham.com"}]
-dependencies = ["pydantic", "pydantic-settings>=2.8.1,<3"] # mfdb #TODO
+dependencies = ["pydantic", "pydantic-settings>=2.8.1,<3"]
 description = "Add a short description here"
 name = "bep"
 requires-python = ">= 3.11"
