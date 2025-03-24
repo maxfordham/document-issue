@@ -104,7 +104,7 @@ class Issue(BaseModel):
             revision_code,
             revision_description,
             description,
-        ) = status_revision.split(" - ")
+        ) = status_revision.split(" - ", 4)
         self.revision = f"{revision_code}{str(self.revision_number).zfill(2)}"
         self.status_description = description
         return self
