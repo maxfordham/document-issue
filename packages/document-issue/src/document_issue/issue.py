@@ -24,10 +24,10 @@ class Issue(BaseModel):
         title="Date",
         json_schema_extra={"column_width": COL_WIDTH},
     )
-    status_revision: StatusRevisionEnum = Field(
-        first_status_revision,
+    status_revision: str = Field(
+        first_status_revision.value,
         title="Status Revision Selector",
-        json_schema_extra={"column_width": 1},
+        json_schema_extra={"enum": [e.value for e in StatusRevisionEnum], "column_width": 1},
     )
     revision: str = Field(
         "",
