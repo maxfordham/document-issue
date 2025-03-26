@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import datetime
 from enum import Enum
+from typing import Annotated
 
-from pydantic import Field, field_validator, model_validator
+from pydantic import AfterValidator, Field, field_validator, model_validator
 
 from document_issue.basemodel import BaseModel
 from document_issue.constants import COL_WIDTH
@@ -11,6 +12,18 @@ from document_issue.enums import IssueFormatEnum, StatusRevisionEnum
 
 description_author = "the person who authored the work."
 description_checked_by = "the person who checked the work."
+
+def _check_status_revision(v: str) -> str:
+    max_dashes = 4
+    if v.count(" - ") < max_dashes:
+        msg = "status_revision must be in the format 'code - status description - revision code - revision description - description'"
+        raise ValueError(msg)
+    return v
+
+StatusRevision = Annotated[
+    str,
+    AfterValidator(_check_status_revision),
+]
 
 # TODO: who issued to?
 first_status_revision = next(iter(StatusRevisionEnum))
@@ -24,7 +37,7 @@ class Issue(BaseModel):
         title="Date",
         json_schema_extra={"column_width": COL_WIDTH},
     )
-    status_revision: str = Field(
+    status_revision: StatusRevision = Field(
         first_status_revision.value,
         title="Status Revision Selector",
         json_schema_extra={"enum": [e.value for e in StatusRevisionEnum], "column_width": 1},
