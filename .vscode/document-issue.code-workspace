@@ -37,6 +37,5 @@
         "files.exclude": {
             "packages/": true,
         },
-        "python.defaultInterpreterPath": "/home/jovyan/document-issue/.pixi/envs/default/bin/python"
     }
 }
