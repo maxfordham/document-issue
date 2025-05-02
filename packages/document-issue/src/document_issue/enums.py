@@ -64,5 +64,13 @@ class IssueFormatEnum(Enum):
     p = "paper - full size"
     r = "paper - reduced size"
 
+class DocumentTypeEnum(str, Enum):
+    """maps DocumentType codes to string description."""
+
+    es: str = "Equipment Schedule"
+    rds: str = "Room Data Schedule"
+    prs: str = "Plantroom Schedule"
+    nzc: str = "Net-Zero Carbon Schedule"
+
 
 
