@@ -70,7 +70,4 @@ class DocumentTypeEnum(str, Enum):
     es: str = "Equipment Schedule"
     rds: str = "Room Data Schedule"
     prs: str = "Plantroom Schedule"
-    nzc: str = "Net-Zero Carbon Schedule"
-
-
-
+    # nzc: str = "Net-Zero Carbon Schedule"  # TODO: Implement this in the future  # noqa: ERA001
