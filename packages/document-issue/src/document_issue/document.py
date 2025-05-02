@@ -4,11 +4,11 @@ from __future__ import annotations
 from typing import Annotated
 
 from annotated_types import Len
-from pydantic import AliasChoices, Field, WithJsonSchema, field_validator
+from pydantic import AliasChoices, Field, WithJsonSchema, field_validator, model_validator
 from typing_extensions import Literal
 
 from document_issue.basemodel import BaseModel
-from document_issue.enums import DocSource, PaperSizeEnum, ScalesEnum
+from document_issue.enums import DocSource, DocumentTypeEnum, PaperSizeEnum, ScalesEnum
 
 
 class FormatConfiguration(BaseModel):
@@ -67,10 +67,17 @@ class DocumentBase(BaseModel):
         examples=DocSource._member_names_,
         alias="doc_source",
     )
+    document_type: DocumentTypeEnum = Field(
+        DocumentTypeEnum.es,
+        description="type of document",
+        alias="doc_type",
+        title="Document Type",
+    )
     paper_size: str | PaperSizeEnum = Field(
         "A4",
         description="paper size of the document",
         alias="size",
+        json_schema_extra={"disabled": True},
     )
     scale: str | ScalesEnum = Field(
         "nts",
@@ -111,6 +118,18 @@ class DocumentBase(BaseModel):
         li_nomenclature = [s.strip() for s in li_nomenclature]
         return "-".join(li_nomenclature)
 
+    @model_validator(mode="after")
+    def set_paper_size_based_on_document_type(self) -> DocumentBase:
+        """Set the paper size based on the document type."""
+        if self.document_type == DocumentTypeEnum.es:
+            self.paper_size = PaperSizeEnum.A4
+        elif self.document_type == DocumentTypeEnum.prs:
+            self.paper_size = PaperSizeEnum.A3
+        elif self.document_type == DocumentTypeEnum.rds:
+            self.paper_size = PaperSizeEnum.A4
+        else:
+            self.paper_size = PaperSizeEnum.na
+        return self
 
 class Document(DocumentBase):
     """Document model."""
