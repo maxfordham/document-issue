@@ -61,17 +61,16 @@ class DocumentBase(BaseModel):
         "Document Description",
         description="human readable description of the document",
     )
+    document_type: DocumentTypeEnum = Field(
+        DocumentTypeEnum.es,
+        description="type of document",
+        title="Document Type",
+    )
     document_source: str = Field(
         "DS",
         description="software used to author the document",
         examples=DocSource._member_names_,
         alias="doc_source",
-    )
-    document_type: DocumentTypeEnum = Field(
-        DocumentTypeEnum.es,
-        description="type of document",
-        alias="doc_type",
-        title="Document Type",
     )
     paper_size: str | PaperSizeEnum = Field(
         "A4",
