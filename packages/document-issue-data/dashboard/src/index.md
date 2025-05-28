@@ -1,26 +1,27 @@
 ---
 title: Latest Issued Documents
 theme: dashboard
-# theme: [light, dark, alt, wide]
 toc: false
 ---
 
 ## Latest Issued Documents
 
 ```js
-const docs = FileAttachment("data/latest_found.csv").csv({typed: true});
+const data = FileAttachment("data/latest_found.csv").csv({typed: true});
 ```
 
 ```js
-const search_docs = view(Inputs.search(docs, {placeholder: "Search docs"}));
+const filtered = view(Inputs.search(data));
+
 ```
 
+
 ```js
-Inputs.table(search_docs, {
+Inputs.table(filtered, {
   format: {
-    project: d3.format("d"), // format as "1960" rather than "1,960"
+    project: d3.format("d"),
     link: id => htl.html`<a href=mfllp:explorer.exe?${id} target=_blank>🔗</a>`
   },
-  rows : 40
+  rows: 40
 })
 ```
