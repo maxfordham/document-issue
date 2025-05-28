@@ -44,10 +44,12 @@ const filtered = data.filter(d => {
 ```
 
 ```js
-Inputs.table(filtered, {rows: 40})
+Inputs.table(
+  filtered, {
+  format: {
+    project: d3.format("d"), // format as "1960" rather than "1,960"
+    link: id => htl.html`<a href=mfllp:explorer.exe?${id} target=_blank>🔗</a>`
+  },
+  rows: 40})
 ```
 
-
-```js
-filters
-```
