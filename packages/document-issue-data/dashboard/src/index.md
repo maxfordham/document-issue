@@ -30,10 +30,14 @@ const filters = view(Inputs.form({
 
 ```js
 const filtered = data.filter(d => {
-  // Global search
-  const search = filters.search?.value?.toLowerCase() ?? "";
+  // Robustly extract the search string
+  let search = "";
+  if (typeof filters.search?.value === "string") {
+    search = filters.search.value.toLowerCase();
+  } else if (typeof filters.search === "string") {
+    search = filters.search.toLowerCase();
+  }
   const matchesSearch = !search || Object.values(d).some(v => (v + "").toLowerCase().includes(search));
-  // System filter
   const matchesSystem = !filters.system?.length || filters.system.includes(d.system);
   return matchesSearch && matchesSystem;
 });
@@ -41,4 +45,9 @@ const filtered = data.filter(d => {
 
 ```js
 Inputs.table(filtered, {rows: 40})
+```
+
+
+```js
+filters
 ```
