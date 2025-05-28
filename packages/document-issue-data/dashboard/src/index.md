@@ -1,26 +1,44 @@
 ---
 title: Latest Issued Documents
 theme: dashboard
-# theme: [light, dark, alt, wide]
 toc: false
 ---
 
 ## Latest Issued Documents
 
 ```js
-const docs = FileAttachment("data/latest_found.csv").csv({typed: true});
+const data = FileAttachment("data/latest_found.csv").csv({typed: true});
 ```
 
 ```js
-const search_docs = view(Inputs.search(docs, {placeholder: "Search docs"}));
+const unique_systems = [...new Set(data.map(d => d.system))].filter(d => d != null && d !== "");
 ```
 
 ```js
-Inputs.table(search_docs, {
-  format: {
-    project: d3.format("d"), // format as "1960" rather than "1,960"
-    link: id => htl.html`<a href=mfllp:explorer.exe?${id} target=_blank>🔗</a>`
-  },
-  rows : 40
-})
+const filters = view(Inputs.form({
+  search: Inputs.search(data, {placeholder: "Global search..."}),
+  system: Inputs.select(unique_systems, {
+    label: "System",
+    multiple: true,
+    unique: true,
+    sort: true,
+    placeholder: "All systems",
+    allowClear: true // <-- Add this line
+  })
+}));
+```
+
+```js
+const filtered = data.filter(d => {
+  // Global search
+  const search = filters.search?.value?.toLowerCase() ?? "";
+  const matchesSearch = !search || Object.values(d).some(v => (v + "").toLowerCase().includes(search));
+  // System filter
+  const matchesSystem = !filters.system?.length || filters.system.includes(d.system);
+  return matchesSearch && matchesSystem;
+});
+```
+
+```js
+Inputs.table(filtered, {rows: 40})
 ```
