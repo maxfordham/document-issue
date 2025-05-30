@@ -2,7 +2,7 @@ import pathlib
 import glob
 import pandas as pd
 
-FDIR_RAW = pathlib.Path(__file__).parent / "data-raw" / "config"
+FDIR_RAW = pathlib.Path(__file__).parent / "data-raw"
 
 
 def get_docs():
@@ -54,7 +54,6 @@ def get_issues():
 
         # Append the dataframe to the list
         dataframes.append(df)
-
     # Concatenate all dataframes into a single dataframe
     df_issues = pd.concat(dataframes, ignore_index=True)
 

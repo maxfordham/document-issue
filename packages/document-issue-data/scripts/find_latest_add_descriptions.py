@@ -5,6 +5,7 @@ from _load_dng_data import get_docs
 from _load_found_files import FDIR_FIND_FILES, load_found_files
 
 FDIR_PROCESSED_1 = pathlib.Path(__file__).parent / "data-processed-1"
+FDIR_PROCESSED_1.mkdir(exist_ok=True, parents=True)
 MAP_COLS_DOCS = {
     "project_number": "project",
     "document_code": "document-code",
@@ -92,35 +93,32 @@ def merge_and_format(df_docs, df_paths):
     return df
 
 
+df_docs = get_docs()[COLS_DOCS]
+
+found, missing = load_found_files(list(FDIR_FIND_FILES.glob("found_files*.txt")))
+
+# latest
+df_latest = get_latest(found | missing).merge(df_docs, on="document_code", how="left")
+df_latest.to_csv(FDIR_PROCESSED_1 / "latest.csv", index=False)
+
+# latest found
+df_paths = get_latest(found)
+df_latest_found = merge_and_format(df_docs, df_paths)
+
+fpth_tmp_latest_found = pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "tmp" / "latest_found.csv"
+fpth_tmp_latest_found.parent.mkdir(exist_ok=True, parents=True)
+df_latest_found.to_csv(FDIR_PROCESSED_1 / "latest_found.csv", index=False)
+df_latest_found.to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "latest_found.csv", index=False)
+df_latest_found.loc[0:10].to_csv(fpth_tmp_latest_found, index=False)
+
+# schematics
+df_latest_found_schematics = df_latest_found.query("`drawing-type` == 'Schematic'")
+df_latest_found_schematics.to_csv(FDIR_PROCESSED_1 / "latest_found_schematics.csv", index=False)
+df_latest_found_schematics.to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "latest_found_schematics.csv", index=False)
 
 
-if __name__ == "__main__":
-    df_docs = get_docs()[COLS_DOCS]
-
-    found, missing = load_found_files(list(FDIR_FIND_FILES.glob("found_files*.txt")))
-
-    # latest
-    df_latest = get_latest(found | missing).merge(df_docs, on="document_code", how="left")
-    df_latest.to_csv(FDIR_PROCESSED_1 / "latest.csv", index=False)
-
-    # latest found
-    df_paths = get_latest(found)
-    df_latest_found = merge_and_format(df_docs, df_paths)
-    
-
-
-    df_latest_found.to_csv(FDIR_PROCESSED_1 / "latest_found.csv", index=False)
-    df_latest_found.to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "latest_found.csv", index=False)
-    df_latest_found.loc[0:10].to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "tmp" / "latest_found.csv", index=False)
-
-    # schematics
-    df_latest_found_schematics = df_latest_found.query("`drawing-type` == 'Schematic'")
-    df_latest_found_schematics.to_csv(FDIR_PROCESSED_1 / "latest_found_schematics.csv", index=False)
-    df_latest_found_schematics.to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "latest_found_schematics.csv", index=False)
-
-
-    # details
-    df_latest_found_details = df_latest_found.query("`drawing-type` == 'Detail'")
-    df_latest_found_details.to_csv(FDIR_PROCESSED_1 / "latest_found_details.csv", index=False)
-    df_latest_found_details.to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "latest_found_details.csv", index=False)
-    print("done")
+# details
+df_latest_found_details = df_latest_found.query("`drawing-type` == 'Detail'")
+df_latest_found_details.to_csv(FDIR_PROCESSED_1 / "latest_found_details.csv", index=False)
+df_latest_found_details.to_csv(pathlib.Path(__file__).parent.parent / "dashboard" / "src" / "data" / "latest_found_details.csv", index=False)
+print("done")
