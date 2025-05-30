@@ -47,10 +47,6 @@ dashboard = ["dashboard"]
 [feature.dashboard.dependencies]
 nodejs = "*"
 
-[feature.dashboard.tasks]
-dashboard-install = { cmd = "npm install", cwd = "packages/document-issue-data/dashboard" }
-dashboard-preview = { cmd = "npm run dev", cwd = "packages/document-issue-data/dashboard" }
-
 [tasks]
 test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto" }
 test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io" }
@@ -76,15 +72,4 @@ tests = { depends-on = [
 ] }
 lint = "ruff check --fix"
 format = "ruff format"
-mk-jdrive = { cmd = "mkdir -p /home/jovyan/jobs" }
-chmod-scripts = { cmd = "chmod +x *.sh", cwd = "SECRETS" }
-mnt-jdrive = { cmd = "./mnt-jdrive.sh", depends-on = [
-    "mk-jdrive",
-], cwd = "SECRETS" }
-get-data = { cmd = "./get-data.sh", cwd = "SECRETS" }
-push-data = { cmd = "./push-data.sh", cwd = "SECRETS" }
-pull-data = { cmd = "./pull-data.sh", cwd = "SECRETS" }
-cp-to-dashboard = { cmd = "./cp-to-dashboard.sh", cwd = "SECRETS" }
-find-files = { cmd = "python find_files.py", cwd = "packages/document-issue-data/scripts" }
-find-latest-add-descriptions = { cmd = "python find_latest_add_descriptions.py", cwd = "packages/document-issue-data/scripts" }
 get-project-roles = { cmd = "python get-project-roles.py", cwd = "packages/bep/scripts" }
