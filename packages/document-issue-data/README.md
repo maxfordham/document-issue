@@ -13,6 +13,7 @@ pixi run mnt-jdrive
 pixi run get-data  # gets raw doc issue data
 pixi run pull-data  # get previously found data
 pixi run find-files
+pixi run find-latest-add-descriptions # find latest files and add descriptions
 pixi run push-data  # push found files back to jobs folder
 pixi run cp-to-dashboard  # copy data to dashboard directory
 

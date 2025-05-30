@@ -55,7 +55,7 @@ dashboard-preview = { cmd = "npm run dev", cwd = "packages/document-issue-data/d
 test-document-issue-quarto = { cmd = "pytest", cwd = "packages/document-issue-quarto" }
 test-document-issue-io = { cmd = "pytest", cwd = "packages/document-issue-io" }
 test-document-issue-api = { cmd = "pytest", cwd = "packages/document-issue-api", env = { SQLALCHEMY_WARN_20 = "1" } }
-test-bep = { cmd = "pytest", cwd = "packages/bep"}
+test-bep = { cmd = "pytest", cwd = "packages/bep" }
 update-examples = { cmd = "pytest --update-examples", cwd = "packages/document-issue-io" }
 update-quarto-extensions = "tar -czvf packages/document-issue-io/src/document_issue_io/templates/document-issue-quarto.tar.gz -C packages/document-issue-quarto _extensions"
 build-docs = { cmd = "quarto render .", cwd = "docs" } #, depends-on = ["test-document-issue-io"]
@@ -75,14 +75,16 @@ tests = { depends-on = [
     "test-document-issue-api",
 ] }
 lint = "ruff check --fix"
-format = "ruff format"  
-mk-jdrive = { cmd = "mkdir -p /home/jovyan/jobs"}
-chmod-scripts = { cmd = "chmod +x *.sh", cwd = "SECRETS"}
-mnt-jdrive = { cmd = "./mnt-jdrive.sh", depends-on = ["mk-jdrive"], cwd = "SECRETS"}
-get-data = {cmd = "./get-data.sh", cwd = "SECRETS"}
-push-data = {cmd = "./push-data.sh", cwd = "SECRETS"}
-pull-data = {cmd = "./pull-data.sh", cwd = "SECRETS"}
-cp-to-dashboard ={ cmd = "./cp-to-dashboard.sh", cwd = "SECRETS"} 
-find-files = { cmd = "python find_files.py", cwd = "packages/document-issue-data/scripts"} 
-get-project-roles = { cmd = "python get-project-roles.py", cwd = "packages/bep/scripts"} 
-
+format = "ruff format"
+mk-jdrive = { cmd = "mkdir -p /home/jovyan/jobs" }
+chmod-scripts = { cmd = "chmod +x *.sh", cwd = "SECRETS" }
+mnt-jdrive = { cmd = "./mnt-jdrive.sh", depends-on = [
+    "mk-jdrive",
+], cwd = "SECRETS" }
+get-data = { cmd = "./get-data.sh", cwd = "SECRETS" }
+push-data = { cmd = "./push-data.sh", cwd = "SECRETS" }
+pull-data = { cmd = "./pull-data.sh", cwd = "SECRETS" }
+cp-to-dashboard = { cmd = "./cp-to-dashboard.sh", cwd = "SECRETS" }
+find-files = { cmd = "python find_files.py", cwd = "packages/document-issue-data/scripts" }
+find-latest-add-descriptions = { cmd = "python find_latest_add_descriptions.py", cwd = "packages/document-issue-data/scripts" }
+get-project-roles = { cmd = "python get-project-roles.py", cwd = "packages/bep/scripts" }
