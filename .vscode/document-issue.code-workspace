@@ -23,9 +23,6 @@
             "path": "../packages/document-issue-xl"
         },
         {
-            "path": "../packages/document-issue-data"
-        },
-        {
             "path": "../packages/bep"
         }
     ],
