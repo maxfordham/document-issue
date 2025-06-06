@@ -13,6 +13,7 @@ class RevisionTypeEnum(Enum):
 
     Preliminary = "P"
     Contractual = "C"
+    Tender = "T"
 
 
 class StatusRevision(BaseModel):
