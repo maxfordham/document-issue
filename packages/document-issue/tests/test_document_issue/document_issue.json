@@ -7,6 +7,7 @@
     "name_nomenclature": "project-originator-volume-level-infotype-role-number",
     "document_code": "06667-MXF-XX-XX-SH-M-20003",
     "document_description": "Document Description",
+    "document_type": "Equipment Schedule",
     "document_source": "DS",
     "paper_size": "A4",
     "scale": "nts",
