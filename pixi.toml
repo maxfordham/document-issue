@@ -73,3 +73,4 @@ tests = { depends-on = [
 lint = "ruff check --fix"
 format = "ruff format"
 get-project-roles = { cmd = "python get-project-roles.py", cwd = "packages/bep/scripts" }
+open-docs = {cmd="/mnt/c/windows/explorer.exe index.html", cwd="docs/_site"} # this will only work on WSL
